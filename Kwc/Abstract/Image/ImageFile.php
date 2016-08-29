@@ -1,13 +1,6 @@
 <?php
-class Kwc_Abstract_Image_ImageFile extends Kwf_Form_Field_File
+class Kwc_Abstract_Image_ImageFile extends Kwf_Form_Field_Image_ImageFile
 {
-    public function __construct($fieldname = null, $fieldLabel = null)
-    {
-        parent::__construct($fieldname, $fieldLabel);
-        $this->setXtype('kwc.imagefile');
-        $this->setAllowOnlyImages(true);
-    }
-
     public function load($row, $postData = array())
     {
         $ret = parent::load($row, $postData);

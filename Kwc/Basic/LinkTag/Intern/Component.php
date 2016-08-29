@@ -5,9 +5,9 @@
  */
 class Kwc_Basic_LinkTag_Intern_Component extends Kwc_Basic_LinkTag_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'dataClass' => 'Kwc_Basic_LinkTag_Intern_Data',
             'ownModel'     => 'Kwc_Basic_LinkTag_Intern_Model',
             'componentName' => trlKwfStatic('Link.Intern'),

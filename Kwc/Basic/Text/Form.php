@@ -6,7 +6,7 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
         $this->setModel(Kwc_Basic_Text_Component::createOwnModel($class));
         parent::__construct($name, $class, $id);
         $field = new Kwf_Form_Field_HtmlEditor('content', trlKwf('Text'));
-        $field->setData(new Kwf_Data_Kwc_ComponentIds('content'));
+        $field->setData(new Kwc_Basic_Text_ContentData('content'));
         $field->setHideLabel(true);
 
         $ignoreSettings = array('tablename', 'componentName',

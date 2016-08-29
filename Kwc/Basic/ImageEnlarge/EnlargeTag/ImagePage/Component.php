@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_ContentSender';
         $ret['assetsDefer']['dep'][] = 'KwfLightbox';
         $ret['rootElementClass'] = 'kwfUp-webStandard';
@@ -11,7 +11,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
 

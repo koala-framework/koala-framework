@@ -3,9 +3,9 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
 {
     private $_chartPlugins;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['form'] = 'Kwc_Shop_Cart_Form_Component';
         $ret['generators']['child']['component']['view'] = 'Kwc_Shop_Cart_View_Component';
         $ret['generators']['detail']['class'] = 'Kwc_Shop_Cart_Generator';
@@ -24,9 +24,6 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['placeholder']['backToShop'] = trlKwfStatic('Back to shop');
         $ret['placeholder']['checkout'] = trlKwfStatic('To checkout');
         $ret['placeholder']['headline'] = trlKwfStatic('Your cart contains');
-
-        $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Keepalive.js';
-        $ret['assets']['dep'][] = 'ExtConnection';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         $ret['contentSender'] = 'Kwc_Shop_Cart_ContentSender';
@@ -52,7 +49,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
             ->getProductsDataWithProduct($this->getData());
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['countProducts'] = $this->getData()->countChildComponents(array('generator'=>'detail'));

@@ -33,6 +33,8 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
 
         Kwf_Events_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
+        Kwf_Registry::get('db')->beginTransaction();
+
         echo "counting pages...";
         $steps = Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
         echo " ".$steps."\n";
@@ -46,6 +48,8 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
         Kwf_Util_Component::afterDuplicate($source, $target);
 
         $progressBar->finish();
+
+        Kwf_Registry::get('db')->commit();
 
         exit;
     }

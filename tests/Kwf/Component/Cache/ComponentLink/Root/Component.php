@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Cache_ComponentLink_Root_Component extends Kwf_Component_NoCategoriesRoot
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['page']['model'] = 'Kwf_Component_Cache_ComponentLink_Root_Model';
         $ret['generators']['page']['historyModel'] = new Kwf_Model_FnF();
         $ret['generators']['page']['component'] = array(
@@ -13,7 +13,7 @@ class Kwf_Component_Cache_ComponentLink_Root_Component extends Kwf_Component_NoC
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         for ($x = 1; $x <= 4; $x++) {

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Cc_CopyPages_Paragraphs_Component extends Kwc_Paragraphs_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['childModel'] = new Kwf_Model_FnF(array(
             'data' => array(
                 array('id'=>1, 'component_id'=>'1', 'component' => 'test', 'visible'=>true),

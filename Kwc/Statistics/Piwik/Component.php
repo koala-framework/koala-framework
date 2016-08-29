@@ -1,9 +1,9 @@
 <?php
 class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['disableCookies'] = false;
         $ret['enableLinkTracking'] = true;
         $ret['customTrackingDomain'] = false;
@@ -16,7 +16,7 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         return $this->getData();
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $config = array();

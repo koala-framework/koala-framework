@@ -183,10 +183,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
             $parsedUrl = $p->preFormatPath($parsedUrl);
         }
         $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
-        $cacheId = 'url-'.$cacheUrl;
-        if ($page = Kwf_Cache_Simple::fetch($cacheId)) {
+        if ($ret = Kwf_Component_Cache_Url_Abstract::getInstance()->load($cacheUrl)) {
             $exactMatch = true;
-            $ret = Kwf_Component_Data::kwfUnserialize($page);
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
             if (is_null($path)) return null;
@@ -203,14 +201,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
                 if ($ret->isVisible()) {
-                    Kwf_Cache_Simple::add($cacheId, $ret->kwfSerialize());
-
-                    Kwf_Component_Cache::getInstance()->getModel('url')->import(Kwf_Model_Abstract::FORMAT_ARRAY,
-                        array(array(
-                            'url' => $cacheUrl,
-                            'page_id' => $ret->componentId,
-                            'expanded_page_id' => $ret->getExpandedComponentId()
-                        )), array('replace'=>true, 'skipModelObserver'=>true));
+                    Kwf_Component_Cache_Url_Abstract::getInstance()->save($ret);
                 }
             } else {
                 $exactMatch = false;
@@ -329,7 +320,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                     $ret = null;
                     $generators = $this->getPageGenerators();
                     foreach ($generators as $generator) {
-                        $ret = array_pop($generator->getChildData(null, $s));
+                        $ret = $generator->getChildData(null, $s);
+                        $ret = array_pop($ret);
                         if ($ret) break;
                     }
                 } else {

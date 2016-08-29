@@ -1,9 +1,9 @@
 <?php
 class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Gallery');
         $ret['componentIcon'] = 'images.png';
         $ret['componentCategory'] = 'media';
@@ -14,6 +14,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $ret['placeholder']['moreButton'] = trlKwfStatic('more');
         $ret['breakpoint'] = '600';
         $ret['showMoreLink'] = true;
+        $ret['defaultVisible'] = true;
         return $ret;
     }
 
@@ -35,7 +36,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         return $this->_getRow()->columns;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $showPics = null;

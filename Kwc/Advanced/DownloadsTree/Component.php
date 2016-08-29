@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Downloads');
         $ret['componentIcon'] = 'application_side_tree';
 
@@ -24,7 +24,7 @@ class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Compon
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['options'] = $this->_getOptions();

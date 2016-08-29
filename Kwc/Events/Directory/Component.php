@@ -1,9 +1,9 @@
 <?php
 class Kwc_Events_Directory_Component extends Kwc_News_Directory_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Events');
         $ret['componentCategory'] = 'admin';
         $ret['componentIcon'] = 'date';

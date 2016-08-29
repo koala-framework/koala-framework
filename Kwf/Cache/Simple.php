@@ -12,6 +12,8 @@ class Kwf_Cache_Simple
     public static $backend; //set in Setup
     public static $memcacheHost; //set in Setup
     public static $memcachePort; //set in Setup
+    public static $redisHost; //set in Setup
+    public static $redisPort; //set in Setup
 
     private static $_zendCache = null;
     private static $_cacheNamespace = null;
@@ -29,6 +31,8 @@ class Kwf_Cache_Simple
         }
         if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
             $ret = 'elastiCache';
+        } else if (Kwf_Config::getValue('server.redis.host')) {
+            $ret = 'redis';
         } else if (Kwf_Config::getValue('server.memcache.host')) {
             $ret = 'memcache';
         } else if (extension_loaded('apcu') && !Kwf_Config::getValue('server.apcStaticOnly')) {
@@ -112,6 +116,19 @@ class Kwf_Cache_Simple
         return $memcache;
     }
 
+    public static function getRedis()
+    {
+        static $redis;
+        if (isset($redis)) return $redis;
+        if (!self::$redisHost) {
+            return false;
+        }
+        $redis = new Redis();
+        $redis->connect(self::$redisHost, self::$redisPort);
+        $redis->setOption(Redis::OPT_PREFIX, self::getUniquePrefix());
+        return $redis;
+    }
+
     private static function _getMemcachePrefix()
     {
         if (!isset(self::$_cacheNamespace)) {
@@ -141,8 +158,15 @@ class Kwf_Cache_Simple
     public static function fetch($cacheId, &$success = true)
     {
         if (self::getBackend() == 'memcache') {
-            $ret = self::getMemcache()->get(self::_getMemcachePrefix().$cacheId);
+            $ret = self::getMemcache()->get(self::_getMemcachePrefix().md5($cacheId));
             $success = $ret !== false;
+            return $ret;
+        } else if (self::getBackend() == 'redis') {
+            $ret = self::getRedis()->get('simple:'.$cacheId);
+            $success = $ret !== false;
+            if ($success) {
+                $ret = unserialize($ret);
+            }
             return $ret;
         } else if (self::getBackend() == 'apc') {
             static $prefix;
@@ -178,7 +202,11 @@ class Kwf_Cache_Simple
     public static function add($cacheId, $data, $ttl = null)
     {
         if (self::getBackend() == 'memcache') {
-            return self::getMemcache()->set(self::_getMemcachePrefix().$cacheId, $data, 0, $ttl);
+            return self::getMemcache()->set(self::_getMemcachePrefix().md5($cacheId), $data, 0, $ttl);
+        } else if (self::getBackend() == 'redis') {
+            if (!$ttl) $ttl = 365*24*60*60; //Set a TTL so it can be evicted http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
+            $ret = self::getRedis()->setEx('simple:'.$cacheId, $ttl, serialize($data));
+            return $ret;
         } else if (self::getBackend() == 'apc') {
             static $prefix;
             if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
@@ -201,10 +229,18 @@ class Kwf_Cache_Simple
     public static function delete($cacheIds)
     {
         if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
+
+        if (self::getBackend() == 'redis') {
+            foreach ($cacheIds as &$id) {
+                $id = 'simple:'.$id;
+            }
+            return self::getRedis()->delete($cacheIds);
+        }
+
         $ret = true;
         foreach ($cacheIds as $cacheId) {
             if (self::getBackend() == 'memcache') {
-                $r = self::getMemcache()->delete(self::_getMemcachePrefix().$cacheId);
+                $r = self::getMemcache()->delete(self::_getMemcachePrefix().md5($cacheId));
             } else if (self::getBackend() == 'apc') {
                 static $prefix;
                 if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
@@ -236,6 +272,28 @@ class Kwf_Cache_Simple
     public static function clear($cacheIdPrefix)
     {
         throw new Kwf_Exception("don't delete the whole cache");
+    }
+
+    //only call from Kwf_Util_ClearCache_Types_SimpleCache!
+    public static function _clear()
+    {
+        if (self::getBackend() == 'memcache') {
+            //increment namespace
+            $mc = Kwf_Cache_Simple::getMemcache();
+            if ($mc->get(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace')) {
+                $mc->increment(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace');
+            }
+        } else if (self::getBackend() == 'redis') {
+            $it = null;
+            while ($keys = self::getRedis()->scan($it, 'simple:*')) {
+                self::getRedis()->delete($keys);
+            }
+        } else if (self::getBackend() == 'apc' || self::getBackend() == 'apcu' || self::getBackend() == 'file') {
+            //those are cleared using their own clear-cache type
+        } else {
+            if (!isset(self::$_zendCache)) self::getZendCache();
+            $r = self::$_zendCache->clean(Zend_Cache::CLEANING_MODE_ALL);
+        }
     }
 
     public static function getUniquePrefix()

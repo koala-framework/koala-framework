@@ -15,7 +15,7 @@ class Kwc_Basic_LinkTag_Admin extends Kwc_Admin
         return $ret;
     }
 
-    public function getPagePropertiesForm()
+    public function getPagePropertiesForm($config)
     {
         $ret = new Kwc_Basic_LinkTag_Form(null, $this->_class);
         $fs = new Kwf_Form_Container_FieldSet(trlKwf('Link'));

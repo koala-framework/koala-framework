@@ -149,7 +149,7 @@ abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
         parent::afterSave($row, $postData);
     }
 
-    public function delete($parentRow)
+    public function delete(Kwf_Model_Row_Interface $parentRow)
     {
         $row = $this->_getRowByParentRow($parentRow);
         parent::delete($row);

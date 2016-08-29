@@ -15,12 +15,12 @@ class Kwf_Trl_ZendAdapter extends Zend_Translate_Adapter
     }
 
     //muss false zurückgeben da sonst validator keine message bekommen
-    public function isTranslated($msg)
+    public function isTranslated($messageId, $original = false, $locale = null)
     {
         return false;
     }
 
-    public function translate($messageId)
+    public function translate($messageId, $locale = null)
     {
         return Zend_Registry::get('trl')->trlStaticExecute($messageId, $this->_locale);
     }

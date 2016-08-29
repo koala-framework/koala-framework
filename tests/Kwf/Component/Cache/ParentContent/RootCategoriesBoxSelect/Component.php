@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Cache_ParentContent_RootCategoriesBoxSelect_Component extends Kwc_Root_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['category']['component'] = 'Kwf_Component_Cache_ParentContent_RootCategoriesBoxSelect_Category_Component';
         $ret['generators']['category']['model'] = new Kwf_Model_FnF(array(
             'data' => array(

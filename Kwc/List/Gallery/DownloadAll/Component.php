@@ -10,13 +10,13 @@
 class Kwc_List_Gallery_DownloadAll_Component extends Kwc_Abstract
     implements Kwf_Media_Output_IsValidInterface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null) {
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer) {
         $ret = parent::getTemplateVars($renderer);
         $ret['downloadUrl'] = Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, 'list', 'all'

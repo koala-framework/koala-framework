@@ -1,9 +1,9 @@
 <?php
 class Kwc_FavouritesSelenium_Selenium_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['favouritesbox'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => 'Kwc_Favourites_Box_Component',

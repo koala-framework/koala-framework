@@ -1,5 +1,5 @@
 <?php
-class Kwf_Events_Event_CreateAssetUrls extends Kwf_Events_Event_Abstract
+class Kwf_Events_Event_CreateAssetsPackageUrls extends Kwf_Events_Event_Abstract
 {
     public $prefix = '';
 

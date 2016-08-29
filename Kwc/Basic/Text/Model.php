@@ -18,7 +18,6 @@ class Kwc_Basic_Text_Model extends Kwf_Model_Db_Proxy
 
         if (!isset($this->_default['content'])) {
             $default = Kwc_Abstract::getSetting($config['componentClass'], 'defaultText');
-            $default = Kwf_Trl::getInstance()->trlStaticExecute($default);
             $config['default']['content'] = "<p>$default</p>";
         }
         $this->_componentClass = $config['componentClass'];

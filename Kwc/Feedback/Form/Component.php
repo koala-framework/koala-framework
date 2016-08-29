@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_Feedback_Form_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Feedback');
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Grid';
         $ret['placeholder']['closeButtonText'] = trlKwfStatic('Cancel');

@@ -6,9 +6,9 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
     const USER_SELECT = 'user';
     const CONTENT_WIDTH = 'contentWidth';
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Youtube');
         $ret['componentCategory'] = 'media';
         $ret['componentPriority'] = 40;
@@ -39,11 +39,18 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
+        $ret['config'] = $this->getConfig();
+        return $ret;
+    }
 
-        if (preg_match(self::REGEX, $ret['row']->url, $matches)) {
+    public function getConfig()
+    {
+        $row = $this->_getRow();
+
+        if (preg_match(self::REGEX, $row->url, $matches)) {
             $videoId = $matches[0];
         } else {
             $videoId = null;
@@ -51,22 +58,23 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
 
         $width = $this->_getSetting('videoWidth');
         if ($width === self::USER_SELECT) {
-            if ($ret['row']->size == 'fullWidth') {
+            if ($row->size == 'fullWidth') {
                 $width = null;
             } else {
-                $width = (int)$ret['row']->video_width;
+                $width = (int)$row->video_width;
             }
         } else if ($width === self::CONTENT_WIDTH) {
             $width = null;
         }
+
         $config = array(
             'videoId' => $videoId,
-            'size' => $ret['row']->size,
+            'size' => $row->size,
             'width' => $width,
             'height' => null,
             'ratio' => '16x9'
         );
-        if ($d = $ret['row']->dimensions) {
+        if ($d = $row->dimensions) {
             if ($d == '16x9') {
                 if ($config['width']) $config['height'] = ($config['width'] / 16) * 9;
                 $config['ratio'] = self::getBemClass($this, '--ratio'.$d);
@@ -75,9 +83,9 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
                 $config['ratio'] = self::getBemClass($this, '--ratio'.$d);
             }
         }
-        $ret['config'] = array_merge($config, array('playerVars' => $this->_getSetting('playerVars')));
-        $ret['config']['playerVars']['autoplay'] = ($ret['row']->autoplay) ? 1 : 0;
-        return $ret;
+        $config = array_merge($config, array('playerVars' => $this->_getSetting('playerVars')));
+        $config['playerVars']['autoplay'] = ($row->autoplay) ? 1 : 0;
+        return $config;
     }
 
     public function hasContent()

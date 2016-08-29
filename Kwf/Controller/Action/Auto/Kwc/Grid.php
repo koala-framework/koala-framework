@@ -20,7 +20,7 @@ abstract class Kwf_Controller_Action_Auto_Kwc_Grid extends Kwf_Controller_Action
         return $ret;
     }
 
-    protected function _beforeSave($row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row, $submitRow)
     {
         if ($this->_hasComponentId) {
             $row->component_id = $this->_getParam('componentId');

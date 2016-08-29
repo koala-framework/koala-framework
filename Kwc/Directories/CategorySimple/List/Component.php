@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_Directories_CategorySimple_List_Component extends Kwc_Directories_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwc_Directories_CategorySimple_List_Model';
         $ret['categoryComponentClass'] = 'Kwc_Directories_CategorySimple_Component';
         return $ret;

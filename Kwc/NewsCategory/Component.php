@@ -1,9 +1,9 @@
 <?php
 class Kwc_NewsCategory_Component extends Kwc_News_Directory_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['childModel'] = 'Kwc_NewsCategory_Model';
         $ret['generators']['child']['component']['view'] = 'Kwc_NewsCategory_View_Component';
         $ret['generators']['detail']['component'] = 'Kwc_NewsCategory_Detail_Component';

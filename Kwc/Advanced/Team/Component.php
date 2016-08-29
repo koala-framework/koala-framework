@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_Team_Component extends Kwc_Abstract_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Team');
         $ret['componentIcon'] = 'image';
         $ret['generators']['child']['component'] = 'Kwc_Advanced_Team_Member_Component';

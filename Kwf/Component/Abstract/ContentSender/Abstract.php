@@ -20,6 +20,11 @@ abstract class Kwf_Component_Abstract_ContentSender_Abstract
         return array();
     }
 
+    public function getLinkClass()
+    {
+        return '';
+    }
+
     abstract public function sendContent($includeMaster);
 
     protected function _render($includeMaster, &$hasDynamicParts)

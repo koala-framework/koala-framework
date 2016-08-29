@@ -12,7 +12,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         return null;
     }
 
-    public function getDependenciesForDependency($dependency)
+    public function getDependenciesForDependency(Kwf_Assets_Dependency_Abstract $dependency)
     {
         if ($dependency->getMimeType() != 'text/javascript' && $dependency->getMimeType() != 'text/javascript; defer') {
             return array();
@@ -67,7 +67,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             } else if ($src['type'] == 'contents') {
                 $contents = $src['contents'];
             }
-            $useBabel = strpos($contents, '"use es6";') !== false;
+            $useBabel = preg_match("/\bimport\s+(?:.+\s+from\s+)?[\'\"]([^\"\']+)[\"\']/", $contents);
             if ($useBabel) {
                 $src['type'] = 'contents';
                 $src['contents'] = $dependency->getContentsPacked()->getFileContents(); //we have to use complied contents as babel adds require() statements

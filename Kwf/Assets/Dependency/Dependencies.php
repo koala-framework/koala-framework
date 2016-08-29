@@ -22,9 +22,13 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
         return $this->_name;
     }
 
-    public function addDependency($type, Kwf_Assets_Dependency_Abstract $dependency)
+    public function addDependency($type, Kwf_Assets_Dependency_Abstract $dependency, $index = null)
     {
-        $this->_dependencies[$type][] = $dependency;
+        if (!is_null($index)) {
+            $this->_dependencies[$type][$index] = $dependency;
+        } else {
+            $this->_dependencies[$type][] = $dependency;
+        }
         return $this;
     }
 

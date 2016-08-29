@@ -1,9 +1,9 @@
 <?php
 class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Columns');
         $ret['componentIcon'] = 'application_tile_horizontal';
         $ret['componentCategory'] = 'layout';
@@ -80,9 +80,9 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
         ));
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $row = $ret['row'];
 
         $columnTypes = $this->_getSetting('columns');

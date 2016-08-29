@@ -4,9 +4,9 @@ class Kwc_Favourites_Component extends Kwc_Abstract
     const LINK_TYPE_GRAPHICAL = 'graphical';
     const LINK_TYPE_TEXTUAL = 'textual';
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['assets']['dep'][] = 'KwfSwitchHoverFade';
 
         $ret['placeholder']['saveFavourite'] = trlKwfStatic('save as favourite');
@@ -16,7 +16,7 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['favouriteText'] = $this->_getPlaceholder('saveFavourite');

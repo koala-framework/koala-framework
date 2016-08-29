@@ -1,9 +1,9 @@
 <?php
 class Kwc_Menu_OtherCategoryChild_Trl_Cc_Component extends Kwc_Basic_ParentContent_Cc_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['plugins'] = Kwc_Abstract::getSetting($masterComponentClass, 'plugins');
         $ret['viewCache'] = Kwc_Abstract::getSetting($masterComponentClass, 'viewCache');
         $ret['menuComponentClass'] = Kwc_Abstract::getSetting($masterComponentClass, 'menuComponentClass');

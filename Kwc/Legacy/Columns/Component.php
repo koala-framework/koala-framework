@@ -1,11 +1,10 @@
 <?php
 class Kwc_Legacy_Columns_Component extends Kwc_Abstract_List_Component
 {
-    public static $needsParentComponentClass = true;
-    public static function getSettings($parentComponentClass)
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
-        $ret['generators']['child']['component'] = $parentComponentClass;
+        $ret = parent::getSettings($param);
+        $ret['generators']['child']['component'] = 'Kwc_Paragraphs_Component';
         $ret['componentName'] = trlKwfStatic('Columns');
         $ret['componentIcon'] = 'application_tile_horizontal';
 
@@ -16,7 +15,7 @@ class Kwc_Legacy_Columns_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         foreach($ret['listItems'] as $k => $v) {

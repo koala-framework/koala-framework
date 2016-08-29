@@ -7,7 +7,6 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     {
         $this->_models = array (
             'cache' => 'Kwf_Component_Cache_Mysql_Model',
-            'url' => 'Kwf_Component_Cache_Mysql_UrlModel',
             'includes' => 'Kwf_Component_Cache_Mysql_IncludesModel',
         );
     }
@@ -113,10 +112,70 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         return $data;
     }
 
-    public function deleteViewCache($select, $progressBarAdapter = null)
+    public function countViewCacheEntries($updates)
     {
-        $microtime = $this->_getMicrotime();
+        $select = $this->_buildSelectForDelete($updates);
+        return $this->getModel()->countRows($select);
+    }
+
+    protected function _buildSelectForDelete($updates)
+    {
+        $or = array();
+        foreach ($updates as $key => $values) {
+            if ($key === 'component_id') {
+                $or[] = new Kwf_Model_Select_Expr_And(array(
+                    new Kwf_Model_Select_Expr_Equal('component_id', array_unique($values)),
+                    new Kwf_Model_Select_Expr_Equal('type', 'component'),
+                ));
+            } else if ($key === 'master-component_id') {
+                $or[] = new Kwf_Model_Select_Expr_And(array(
+                    new Kwf_Model_Select_Expr_Equal('component_id', array_unique($values)),
+                    new Kwf_Model_Select_Expr_Equal('type', 'master'),
+                ));
+            } else {
+                $and = array();
+                foreach ($values as $k => $v) {
+                    if (substr($v, -1) == '%') {
+                        $v = substr($v, 0, -1);
+                        $and[] = new Kwf_Model_Select_Expr_Or(array(
+                            new Kwf_Model_Select_Expr_Equal($k, $v),
+                            new Kwf_Model_Select_Expr_Like($k, $v.'-%'),
+                            new Kwf_Model_Select_Expr_Like($k, $v.'_%'),
+                        ));
+                    } else if (strpos($v, '%') !== false) {
+                        $and[] = new Kwf_Model_Select_Expr_Like($k, $v);
+                    } else {
+                        $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
+                    }
+                }
+                if ($and) {
+                    $and = new Kwf_Model_Select_Expr_And($and);
+                    if (!in_array($and, $or)) {
+                        $or[] = $and;
+                    }
+                }
+            }
+        }
+        $select = new Kwf_Model_Select();
+        if ($or) {
+            $select->where($or[0]);
+            unset($or[0]);
+            foreach ($or as $i) {
+                $s = new Kwf_Model_Select();
+                $s->where($i);
+                $select->union($s);
+            }
+        }
         $select->whereEquals('deleted', false);
+        return $select;
+    }
+
+    public function deleteViewCache(array $updates, $progressBarAdapter = null)
+    {
+        $select = $this->_buildSelectForDelete($updates);
+
+        //execute select
+        $microtime = $this->_getMicrotime();
         $model = $this->getModel();
         $log = Kwf_Events_Log::getInstance();
         $cacheIds = array();
@@ -304,4 +363,136 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     protected function _afterMemcacheDelete($select) {} // For unit testing - DO NOT DELETE!
     protected function _beforeDatabaseDelete($select) {} // For unit testing - DO NOT DELETE!
     protected function _afterDatabaseDelete($select) {} // For unit testing - DO NOT DELETE!
+
+    public function saveIncludes($componentId, $type, $includedComponents)
+    {
+        $m = $this->getModel('includes');
+        $s = $m->select()
+            ->whereEquals('component_id', $componentId)
+            ->whereEquals('type', $type);
+        $existingTargetIds = array();
+        foreach ($m->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('id', 'target_id', 'type'))) as $i) {
+            $existingTargetIds[$i['id']] = $i['target_id'].':'.$i['type'];
+        }
+        $newTargetIds = array();
+        if ($includedComponents) {
+            $data = array();
+            foreach ($includedComponents as $includedComponent) {
+                $cmp = Kwf_Component_Data_Root::getInstance()
+                    ->getComponentById($componentId, array('ignoreVisible' => true));
+                $id = substr($includedComponent, 0, strrpos($includedComponent, ':'));
+                $targetCmp = Kwf_Component_Data_Root::getInstance()
+                    ->getComponentById($id, array('ignoreVisible' => true));
+                if ($cmp->getInheritsParent() !== $targetCmp->getInheritsParent()) {
+                    if (!in_array($includedComponent, $existingTargetIds)) {
+                        $c = array(
+                            'target_id' => $includedComponent,
+                            'type' => $type,
+                            'component_id' => $componentId,
+                        );
+                        $data[] = $c;
+                    }
+                    $newTargetIds[] = $includedComponent;
+                }
+            }
+            $m->import(Kwf_Model_Abstract::FORMAT_ARRAY, $data);
+        }
+        $diffTargetIds = array_diff($existingTargetIds, $newTargetIds);
+        if ($diffTargetIds) {
+            //delete not anymore included
+            $m = $this->getModel('includes');
+            $s = $m->select()
+                ->whereEquals('component_id', $componentId)
+                ->whereEquals('type', $type)
+                ->whereEquals('target_id', $diffTargetIds);
+            $m->deleteRows($s);
+        }
+    }
+
+    public function handlePageParentChanges(array $pageParentChanges)
+    {
+        foreach ($pageParentChanges as $changes) {
+            $oldParentId = $changes['oldParentId'];
+            $newParentId = $changes['newParentId'];
+            $componentId = $changes['componentId'];
+            $length = strlen($oldParentId);
+            $like = $oldParentId . '_' . $componentId;
+            $model = Kwf_Component_Cache::getInstance()->getModel();
+            while ($model instanceof Kwf_Model_Proxy) $model = $model->getProxyModel();
+            if ($model instanceof Kwf_Model_Db) {
+                $db = Kwf_Registry::get('db');
+                $newParentId = $db->quote($newParentId);
+                $where[] = 'expanded_component_id = ' . $db->quote($like);
+                $where[] = 'expanded_component_id LIKE ' . str_replace('_', '\_', $db->quote($like . '-%'));
+                $where[] = 'expanded_component_id LIKE ' . str_replace('_', '\_', $db->quote($like . '_%'));
+                $sql = "UPDATE cache_component
+                    SET expanded_component_id=CONCAT(
+                        $newParentId, SUBSTRING(expanded_component_id, $length)
+                    )
+                    WHERE " . implode(' OR ', $where);
+                $model->executeSql($sql);
+                $this->_log("expanded_component_id={$like}%->{$newParentId}");
+            } else {
+                $model = Kwf_Component_Cache::getInstance()->getModel();
+                $select = $model->select()->where(
+                    new Kwf_Model_Select_Expr_Like('expanded_component_id', $like . '%')
+                );
+                foreach ($model->getRows($select) as $row) {
+                    $oldExpandedId = $row->expanded_component_id;
+                    $newExpandedId = $newParentId . substr($oldExpandedId, $length);
+                    $row->expanded_component_id = $newExpandedId;
+                    $row->save();
+                    $this->_log("expanded_component_id={$oldExpandedId}->{$newExpandedId}");
+                }
+            }
+        }
+    }
+
+    private function _log($msg)
+    {
+        $log = Kwf_Events_Log::getInstance();
+        if ($log) {
+            $log->log("view cache clear $msg", Zend_Log::INFO);
+        }
+    }
+
+    public function writeBuffer()
+    {
+        foreach ($this->_models as $m) {
+            if (is_object($m)) $m->writeBuffer();
+        }
+    }
+
+    public function collectGarbage($debug)
+    {
+        $model = $this->getModel();
+        $includesModel = $this->getModel('includes');
+
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('deleted', true);
+        $s->where(new Kwf_Model_Select_Expr_Lower('microtime', (time()-3*24*60*60)*1000));
+        $options = array(
+            'columns' => array('component_id')
+        );
+        if ($debug) {
+            echo "querying for garbage in cache_component...\n";
+        }
+        foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, $options) as $row) {
+            if ($debug) {
+                echo "deleting ".$row['component_id']."\n";
+            }
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('component_id', $row['component_id']);
+            $model->deleteRows($s);
+
+
+            $s = new Kwf_Model_Select();
+            $s->where(new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Equal('component_id', $row['component_id']),
+                new Kwf_Model_Select_Expr_Like('target_id', $row['component_id'].':%'),
+            )));
+            $includesModel->deleteRows($s);
+        }
+    }
+
 }

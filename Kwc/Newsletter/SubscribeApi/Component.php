@@ -1,9 +1,9 @@
 <?php
 class Kwc_Newsletter_SubscribeApi_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Newsletter subscribing');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Subscribe the newsletter');
         return $ret;

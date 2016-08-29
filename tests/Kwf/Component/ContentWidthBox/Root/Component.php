@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_ContentWidthBox_Root_Component extends Kwc_Root_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         unset($ret['generators']['title']);
         unset($ret['generators']['box']);
         $ret['contentWidth'] = 800;

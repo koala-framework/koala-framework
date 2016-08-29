@@ -14,4 +14,9 @@ class Kwc_Basic_LinkTag_Youtube_Data extends Kwc_Basic_LinkTag_Abstract_Data
     {
         return $this->getChildComponent('_video')->getLinkDataAttributes();
     }
+
+    public function getLinkClass()
+    {
+        return $this->getChildComponent('_video')->getLinkClass();
+    }
 }

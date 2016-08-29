@@ -1,13 +1,13 @@
 <?php
 class Kwc_Advanced_Amazon_Nodes_ProductsDirectory_Detail_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['product'] = $this->getData()->row;

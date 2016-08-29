@@ -1,9 +1,9 @@
 <?php
 class Kwc_User_Register_Form_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('create account');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Register_Form_Success_Component';
         $ret['standardRole'] = 'user';

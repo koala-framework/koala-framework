@@ -1,7 +1,7 @@
 <?php
 class Kwc_Form_Dynamic_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
 
@@ -15,7 +15,7 @@ class Kwc_Form_Dynamic_Trl_Component extends Kwc_Abstract_Composite_Trl_Componen
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $data = $this->getData();

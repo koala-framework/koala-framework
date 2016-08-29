@@ -1,7 +1,7 @@
 <?php
 class Kwc_Form_Field_TextField_Trl_Component extends Kwc_Form_Field_Abstract_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         return $ret;

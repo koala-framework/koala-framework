@@ -1,9 +1,9 @@
 <?php
 class Kwc_Form_Field_MultiCheckbox_Component extends Kwc_Form_Field_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Form.Multi Checkbox');
         $ret['ownModel'] = 'Kwc_Form_Field_MultiCheckbox_Model';
         return $ret;

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Image_CacheFullWidth_Root_Component extends Kwf_Component_NoCategoriesRoot
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         unset($ret['generators']['title']);
 
         $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(

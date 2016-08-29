@@ -9,6 +9,9 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
     protected function _initColumns()
     {
         parent::_initColumns();
+
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
+
         if ($this->_showChildComponentGridColumns) {
             $c = Kwc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
             foreach (Kwc_Admin::getInstance($c)->gridColumns() as $i) {
@@ -31,12 +34,11 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             }
         }
 
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 
     protected function _beforeInsert($row)
     {
-        if (is_null($row->visible)) $row->visible = 0;
+        $row->visible = Kwc_Abstract::getSetting($this->_getParam('class'), 'defaultVisible');
     }
 
     public function jsonMultiUploadAction()
@@ -47,10 +49,12 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $uploadIds = explode(',', $this->_getParam('uploadIds'));
 
         $max = Kwc_Abstract::getSetting($this->_getParam('class'), 'maxEntries');
-        $s = new Kwf_Model_Select();
-        $s->whereEquals('component_id', $this->_getParam('componentId'));
-        if ($this->_model->countRows($s)+count($uploadIds) >= $max) {
-            throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
+        if ($max) {
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('component_id', $this->_getParam('componentId'));
+            if ($this->_model->countRows($s)+count($uploadIds) >= $max) {
+                throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
+            }
         }
 
         foreach ($uploadIds as $uploadId) {
@@ -156,10 +160,12 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
     private function _validateMaxEntries()
     {
         $max = Kwc_Abstract::getSetting($this->_getParam('class'), 'maxEntries');
-        $s = new Kwf_Model_Select();
-        $s->whereEquals('component_id', $this->_getParam('componentId'));
-        if ($this->_model->countRows($s)+1 >= $max) {
-            throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
+        if ($max) {
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('component_id', $this->_getParam('componentId'));
+            if ($this->_model->countRows($s)+1 >= $max) {
+                throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
+            }
         }
     }
 

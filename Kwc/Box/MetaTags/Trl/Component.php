@@ -1,7 +1,7 @@
 <?php
 class Kwc_Box_MetaTags_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['flags']['hasHeaderIncludeCode'] = true;
@@ -24,7 +24,7 @@ class Kwc_Box_MetaTags_Trl_Component extends Kwc_Abstract_Composite_Trl_Componen
         return Kwc_Box_MetaTags_Component::getMetaTagsForData($this->getData());
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['metaTags'] = $this->_getMetaTags();

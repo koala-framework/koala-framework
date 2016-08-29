@@ -3,9 +3,9 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
     implements Kwf_Component_Partial_Interface
 {
     private $_entries;
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['pagesize'] = 10;
         $ret['maxPagingLinks'] = 13;
         $ret['bigPagingSteps'] = array(10, 50);
@@ -175,7 +175,7 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['pages'] = $this->_getPages();

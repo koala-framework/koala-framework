@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Cache_Mysql_UrlModel extends Kwf_Model_Db
+class Kwf_Component_Cache_Url_Mysql_Model extends Kwf_Model_Db
 {
     protected $_table = 'cache_component_url';
 

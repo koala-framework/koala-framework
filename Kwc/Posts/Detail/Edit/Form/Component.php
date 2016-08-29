@@ -25,9 +25,9 @@ class Kwc_Posts_Detail_Edit_Form_Component extends Kwc_Posts_Write_Form_Componen
         parent::processInput($postData);
     }
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('save');
         return $ret;
     }

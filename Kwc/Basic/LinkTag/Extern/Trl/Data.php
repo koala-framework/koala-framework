@@ -35,4 +35,9 @@ class Kwc_Basic_LinkTag_Extern_Trl_Data extends Kwc_Basic_LinkTag_Abstract_Trl_D
     {
         return $this->chained->getLinkDataAttributes();
     }
+
+    public function getLinkClass()
+    {
+        return $this->chained->getLinkClass();
+    }
 }

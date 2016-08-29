@@ -28,7 +28,7 @@ class Kwc_Root_DomainRoot_Generator extends Kwf_Component_Generator_PseudoPage_T
         return $select;
     }
 
-    protected function _getParentDataByRow($row)
+    protected function _getParentDataByRow($row, $select)
     {
         return Kwf_Component_Data_Root::getInstance();
     }

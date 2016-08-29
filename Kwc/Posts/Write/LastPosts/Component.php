@@ -1,9 +1,9 @@
 <?php
 class Kwc_Posts_Write_LastPosts_Component extends Kwc_Directories_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['view'] = 'Kwc_Posts_Directory_View_Component';
         $ret['entryLimit'] = 5;
         return $ret;

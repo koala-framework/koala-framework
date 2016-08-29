@@ -45,6 +45,7 @@ class Kwf_Loader_Test extends Kwf_Test_TestCase
             array(array('A\\B\\' => array('vendor/a/b')), array(), 'A\\B\\X\\Y\\Z', 'vendor/a/b/A/B/X/Y/Z.php'),
             array(array('A\\B\\C\\' => array('vendor/a/b-c')), array(), 'A\\B\\C\\X', 'vendor/a/b-c/A/B/C/X.php'),
             array(array('A\\B\\C\\' => array('vendor/a/b-c')), array(), 'A\\B\\C\\X\\Y', 'vendor/a/b-c/A/B/C/X/Y.php'),
+            array(array('A\\B\\C' => array('vendor/a/b-c')), array(), 'A\\B\\C\\X\\Y', 'vendor/a/b-c/A/B/C/X/Y.php'),
 
             //psr-4:
             array(array(), array('A\\' => array('vendor/a/a')), 'A\\X', 'vendor/a/a/X.php'),

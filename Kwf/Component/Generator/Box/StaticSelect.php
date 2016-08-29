@@ -121,7 +121,7 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
         return $ret;
     }
 
-    public function getPagePropertiesForm()
+    public function getPagePropertiesForm($componentOrParent)
     {
         return new Kwf_Component_Generator_Box_StaticSelect_PagePropertiesForm($this);
     }

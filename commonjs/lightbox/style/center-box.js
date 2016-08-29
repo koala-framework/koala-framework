@@ -2,7 +2,8 @@ var AbstractStyle = require('kwf/lightbox/style/abstract');
 var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var kwfExtend = require('kwf/extend');
-var oneTransitionEnd = require('kwf/lightbox/helper/one-transition-end');
+var oneTransitionEnd = require('kwf/element/one-transition-end');
+var lightboxHelper = require('kwf/lightbox/lightbox-helper');
 
 var CenterBoxStyle = kwfExtend(AbstractStyle, {
     init: function()
@@ -106,6 +107,29 @@ var CenterBoxStyle = kwfExtend(AbstractStyle, {
         return maxSize;
     },
 
+
+    //http://stackoverflow.com/a/13382873
+    _getScrollbarWidth: function() {
+        var outer = document.createElement("div");
+        outer.style.visibility = "hidden";
+        outer.style.width = "200px";
+        document.body.appendChild(outer);
+
+        var widthNoScroll = outer.offsetWidth;
+        outer.style.overflow = "scroll";
+
+        var inner = document.createElement("div");
+        inner.style.width = "100%";
+        outer.appendChild(inner);
+
+        var widthWithScroll = inner.offsetWidth;
+
+        outer.parentNode.removeChild(outer);
+
+        return widthNoScroll - widthWithScroll;
+    },
+
+
     _getContentSize: function(dontDeleteHeight)
     {
         var newWidth = this.lightbox.contentEl.width();
@@ -159,6 +183,14 @@ var CenterBoxStyle = kwfExtend(AbstractStyle, {
     },
     onShow: function() {
         this.mask();
+        var scrollbarWidth = this._getScrollbarWidth();
+        $('html').addClass('kwfUp-kwfLightboxActive');
+
+        //Add margin on html to compensate missing scrollbar when lightbox is open
+        //because of ugly flicker when you close the lightbox
+        if (scrollbarWidth != 0) {
+            $('html').css("margin-right", scrollbarWidth + "px");
+        }
     },
     onClose: function(options) {
         var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
@@ -166,12 +198,17 @@ var CenterBoxStyle = kwfExtend(AbstractStyle, {
         if (parseFloat(duration)>0) {
             $('body').addClass('kwfUp-kwfLightboxAnimate');
             oneTransitionEnd(this.lightbox.innerLightboxEl, function() {
-                $('html').removeClass('kwfUp-kwfLightboxActive');
+                if (!lightboxHelper.currentOpen) {
+                    $('html').removeClass('kwfUp-kwfLightboxActive');
+                    $('html').css("margin-right", "");
+                }
                 $('body').removeClass('kwfUp-kwfLightboxAnimate');
                 this.lightbox.lightboxEl.hide();
                 this.afterClose();
             }, this);
         } else {
+            $('html').removeClass('kwfUp-kwfLightboxActive');
+            $('html').css("margin-right", "");
             this.lightbox.lightboxEl.hide();
             this.afterClose();
         }

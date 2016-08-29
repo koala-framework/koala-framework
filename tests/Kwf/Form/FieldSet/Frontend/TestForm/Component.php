@@ -1,9 +1,9 @@
 <?php
 class Kwf_Form_FieldSet_Frontend_TestForm_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         return $ret;
     }
     protected function _initForm()

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_Text_Cc_Component extends Kwc_Chained_Cc_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['flags']['hasFulltext'] = true;
@@ -13,7 +13,7 @@ class Kwc_Basic_Text_Cc_Component extends Kwc_Chained_Cc_Component
         return $this->getData()->chained->getComponent()->getFulltextContent();
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $childs = $this->getData()->getChildComponents();

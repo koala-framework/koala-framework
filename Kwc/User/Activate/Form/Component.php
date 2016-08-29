@@ -8,9 +8,9 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
     private $_user = null;
     private $_hideForm = false;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('Activate Account');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Activate_Form_Success_Component';
         $ret['useAjaxRequest'] = true;
@@ -38,7 +38,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         $this->_form->add(new Kwf_Form_Field_Hidden('code'));
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         if ($this->_hideForm) $ret['form'] = null;

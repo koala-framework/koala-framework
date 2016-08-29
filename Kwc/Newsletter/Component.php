@@ -1,9 +1,9 @@
 <?php
 class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Component implements Kwf_Util_Maintenance_JobProviderInterface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['detail']['component'] = 'Kwc_Newsletter_Detail_Component';
 
         // wird von der Mail_Redirect gerendered

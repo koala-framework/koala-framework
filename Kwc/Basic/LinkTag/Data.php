@@ -37,6 +37,12 @@ class Kwc_Basic_LinkTag_Data extends Kwf_Component_Data
         return $this->_getLinkData()->getLinkDataAttributes();
     }
 
+    public function getLinkClass()
+    {
+        if (!$this->_getLinkData()) return '';
+        return $this->_getLinkData()->getLinkClass();
+    }
+
     public function getLinkTitle()
     {
         if (!$this->_getLinkData()) return '';

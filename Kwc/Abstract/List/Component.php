@@ -1,9 +1,9 @@
 <?php
 class Kwc_Abstract_List_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'componentName' => 'List',
             'childModel'     => 'Kwc_Abstract_List_Model',
             'ownModel'     => 'Kwc_Abstract_List_OwnModel',
@@ -21,11 +21,12 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/List/ListEditButton.js';
         $ret['extConfig'] = 'Kwc_Abstract_List_ExtConfigListUpload';
         $ret['hasVisible'] = true;
+        $ret['defaultVisible'] = false;
         $ret['maxEntries'] = 100;
         return $ret;
     }
 
-    public static function validateSettings($settings)
+    public static function validateSettings($settings, $componentClass)
     {
         if (isset($settings['default'])) {
             throw new Kwf_Exception("Setting default doesn't exist anymore");
@@ -46,7 +47,7 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         return $select;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $children = $this->getData()->getChildComponents($this->getSelect());

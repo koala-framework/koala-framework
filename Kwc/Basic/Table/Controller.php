@@ -18,9 +18,9 @@ class Kwc_Basic_Table_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         }
         $sel->setValues($rowStylesSelect);
         $sel->setShowNoSelection(true);
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('css_style', trlKwf('Style'), 100))
             ->setEditor($sel);
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
         for ($i = 1; $i <= $maxColumns; $i++) {
             $ed = new Kwf_Form_Field_TextField();
             $ed->setAllowTags(true);

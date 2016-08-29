@@ -32,10 +32,4 @@ class Kwc_Directories_Item_Directory_Admin extends Kwc_Admin
     {
         return $this->_getPluginAdmins();
     }
-
-    public function delete($componentId)
-    {
-        $detail = Kwc_Abstract::getChildComponentClass($this->_class, 'detail');
-        Kwc_Admin::getInstance($detail)->delete($componentId);
-    }
 }

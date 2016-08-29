@@ -1,9 +1,9 @@
 <?php
 class Kwc_Trl_Simple_Test_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['test2'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Trl_Simple_Test_Test2_Component',
@@ -12,7 +12,7 @@ class Kwc_Trl_Simple_Test_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['componentClass'] = get_class($this);

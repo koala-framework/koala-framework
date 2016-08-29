@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_FlashMediaPlayer_Component extends Kwc_Abstract_Flash_Upload_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Flash.Media Player');
         $ret['ownModel'] = 'Kwc_Basic_FlashMediaPlayer_Model';
         $ret['playerPath'] = '/assets/kwf/Kwc/Basic/FlashMediaPlayer/player.swf';

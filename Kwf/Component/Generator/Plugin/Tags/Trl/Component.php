@@ -1,7 +1,7 @@
 <?php
 class Kwf_Component_Generator_Plugin_Tags_Trl_Component extends Kwf_Component_Generator_Plugin_Abstract
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['componentName'] = trlKwfStatic('Tags Translation');

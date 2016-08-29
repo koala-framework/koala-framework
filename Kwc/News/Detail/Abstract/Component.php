@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_News_Detail_Abstract_Component extends Kwc_Directories_Item_Detail_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['content'] = 'Kwc_Paragraphs_Component';
         $ret['generators']['metaTags'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
@@ -16,7 +16,7 @@ abstract class Kwc_News_Detail_Abstract_Component extends Kwc_Directories_Item_D
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['title'] = $this->getData()->row->title;

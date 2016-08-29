@@ -57,4 +57,9 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwc_Basic_LinkTag_Abstract_Data
         }
         return $ret;
     }
+
+    public function getLinkClass()
+    {
+        return 'kwfUp-kwcPopup';
+    }
 }

@@ -1,9 +1,9 @@
 <?php
 class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item_Directory_Component implements Kwf_Util_Maintenance_JobProviderInterface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Fulltext Search');
         $ret['generators']['detail']['class'] = 'Kwc_FulltextSearch_Search_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Kwc_FulltextSearch_Search_Detail_Component';

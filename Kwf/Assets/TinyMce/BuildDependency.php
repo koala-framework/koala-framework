@@ -17,7 +17,7 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
 
         if (!file_exists('temp/tinymce-build-out.js.mtime') || file_get_contents('temp/tinymce-build-out.js.mtime') != $mtime) {
             $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".__DIR__."/build.js";
-            putenv("NODE_PATH=".KWF_PATH."/node_modules");
+            putenv("NODE_PATH=".getcwd()."/node_modules");
             exec($cmd, $out, $ret);
             putenv("NODE_PATH=");
             if ($ret) {

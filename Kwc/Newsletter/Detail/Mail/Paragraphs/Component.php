@@ -1,9 +1,9 @@
 <?php
 class Kwc_Newsletter_Detail_Mail_Paragraphs_Component extends Kwc_Paragraphs_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Mail');
         $ret['generators']['paragraphs']['component'] = array();
         $ret['generators']['paragraphs']['component']['textImage'] =

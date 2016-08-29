@@ -27,4 +27,10 @@ class Kwc_Basic_LinkTag_CommunityVideo_Data extends Kwc_Basic_LinkTag_Abstract_D
         if (!$this->_getLinkData()->getComponent()->hasContent()) return array();
         return $this->chained->getLinkDataAttributes();
     }
+
+    public function getLinkClass()
+    {
+        if (!$this->_getLinkData()->getComponent()->hasContent()) return '';
+        return $this->chained->getLinkClass();
+    }
 }

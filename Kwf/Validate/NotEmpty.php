@@ -11,7 +11,7 @@ class Kwf_Validate_NotEmpty extends Zend_Validate_NotEmpty
         $this->_messageTemplates[self::IS_EMPTY] = trlKwfStatic("Please fill out the field");
     }
 
-    public function setMessage($type, $msg)
+    public function setMessage($type, $msg = null)
     {
         $this->_messageTemplates[$type] = $msg;
     }

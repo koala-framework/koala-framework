@@ -1,9 +1,9 @@
 <?php
 class Kwc_Box_Title_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Title');
         $ret['flags']['hasHeaderIncludeCode'] = true;
         $ret['flags']['hasInjectIntoRenderedHtml'] = true;
@@ -28,7 +28,7 @@ class Kwc_Box_Title_Component extends Kwc_Abstract
         return $this->getData()->getBaseProperty('application.name');
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['title'] = $this->_getTitle();

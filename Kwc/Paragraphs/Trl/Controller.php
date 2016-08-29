@@ -10,6 +10,7 @@ class Kwc_Paragraphs_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 
     protected function _initColumns()
     {
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('component_class'));
         $this->_columns->add(new Kwf_Grid_Column('component_name'));
         $this->_columns->add(new Kwf_Grid_Column('component_icon'));
@@ -19,7 +20,6 @@ class Kwc_Paragraphs_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $this->_columns->add(new Kwf_Grid_Column('preview'))
             ->setData(new Kwf_Data_Kwc_Frontend($this->_getParam('class')))
             ->setRenderer('component');
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('edit_components'))
             ->setData(new Kwc_Paragraphs_Trl_EditComponentsData($this->_getParam('class')));
     }

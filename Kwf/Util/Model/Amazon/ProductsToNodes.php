@@ -44,7 +44,7 @@ class Kwf_Util_Model_Amazon_ProductsToNodes extends Kwf_Model_Abstract
         throw new Kwf_Exception('Not possible');
     }
 
-    public function getRowByDataKey($key, $parentRow)
+    public function getRowByDataKeyAndParentRow($key, $parentRow)
     {
         $pId = $parentRow->getInternalId();
         if (!isset($this->_rows[$pId][$key])) {

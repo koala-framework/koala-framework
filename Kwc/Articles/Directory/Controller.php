@@ -22,9 +22,9 @@ class Kwc_Articles_Directory_Controller extends Kwf_Controller_Action_Auto_Kwc_G
             'icon'=>'/assets/silkicons/bin.png',
             'cls'=>'x2-btn-icon'
         );
+        $this->_columns->add(new Kwf_Grid_Column_Visible('visible'));
         $this->_columns->add(new Kwf_Grid_Column('title', trlKwf('Title'), 200));
         $this->_columns->add(new Kwf_Grid_Column_Date('date', trlKwf('Publication')));
-        $this->_columns->add(new Kwf_Grid_Column_Visible('visible'));
         $this->_columns->add(new Kwf_Grid_Column('vi_nr', trlKwf('VI-Nr'), 50));
         $this->_columns->add(new Kwf_Grid_Column('is_top', '&nbsp', 25))
             ->setRenderer('booleanIcon')

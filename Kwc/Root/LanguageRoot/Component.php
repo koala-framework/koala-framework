@@ -1,9 +1,9 @@
 <?php
 class Kwc_Root_LanguageRoot_Component extends Kwc_Root_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['language'] = array(
             'class' => 'Kwc_Root_LanguageRoot_Generator',
             'component' => array(

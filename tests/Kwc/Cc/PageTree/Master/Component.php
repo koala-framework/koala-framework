@@ -1,9 +1,9 @@
 <?php
 class Kwc_Cc_PageTree_Master_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['category'] = array(
             'class' => 'Kwc_Root_CategoryGenerator',
             'component' => 'Kwc_Cc_PageTree_Master_Category_Component',

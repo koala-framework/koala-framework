@@ -7,11 +7,11 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
     {
         $user = Zend_Registry::get('userModel')->getAuthedUser();
         $acl = Kwf_Registry::get('acl')->getComponentAcl();
-        return self::getNodeConfig($component, $user, $acl, $this->_componentConfigs);
+        return self::getComponentNodeConfig($component, $user, $acl, $this->_componentConfigs);
     }
 
     //public static zum testen
-    public static function getNodeConfig($component, $user, $acl, array &$componentConfigs = array())
+    public static function getComponentNodeConfig($component, $user, $acl, array &$componentConfigs = array())
     {
         $data = parent::getNodeConfig($component);
         $enabled = $acl->isAllowed($user, $component);
@@ -77,7 +77,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             $pageGenerator = Kwf_Component_Generator_Abstract::getInstances($component, array(
                 'pageGenerator' => true
             ));
-            if ($pageGenerator) {
+            if ($pageGenerator && $pageGenerator[0] instanceof Kwc_Root_Category_Generator) {
                 $data['actions']['add'] = true;
                 $data['actions']['paste'] = true;
                 $data['allowDrop'] = true;

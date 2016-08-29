@@ -8,9 +8,9 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     const CONFIRM_MAIL_ONLY = 'confirm-mail-only';
     const DOUBLE_OPT_IN = 'double-opt-in';
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Newsletter subscribing');
         $ret['placeholder']['submitButton'] = trlKwfStatic('Subscribe the newsletter');
         $ret['subscribeType'] = self::CONFIRM_MAIL_ONLY;

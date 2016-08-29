@@ -54,6 +54,12 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
                     'file' => $i
                 );
             }
+            foreach (glob('node_modules/*') as $i) {
+                $cachedProviders[] = array(
+                    'cls' => 'Kwf_Assets_Provider_Npm',
+                    'file' => $i
+                );
+            }
             Kwf_Cache_SimpleStatic::add($cacheId, $cachedProviders);
         }
 

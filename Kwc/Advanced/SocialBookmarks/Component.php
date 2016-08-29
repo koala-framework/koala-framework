@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Social Bookmarks');
         $ret['ownModel'] = 'Kwc_Advanced_SocialBookmarks_Model';
         $ret['rootElementClass'] = 'kwfUp-webStandard';
@@ -50,17 +50,17 @@ class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
         return count($this->_getNetworks($this->getData())) > 0;
     }
 
-    public function getTemplateVarsWithNetworks($currentPage)
+    public function getTemplateVarsWithNetworks(Kwf_Component_Renderer_Abstract $renderer, $currentPage)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['networks'] = $this->_getNetworks($currentPage);
         $ret['iconSet'] = $this->_getSetting('iconSet');
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
-        return $this->getTemplateVarsWithNetworks($this->getData()->parent);
+        return $this->getTemplateVarsWithNetworks($renderer, $this->getData()->parent);
     }
 
     public static function getAlternativeComponents()

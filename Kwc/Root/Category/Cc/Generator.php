@@ -1,9 +1,9 @@
 <?php
 class Kwc_Root_Category_Cc_Generator extends Kwc_Chained_Cc_Generator
 {
-    public function getPagesControllerConfig($component)
+    public function getPagesControllerConfig($component, $generatorClass = null)
     {
-        $ret = parent::getPagesControllerConfig($component);
+        $ret = parent::getPagesControllerConfig($component, $generatorClass);
         foreach ($ret['actions'] as &$a) $a = false;
         return $ret;
     }

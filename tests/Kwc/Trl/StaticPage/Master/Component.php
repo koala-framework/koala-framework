@@ -1,9 +1,9 @@
 <?php
 class Kwc_Trl_StaticPage_Master_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['foo'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Trl_StaticPage_Master_Foo_Component',

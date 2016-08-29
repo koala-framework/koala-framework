@@ -9,6 +9,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 
     protected function _initColumns()
     {
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('component_class'))
             ->setData(new Kwf_Data_Kwc_ComponentClass($this->_getParam('class')));
         $this->_columns->add(new Kwf_Grid_Column('component_name'))
@@ -19,7 +20,6 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $this->_columns->add(new Kwf_Grid_Column('preview'))
             ->setData(new Kwf_Data_Kwc_Frontend($this->_getParam('class')))
             ->setRenderer('component');
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('device_visible'))
             ->setEditor(new Kwf_Form_Field_TextField());
 

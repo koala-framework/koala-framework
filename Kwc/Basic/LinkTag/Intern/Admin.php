@@ -34,7 +34,7 @@ class Kwc_Basic_LinkTag_Intern_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
         return $data->getLinkedData()->name;
     }
 
-    public function duplicate($source, $target, $progressBar = null)
+    public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
         parent::duplicate($source, $target, $progressBar);
         $this->_duplicated[] = array(

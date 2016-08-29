@@ -1,7 +1,7 @@
 <?php
 class Kwc_Directories_Item_Detail_Cc_Component extends Kwc_Abstract_Composite_Cc_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['hasModifyItemData'] = true;

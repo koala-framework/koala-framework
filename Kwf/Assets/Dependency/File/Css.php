@@ -27,6 +27,14 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         //as we don't support them anymore drop them
         $ret = preg_replace('#[^/]\\*[a-z-]+:[^;}]+#', '', $ret);
 
+        // @charset has to be in the first line of css-file. we generate packages from
+        // all the css-files and therefore @charset needs to be removed.
+        $ret = str_replace('@charset "UTF-8";', '', $ret);
+        $ret = str_replace('@charset \'UTF-8\';', '', $ret);
+        if (strpos($ret, '@charset') !== false) {
+            throw new Kwf_Exception('@charset in CSS-Files not supported');
+        }
+
         return $ret;
     }
 

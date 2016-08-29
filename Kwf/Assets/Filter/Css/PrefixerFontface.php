@@ -28,7 +28,7 @@ class Kwf_Assets_Filter_Css_PrefixerFontface extends Kwf_Assets_Filter_Css_Abstr
     public function getMasterFiles()
     {
         return array(
-            getcwd().'/'.KWF_PATH.'/node_modules/postcss-prefixer-font-face/package.json'
+            getcwd().'/node_modules/postcss-prefixer-font-face/package.json'
         );
     }
 }

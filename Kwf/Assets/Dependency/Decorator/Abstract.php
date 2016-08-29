@@ -48,7 +48,7 @@ abstract class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Depen
         return $this->_dep->addDependencies($type, $deps);
     }
 
-    public function addDependency($type, $dep, $index = null)
+    public function addDependency($type, Kwf_Assets_Dependency_Abstract $dep, $index = null)
     {
         return $this->_dep->addDependency($type, $dep, $index);
     }

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Form_Dynamic_Paragraphs_Component extends Kwc_Paragraphs_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['paragraphs']['component'] = array_merge(
             array(
                 'textField' => 'Kwc_Form_Field_TextField_Component',

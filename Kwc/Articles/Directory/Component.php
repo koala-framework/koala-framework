@@ -1,9 +1,9 @@
 <?php
 class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Directory_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Articles/Directory/Controller.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Articles/Directory/AuthorsPanel.js';
         $ret['generators']['child']['component']['view'] = 'Kwc_Articles_Directory_View_Component';
