@@ -24,7 +24,7 @@ class Kwf_Cache_SimpleStatic
         if (strlen($cacheId) > 50) {
             $cacheId = substr($cacheId, 0, 50).md5($cacheId);
         }
-        return "cache/simple/".$cacheId;
+        return "cache/simpleStatic/".$cacheId;
     }
 
     public static function fetch($cacheId, &$success = true)
@@ -84,7 +84,7 @@ class Kwf_Cache_SimpleStatic
         if (!extension_loaded('apc') || PHP_SAPI == 'cli') {
             self::$_cache = array();
             //don't use $cacheIdPrefix as filenames are base64 encoded
-            foreach (glob('cache/simple/*') as $f) {
+            foreach (glob('cache/simpleStatic/*') as $f) {
                 unlink($f);
             }
             if (extension_loaded('apc')) {
