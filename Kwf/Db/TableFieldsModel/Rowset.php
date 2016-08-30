@@ -14,6 +14,6 @@ class Kwf_Db_TableFieldsModel_Rowset extends Kwf_Model_Rowset_Abstract
             return null;
         }
         $key = $this->_dataKeys[$this->_pointer];
-        return $this->getModel()->getRowByDataKey($key, $this->_parentRow);
+        return $this->getModel()->getRowByDataKeyAndParentRow($key, $this->_parentRow);
     }
 }

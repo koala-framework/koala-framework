@@ -12,10 +12,10 @@ class Kwc_List_ChildPages_Teaser_Controller extends Kwf_Controller_Action_Auto_K
         $this->_getModel()->updatePages($cmp);
 
         $this->_columns->add(new Kwf_Grid_Column('pos'));
+        $this->_columns->add(new Kwf_Grid_Column_Visible('visible'));
         $this->_columns->add(new Kwf_Grid_Column('child_id'));
         $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Page name'), 200))
             ->setData(new Kwc_List_ChildPages_Teaser_ChildPageNameData());
-        $this->_columns->add(new Kwf_Grid_Column_Visible('visible'));
 
     }
 

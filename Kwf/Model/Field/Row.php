@@ -24,7 +24,7 @@ class Kwf_Model_Field_Row extends Kwf_Model_Row_Data_Abstract
         parent::__construct($config);
     }
 
-    public function getSiblingRow()
+    public function getSiblingRow($rule = null)
     {
         return $this->_siblingRow;
     }

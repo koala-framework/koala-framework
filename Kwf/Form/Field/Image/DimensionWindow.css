@@ -1,0 +1,38 @@
+.kwf-form-field-image-dimension-window-crop-panel .information {
+    background-image: url('/assets/silkicons/error.png');
+    background-repeat: no-repeat;
+    padding-left: 22px;
+    margin: 3px;
+    margin-left: 6px;
+    background-position: left center;
+    line-height: 14px;
+}
+
+.kwf-form-field-image-dimension-window-imagedata {
+    margin-top:10px;
+}
+
+.kwf-form-field-image-dimension-window-userselection,
+.kwf-form-field-image-dimension-window-userselection > div > div {
+    border: none;
+}
+
+.x2-form-radio-group .x2-form-element.error {
+    background-color: #ff0000;
+    color: #ffffff;
+}
+
+.x2-window .kwf-form-field-image-crop-image-wrapper.error {
+    background-image: url('/assets/kwf/images/cropimage/redPx85.png');
+}
+
+.kwf-form-field-image-dimensionwindow-errorMessage.error {
+    padding-left: 18px;
+    background-image: url('/assets/silkicons/exclamation.png');
+    background-repeat: no-repeat;
+    font: 11px tahoma,verdana,helvetica;
+    color: #444444;
+    font-weight: bold;
+    margin-right: 5px;
+    background-position: 0px 1px;
+}

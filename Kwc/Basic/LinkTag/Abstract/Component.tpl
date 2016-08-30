@@ -1,6 +1,6 @@
 <?php
 if ($this->data->url) {
-    echo '<a class="'.$this->rootElementClass.'" href="' . htmlspecialchars($this->data->url) . '"';
+    echo '<a class="'.$this->linkClass.'" href="' . htmlspecialchars($this->data->url) . '"';
     if($this->data->rel) { echo ' rel="' . htmlspecialchars($this->data->rel) . '"'; }
     if ($this->linkTitle) { echo ' title="' . htmlspecialchars($this->linkTitle) . '"'; }
     $attributes = $this->data->getLinkDataAttributes();

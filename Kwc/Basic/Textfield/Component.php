@@ -5,9 +5,9 @@
  */
 class Kwc_Basic_Textfield_Component extends Kwc_Basic_Html_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        return array_merge(parent::getSettings(), array(
+        return array_merge(parent::getSettings($param), array(
             'componentName' => trlKwfStatic('Headline'),
             'ownModel' => 'Kwc_Basic_Textfield_Model'
         ));

@@ -46,9 +46,9 @@ class Kwc_Directories_Category_Directory_Trl_CategoriesController
 
     protected function _initColumns()
     {
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Category'), 200))
             ->setEditor(new Kwf_Form_Field_TextField());
         $this->_columns->add(new Kwf_Grid_Column('original_name', trlKwf('Original Category'), 150));
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 }

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Legacy_List_Carousel_Image_Component extends Kwc_Basic_Image_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Carousel');
         $ret['dimensions'] = array(
             'fullWidth'=>array(

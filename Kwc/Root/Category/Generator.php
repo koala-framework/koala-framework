@@ -503,8 +503,11 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         unset($source);
         unset($parentTarget);
         $targetId = $this->_duplicatePageRecursive($parentSourceId, $parentTargetId, $sourceId, $progressBar);
-        return Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($targetId, array('ignoreVisible'=>true));
+        if ($targetId) {
+            return Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($targetId, array('ignoreVisible'=>true));
+        }
+        return null;
     }
 
     private function _duplicatePageRecursive($parentSourceId, $parentTargetId, $childId, Zend_ProgressBar $progressBar = null)
@@ -537,6 +540,14 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $target = Kwf_Component_Data_Root::getInstance()->getComponentById($newRow->id, array('ignoreVisible'=>true));
         if (!$target) {
             throw new Kwf_Exception("didn't find just duplicated component '$newRow->id' below '{$parentTarget->componentId}'");
+        }
+
+        $ev = new Kwf_Component_Event_Component_FilterAddComponentClass($source->componentClass, $target);
+        Kwf_Events_Dispatcher::fireEvent($ev);
+        if ($ev->deny) {
+            //increment for number of child pages as those will be skipped
+            if ($progressBar) $progressBar->next($this->getDuplicateProgressSteps($source)-1);
+            return null;
         }
 
         Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);

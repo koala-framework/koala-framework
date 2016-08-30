@@ -9,11 +9,11 @@
         <div class="x2-panel-bwrap" id="ext-gen12">
             <form id="ext-gen34" method="post" class="x2-form" action="<?=$this->action?>">
                 <div class="x2-panel-mc" style="padding: 10px; height:100%">
-                    <? if ($this->text) { ?>
+                    <?php if ($this->text) { ?>
                         <div class="x2-form-item kwfLoginResult <?= $this->cssClass; ?>">
                             <span><?= $this->text ?></span>
                         </div>
-                    <? } else { ?>
+                    <?php } else { ?>
                     <div tabindex="-1" class="x2-form-item">
                         <label class="x2-form-item-label" style="width: 75px;" for="ext-comp-1004"><?= trlKwf('E-Mail') ?>:</label>
                         <div style="padding-left: 80px;" id="x2-form-el-ext-comp-1004" class="x2-form-element">
@@ -40,7 +40,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <? } ?>
+                    <?php } ?>
                     <div class="x2-clear"></div>
                 </div>
             </form>

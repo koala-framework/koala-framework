@@ -2,9 +2,9 @@
 class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwf_Component_Plugin_Abstract
     implements Kwc_Shop_Cart_Plugins_Interface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Discount');
         return $ret;
     }

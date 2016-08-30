@@ -17,18 +17,22 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         '<ul class="kwfUp-menu">\n' +
             '<% if (isRoot) { %>' +
                 '<% _.each(item.pages, function(page) { %>' +
+                    '<% if (!page.hidden) {  %>\n' +
                     '<li class="<% if (page.hasChildren) {  %>kwfUp-hasChildren<% } else if (page.isParent) { %>kwfUp-parent<% } %>">\n' +
                         '<a href="<%= page.url %>" data-id="<%= page.id %>" data-children="<%= (page.hasChildren || page.children && page.children.length) || false %>"><%= page.name %></a>\n'+
                     '</li>\n'+
+                    '<% } %>\n' +
                 '<% }) %>'+
             '<% } else { %>'+
                 '<% if (item.children && item.children.length) { %>'+
                     '<li class="kwfUp-back"><a href="#">'+t.trlKwf('back')+'</a></li>\n'+
                 '<% } %>'+
                 '<% _.each(item.children, function(child) { %>'+
+                    '<% if (!child.hidden) {  %>\n' +
                     '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %>">\n' +
                         '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="kwfUp-overview">('+t.trlKwf('Overview')+')</span><% } %></a>\n'+
                     '</li>\n' +
+                    '<% } %>\n' +
                 '<% }) %>' +
             '<% } %>' +
         '</ul>\n'
@@ -93,7 +97,8 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
             fetchedPages[data.id] = true;
             var params = {
                 pageId: data.id,
-                componentId: config.componentId
+                componentId: config.componentId,
+                pageUrl: location.href
             };
             if (typeof Kwf != "undefined" && Kwf.sessionToken) {
                 params.kwfSessionToken = Kwf.sessionToken
@@ -146,7 +151,8 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
 
     var params = {
         subrootComponentId: config.subrootComponentId,
-        componentId: config.componentId
+        componentId: config.componentId,
+        pageUrl: location.href
     };
     if (typeof Kwf != "undefined" && Kwf.sessionToken) {
         params.kwfSessionToken = Kwf.sessionToken

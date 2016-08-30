@@ -1,18 +1,16 @@
 <?php
 class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Component
 {
-    public static $needsParentComponentClass = true;
-    public static function getSettings($parentComponentClass)
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentIcon'] = 'shape_move_forwards';
         $ret['componentName'] = trlKwfStatic('Switch display');
         $ret['componentCategory'] = 'layout';
         $ret['componentPriority'] = 60;
         $ret['generators']['child']['component']['linktext'] =
             'Kwc_Composite_SwitchDisplay_LinkText_Component';
-        $ret['generators']['child']['component']['content'] =
-            $parentComponentClass;
+        $ret['generators']['child']['component']['content'] = 'Kwc_Paragraphs_Component';
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['assetsDefer']['dep'][] = 'KwfSwitchDisplay';
         $ret['extConfig'] = 'Kwc_Composite_SwitchDisplay_ExtConfig';
@@ -20,7 +18,7 @@ class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Compo
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['startOpened'] = $this->getRow()->start_opened;

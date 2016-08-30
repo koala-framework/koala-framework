@@ -28,7 +28,7 @@ class Kwf_Assets_Filter_Css_PrefixerKeyframes extends Kwf_Assets_Filter_Css_Abst
     public function getMasterFiles()
     {
         return array(
-            getcwd().'/'.KWF_PATH.'/node_modules/postcss-prefixer-keyframes/package.json'
+            getcwd().'/node_modules/postcss-prefixer-keyframes/package.json'
         );
     }
 }

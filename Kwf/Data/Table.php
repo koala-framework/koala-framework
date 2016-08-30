@@ -11,7 +11,7 @@ class Kwf_Data_Table extends Kwf_Data_Abstract
         $this->_dataIndex = $dataIndex;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $name = $this->getField();
         return $row->$name;

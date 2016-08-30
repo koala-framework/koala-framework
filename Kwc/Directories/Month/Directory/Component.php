@@ -1,9 +1,9 @@
 <?php
 class Kwc_Directories_Month_Directory_Component extends Kwc_Directories_ItemPage_Directory_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['generators']['detail'] = array(
             'class' => 'Kwc_Directories_Month_Directory_Generator',

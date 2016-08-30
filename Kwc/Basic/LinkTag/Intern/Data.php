@@ -61,4 +61,9 @@ class Kwc_Basic_LinkTag_Intern_Data extends Kwc_Basic_LinkTag_Abstract_Data
     {
         return $this->getLinkedData()->getLinkDataAttributes();
     }
+
+    public function getLinkClass()
+    {
+        return $this->getLinkedData()->getLinkClass().' kwfUp-kwcLinkIntern';
+    }
 }

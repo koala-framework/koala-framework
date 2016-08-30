@@ -27,7 +27,11 @@ class Kwf_Util_Setup
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         Kwf_Setup::$configSection = $configSection;
 
-        error_reporting(E_ALL^E_STRICT);
+        if (Kwf_Exception::isDebug()) {
+            error_reporting(E_ALL | E_STRICT | E_DEPRECATED);
+        } else {
+            error_reporting(E_ALL^E_STRICT);
+        }
 
         class_exists('Kwf_Trl'); //trigger autoload
 
@@ -159,8 +163,13 @@ class Kwf_Util_Setup
         $ret .= "Kwf_Loader::setIncludePath('".implode(PATH_SEPARATOR, $ip)."');\n";
         $ret .= "\n";
         $ret .= "\n";
-        $ret .= "error_reporting(E_ALL & ~E_STRICT);\n";
-        $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL & ~E_STRICT);\n";
+        if (Kwf_Exception::isDebug()) {
+            $ret .= "error_reporting(E_ALL | E_STRICT | E_DEPRECATED);\n";
+            $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL | E_STRICT | E_DEPRECATED);\n";
+        } else {
+            $ret .= "error_reporting(E_ALL & ~E_STRICT);\n";
+            $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL & ~E_STRICT);\n";
+        }
         $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "\n";
         $ret .= "\$requestUri = isset(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : null;\n";
@@ -253,7 +262,6 @@ class Kwf_Util_Setup
         $preloadClasses[] = 'Kwf_Registry';
         $preloadClasses[] = 'Kwf_Trl';
         $preloadClasses[] = 'Kwf_Util_SessionHandler';
-        $preloadClasses[] = 'Kwf_Util_Memcache';
         $preloadClasses[] = 'Zend_Session';
         $preloadClasses[] = 'Kwf_Benchmark_Counter';
         $preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
@@ -286,15 +294,13 @@ class Kwf_Util_Setup
 
         if (Kwf_Config::getValue('server.memcache.host')) {
             $host = Kwf_Config::getValue('server.memcache.host');
-            if ($host == '%webserverHostname%') {
-                if (PHP_SAPI == 'cli') {
-                    $host = Kwf_Util_Apc::callUtil('get-hostname', array(), array('returnBody'=>true, 'skipCache'=>true));
-                } else {
-                    $host = php_uname('n');
-                }
-            }
             $ret .= "Kwf_Cache_Simple::\$memcacheHost = '".$host."';\n";
             $ret .= "Kwf_Cache_Simple::\$memcachePort = '".Kwf_Config::getValue('server.memcache.port')."';\n";
+        }
+        if (Kwf_Config::getValue('server.redis.host')) {
+            $host = Kwf_Config::getValue('server.redis.host');
+            $ret .= "Kwf_Cache_Simple::\$redisHost = '".$host."';\n";
+            $ret .= "Kwf_Cache_Simple::\$redisPort = '".Kwf_Config::getValue('server.redis.port')."';\n";
         }
 
         $ret .= "if (substr(\$requestUri, 0, 8) == '/assets/') {\n";
@@ -344,7 +350,7 @@ class Kwf_Util_Setup
             $redirectHttpsCode .= "    exit;\n";
             $redirectHttpCode = str_replace('https', 'http', $redirectHttpsCode);
 
-            $ret .= "if (PHP_SAPI != 'cli') {\n";
+            $ret .= "if (PHP_SAPI != 'cli' && isset(\$_SERVER['HTTP_HOST'])) {\n";
             if (!Kwf_Config::getValue('server.https')) {
                 $ret .= "if (isset(\$_SERVER['HTTPS'])) {\n";
                 $ret .= "    $redirectHttpCode";
@@ -353,10 +359,19 @@ class Kwf_Util_Setup
                 if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
                     $ret .= "\$domains = array(";
                     foreach ($domains as $d) {
-                        $ret .= "'".$d."'=>true, ";
+                        if (substr($d, 0, 2) != '*.') {
+                            $ret .= "'".$d."'=>true, ";
+                        }
                     }
                     $ret .= ");\n";
-                    $ret .= "\$supportsHttps = isset(\$_SERVER['HTTP_HOST']) && isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
+                    $ret .= "\$supportsHttps = isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
+                    foreach ($domains as $d) {
+                        if (substr($d, 0, 2) == '*.') {
+                            $ret .= "    if (!\$supportsHttps && '".substr($d, 1)."' == substr(\$_SERVER['HTTP_HOST'], strpos(\$_SERVER['HTTP_HOST'], '.'))) {\n";
+                            $ret .= "        \$supportsHttps = true;\n";
+                            $ret .= "    }\n";
+                        }
+                    }
                     $ret .= "if (\$supportsHttps != isset(\$_SERVER['HTTPS'])) {\n";
                     $ret .= "    if (\$supportsHttps) {\n";
                     $ret .= "        $redirectHttpsCode";
@@ -384,14 +399,19 @@ class Kwf_Util_Setup
         $ret .= "\n";
 
         //store session data in memcache if avaliable
-        if ((Kwf_COnfig::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
+        if (Kwf_Config::getValue('server.redis.host')) {
+            $ret .= "\nif (PHP_SAPI != 'cli') {\n";
+            $ret .= "    ini_set('session.save_handler', 'redis');\n";
+            $ret .= "    ini_set('session.save_path', 'tcp://".Kwf_Config::getValue('server.redis.host').":".Kwf_Config::getValue('server.redis.port')."?prefix=".substr(md5(Kwf_Cache_Simple::getUniquePrefix()), 0, 10)."');\n";
+            $ret .= "}\n";
+        } else if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (PHP_SAPI != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
         $ret .= "\n\$preLogin = false;\n";
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Kwf_Config::getValue('server.redirectToDomain')) {
-            $ret .= "if (\$host && substr(\$requestUri, 0, 17) != '/kwf/maintenance/' && substr(\$requestUri, 0, 8) != '/assets/') {\n";
+            $ret .= "if (\$host && substr(\$requestUri, 0, 8) != '/assets/') {\n";
             $ret .= "    \$redirect = false;\n";
             if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
                 $ret .= "    \$domainMatches = false;\n";

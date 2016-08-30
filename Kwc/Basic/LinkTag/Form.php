@@ -27,7 +27,7 @@ class Kwc_Basic_LinkTag_Form extends Kwc_Abstract_Cards_Form
 class Kwc_Basic_LinkTag_Form_Data extends Kwf_Data_Table
 {
     public $cards;
-    public function load($row)
+    public function load($row, array $info = array())
     {
         foreach ($this->cards as $card) {
             $n = $card->getName();

@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Cache_Menu_Root4_Page_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['children'] = array(
             'component' => 'Kwf_Component_Cache_Menu_Root4_Page_Child_Component',
             'class' => 'Kwf_Component_Generator_Table',

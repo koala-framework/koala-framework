@@ -2,9 +2,9 @@
 class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Kwc_Editable_Component
 {
     private $_order;
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['content']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Component';
         $ret['flags']['processInput'] = true;
         $ret['rootElementClass'] = 'kwfUp-webStandard';

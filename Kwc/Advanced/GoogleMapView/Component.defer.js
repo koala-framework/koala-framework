@@ -54,7 +54,7 @@ onReady.onRender('.kwcClass', function (el) {
             $('html, body').animate({
                 scrollTop: newEl.offset().top
             }, 400, function() {
-                google.maps.event.trigger(newEl.get(0).map.gmap, 'resize');
+                google.maps.event.trigger(newEl.data('gmapObject').gmap, 'resize');
             });
         }
     });

@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
 {
-    protected function _build()
+    protected function _build($options)
     {
         if (!file_exists('build/trl')) {
             mkdir('build/trl');
@@ -39,57 +39,117 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
 
         foreach ($langs as $l) {
             if ($l != $config->webCodeLanguage) {
-                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l, true);
-                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_WEB, $l, true), serialize($c));
-
-                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l, false);
-                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_WEB, $l, false), serialize($c));
+                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l);
+                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_WEB, $l), serialize($c));
             }
 
             if ($l != 'en') {
-                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_KWF, $l, true);
-                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_KWF, $l, true), serialize($c));
-
-                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_KWF, $l, false);
-                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_KWF, $l, false), serialize($c));
+                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_KWF, $l);
+                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_KWF, $l), serialize($c));
             }
         }
     }
 
-    private function _loadTrlArray($source, $targetLanguage, $plural)
+    private function _convertTrlEntry($entry)
     {
-        $poParsers = $this->_getPoParsers($source, $targetLanguage);
-        $c = array();
-        foreach ($poParsers as $poParser) {
-            foreach ($poParser->entries() as $entry) {
-                $ctx = isset($entry['msgctxt']) ? implode($entry['msgctxt']) : '';
-                $translation = isset($entry['msgstr']) ? implode($entry['msgstr']) : '';
-                if (isset($entry['msgid_plural']) && isset($entry['msgstr[0]'])) {
-                    $translation = implode($entry['msgstr[0]']);
-                }
-                if ($translation == '') continue;
-                $msgId = implode($entry['msgid']);
-                if ($msgId == '') continue;
-                $msgKey = $msgId.'-'.$ctx;
-                if (isset($c[$msgKey])) {
-                    echo "\nDuplicate entry in trl-files: $msgKey => $translation\n";
-                }
-                $c[$msgKey] = $translation;
+        $ctx = isset($entry['msgctxt']) ? implode($entry['msgctxt']) : '';
+        $translation = isset($entry['msgstr']) ? implode($entry['msgstr']) : '';
+        if (isset($entry['msgid_plural']) && isset($entry['msgstr[0]'])) {
+            $translation = implode($entry['msgstr[0]']);
+        }
+        if ($translation == '') return false;
+        $msgId = implode($entry['msgid']);
+        if ($msgId == '') return false;
 
-                if (isset($entry['msgid_plural'])) {
-                    $msgIdPlural =  implode($entry['msgid_plural']);
-                    $pluralTranslation = '';
-                    if (isset($entry['msgstr[1]'])) {
-                        $pluralTranslation = implode($entry['msgstr[1]']);
+        $ret = array(
+            'key' => $msgId.'-'.$ctx,
+            'translation' => $translation
+        );
+
+        if (isset($entry['msgid_plural'])) {
+            $msgIdPlural =  implode($entry['msgid_plural']);
+            $pluralTranslation = '';
+            if (isset($entry['msgstr[1]'])) {
+                $pluralTranslation = implode($entry['msgstr[1]']);
+            }
+            $ret['pluralKey'] = $msgIdPlural.'-'.$ctx;
+            $ret['pluralTranslation'] = $pluralTranslation;
+        }
+
+        return $ret;
+    }
+
+    private function _loadTrlArray($source, $targetLanguage)
+    {
+        $trlEntries = array();
+        $kwfTrlFile = KWF_PATH.'/trl/'.$targetLanguage.'.po';
+        $kwfPoParser = \Sepia\PoParser::parseFile($kwfTrlFile);
+        foreach ($kwfPoParser->entries() as $entry) {
+            $entry = $this->_convertTrlEntry($entry);
+            if (!$entry) continue;
+            $trlEntries[$entry['key']] = array(
+                'source' => $kwfTrlFile,
+                'translation' => $entry['translation']
+            );
+            if (isset($entry['pluralKey'])) {
+                $trlEntries[$entry['pluralKey']] = array(
+                    'source' => $kwfTrlFile,
+                    'translation' => $entry['pluralTranslation']
+                );
+            }
+        }
+
+        $poParsers = $this->_getAllPoParsersExceptKwf($source, $targetLanguage);
+        foreach ($poParsers as $file => $poParser) {
+            foreach ($poParser->entries() as $entry) {
+                $entry = $this->_convertTrlEntry($entry);
+
+                if (isset($trlEntries[$entry['key']])) {
+                    if ($trlEntries[$entry['key']]['source'] == $kwfTrlFile) {
+                        echo "\n - Translation defined in kwf is also translated in package:";
+                        echo "\n - $file: {$entry['key']}\n";
+
+                    } else if ($trlEntries[$entry['key']]['translation'] != $entry['translation']) {
+                        $secondFile = $trlEntries[$entry['key']]['source'];
+                        echo "\n - Translation is defined in a second package but translated differently:";
+                        echo "\n - $secondFile & $file | {$entry['key']}";
+                        echo "\n - Please consider adding context to one or both.\n";
                     }
-                    $c[$msgIdPlural.'-'.$ctx] = $pluralTranslation;
+                } else {
+                    $trlEntries[$entry['key']] = array(
+                        'source' => $file,
+                        'translation' => $entry['translation']
+                    );
+                }
+
+                if (isset($entry['pluralKey'])) {
+                    if (isset($trlEntries[$entry['pluralKey']])) {
+                        if ($trlEntries[$entry['pluralKey']]['source'] == $kwfTrlFile) {
+                            echo "\nTranslation defined in kwf is also translated in package: $file:{$entry['pluralKey']}\n";
+
+                        } else if ($trlEntries[$entry['pluralKey']]['translation'] != $entry['pluralTranslation']) {
+                            $secondFile = $trlEntries[$entry['pluralKey']]['source'];
+                            echo "\nTranslation is defined in a second package but translated differently:";
+                            echo "\n{$entry['pluralKey']} | $secondFile & $file";
+                            echo "\nPlease consider adding context to one or both.\n";
+                        }
+                    } else {
+                        $trlEntries[$entry['pluralKey']] = array(
+                            'source' => $file,
+                            'translation' => $entry['pluralTranslation']
+                        );
+                    }
                 }
             }
         }
-        return $c;
+        $trl = array();
+        foreach ($trlEntries as $id => $value) {
+            $trl[$id] = $value['translation'];
+        }
+        return $trl;
     }
 
-    private function _getPoParsers($source, $targetLanguage)
+    private function _getAllPoParsersExceptKwf($source, $targetLanguage)
     {
         $files = array();
         if ($source == Kwf_Trl::SOURCE_WEB) {
@@ -98,18 +158,17 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             }
         } else if ($source == Kwf_Trl::SOURCE_KWF) {
             // check all composer packages
-            $files = $this->_getAllLibraryTrlFiles($targetLanguage);
+            $files = $this->_getAllPackagesTrlFiles($targetLanguage);
         }
         require_once VENDOR_PATH.'/autoload.php';
         $poParsers = array();
         foreach ($files as $file) {
-            $poParser = \Sepia\PoParser::parseFile($file);
-            array_push($poParsers, $poParser);
+            $poParsers[$file] = \Sepia\PoParser::parseFile($file);
         }
         return $poParsers;
     }
 
-    private function _getAllLibraryTrlFiles($targetLanguage)
+    private function _getAllPackagesTrlFiles($targetLanguage)
     {
         $composerFiles = array_merge(
             //Explicitly add koala-framework composer.json because of tests
@@ -119,6 +178,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         $existingFiles = array();
         $composerFiles = array_unique($composerFiles);
         foreach ($composerFiles as $composerFile) {
+            if (strpos($composerFile, 'koala-framework/koala-framework') !== false) continue;
             $trlDir = dirname($composerFile).'/trl/';
 
             $trlFilePath = $trlDir.$targetLanguage.'.po';

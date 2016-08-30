@@ -27,6 +27,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'assetdeps') continue; //never clear assetdeps, too expensive to regenerate
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
                 if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
+                if ($d->getFilename() == 'simple') continue; //handled by Kwf_Util_ClearCache_Types_SimpleCache
                 $ret[] = $d->getFilename();
             }
         }
@@ -77,7 +78,7 @@ class Kwf_Util_ClearCache
     {
         $types = array();
         $simpleCacheBackend = Kwf_Cache_Simple::getBackend();
-        if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'elastiCache') {
+        if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'redis' || $simpleCacheBackend == 'elastiCache') {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         }
         if (Kwf_Util_Apc::isAvailable()) {
@@ -93,19 +94,19 @@ class Kwf_Util_ClearCache
                 $types[] = new Kwf_Util_ClearCache_Types_Dir($d);
             }
         }
+
+        if (Kwf_Component_Data_Root::getInstance()) {
+            $types[] = new Kwf_Util_ClearCache_Types_ComponentView();
+            $types[] = new Kwf_Util_ClearCache_Types_ComponentUrl();
+        }
         foreach ($this->_getDbCacheTables() as $t) {
-            if ($t == 'cache_component') {
-                $types[] = new Kwf_Util_ClearCache_Types_TableComponentView();
-            } else if ($t == 'cache_component_includes') {
+            if ($t == 'cache_component' || $t == 'cache_component_includes' || $t == 'cache_component_url') {
                 //never completely clear that table as it would break clearing fullPage cache
             } else if ($t == 'cache_users') {
                 //skip, needed during update
             } else {
                 $types[] = new Kwf_Util_ClearCache_Types_Table($t);
             }
-        }
-        if (Kwf_Config::getValue('assetsCacheUrl')) {
-            $types[] = new Kwf_Util_ClearCache_Types_AssetsServer();
         }
 
         $types[] = new Kwf_Util_ClearCache_Types_Config();
@@ -115,6 +116,10 @@ class Kwf_Util_ClearCache
         if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && VENDOR_PATH != '../vendor') {
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();
         }
+
+        $ev = new Kwf_Events_Event_FetchClearCacheTypes(get_class($this));
+        Kwf_Events_Dispatcher::fireEvent($ev);
+        $types = array_merge($types, $ev->types);
 
         return $types;
     }
@@ -129,7 +134,7 @@ class Kwf_Util_ClearCache
     }
 
     /**
-     * @param array possible options: types(=all), output(=false), refresh(=true), excludeTypes, skipOtherServers
+     * @param array possible options: types(=all), output(=false), refresh(=true), excludeTypes
      */
     public final function clearCache(array $options)
     {

@@ -1,14 +1,14 @@
 <?php
 class Kwc_Shop_AddToCartAbstract_Trl_Form_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('add to cart');
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['cssClass'] = self::getCssClass($this->getData()->parent->componentClass);

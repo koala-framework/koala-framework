@@ -1,9 +1,9 @@
 <?php
 class Kwc_News_Detail_Component extends Kwc_News_Detail_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['image'] = 'Kwc_News_Detail_PreviewImage_Component';
         $ret['generators']['child']['component']['customMetaTags'] = 'Kwc_Box_MetaTagsContent_Component';
         return $ret;

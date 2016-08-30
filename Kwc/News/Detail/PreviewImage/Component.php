@@ -1,9 +1,9 @@
 <?php
 class Kwc_News_Detail_PreviewImage_Component extends Kwc_Basic_Image_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['dimensions'] = array(
             array(
                 'width' => 120,
@@ -12,6 +12,7 @@ class Kwc_News_Detail_PreviewImage_Component extends Kwc_Basic_Image_Component
             )
         );
         $ret['defineWidth'] = true;
+        $ret['flags']['assetsPackage'] = 'Default';
         return $ret;
     }
 }

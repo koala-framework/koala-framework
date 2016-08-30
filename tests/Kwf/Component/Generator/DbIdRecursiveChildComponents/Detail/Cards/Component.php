@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Generator_DbIdRecursiveChildComponents_Detail_Cards_Component extends Kwc_Abstract_Cards_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = new Kwf_Model_FnF(array(
             'primaryKey' => 'component_id',
             'data' => array(

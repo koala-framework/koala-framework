@@ -20,20 +20,20 @@
         <h3><?=$this->data->trlKwf('Member since')?>:</h3>
         <p><?=$this->date($this->row->created)?></p>
 
-        <? if (isset($this->row->last_login_web)) { ?>
+        <?php if (isset($this->row->last_login_web)) { ?>
             <h3><?=$this->data->trlKwf('Latest online')?>:</h3>
             <p><?=$this->timestamp($this->row->last_login_web)?></p>
-        <? } ?>
+        <?php } ?>
 
-        <? if ($this->row->location != '') { ?>
+        <?php if ($this->row->location != '') { ?>
         <h3><?=$this->data->trlKwf('Place of living')?>:</h3>
         <p><?=htmlspecialchars($this->row->location)?></p>
-        <? } ?>
+        <?php } ?>
     
-        <? if ($this->row->description_short != '') { ?>
+        <?php if ($this->row->description_short != '') { ?>
         <h3><?=$this->data->trlKwf('Short description')?>:</h3>
         <p><?=nl2br(htmlspecialchars($this->row->description_short))?></p>
-        <? } ?>
+        <?php } ?>
     
         <h3><?=$this->data->trlKwf('Last Posts')?>:</h3>
         <?= $this->component($this->latestPosts) ?>

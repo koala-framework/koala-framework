@@ -2,13 +2,13 @@
 class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     implements Kwf_Media_Output_IsValidInterface
 {
-    const USER_SELECT = 'user';
-    const CONTENT_WIDTH = 'contentWidth';
+    const USER_SELECT = Kwf_Form_Field_Image_UploadField::USER_SELECT;
+    const CONTENT_WIDTH = Kwf_Form_Field_Image_UploadField::CONTENT_WIDTH;
     private $_imageDataOrEmptyImageData;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwc_Abstract_Image_Model';
 
         $ret['dimensions'] = array(
@@ -22,7 +22,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             ),
             'fullWidth'=>array(
                 'text' => trlKwfStatic('full width'),
-                'width' => self::CONTENT_WIDTH,
+                'width' => Kwf_Form_Field_Image_UploadField::CONTENT_WIDTH,
                 'height' => 0,
                 'cover' => true
             ),
@@ -31,8 +31,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             ),
             'custom'=>array(
                 'text' => trlKwfStatic('user-defined'),
-                'width' => self::USER_SELECT,
-                'height' => self::USER_SELECT,
+                'width' => Kwf_Form_Field_Image_UploadField::USER_SELECT,
+                'height' => Kwf_Form_Field_Image_UploadField::USER_SELECT,
                 'cover' => true
             ),
         );
@@ -52,18 +52,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['loadedAnimationClass'] = 'webImageLoadedAnimation';
         $ret['imgCssClass'] = '';
         $ret['flags']['hasFulltext'] = true;
-        $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
-        $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.css';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.js';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionWindow.css';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionWindow.js';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.js';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.css';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.js';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.scss';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwf_js/Utils/Resizable.js';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageFile.js';
+        $ret['assetsAdmin']['dep'][] = 'KwfImageUpload';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         $ret['outputImgTag'] = true;
 
@@ -99,7 +88,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['image'] = $this->getData();
@@ -197,6 +186,17 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return false;
     }
 
+    public function getAbsoluteImageUrl()
+    {
+        $ret = $this->getImageUrl();
+        if ($ret && substr($ret, 0, 1) == '/' && substr($ret, 0, 2) != '//') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
+            $domain = $this->getData()->getDomain();
+            $protocol = Kwf_Util_Https::domainSupportsHttps($domain) ? 'https' : 'http';
+            $ret = "$protocol://$domain$ret";
+        }
+        return $ret;
+    }
+
     public function getImageUrl()
     {
         $data = $this->_getImageDataOrEmptyImageData();
@@ -236,10 +236,13 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     {
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data) {
-            return Kwf_Media::getUrl($this->getData()->componentClass,
+            $ret = Kwf_Media::getUrl($this->getData()->componentClass,
                 $this->getData()->componentId,
                 $this->getBaseType(),
                 $data['filename']);
+            $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $ret);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            return $ev->url;
         }
         return null;
     }

@@ -2,9 +2,9 @@
 class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
     implements Kwf_Media_Output_IsValidInterface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Enlarge Image');
         $ret['fullSizeDownloadable'] = false;
         $ret['imageTitle'] = true;
@@ -45,7 +45,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         }
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['imageUrl'] = $this->getImageUrl();
@@ -104,7 +104,10 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             $imageData = $this->getImageData();
             $width = Kwf_Media_Image::getResponsiveWidthStep($dimensions['width'],
                     Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageData['file']));
-            return str_replace('{width}', $width, $baseUrl);
+            $ret = str_replace('{width}', $width, $baseUrl);
+            $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $ret);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            return $ev->url;
         }
         return null;
     }

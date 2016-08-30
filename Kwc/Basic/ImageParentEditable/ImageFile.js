@@ -1,5 +1,5 @@
 Ext2.ns('Kwc.Basic.ImageParentEditable');
-Kwc.Basic.ImageParentEditable.ImageFile = Ext2.extend(Kwc.Abstract.Image.ImageFile, {
+Kwc.Basic.ImageParentEditable.ImageFile = Ext2.extend(Kwf.Form.Field.Image.ImageFile, {
     _showParentImage: null,
     _parentImageValue: null,
     initComponent: function() {

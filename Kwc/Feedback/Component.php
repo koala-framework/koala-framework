@@ -1,9 +1,9 @@
 <?php
 class Kwc_Feedback_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['form'] = 'Kwc_Feedback_Form_Component';
 
         $ret['contentSender'] = 'Kwf_Component_Abstract_ContentSender_Lightbox';

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Flash_Upload_Component extends Kwc_Abstract_Flash_Upload_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Flash.Upload');
         $ret['ownModel'] = 'Kwc_Basic_Flash_Upload_Model';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

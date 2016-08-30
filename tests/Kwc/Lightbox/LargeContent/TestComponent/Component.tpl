@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?>">
     <h1>asdf asdf asdf</h1>
-    <? for($i=0;$i<50;$i++) { ?>
+    <?php for ($i=0;$i<50;$i++) { ?>
     <p>asdf asdf asdf<?=$i?></p>
-    <? } ?>
+    <?php } ?>
 </div>

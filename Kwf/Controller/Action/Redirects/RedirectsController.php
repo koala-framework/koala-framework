@@ -15,6 +15,7 @@ class Kwf_Controller_Action_Redirects_RedirectsController extends Kwf_Controller
     protected function _initColumns()
     {
         parent::_initColumns();
+        $this->_columns->add(new Kwf_Grid_Column_Visible('active'));
         $domains = Kwf_Controller_Action_Redirects_RedirectController::getDomains();
         if ($domains && count($domains) > 1) {
             $this->_columns->add(new Kwf_Grid_Column('domain_component_id', trlKwf('Domain'), 70));
@@ -30,7 +31,6 @@ class Kwf_Controller_Action_Redirects_RedirectsController extends Kwf_Controller
         }
         $this->_columns->add(new Kwf_Grid_Column('source', trlKwf('Source'), 200));
         $this->_columns->add(new Kwf_Grid_Column('comment', trlKwf('Comment'), 150));
-        $this->_columns->add(new Kwf_Grid_Column_Visible('active'));
     }
 
     protected function _getSelect()

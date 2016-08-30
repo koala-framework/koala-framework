@@ -3,14 +3,14 @@ class Kwf_Component_Cache_CacheDisabled_Test_Component extends Kwc_Abstract_Comp
 {
     public static $test = 'foo';
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['viewCache'] = false;
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['test'] = self::$test;

@@ -1,9 +1,9 @@
 <?php
 class Kwc_List_ChildPages_Teaser_TeaserImage_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['text'] =
             'Kwc_List_ChildPages_Teaser_TeaserImage_Text_Component';
         $ret['generators']['child']['component']['image'] =
@@ -18,7 +18,7 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Component extends Kwc_Abstract_Comp
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['readMoreLinktext'] = $this->getRow()->link_text;

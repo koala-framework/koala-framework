@@ -1,9 +1,9 @@
 <?php
 class Kwc_Editable_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['menuConfig'] = 'Kwc_Editable_MenuConfig';
         $ret['generators']['content'] = array(
             'class' => 'Kwf_Component_Generator_Static',
@@ -20,7 +20,7 @@ class Kwc_Editable_Component extends Kwc_Abstract
         return Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->componentClass, 'componentName'));
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['content'] = $this->getData()->getChildComponent('-content');

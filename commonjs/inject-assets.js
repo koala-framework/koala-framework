@@ -62,9 +62,11 @@ function injectAssets(html, re, type, callbackOptions) {
 
 //callback will called when all css files are loaded
 module.exports = function(html, callback) {
+    var fallbackTimeout;
     var callbackOptions = {
         pending: 0,
         loaded: function() {
+            if (fallbackTimeout) clearTimeout(fallbackTimeout);
             callbackOptions.pending--;
             if (callbackOptions.pending == 0) {
                 if (callback) callback();
@@ -85,7 +87,7 @@ module.exports = function(html, callback) {
         if (callback) callback();
     } else {
         //to avoid errors: if pending is not 0 within 500ms call callback
-        setTimeout(function() {
+        fallbackTimeout = setTimeout(function() {
             callbackOptions.pending = -1; //make sure it doesn't get 0 and callback is executed twice
             if (callback) callback();
         }, 500);

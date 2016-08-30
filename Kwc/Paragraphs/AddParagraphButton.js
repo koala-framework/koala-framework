@@ -33,6 +33,9 @@ Kwc.Paragraphs.AddParagraphButton = Ext2.extend(Ext2.Button, {
                             if (!foundMatch) componentSupported = false;
                         }, this);
                     }
+                    if (this.deniedComponentClasses.indexOf(components[i]) != -1) {
+                        componentSupported = false;
+                    }
                     if (componentSupported) {
                         addToItem.addItem(
                             new Ext2.menu.Item({
@@ -69,5 +72,10 @@ Kwc.Paragraphs.AddParagraphButton = Ext2.extend(Ext2.Button, {
     setMasterLayoutContexts: function(masterLayoutContexts)
     {
         this.masterLayoutContexts = masterLayoutContexts;
+    },
+
+    setDeniedComponentClasses: function(deniedComponentClasses)
+    {
+        this.deniedComponentClasses = deniedComponentClasses;
     }
 });

@@ -15,8 +15,8 @@ class Kwc_Columns_Abstract_Controller extends Kwc_Abstract_List_Controller
     protected function _initColumns()
     {
         Kwf_Controller_Action_Auto_Kwc_Grid::_initColumns();
-        $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Name'), 200));
         $this->_columns->add(new Kwf_Grid_Column_Visible());
+        $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Name'), 200));
 
         // Not visible
         $this->_columns->add(new Kwf_Grid_Column('total_columns'));

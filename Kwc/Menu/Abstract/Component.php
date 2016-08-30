@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Menu');
         $ret['componentIcon'] = 'layout';
         $ret['rootElementClass'] = 'kwfUp-webStandard kwfUp-webMenu kwfUp-webListNone';
@@ -154,7 +154,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
 

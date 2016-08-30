@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'componentName' => trlKwfStatic('Google Maps'),
             'ownModel' => 'Kwc_Advanced_GoogleMap_Model',
             'default' => array(

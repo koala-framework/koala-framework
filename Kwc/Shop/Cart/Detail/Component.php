@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['form'] = 'Kwc_Shop_Cart_Detail_Form_Component';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
@@ -19,7 +19,7 @@ class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $addCmp = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(

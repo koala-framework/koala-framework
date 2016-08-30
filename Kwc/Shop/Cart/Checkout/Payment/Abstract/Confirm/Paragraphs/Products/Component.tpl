@@ -1,8 +1,8 @@
 <div class="<?=$this->rootElementClass;?>">
-    <? if (isset($this->items)) { ?>
+    <?php if (isset($this->items)) { ?>
         <p><?=$this->data->trlpKwf('You ordered the following product', 'You ordered the following products', count($this->items));?>:</p>
         <table class="tblBoxCart" cellspacing="0" cellpadding="0">
-        <?
+        <?php
         $maxAddOrderData = 0;
         foreach ($this->items as $item) {
             $maxAddOrderData = max($maxAddOrderData, count($item->additionalOrderData));
@@ -11,29 +11,29 @@
         foreach ($this->items as $item) { ?>
             <tr class="products<?=($c%2==0 ? ' row1' : ' row2');?>">
                 <td class="product"><?=$item->text?></td>
-                <? foreach($item->additionalOrderData as $d) { ?>
+                <?php foreach($item->additionalOrderData as $d) { ?>
                     <td class="<?=$d['class']?>"><?=$this->data->trlStaticExecute($d['name'])?>: <?=$d['value']?></td>
-                <? } ?>
+                <?php } ?>
                 <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>"><?=$this->money($item->price)?></td>
             </tr>
-            <? $c++;
+            <?php $c++;
         } ?>
         </table>
         <ul class="moneyInfo webListNone">
-            <? foreach ($this->sumRows as $row) { ?>
-                <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
+            <?php foreach ($this->sumRows as $row) { ?>
+                <li<?php if (isset($row['class'])) { ?> class="<?=$row['class']?>"<?php } ?>>
                     <span class="text"><?=$this->data->trlStaticExecute($row['text'])?></span>
                     <span class="price"><?=$this->money($row['amount'],'')?></span>
                     <div class="kwfUp-clear"></div>
                 </li>
-            <? } ?>
-            <? if ($this->tableFooterText) { ?>
+            <?php } ?>
+            <?php if ($this->tableFooterText) { ?>
                 <li class="footer">
                     <?=$this->tableFooterText?>
                 </li>
-            <? } ?>
+            <?php } ?>
         </ul>
-    <? } else { ?>
+    <?php } else { ?>
         <p><?=$this->data->trlKwf('Productlist');?></p>
-    <? } ?>
+    <?php } ?>
 </div>

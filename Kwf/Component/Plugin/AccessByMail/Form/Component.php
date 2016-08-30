@@ -3,9 +3,9 @@ class Kwf_Component_Plugin_AccessByMail_Form_Component extends Kwc_Form_Componen
 {
     private $_accessByMailRow;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['subject'] = trlKwfStatic('Temporary access');
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
         unset($ret['plugins']['useViewCache']);

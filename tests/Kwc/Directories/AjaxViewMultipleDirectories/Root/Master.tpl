@@ -5,7 +5,7 @@
         <?=$this->debugData()?>
     </head>
     <body>
-        <?
+        <?php
         echo $this->componentWithMaster($this->componentWithMaster);
         ?>
     </body>

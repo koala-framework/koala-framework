@@ -1,9 +1,9 @@
 <?php
 class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['category'] = array(
             'class' => 'Kwc_Root_CategoryGenerator',
             'component' => 'Kwc_Root_Category_Component',

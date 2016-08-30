@@ -3,9 +3,9 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
     implements Kwf_Media_Output_IsValidInterface
 {
     const CONTENT_WIDTH = 'contentWidth';
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['dimension'] = array('width'=>100, 'height'=>100, 'cover' => false);
         $ret['imgCssClass'] = '';
         $ret['lazyLoadOutOfViewport'] = true; // Set to false to load image also when not in view
@@ -24,7 +24,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         }
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
@@ -68,7 +68,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         return Kwf_Media_Image::calculateScaleDimensions($data['file'], $dimension);
     }
 
-    protected function _getImageComponent()
+    protected final function _getImageComponent()
     {
         return $this->getData()->parent->getComponent();
     }
@@ -104,7 +104,10 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $data = $this->getImageData();
         if ($data) {
             $id = $this->getData()->componentId;
-            return Kwf_Media::getUrl($this->getData()->componentClass, $id, $this->getBaseType(), $data['filename']);
+            $ret = Kwf_Media::getUrl($this->getData()->componentClass, $id, $this->getBaseType(), $data['filename']);
+            $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $ret);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            return $ev->url;
         }
         return null;
     }

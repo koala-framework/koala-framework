@@ -548,7 +548,7 @@ class Kwf_Media_Image
         return $im;
     }
 
-    private function _createImagickFromBlob($blob, $mime)
+    private static function _createImagickFromBlob($blob, $mime)
     {
         $im = new Imagick();
         $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $mime)); //add fake filename to help imagick with format detection
@@ -559,7 +559,7 @@ class Kwf_Media_Image
         return $im;
     }
 
-    private function _processCommonImagickSettings($im)
+    private static function _processCommonImagickSettings($im)
     {
         if (method_exists($im, 'getImageProfiles') && $im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
             $profiles = $im->getImageProfiles('icc', false);

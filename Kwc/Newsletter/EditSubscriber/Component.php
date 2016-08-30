@@ -3,9 +3,9 @@ class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
 {
     protected $_recipient;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('Save');
         $ret['generators']['child']['component']['success'] =
             'Kwc_Newsletter_EditSubscriber_Success_Component';

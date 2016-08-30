@@ -9,6 +9,9 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
     protected function _initColumns()
     {
         parent::_initColumns();
+
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
+
         if ($this->_showChildComponentGridColumns) {
             $c = Kwc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
             foreach (Kwc_Admin::getInstance($c)->gridColumns() as $i) {
@@ -31,12 +34,11 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             }
         }
 
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 
     protected function _beforeInsert($row)
     {
-        if (is_null($row->visible)) $row->visible = 0;
+        $row->visible = Kwc_Abstract::getSetting($this->_getParam('class'), 'defaultVisible');
     }
 
     public function jsonMultiUploadAction()

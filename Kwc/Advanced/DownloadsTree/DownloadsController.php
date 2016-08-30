@@ -25,6 +25,7 @@ class Kwc_Advanced_DownloadsTree_DownloadsController extends Kwf_Controller_Acti
     protected function _initColumns()
     {
         parent::_initColumns();
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('type', trlKwf('Typ'), 30))
             ->setData(new Kwc_Advanced_DownloadsTree_Data_Fileicon())
             ->setRenderer('image');
@@ -35,7 +36,6 @@ class Kwc_Advanced_DownloadsTree_DownloadsController extends Kwf_Controller_Acti
             ->setData(new Kwc_Advanced_DownloadsTree_Data_Filesize())
             ->setRenderer('fileSize');
         $this->_columns->add(new Kwf_Grid_Column_Date('date', trlKwf('Date')));
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 
     protected function _getSelect()

@@ -121,7 +121,8 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
         }
         $this->_data[] = $rowData;
         $this->_afterDataUpdate();
-        $key = end(array_keys($this->_data));
+        $keys = array_keys($this->_data);
+        $key = end($keys);
         $this->_rows[$key] = $row;
         $this->_dataModified();
         return $rowData[$this->getPrimaryKey()];

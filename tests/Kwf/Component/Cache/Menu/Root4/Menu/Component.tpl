@@ -1,2 +1,2 @@
 Main <?=$this->data->componentId?><br />
-<? include('Kwc/Menu/Expanded/Component.tpl'); ?>
+<?php include('Kwc/Menu/Expanded/Component.tpl'); ?>

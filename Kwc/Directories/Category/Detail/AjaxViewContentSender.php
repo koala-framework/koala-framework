@@ -13,4 +13,9 @@ class Kwc_Directories_Category_Detail_AjaxViewContentSender extends Kwf_Componen
         $ret['kwc-view-ajax-filter'] = json_encode($config);
         return $ret;
     }
+
+    public function getLinkClass()
+    {
+        return 'kwfUp-kwcViewAjaxFilter';
+    }
 }

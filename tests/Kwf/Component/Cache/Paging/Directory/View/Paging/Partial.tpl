@@ -1,1 +1,1 @@
-<? foreach ($this->pageLinks as $l) { echo $l['text']; }?>
+<?php foreach ($this->pageLinks as $l) { echo $l['text']; }?>

@@ -6,9 +6,9 @@
  */
 class Kwc_Menu_Component extends Kwc_Menu_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['subMenu'] = array(
             'class' => 'Kwc_Menu_Generator',
             'component' => false
@@ -50,7 +50,7 @@ class Kwc_Menu_Component extends Kwc_Menu_Abstract_Component
         return $requiredLevels;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['menu'] = $this->_getMenuData();

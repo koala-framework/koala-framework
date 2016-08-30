@@ -8,7 +8,7 @@ class Kwf_Data_Kwc_Frontend extends Kwf_Data_Abstract
         $this->_componentClass = $componentClass;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $id = $row->component_id.'-'.$row->id;
         $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(

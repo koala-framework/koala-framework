@@ -86,9 +86,9 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
             ->setData(new Kwf_Data_Kwc_EditComponents($this->_getParam('class'), 'detail'));
     }
 
-    protected function _beforeSave(Kwf_Model_Row_Interface $row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row, $submitRow)
     {
-        parent::_beforeSave($row);
+        parent::_beforeSave($row, $submitRow);
         if ($row->getModel()->hasColumn('visible') && !$row->visible) {
             $this->_checkRowIndependence($row, trlKwf('hide'));
         }

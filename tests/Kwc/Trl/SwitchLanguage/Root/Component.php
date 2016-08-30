@@ -1,9 +1,9 @@
 <?php
 class Kwc_Trl_SwitchLanguage_Root_Component extends Kwc_Root_TrlRoot_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         unset($ret['generators']['title']);
         $ret['childModel'] = 'Kwc_Trl_SwitchLanguage_Root_LanguagesModel';
         $ret['generators']['master']['component'] = 'Kwc_Trl_SwitchLanguage_Master_Component';

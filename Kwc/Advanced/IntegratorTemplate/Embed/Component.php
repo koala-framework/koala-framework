@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_IntegratorTemplate_Embed_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['contentSender'] = 'Kwc_Advanced_IntegratorTemplate_Embed_ContentSender';
         $ret['flags']['hasHeaderIncludeCode'] = true;
         $ret['flags']['hasFooterIncludeCode'] = true;
@@ -16,9 +16,9 @@ class Kwc_Advanced_IntegratorTemplate_Embed_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['includeCode'] = $this->getIncludeCode('content');
         return $ret;
     }

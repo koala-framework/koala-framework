@@ -4,10 +4,10 @@
 class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Component
     implements Kwf_Media_Output_IsValidInterface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = parent::getSettings($param);
+        $ret = array_merge(parent::getSettings($param), array(
             'ownModel'     => 'Kwc_Advanced_VideoPlayer_Model',
             'componentName' => trlKwfStatic('Video'),
             'componentCategory' => 'media',
@@ -47,7 +47,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['sources'] = array();
@@ -173,7 +173,10 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         if ($row->source_type == 'links') {
             return $row->{$format.'_url'};
         }
-        return Kwf_Media::getUrl($this->getData()->componentClass,
+        $ret = Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, $format, 'video.'.$format);
+        $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $ret);
+        Kwf_Events_Dispatcher::fireEvent($ev);
+        return $ev->url;
     }
 }

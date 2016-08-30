@@ -111,18 +111,33 @@ class Kwf_Media
             if ($isValid != Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
                 Kwf_Cache_Simple::add($cacheId, true, 60*60);
             }
+        } else {
+            $isValid = Kwf_Media_Output_IsValidInterface::VALID;
         }
         Zend_Session::writeClose();
         $output = self::_getOutputWithoutCheckingIsValid($class, $id, $type);
+        if ($isValid == Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
+            $output['lifetime'] = false; //for valid don't cache also don't output cache http headers (to avoid proxy or browser caching)
+        }
         return $output;
     }
 
-    public static function clearCache($class, $id, $type)
+    /**
+     *
+     * @param string
+     * @param string
+     * @param string|array array to clear multiple types
+     */
+    public static function clearCache($class, $id, $types)
     {
-        $cacheId = self::createCacheId($class, $id, $type);
-        Kwf_Media_MemoryCache::getInstance()->remove($cacheId);
-        Kwf_Media_MemoryCache::getInstance()->remove('mtime-'.$cacheId);
-        //not required to delete cache/media/$cacheId, that will be regenerated if $cacheId is deleted
+        if (!is_array($types)) $types = array($types);
+
+        foreach ($types as $type) {
+            $cacheId = self::createCacheId($class, $id, $type);
+            Kwf_Media_MemoryCache::getInstance()->remove($cacheId);
+            Kwf_Media_MemoryCache::getInstance()->remove('mtime-'.$cacheId);
+            //not required to delete cache/media/$cacheId, that will be regenerated if $cacheId is deleted
+        }
     }
 
     public static function getOutputWithoutCheckingIsValid($class, $id, $type)

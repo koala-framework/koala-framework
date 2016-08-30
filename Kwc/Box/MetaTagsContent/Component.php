@@ -1,9 +1,9 @@
 <?php
 class Kwc_Box_MetaTagsContent_Component extends Kwc_Box_MetaTags_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Meta Tags');
         $ret['ownModel'] = 'Kwc_Box_MetaTagsContent_Model';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';

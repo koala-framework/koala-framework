@@ -1,9 +1,9 @@
 <?php
 class Kwc_Directories_TopChoose_Component extends Kwc_Directories_Top_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['showDirectoryClass'] = 'Kwc_Directories_Item_Directory_Component'; // nur für form
         $ret['ownModel'] = 'Kwc_Directories_TopChoose_Model';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

@@ -43,7 +43,8 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             file_put_contents($buildFile, $rawContents);
 
             if ($useBabel) {
-                $map = Kwf_Assets_Dependency_Filter_BabelJs::build($buildFile);
+                $filter = new Kwf_Assets_Dependency_Filter_BabelJs($buildFile);
+                $map = $filter->build();
                 file_put_contents($buildFile, $map->getFileContents()); //TODO: map support
             }
 

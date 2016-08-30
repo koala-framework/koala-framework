@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 http://xlink.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_TextImage_Root/de/test
 http://xlink.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_TextImage_Root/en/test

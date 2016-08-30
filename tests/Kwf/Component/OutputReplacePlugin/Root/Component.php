@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_OutputReplacePlugin_Root_Component extends Kwf_Component_NoCategoriesRoot
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         unset($ret['generators']['page']);
 
         $ret['generators']['test'] = array(

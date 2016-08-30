@@ -137,4 +137,10 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         $ret['kwc-lightbox'] = json_encode((object)$this->_getOptions());
         return $ret;
     }
+
+
+    public function getLinkClass()
+    {
+        return 'kwfUp-kwcLightbox';
+    }
 }

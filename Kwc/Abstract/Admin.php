@@ -1,16 +1,6 @@
 <?php
 class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 {
-    public function delete($componentId)
-    {
-        if (Kwc_Abstract::createOwnModel($this->_class)) {
-            $row = Kwc_Abstract::createOwnModel($this->_class)->getRow($componentId);
-            if ($row) {
-                $row->delete();
-            }
-        }
-    }
-
     public function getDuplicateProgressSteps($source)
     {
         $ret = 0;
@@ -105,13 +95,13 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
         return $ret;
     }
 
-    public function getVisibleCardForms()
+    public function getVisibleCardForms($cardDbId)
     {
         $ret = array('form');
         return $ret;
     }
 
-    public function getPagePropertiesForm()
+    public function getPagePropertiesForm($config)
     {
         return null;
     }

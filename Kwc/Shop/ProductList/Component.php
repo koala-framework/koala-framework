@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_ProductList_Component extends Kwc_Directories_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['view'] = 'Kwc_Shop_Products_View_Component';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['componentName'] = trlKwfStatic('Shop.ProductList');

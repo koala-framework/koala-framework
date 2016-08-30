@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Flash_Code_Component extends Kwc_Abstract_Flash_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Flash.Code');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

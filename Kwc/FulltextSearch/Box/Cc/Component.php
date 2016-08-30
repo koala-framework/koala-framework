@@ -1,7 +1,7 @@
 <?php
 class Kwc_FulltextSearch_Box_Cc_Component extends Kwc_Chained_Cc_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['flags']['forwardProcessInput'] = true;
@@ -23,7 +23,7 @@ class Kwc_FulltextSearch_Box_Cc_Component extends Kwc_Chained_Cc_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $searchPage = $this->_getSearchDirectory();

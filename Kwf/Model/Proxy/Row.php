@@ -71,9 +71,9 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
         $this->_row->_resetDirty();
     }
 
-    protected function _isDirty()
+    protected function _isDirty($column = null)
     {
-        return $this->_row->isDirty();
+        return $this->_row->isDirty($column);
     }
 
     public function getDirtyColumns()

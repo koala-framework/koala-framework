@@ -57,7 +57,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             foreach ($files as $fileinfo) {
                 if ($fileinfo->getFilename() != '.gitignore') {
                     $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-                    $todo($fileinfo->getRealPath());
+                    $todo((string)$fileinfo);
                 }
             }
         }

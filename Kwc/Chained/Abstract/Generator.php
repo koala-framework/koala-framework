@@ -47,7 +47,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         return $r[$id];
     }
 
-    public function getPagesControllerConfig($component)
+    public function getPagesControllerConfig($component, $generatorClass = null)
     {
         $ret = $this->_getChainedGenerator()->getPagesControllerConfig($component, $this->getClass());
         $ret['allowDrag'] = false;
@@ -270,7 +270,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         Kwc_Admin::getInstance($source->componentClass)->makeVisible($source);
     }
 
-    public function duplicateChild($source, $parentTarget)
+    public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
     {
         if ($source->generator !== $this) {
             throw new Kwf_Exception("you must call this only with the correct source");

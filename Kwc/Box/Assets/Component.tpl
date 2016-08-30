@@ -1,6 +1,5 @@
 <!-- assets -->
-<? foreach ($this->assetsPackages as $package) { ?>
-<?= $this->assets($package, $this->language) ?>
-<? } ?>
+<?php foreach ($this->assetsPackages as $package) { ?>
+<?= $this->assets($package, $this->language, $this->subroot) ?>
+<?php } ?>
 <!-- /assets -->
-

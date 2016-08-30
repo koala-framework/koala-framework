@@ -1,9 +1,9 @@
 <?php
 class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['generators']['child']['component']['paging'] = 'Kwc_Directories_List_ViewAjax_Paging_Component';
 
@@ -14,7 +14,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $cfg = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->getData()->componentClass);
@@ -29,8 +29,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             'loadMoreBufferPx' => $this->_getSetting('loadMoreBufferPx'),
             'loadDetailAjax' => $this->_getSetting('loadDetailAjax'),
             'limit' => 10,
-            'minimumCharactersForFilter' => 3,
-            'checkLastViewScrollPosition' => false
+            'minimumCharactersForFilter' => 3
         );
         $itemDir = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($itemDir)) {

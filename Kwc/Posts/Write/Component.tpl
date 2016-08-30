@@ -1,10 +1,10 @@
 <div class="<?=$this->rootElementClass?>">
-    <? if (!$this->isSaved) echo $this->component($this->preview); ?>
+    <?php if (!$this->isSaved) echo $this->component($this->preview); ?>
     <?=$this->component($this->form)?>
-    <? if (!$this->isSaved) { ?>
-        <?if ($this->hasContent($this->lastPosts)) {?>
+    <?php if (!$this->isSaved) { ?>
+        <?php if ($this->hasContent($this->lastPosts)) { ?>
             <h1 class="mainHeadline"><?=$this->placeholder['lastPosts']?>:</h1>
             <?=$this->component($this->lastPosts)?>
-        <?}?>
-    <? } ?>
+        <?php } ?>
+    <?php } ?>
 </div>

@@ -1,5 +1,5 @@
 <div class="<?=$this->rootElementClass?>">
-    <? if($this->src) { ?>
+    <?php if ($this->src) { ?>
     <img src="<?=$this->src?>" alt="" />
-    <? } ?>
+    <?php } ?>
 </div>

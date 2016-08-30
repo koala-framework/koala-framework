@@ -1,44 +1,44 @@
 <div class="<?=$this->rootElementClass?>">
     <div class="postData">
         <div class="postInfo">
-            <? if ($this->avatar) { ?>
+            <?php if ($this->avatar) { ?>
                 <div class="avatar">
-                    <? if ($this->avatar instanceof Kwf_Component_Data) { ?>
+                    <?php if ($this->avatar instanceof Kwf_Component_Data) { ?>
                         <?= $this->componentLink(
                                 $this->user,
                                 $this->component($this->avatar)
                         ) ?>
-                    <? } else { ?>
+                    <?php } else { ?>
                         <img src="<?=$this->avatar?>" width="68" height="68" alt="" />
-                    <? } ?>
+                    <?php } ?>
                 </div>
-            <? } ?>
-            <? if ($this->user) { ?>
+            <?php } ?>
+            <?php if ($this->user) { ?>
                 <div class="user">
-                    <?if (is_string($this->user)) {?>
+                    <?php if (is_string($this->user)) { ?>
                         <?=$this->data->trlKwf('By')?>: <?=$this->user?>
-                    <?} else {?>
+                    <?php } else { ?>
                         <?=$this->data->trlKwf('By')?>: <?= $this->componentLink($this->user) ?>
                         <?=$this->component($this->user->getChildComponent('-general')->getChildComponent('-rating'))?>
-                    <?}?>
+                    <?php } ?>
                 </div>
-            <? } ?>
+            <?php } ?>
             <strong>#<?= $this->postNumber ?></strong>
             <em>
                 <?=$this->data->trlKwf('on') ?> <?=$this->date($this->row->create_time)?>
                 <?=$this->data->trlKwf('at') ?> <?=$this->time($this->row->create_time)?>
             </em><br />
-            <?if ($this->actions->hasContent()){?>
+            <?php if ($this->actions->hasContent()) { ?>
                 <?=$this->data->trlKwf('Post')?>:
                 <?= $this->component($this->actions) ?>
-            <?}?>
+            <?php } ?>
         </div>
         <div class="text">
             <?=$this->content?>
         </div>
-        <? if (isset($this->signature)) { ?>
+        <?php if (isset($this->signature)) { ?>
             <?=$this->component($this->signature)?>
-        <? } ?>
+        <?php } ?>
     </div>
     <div class="kwfUp-clear"></div>
 </div>

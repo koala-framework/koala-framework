@@ -4,7 +4,7 @@
         <?=implode(', ', $this->tags)?>
     </div>
 
-    <? if ($this->suggestions) { ?>
+    <?php if ($this->suggestions) { ?>
         <?=$this->component($this->suggestions)?>
-    <? } ?>
+    <?php } ?>
 </div>

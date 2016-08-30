@@ -3,7 +3,7 @@
     <p>
         <?=$this->errorMessage?>
     </p>
-    <? if ($this->redirect) { ?>
+    <?php if ($this->redirect) { ?>
         <p><a href="<?=$this->redirect?>"><?=trlKwf('Continue')?></a></p>
-    <? } ?>
+    <?php } ?>
 </div>

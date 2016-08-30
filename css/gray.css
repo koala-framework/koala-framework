@@ -48,7 +48,7 @@ td.x2-grid3-hd-over,td.sort-desc,td.sort-asc,td.x2-grid3-hd-menu-open{border-lef
 .x2-grid3-body .x2-grid3-row-selected .x2-grid3-td-numberer,.x2-grid3-body .x2-grid3-row-selected .x2-grid3-td-checker,.x2-grid3-body .x2-grid3-row-selected .x2-grid3-td-expander{background:transparent url(/assets/kwf/images/gray/grid/grid3-special-col-sel-bg.gif) repeat-y right;}
 .x2-grid-group-hd div{color:#626262;}
 .x2-grid-group-hd{border-bottom:2px solid #d7d7d7}
-.x2-grid-group-hd div{background:color: #616161;font:bold 11px arial,helvetica,sans-serif;}
+.x2-grid-group-hd div{background-color: #616161;font:bold 11px arial,helvetica,sans-serif;}
 .sort-asc .x2-grid3-sort-icon{background-image:url(/assets/kwf/images/gray/grid/sort_asc.gif);display:inline;}
 .sort-desc .x2-grid3-sort-icon{background-image:url(/assets/kwf/images/gray/grid/sort_desc.gif);display:inline;}
 

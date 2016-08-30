@@ -1,9 +1,9 @@
 <?php
 class Kwc_Events_TopChoose_Component extends Kwc_News_TopChoose_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Events.Top');
         $ret['componentIcon'] = 'date';
         $ret['showDirectoryClass'] = 'Kwc_Events_Directory_Component';

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Posts_Detail_Report_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['reportMail'] = 'content@vivid-planet.com';
         $ret['reportMailName'] = '';
         $ret['generators']['child']['component']['success'] = 'Kwc_Posts_Detail_Report_Success_Component';

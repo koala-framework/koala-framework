@@ -1,9 +1,9 @@
 <?php
 class Kwc_TextImage_ImageEnlarge_Component extends Kwc_Basic_ImageEnlarge_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['rootElementClass'] .= ' kwfUp-webStandard';
         $ret['imageCaption'] = true;
         $ret['generators']['child']['component']['linkTag'] = 'Kwc_TextImage_ImageEnlarge_LinkTag_Component';

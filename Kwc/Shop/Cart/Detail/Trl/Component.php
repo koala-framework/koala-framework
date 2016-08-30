@@ -1,7 +1,7 @@
 <?php
 class Kwc_Shop_Cart_Detail_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['flags']['processInput'] = true;
@@ -15,7 +15,7 @@ class Kwc_Shop_Cart_Detail_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
         }
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $addCmp = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(

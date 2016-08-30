@@ -13,6 +13,14 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                       'controller' => 'index',
                       'action'     => 'index')));
 
+        if (!$prefix) {
+            $this->AddRoute('welcome', new Zend_Controller_Router_Route(
+                '',
+                array('module'=>'kwf_controller_action_welcome',
+                    'controller' => 'welcome',
+                    'action' => 'index')));
+        }
+
         $this->AddRoute('kwf_welcome', new Zend_Controller_Router_Route(
                     '/kwf/welcome/:controller/:action',
                     array('module'     => 'kwf_controller_action_welcome',
@@ -56,10 +64,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
         $this->AddRoute('kwf_redirects', new Zend_Controller_Router_Route(
                     '/kwf/redirects/:controller/:action',
                     array('module'     => 'kwf_controller_action_redirects',
-                          'action'     =>'index')));
-        $this->AddRoute('kwf_maintenance', new Zend_Controller_Router_Route(
-                    '/kwf/maintenance/:controller/:action',
-                    array('module'     => 'kwf_controller_action_maintenance',
                           'action'     =>'index')));
         $this->AddRoute('kwf_component', new Zend_Controller_Router_Route(
                     '/kwf/component/:controller/:action',

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Shop_AddToCart_Trl_Component extends Kwc_Shop_AddToCartAbstract_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['form']['component'] = 'Kwc_Shop_AddToCart_Trl_Form_Component';

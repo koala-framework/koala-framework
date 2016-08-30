@@ -1,9 +1,9 @@
 <?php
 class Kwc_Box_Assets_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['flags']['hasHeaderIncludeCode'] = true;
         $ret['flags']['hasInjectIntoRenderedHtml'] = true;
         return $ret;
@@ -14,10 +14,11 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
         return $this->getData();
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['language'] = $this->getData()->getLanguage();
+        $ret['subroot'] = $this->getData()->getSubroot();
         $ret['assetsPackages'] = array(Kwf_Assets_Package_ComponentFrontend::getInstance());
 
         $packageNames = array();

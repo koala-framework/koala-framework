@@ -14,7 +14,7 @@ class Kwf_Assets_Filter_Css_MediaQueriesDropRedundant extends Kwf_Assets_Filter_
     public function getMasterFiles()
     {
         return array(
-            getcwd().'/'.KWF_PATH.'/node_modules/postcss-media-queries-drop-redundant/package.json'
+            getcwd().'/node_modules/postcss-media-queries-drop-redundant/package.json'
         );
     }
 }

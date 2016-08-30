@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Kwc_Mail_Editable_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['content']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Component';
         return $ret;
     }

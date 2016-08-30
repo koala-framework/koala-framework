@@ -247,6 +247,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                 componentIcons: this.componentIcons,
                 supportedMasterLayoutContexts: this.supportedMasterLayoutContexts,
                 masterLayoutContexts: this.masterLayoutContexts,
+                deniedComponentClasses: this.deniedComponentClasses,
                 listeners: {
                     scope: this,
                     menushow: function(btn) {
@@ -296,6 +297,11 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
     setMasterLayoutContexts: function(masterLayoutContexts)
     {
         this.masterLayoutContexts = masterLayoutContexts;
+    },
+
+    setDeniedComponentClasses: function(deniedComponentClasses)
+    {
+        this.deniedComponentClasses = deniedComponentClasses;
     }
 });
 

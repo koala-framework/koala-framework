@@ -1,7 +1,7 @@
 <?php
 class Kwf_Component_Events_UrlCache extends Kwf_Events_Subscriber
 {
-    private $_orExpr;
+    private $_constraints;
 
     public function getListeners()
     {
@@ -32,43 +32,37 @@ class Kwf_Component_Events_UrlCache extends Kwf_Events_Subscriber
     protected function _init()
     {
         parent::_init();
-        $this->_orExpr = new Kwf_Model_Select_Expr_Or(array());
     }
 
     public function onRowUpdatesFinished(Kwf_Events_Event_Row_UpdatesFinished $event)
     {
-        if (count($this->_orExpr->getExpressions())) {
-            $select = new Kwf_Model_Select();
-            $select->where($this->_orExpr);
-            $rows = Kwf_Component_Cache::getInstance()->getModel('url')->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select);
-            foreach ($rows as $row) {
-                $cacheId = 'url-'.$row['url'];
-                Kwf_Cache_Simple::delete($cacheId);
-            }
+        if ($this->_constraints) {
+            Kwf_Component_Cache_Url_Abstract::getInstance()->delete($this->_constraints);
+            $this->_constraints = array();
         }
     }
 
     public function onPageUrlChanged(Kwf_Component_Event_Page_UrlChanged $event)
     {
         $c = $event->component->getPageOrRoot();
-        $this->_orExpr[] = new Kwf_Model_Select_Expr_Equal('expanded_page_id', $c->getExpandedComponentId());
+        $this->_constraints[] = array('field'=>'expanded_page_id', 'value'=>$c->getExpandedComponentId());
     }
 
     public function onPageNameChanged(Kwf_Component_Event_Page_NameChanged $event)
     {
         $c = $event->component->getPageOrRoot();
-        $this->_orExpr[] = new Kwf_Model_Select_Expr_Equal('page_id', $c->componentId);
+        $this->_constraints[] = array('field'=>'page_id', 'value'=>$c->componentId);
     }
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
         $c = $event->component->getPageOrRoot();
-        $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('expanded_page_id', $c->getExpandedComponentId().'%');
+        $this->_constraints[] = array('field'=>'expanded_page_id', 'value'=>$c->getExpandedComponentId().'%');
     }
 
     public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
         $c = $event->component->getPageOrRoot();
-        $this->_orExpr[] = new Kwf_Model_Select_Expr_Like('expanded_page_id', $c->getExpandedComponentId().'%');
+        $this->_constraints[] = array('field'=>'expanded_page_id', 'value'=>$c->getExpandedComponentId().'%');
     }
 }

@@ -1,5 +1,5 @@
 Ext2.namespace('Kwc.Basic.ImageParentEditable');
-Kwc.Basic.ImageParentEditable.ImageUploadField = Ext2.extend(Kwc.Abstract.Image.ImageUploadField, {
+Kwc.Basic.ImageParentEditable.ImageUploadField = Ext2.extend(Kwf.Form.Field.Image.UploadField, {
     initComponent: function() {
         Kwc.Basic.ImageParentEditable.ImageUploadField.superclass.initComponent.call(this);
     },
@@ -8,7 +8,7 @@ Kwc.Basic.ImageParentEditable.ImageUploadField = Ext2.extend(Kwc.Abstract.Image.
         var container = this.ownerCt;
         while (container) {
             var imageFile = container.findBy(function(i) {
-                return i instanceof Kwc.Abstract.Image.ImageFile
+                return i instanceof Kwf.Form.Field.Image.ImageFile
                     && !(i.ownerCt instanceof Kwc.Basic.ImageParentEditable.ImageUploadField);
             }, this);
             if (imageFile.length) break;

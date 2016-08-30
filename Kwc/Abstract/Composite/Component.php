@@ -1,20 +1,14 @@
 <?php
 class Kwc_Abstract_Composite_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['assetsAdmin']['dep'][] = 'KwfTabPanel';
         $ret['generators']['child'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => array()
         );
-        $cc = Kwf_Registry::get('config')->kwc->childComponents;
-        if (isset($cc->Kwc_Abstract_Composite_Component)) {
-            $ret['generators']['child']['component'] =
-                $cc->Kwc_Abstract_Composite_Component->toArray();
-        }
-
         $ret['extConfig'] = 'Kwc_Abstract_Composite_ExtConfigForm';
 
         return $ret;
@@ -28,7 +22,7 @@ class Kwc_Abstract_Composite_Component extends Kwc_Abstract
         return false;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['keys'] = array();

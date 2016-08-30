@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_Hash
 {
-    public static function hash($str)
+    public static function getPrivatePart()
     {
         $salt = Kwf_Cache_SimpleStatic::fetch('hashpp-');
         if (!$salt) {
@@ -16,6 +16,11 @@ class Kwf_Util_Hash
                 Kwf_Cache_SimpleStatic::add('hashpp-', $salt);
             }
         }
-        return md5($salt.$str);
+        return $salt;
+    }
+
+    public static function hash($str)
+    {
+        return md5(self::getPrivatePart().$str);
     }
 }

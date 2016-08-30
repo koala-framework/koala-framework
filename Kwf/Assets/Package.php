@@ -25,6 +25,11 @@ class Kwf_Assets_Package
         $this->_dependencyName = $dependencyName;
     }
 
+    public function __toString()
+    {
+        return get_class($this);
+    }
+
     public function getDependencyName()
     {
         return $this->_dependencyName;
@@ -266,8 +271,8 @@ class Kwf_Assets_Package
             $map->setFileContents($fileContents);
             $data = $map->getMapContentsData(false);
             unset($data->sourcesContent); //drop fake sourcesContent (see comment above)
-            if ($data->sources[0] == 'vendor/koala-framework/koala-framework/node_modules/browser-pack/_prelude.js') {
-                $data->sources[0] = '/assets/kwf/node_modules/browser-pack/_prelude.js';
+            if ($data->sources[0] == 'node_modules/browser-pack/_prelude.js') {
+                $data->sources[0] = '/assets/web/node_modules/browser-pack/_prelude.js';
             }
             $packageMap->concat($map);
         }

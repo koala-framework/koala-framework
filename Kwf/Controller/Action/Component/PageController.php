@@ -96,7 +96,22 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
         $generatorForms = array();
         $componentForms = array();
         $formsForComponent = array();
+        $componentValues = array();
+        if (isset($fields['component'])) {
+            $componentValues = $fields['component']->getValues();
+        }
         foreach ($possibleComponentClasses as $key=>$componentClass) {
+            $ev = new Kwf_Component_Event_Component_FilterAddComponentClass($componentClass, $componentOrParent);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            if (!$ev->deny) {
+                if ($this->_getParam('id') && $componentOrParent->componentClass == $componentClass) {
+                    //in edit-mode allow already used componentClass
+                } else {
+                    unset($componentValues[$key]);
+                    continue 2;
+                }
+            }
+
             $component = array(
                 'componentClass' => $componentClass,
                 'inheritClasses' => $inheritClasses
@@ -155,6 +170,7 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
         }
 
         if (isset($fields['component'])) {
+            $fields['component']->setValues($componentValues);
             $fields['component']->setFormsForComponent($formsForComponent);
         }
 

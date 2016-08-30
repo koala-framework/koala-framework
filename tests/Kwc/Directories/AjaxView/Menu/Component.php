@@ -1,13 +1,13 @@
 <?php
 class Kwc_Directories_AjaxView_Menu_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $c = $this->getData()->getParentByClass('Kwc_Directories_AjaxView_Directory_Component');

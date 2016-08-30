@@ -1,9 +1,9 @@
 <?php
 class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
 {
-    public static function getSettings($menuComponentClass)
+    public static function getSettings($menuComponentClass = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($menuComponentClass);
         $ret['plugins'] = Kwc_Abstract::getSetting($menuComponentClass, 'plugins');
         $ret['viewCache'] = Kwc_Abstract::getSetting($menuComponentClass, 'viewCache');
         $ret['menuComponentClass'] = $menuComponentClass;
@@ -35,7 +35,7 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
         return $this->_getSetting('menuComponentClass');
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $menu = $this->_getMenuSource();
         $ret = $menu->getComponent()->getTemplateVars($renderer);

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Trl_StaticTextsPlaceholder_Translate_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['placeholder']['trlTest'] = trlStatic('Sichtbar');
         $ret['placeholder']['trlcTest'] = trlcStatic('time', 'Am');

@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Cache_ParentContent_RootAlternative_Component extends Kwf_Component_NoCategoriesRoot
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         
         $ret['generators']['box']['component']['box'] = 'Kwf_Component_Cache_ParentContent_RootAlternative_Box_Component';
         $ret['generators']['page']['model'] = new Kwf_Model_FnF(array('data'=>array(

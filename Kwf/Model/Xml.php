@@ -242,7 +242,8 @@ class Kwf_Model_Xml extends Kwf_Model_Data_Abstract
         return $this->_filepath;
     }
 
-    public function getUniqueIdentifier() {
+    public function getUniqueIdentifier()
+    {
         if (isset($this->_filepath)) {
             return str_replace(array('/', '.', '-'), array('_', '_', '_'), $this->_filepath);
         } else if (isset($this->_xmlContent)) {
@@ -284,7 +285,7 @@ class Kwf_Model_Xml extends Kwf_Model_Data_Abstract
          */
         $string = array_shift($xmlArray) . "\n";
 
-        foreach($xmlArray as $element) {
+        foreach ($xmlArray as $element) {
             /** find open only tags... add name to stack, and print to string
              * increment currIndent
              */

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_ImageEnlargeParent_Component extends Kwc_Basic_ImageParent_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => array(
@@ -15,7 +15,7 @@ class Kwc_Basic_ImageEnlargeParent_Component extends Kwc_Basic_ImageParent_Compo
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['keys'] = array();

@@ -50,9 +50,9 @@ class Kwc_Directories_Category_Directory_CategoriesController
     protected function _initColumns()
     {
         $this->setModel(Kwc_Abstract::createChildModel($this->_getParam('class')));
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Category'), 300))
             ->setEditor(new Kwf_Form_Field_TextField());
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 
     protected function _beforeInsert(Kwf_Model_Row_Interface $row, $submitRow)

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
 {
-    public static function getSettings($menuComponentClass)
+    public static function getSettings($menuComponentClass = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($menuComponentClass);
         $generators = Kwc_Abstract::getSetting($menuComponentClass, 'generators');
         if (isset($generators['subMenu'])) {
             $ret['generators']['subMenu'] = $generators['subMenu'];
@@ -91,7 +91,7 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $menu = $this->_getParentContentData();
         if (!is_instance_of($menu->componentClass, 'Kwc_Menu_Abstract_Component')) {

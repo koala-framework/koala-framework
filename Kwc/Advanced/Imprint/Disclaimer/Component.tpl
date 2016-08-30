@@ -1,5 +1,5 @@
 <div class="<?=$this->rootElementClass?>">
-    <? if ($this->row->disclaimer_type == 'de' && $this->row->disclaimer_name) { ?>
+    <?php if ($this->row->disclaimer_type == 'de' && $this->row->disclaimer_name) { ?>
         <span class="imprintHeadline"><?=$this->data->trlKwf('Disclaimer');?></span>
         <div class="kwfUp-kwfSwitchDisplay">
             <p><a href="#" class="kwfUp-switchLink">1. Inhalt des Onlineangebotes</a></p>
@@ -23,6 +23,6 @@
             Der vorliegende Haftungsauschlusstext basiert auf dem kostenlosen Dienst von
             <a href="http://www.disclaimer.de/" data-kwc-popup="blank">www.disclaimer.de</a></div>
         </div>
-    <? } ?>
+    <?php } ?>
 </div>
 

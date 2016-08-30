@@ -1,7 +1,7 @@
-<? if ($this->code) { ?>
+<?php if ($this->code) { ?>
 <!-- Google Analytics -->
 <script type="text/javascript">
-    <? if ($this->ignoreCode) { echo "/*"; } ?>
+    <?php if ($this->ignoreCode) { echo "/*"; } ?>
     if (!location.search.match(/[\?&]kwcPreview/)) {
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
@@ -12,7 +12,7 @@
         ga('create', '<?=$this->code?>', 'auto');
         ga('send', 'pageview');
     }
-    <? if ($this->ignoreCode) { echo "*/"; } ?>
+    <?php if ($this->ignoreCode) { echo "*/"; } ?>
 </script>
 <!-- End Google Analytics -->
-<? } ?>
+<?php } ?>

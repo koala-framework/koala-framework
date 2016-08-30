@@ -19,9 +19,11 @@ class Kwf_Model_Provider_Components extends Kwf_Model_Provider_Abstract
             }
         }
 
-        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_Models') as $plugin) {
-            foreach ($plugin->getModels() as $model) {
-                self::_findAllInstancesProcessModel($ret, $model);
+        if ($root = Kwf_Component_Data_Root::getInstance()) {
+            foreach ($root->getPlugins('Kwf_Component_PluginRoot_Interface_Models') as $plugin) {
+                foreach ($plugin->getModels() as $model) {
+                    self::_findAllInstancesProcessModel($ret, $model);
+                }
             }
         }
         return $ret;

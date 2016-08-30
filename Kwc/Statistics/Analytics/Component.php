@@ -1,9 +1,9 @@
 <?php
 class Kwc_Statistics_Analytics_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['flags']['hasFooterIncludeCode'] = true;
         $ret['plugins'] = array('Kwc_Statistics_CookieBeforePlugin', 'Kwc_Statistics_CookieAfterPlugin');
         return $ret;
@@ -19,7 +19,7 @@ class Kwc_Statistics_Analytics_Component extends Kwc_Abstract
         return $this->getData()->getBaseProperty('statistics.analytics.code');
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['code'] = $this->_getAnalyticsCode();

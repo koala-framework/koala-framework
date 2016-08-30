@@ -10,9 +10,9 @@ class Kwc_Guestbook_Component extends Kwc_Posts_Directory_Component
      */
     const ACTIVE_ON_SAVE = 'active_on_save';
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Guestbook');
         $ret['componentCategory'] = 'admin';
         $ret['generators']['detail']['component'] = 'Kwc_Guestbook_Detail_Component';

@@ -11,9 +11,9 @@
  */
 class Kwc_Directories_CategorySimple_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['categoryToItemModelName'] = 'Kwc_Directories_CategorySimple_CategoriesToItemsModel';
         $ret['componentName'] = trlKwfStatic('Categories');
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/CategorySimple/Plugin.js';

@@ -8,12 +8,12 @@
             <?=$this->component($this->content)?>
         </div>
         <div class="icons">
-            <? if ($this->row->is_top) { ?>
+            <?php if ($this->row->is_top) { ?>
                 <div class="kwfSwitchHoverFade">
                     <div class="link switchLink"><a class="top"><?=$this->data->trlKwf('Top-Article')?></a></div>
                     <div class="switchContent"><?=$this->data->trlKwf('Top-Article')?></div>
                 </div>
-            <? } ?>
+            <?php } ?>
             <div class="kwfSwitchHoverFade">
                 <div class="link switchLink"><a href="javascript:window.print()" class="print"><?=$this->data->trlKwf('Print')?></a></div>
                 <div class="switchContent"><?=$this->data->trlKwf('Print')?></div>

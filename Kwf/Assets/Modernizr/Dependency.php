@@ -24,7 +24,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
     {
         if (!$this->_features) return null;
 
-        $modernizrPath = dirname(dirname(dirname(dirname(__FILE__)))).'/node_modules/modernizr';
+        $modernizrPath = getcwd().'/node_modules/modernizr';
         $outputFile = tempnam('./temp', 'modernizr');
 
         $configAll = json_decode(file_get_contents($modernizrPath.'/lib/config-all.json'), true);
@@ -87,7 +87,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
 
         $map = $ret->getMapContentsData(false);
-        $map->{'_x_org_koala-framework_masterFiles'} = array(getcwd().'/'.KWF_PATH.'/node_modules/modernizr/package.json');
+        $map->{'_x_org_koala-framework_masterFiles'} = array(getcwd().'/node_modules/modernizr/package.json');
 
         return $ret;
     }

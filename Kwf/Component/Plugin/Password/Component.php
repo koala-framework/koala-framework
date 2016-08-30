@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_LoginAbstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['password'] = 'planet';
         $ret['generators']['loginForm']['component'] = 'Kwf_Component_Plugin_Password_LoginForm_Component';
         return $ret;

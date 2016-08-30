@@ -1,1 +1,1 @@
-<? include('Kwc/Events/List/View/Partial.tpl'); ?>
+<?php include('Kwc/Events/List/View/Partial.tpl'); ?>

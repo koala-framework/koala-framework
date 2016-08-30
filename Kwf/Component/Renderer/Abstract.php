@@ -518,59 +518,15 @@ abstract class Kwf_Component_Renderer_Abstract
         return null;
     }
 
-    private function _cacheSaveIncludes($componentId, $type, $value)
-    {
-        if ($value !== null && $value !== '') {
-            //each partial (type=partial) is rendered on it's own
-            $type .= '#'.$value;
-        }
-        $m = Kwf_Component_Cache::getInstance()->getModel('includes');
-        $s = $m->select()
-            ->whereEquals('component_id', $componentId)
-            ->whereEquals('type', $type);
-        $existingTargetIds = array();
-        foreach ($m->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('id', 'target_id', 'type'))) as $i) {
-            $existingTargetIds[$i['id']] = $i['target_id'];
-        }
-        $newTargetIds = array();
-        if ($this->_includedComponents) {
-            $data = array();
-            foreach ($this->_includedComponents as $includedComponent) {
-                $cmp = Kwf_Component_Data_Root::getInstance()
-                    ->getComponentById($componentId, array('ignoreVisible' => true));
-                $id = substr($includedComponent, 0, strrpos($includedComponent, ':'));
-                $targetCmp = Kwf_Component_Data_Root::getInstance()
-                    ->getComponentById($id, array('ignoreVisible' => true));
-                if ($cmp->getInheritsParent() !== $targetCmp->getInheritsParent()) {
-                    if (!in_array($includedComponent, $existingTargetIds)) {
-                        $c = array(
-                            'target_id' => $includedComponent,
-                            'type' => $type,
-                            'component_id' => $componentId,
-                        );
-                        $data[] = $c;
-                    }
-                    $newTargetIds[] = $includedComponent;
-                }
-            }
-            $m->import(Kwf_Model_Abstract::FORMAT_ARRAY, $data);
-        }
-        $this->_includedComponents = array();
-        $diffTargetIds = array_diff($existingTargetIds, $newTargetIds);
-        if ($diffTargetIds) {
-            //delete not anymore included
-            $m = Kwf_Component_Cache::getInstance()->getModel('includes');
-            $s = $m->select()
-                ->whereEquals('component_id', $componentId)
-                ->whereEquals('type', $type)
-                ->whereEquals('target_id', $diffTargetIds);
-            $m->deleteRows($s);
-        }
-    }
-
     private function _cacheSave($componentId, $type, $value, $content)
     {
-        $this->_cacheSaveIncludes($componentId, $type, $value);
+        $includesType = $type;
+        if ($value !== null && $value !== '') {
+            //each partial (type=partial) is rendered on it's own
+            $includesType .= '#'.$value;
+        }
+        Kwf_Component_Cache::getInstance()->saveIncludes($componentId, $includesType, $this->_includedComponents);
+        $this->_includedComponents = array();
 
         //save rendered contents into view cache
         $cacheContent = $content;
