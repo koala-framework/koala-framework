@@ -173,7 +173,11 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     public function deleteViewCache(array $updates, $progressBarAdapter = null)
     {
         $select = $this->_buildSelectForDelete($updates);
+        return $this->_deleteViewCacheBySelect( $select, $progressBarAdapter);
+    }
 
+    private function _deleteViewCacheBySelect(Kwf_Model_Select $select, $progressBarAdapter = null)
+    {
         //execute select
         $microtime = $this->_getMicrotime();
         $model = $this->getModel();
@@ -249,7 +253,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                         $log->log("type=fullPage component_id={$id}", Zend_Log::INFO);
                     }
                 }
-                $this->deleteViewCache($s);
+                $this->_deleteViewCacheBySelect($s);
             }
         }
 
