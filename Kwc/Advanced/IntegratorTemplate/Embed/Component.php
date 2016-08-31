@@ -13,6 +13,7 @@ class Kwc_Advanced_IntegratorTemplate_Embed_Component extends Kwc_Abstract_Compo
             'component' => 'Kwc_Basic_None_Component',
             'inherit' => true
         );
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 
