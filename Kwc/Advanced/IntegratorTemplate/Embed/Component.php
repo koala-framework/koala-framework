@@ -1,5 +1,5 @@
 <?php
-class Kwc_Advanced_IntegratorTemplate_Embed_Component extends Kwc_Abstract
+class Kwc_Advanced_IntegratorTemplate_Embed_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
