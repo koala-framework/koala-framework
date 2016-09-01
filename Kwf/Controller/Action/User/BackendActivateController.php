@@ -29,7 +29,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                 }
             }
         }
-        $this->view->dep = Kwf_Assets_Package_Default::getInstance('Admin');
+        $this->view->dep = Kwf_Assets_Package_Default::getAdminMainInstance();
 
         parent::preDispatch();
     }

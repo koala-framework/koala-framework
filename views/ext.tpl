@@ -66,8 +66,5 @@
             }
             Kwf.activateKeepAlive();
         };
-        Ext2.onReady(function() {
-            Kwf.main();
-        });
     })();
     </script>
