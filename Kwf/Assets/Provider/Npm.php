@@ -36,7 +36,12 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
             if (file_exists($dir.'/package.json')) {
                 $package = json_decode(file_get_contents($dir.'/package.json'), true);
                 if (isset($package['main'])) {
-                    $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $type.'/'.$package['main']);
+                    if (file_exists($dir . "/" . $package['main'])) {
+                        $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $type.'/'.$package['main']);
+                    } else {
+                        $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $type.'/'.$package['main'] . '.js');
+                    }
+
                 } else {
                     $ret = $this->_guessMainFiles($dependencyName);
                 }
