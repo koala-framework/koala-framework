@@ -165,7 +165,7 @@ class Kwf_Util_ClearCache_Watcher
     {
         $eventStart = microtime(true);
         Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
-        if (substr($event->filename, -4)=='.css' || substr($event->filename, -3)=='.js' || substr($event->filename, -5)=='.scss' || substr($event->filename, -15)=='.underscore.tpl') {
+        if (substr($event->filename, -4)=='.css' || substr($event->filename, -3)=='.js' || substr($event->filename, -4)=='.jsx' || substr($event->filename, -5)=='.scss' || substr($event->filename, -15)=='.underscore.tpl') {
             echo "asset modified\n";
             if ($event instanceof Event\Modify) {
 
@@ -174,6 +174,7 @@ class Kwf_Util_ClearCache_Watcher
                 $assetsType = substr($event->filename, strrpos($event->filename, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 if ($assetsType == 'tpl') $assetsType = 'js';
+                if ($assetsType == 'jsx') $assetsType = 'js';
                 self::_clearAssetsAll($assetsType);
 
 
