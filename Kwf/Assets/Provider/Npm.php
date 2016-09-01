@@ -50,7 +50,9 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
             }
         } else if  (substr(strtolower($dependencyName), 0, strlen($this->_path)+1) == strtolower($this->_path).'/') {
             //absolute path to single file path given
-            if (file_exists("node_modules/$dependencyName.js")) {
+            if (is_file("node_modules/$dependencyName")) {
+                $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName);
+            } else if (file_exists("node_modules/$dependencyName.js")) {
                 $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName . '.js');
             } else if (is_dir("node_modules/$dependencyName/") && file_exists("node_modules/$dependencyName/index.js")) {
                 $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName . '/index.js');
