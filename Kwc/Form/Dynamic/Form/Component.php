@@ -116,6 +116,12 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
                 $body .= $msg;
                 $mail->setSubject(str_replace('%number%', $row->id, $settings['confirm_subject']));
                 $mail->setBodyText($body);
+
+                $hostNonWww = preg_replace('#^www\\.#', '', $this->getData()->getDomain());
+                $fromAddress = str_replace('%host%', $hostNonWww, $this->getData()->getBaseProperty('email.from.address'));
+                $fromName = str_replace('%host%', $hostNonWww, $this->getData()->getBaseProperty('email.from.name'));
+                $mail->setFrom($fromAddress, $fromName);
+
                 $mail->addTo($recipient);
                 $mail->send();
             }
