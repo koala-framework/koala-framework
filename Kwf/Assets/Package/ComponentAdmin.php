@@ -138,4 +138,13 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
         }
         return $commonJsData;
     }
+
+    public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
+    {
+        $ret = parent::getPackageContents($mimeType, $language, $includeSourceMapComment);
+        if ($mimeType == 'text/javascript; defer') {
+            Kwf_Assets_Package_Filter_LoadDeferred::filter($ret);
+        }
+        return $ret;
+    }
 }
