@@ -34,7 +34,7 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
         if ($this->_getParam('class')) {
             $c = $this->_getParam('class');
             if (strpos($c, '%') === false) {
-                $whereClass = array($c);
+                $whereClass = array();
                 foreach (Kwc_Abstract::getComponentClasses() as $cls) {
                     if (in_array($c, Kwc_Abstract::getSetting($cls, 'parentClasses'))) {
                         $whereClass[] = $cls;
