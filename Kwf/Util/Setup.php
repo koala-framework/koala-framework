@@ -408,7 +408,7 @@ class Kwf_Util_Setup
             $ret .= "    ini_set('session.save_handler', 'redis');\n";
             $ret .= "    ini_set('session.save_path', 'tcp://".Kwf_Config::getValue('server.redis.host').":".Kwf_Config::getValue('server.redis.port')."?prefix=".substr(md5(Kwf_Cache_Simple::getUniquePrefix()), 0, 10)."');\n";
             $ret .= "}\n";
-        } else if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
+        } else if (Kwf_Config::getValue('server.memcache.host') && Kwf_Setup::hasDb()) {
             $ret .= "\nif (PHP_SAPI != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 

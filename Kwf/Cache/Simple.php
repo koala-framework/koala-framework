@@ -5,7 +5,6 @@
  * If available it uses apc user cache or memcache directly (highly recommended!!), else it falls
  * back to Zend_Cache using a (slow) file backend.
  *
- * If aws.simpleCacheCluster is set Aws ElastiCache will be used.
  */
 class Kwf_Cache_Simple
 {
@@ -30,9 +29,7 @@ class Kwf_Cache_Simple
         if (isset(self::$backend)) {
             return self::$backend;
         }
-        if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-            $ret = 'elastiCache';
-        } else if (Kwf_Config::getValue('server.redis.host')) {
+        if (Kwf_Config::getValue('server.redis.host')) {
             $ret = 'redis';
         } else if (Kwf_Config::getValue('server.memcache.host')) {
             $ret = 'memcache';
@@ -50,18 +47,7 @@ class Kwf_Cache_Simple
     {
         if (!isset(self::$_zendCache)) {
             $be = self::getBackend();
-            if ($be == 'elastiCache') {
-                //TODO: use similar like memcache without Zend_Cache
-                self::$_zendCache = new Zend_Cache_Core(array(
-                    'lifetime' => null,
-                    'write_control' => false,
-                    'automatic_cleaning_factor' => 0,
-                    'automatic_serialization' => true
-                ));
-                self::$_zendCache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
-                    'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
-                )));
-            } else if ($be == 'apc' || $be == 'apcu') {
+            if ($be == 'apc' || $be == 'apcu') {
                 self::$_zendCache = false;
             } else {
                 self::$_zendCache = new Zend_Cache_Core(array(
@@ -87,11 +73,6 @@ class Kwf_Cache_Simple
                     if (!$v) {
                         $v = time();
                         self::$_zendCache->getBackend()->getMemcache()->set(self::$uniquePrefix.'cache_namespace', $v);
-                    }
-                    if ($be instanceof Kwf_Util_Aws_ElastiCache_CacheBackend) {
-                        //Kwf_Util_Aws_ElastiCache_CacheBackend doesn't use Kwf_Cache_Backend_Memcached, so we don't have a app prefix
-                        //set app prefix ourselves
-                        $v = Kwf_Config::getValue('application.id').Kwf_Setup::getConfigSection().$v;
                     }
                     self::$_zendCache->setOption('cache_id_prefix', $v);
                 }

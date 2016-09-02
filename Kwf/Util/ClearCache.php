@@ -78,7 +78,7 @@ class Kwf_Util_ClearCache
     {
         $types = array();
         $simpleCacheBackend = Kwf_Cache_Simple::getBackend();
-        if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'redis' || $simpleCacheBackend == 'elastiCache') {
+        if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'redis') {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         }
         if (Kwf_Util_Apc::isAvailable()) {
