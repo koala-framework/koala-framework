@@ -33,7 +33,7 @@ class Kwf_Cache_SimpleStatic
         static $extensionLoaded;
         if (!isset($extensionLoaded)) $extensionLoaded = extension_loaded('apc');
         if ($extensionLoaded && PHP_SAPI != 'cli') {
-            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::$uniquePrefix.'-';
             return apc_fetch($prefix.$cacheId, $success);
         } else {
             if (isset(self::$_cache[$cacheId])) {
@@ -62,7 +62,7 @@ class Kwf_Cache_SimpleStatic
         static $extensionLoaded;
         if (!isset($extensionLoaded)) $extensionLoaded = extension_loaded('apc');
         if ($extensionLoaded && PHP_SAPI != 'cli') {
-            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::$uniquePrefix.'-';
             return apc_add($prefix.$cacheId, $data);
         } else {
             self::$_cache[$cacheId] = $data;
@@ -95,7 +95,7 @@ class Kwf_Cache_SimpleStatic
                 throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
             } else {
                 static $prefix;
-                if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+                if (!isset($prefix)) $prefix = Kwf_Cache_Simple::$uniquePrefix.'-';
                 $it = new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#', APC_ITER_NONE);
                 if ($it->getTotalCount() && !$it->current()) {
                     //APCIterator is borked, delete everything
@@ -138,7 +138,7 @@ class Kwf_Cache_SimpleStatic
                 if (!$result['result']) $ret = false;
             }
         } else {
-            $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            $prefix = Kwf_Cache_Simple::$uniquePrefix.'-';
             foreach ($cacheIds as $cacheId) {
                 if (!apc_delete($prefix.$cacheId)) {
                     $ret = false;

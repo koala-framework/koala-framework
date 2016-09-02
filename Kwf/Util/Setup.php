@@ -292,6 +292,10 @@ class Kwf_Util_Setup
         Kwf_Cache_Simple::$backend = null; //unset to re-calculate
         $ret .= "Kwf_Cache_Simple::\$backend = '".Kwf_Cache_Simple::getBackend()."';\n";
 
+        $cacheUniquePrefix = getcwd().'-'.Kwf_Setup::getConfigSection().'-';
+        $ret .= "Kwf_Cache_Simple::\$uniquePrefix = '".$cacheUniquePrefix."';\n";
+        unset($cacheUniquePrefix);
+
         if (Kwf_Config::getValue('server.memcache.host')) {
             $host = Kwf_Config::getValue('server.memcache.host');
             $ret .= "Kwf_Cache_Simple::\$memcacheHost = '".$host."';\n";

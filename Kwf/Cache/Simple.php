@@ -10,6 +10,7 @@
 class Kwf_Cache_Simple
 {
     public static $backend; //set in Setup
+    public static $uniquePrefix; //set in Setup
     public static $memcacheHost; //set in Setup
     public static $memcachePort; //set in Setup
     public static $redisHost; //set in Setup
@@ -82,10 +83,10 @@ class Kwf_Cache_Simple
                 if ($be instanceof Zend_Cache_Backend_Memcached) {
                     //namespace is incremented in Kwf_Util_ClearCache
                     //use memcache directly as Zend would not save the integer directly and we can't increment it then
-                    $v = self::$_zendCache->getBackend()->getMemcache()->get(self::getUniquePrefix().'cache_namespace');
+                    $v = self::$_zendCache->getBackend()->getMemcache()->get(self::$uniquePrefix.'cache_namespace');
                     if (!$v) {
                         $v = time();
-                        self::$_zendCache->getBackend()->getMemcache()->set(self::getUniquePrefix().'cache_namespace', $v);
+                        self::$_zendCache->getBackend()->getMemcache()->set(self::$uniquePrefix.'cache_namespace', $v);
                     }
                     if ($be instanceof Kwf_Util_Aws_ElastiCache_CacheBackend) {
                         //Kwf_Util_Aws_ElastiCache_CacheBackend doesn't use Kwf_Cache_Backend_Memcached, so we don't have a app prefix
@@ -125,7 +126,7 @@ class Kwf_Cache_Simple
         }
         $redis = new Redis();
         $redis->connect(self::$redisHost, self::$redisPort);
-        $redis->setOption(Redis::OPT_PREFIX, self::getUniquePrefix());
+        $redis->setOption(Redis::OPT_PREFIX, self::$uniquePrefix);
         return $redis;
     }
 
@@ -135,12 +136,12 @@ class Kwf_Cache_Simple
             $mc = self::getMemcache();
             //namespace is incremented in Kwf_Util_ClearCache
             //use memcache directly as Zend would not save the integer directly and we can't increment it then
-            $v = $mc->get(self::getUniquePrefix().'cache_namespace');
+            $v = $mc->get(self::$uniquePrefix.'cache_namespace');
             if (!$v) {
                 $v = time();
-                $mc->set(self::getUniquePrefix().'cache_namespace', $v);
+                $mc->set(self::$uniquePrefix.'cache_namespace', $v);
             }
-            self::$_cacheNamespace = self::getUniquePrefix().'-'.$v;
+            self::$_cacheNamespace = self::$uniquePrefix.'-'.$v;
         }
         return self::$_cacheNamespace;
     }
@@ -170,11 +171,11 @@ class Kwf_Cache_Simple
             return $ret;
         } else if (self::getBackend() == 'apc') {
             static $prefix;
-            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
             return apc_fetch($prefix.$cacheId, $success);
         } else if (self::getBackend() == 'apcu') {
             static $prefix;
-            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
             return apcu_fetch($prefix.$cacheId, $success);
         } else if (self::getBackend() == 'file') {
             $file = self::_getFileNameForCacheId($cacheId);
@@ -209,11 +210,11 @@ class Kwf_Cache_Simple
             return $ret;
         } else if (self::getBackend() == 'apc') {
             static $prefix;
-            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
             return apc_add($prefix.$cacheId, $data, $ttl);
         } else if (self::getBackend() == 'apcu') {
             static $prefix;
-            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
             return apcu_add($prefix.$cacheId, $data, $ttl);
         } else if (self::getBackend() == 'file') {
              $file = self::_getFileNameForCacheId($cacheId);
@@ -243,11 +244,11 @@ class Kwf_Cache_Simple
                 $r = self::getMemcache()->delete(self::_getMemcachePrefix().md5($cacheId));
             } else if (self::getBackend() == 'apc') {
                 static $prefix;
-                if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+                if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
                 $r = apc_delete($prefix.$cacheId);
             } else if (self::getBackend() == 'apcu') {
                 static $prefix;
-                if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+                if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
                 $r = apcu_delete($prefix.$cacheId);
             } else if (self::getBackend() == 'file') {
                 $r = true;
@@ -280,8 +281,8 @@ class Kwf_Cache_Simple
         if (self::getBackend() == 'memcache') {
             //increment namespace
             $mc = Kwf_Cache_Simple::getMemcache();
-            if ($mc->get(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace')) {
-                $mc->increment(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace');
+            if ($mc->get(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace')) {
+                $mc->increment(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace');
             }
         } else if (self::getBackend() == 'redis') {
             $it = null;
@@ -302,10 +303,6 @@ class Kwf_Cache_Simple
 
     public static function getUniquePrefix()
     {
-        static $ret;
-        if (!isset($ret)) {
-            $ret = getcwd().'-'.Kwf_Setup::getConfigSection().'-';
-        }
-        return $ret;
+        return self::$uniquePrefix;
     }
 }
