@@ -292,7 +292,10 @@ class Kwf_Util_Setup
         Kwf_Cache_Simple::$backend = null; //unset to re-calculate
         $ret .= "Kwf_Cache_Simple::\$backend = '".Kwf_Cache_Simple::getBackend()."';\n";
 
-        $cacheUniquePrefix = getcwd().'-'.Kwf_Setup::getConfigSection().'-';
+        $cacheUniquePrefix = Kwf_Config::getValue('cachePrefix'); //can be '' when only a single web runs in memcache instance
+        if ($cacheUniquePrefix === null) {
+            $cacheUniquePrefix = getcwd().'-'.Kwf_Setup::getConfigSection().'-';
+        }
         $ret .= "Kwf_Cache_Simple::\$uniquePrefix = '".$cacheUniquePrefix."';\n";
         unset($cacheUniquePrefix);
 
