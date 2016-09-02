@@ -297,6 +297,9 @@ class Kwf_Util_Setup
             $cacheUniquePrefix = getcwd().'-'.Kwf_Setup::getConfigSection().'-';
         }
         $ret .= "Kwf_Cache_Simple::\$uniquePrefix = '".$cacheUniquePrefix."';\n";
+        if (Kwf_Config::getValue('cacheSimpleNamespace')) {
+            $ret .= "Kwf_Cache_Simple::\$namespace = '".Kwf_Config::getValue('cacheSimpleNamespace')."';\n";
+        }
         unset($cacheUniquePrefix);
 
         if (Kwf_Config::getValue('server.memcache.host')) {

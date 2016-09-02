@@ -10,18 +10,18 @@ class Kwf_Cache_Simple
 {
     public static $backend; //set in Setup
     public static $uniquePrefix; //set in Setup
+    public static $namespace; //set in Setup
     public static $memcacheHost; //set in Setup
     public static $memcachePort; //set in Setup
     public static $redisHost; //set in Setup
     public static $redisPort; //set in Setup
 
     private static $_zendCache = null;
-    private static $_cacheNamespace = null;
 
     public static function resetZendCache()
     {
         self::$_zendCache = null;
-        self::$_cacheNamespace = null;
+        self::$namespace = null;
     }
 
     public static function getBackend()
@@ -106,7 +106,7 @@ class Kwf_Cache_Simple
 
     private static function _getMemcachePrefix()
     {
-        if (!isset(self::$_cacheNamespace)) {
+        if (!isset(self::$namespace)) {
             $mc = self::getMemcache();
             //namespace is incremented in Kwf_Util_ClearCache
             //use memcache directly as Zend would not save the integer directly and we can't increment it then
@@ -115,9 +115,9 @@ class Kwf_Cache_Simple
                 $v = time();
                 $mc->set(self::$uniquePrefix.'cache_namespace', $v);
             }
-            self::$_cacheNamespace = self::$uniquePrefix.'-'.$v;
+            self::$namespace = self::$uniquePrefix.'-'.$v;
         }
-        return self::$_cacheNamespace;
+        return self::$namespace;
     }
 
     //for 'file' backend
@@ -253,10 +253,12 @@ class Kwf_Cache_Simple
     public static function _clear()
     {
         if (self::getBackend() == 'memcache') {
-            //increment namespace
-            $mc = Kwf_Cache_Simple::getMemcache();
-            if ($mc->get(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace')) {
-                $mc->increment(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace');
+            if (!Kwf_Config::getValue('cacheSimpleNamespace')) {
+                //increment namespace
+                $mc = Kwf_Cache_Simple::getMemcache();
+                if ($mc->get(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace')) {
+                    $mc->increment(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace');
+                }
             }
         } else if (self::getBackend() == 'redis') {
             $it = null;
