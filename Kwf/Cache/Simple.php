@@ -137,7 +137,7 @@ class Kwf_Cache_Simple
             $success = $ret !== false;
             return $ret;
         } else if (self::getBackend() == 'redis') {
-            $ret = self::getRedis()->get('simple:'.$cacheId);
+            $ret = self::getRedis()->get('simple:'.self::$namespace.':'.$cacheId);
             $success = $ret !== false;
             if ($success) {
                 $ret = unserialize($ret);
@@ -180,7 +180,7 @@ class Kwf_Cache_Simple
             return self::getMemcache()->set(self::_getMemcachePrefix().md5($cacheId), $data, 0, $ttl);
         } else if (self::getBackend() == 'redis') {
             if (!$ttl) $ttl = 365*24*60*60; //Set a TTL so it can be evicted http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
-            $ret = self::getRedis()->setEx('simple:'.$cacheId, $ttl, serialize($data));
+            $ret = self::getRedis()->setEx('simple:'.self::$namespace.':'.$cacheId, $ttl, serialize($data));
             return $ret;
         } else if (self::getBackend() == 'apc') {
             static $prefix;
@@ -207,7 +207,7 @@ class Kwf_Cache_Simple
 
         if (self::getBackend() == 'redis') {
             foreach ($cacheIds as &$id) {
-                $id = 'simple:'.$id;
+                $id = 'simple:'.self::$namespace.':'.$id;
             }
             return self::getRedis()->delete($cacheIds);
         }
@@ -261,9 +261,11 @@ class Kwf_Cache_Simple
                 }
             }
         } else if (self::getBackend() == 'redis') {
-            $it = null;
-            while ($keys = self::getRedis()->scan($it, 'simple:*')) {
-                self::getRedis()->delete($keys);
+            if (!Kwf_Config::getValue('cacheSimpleNamespace')) {
+                $it = null;
+                while ($keys = self::getRedis()->scan($it, 'simple:*')) {
+                    self::getRedis()->delete($keys);
+                }
             }
         } else if (self::getBackend() == 'file') {
             foreach(glob('cache/simple/*') as $i) {
