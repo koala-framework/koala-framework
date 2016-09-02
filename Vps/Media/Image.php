@@ -309,8 +309,6 @@ class Vps_Media_Image
             $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         }
 
-        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-        $im->stripImage();
         $im->setImageCompressionQuality(80);
 
         $version = $im->getVersion();
