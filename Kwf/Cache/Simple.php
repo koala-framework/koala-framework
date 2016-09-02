@@ -67,14 +67,7 @@ class Kwf_Cache_Simple
             if (self::$_zendCache) {
                 $be = self::$_zendCache->getBackend();
                 if ($be instanceof Zend_Cache_Backend_Memcached) {
-                    //namespace is incremented in Kwf_Util_ClearCache
-                    //use memcache directly as Zend would not save the integer directly and we can't increment it then
-                    $v = self::$_zendCache->getBackend()->getMemcache()->get(self::$uniquePrefix.'cache_namespace');
-                    if (!$v) {
-                        $v = time();
-                        self::$_zendCache->getBackend()->getMemcache()->set(self::$uniquePrefix.'cache_namespace', $v);
-                    }
-                    self::$_zendCache->setOption('cache_id_prefix', $v);
+                    self::$_zendCache->setOption('cache_id_prefix', self::_getMemcachePrefix());
                 }
             }
         }
