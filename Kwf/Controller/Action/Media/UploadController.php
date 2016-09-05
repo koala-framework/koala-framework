@@ -1,6 +1,10 @@
 <?php
 class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 {
+    protected function _validateSessionToken()
+    {
+    }
+
     public function jsonUploadAction()
     {
         Kwf_Util_MemoryLimit::set(1024);

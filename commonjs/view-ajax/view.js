@@ -87,9 +87,6 @@ ViewAjax.prototype = {
         this.baseParams = {
             componentId: this.componentId
         };
-        if (typeof Kwf != 'undefined' && Kwf.sessionToken) {
-            this.baseParams.kwfSessionToken = Kwf.sessionToken;
-        }
 
         if (this.searchFormComponentId) {
             this.searchForm = formRegistry.getFormByComponentId(this.searchFormComponentId);

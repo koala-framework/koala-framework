@@ -100,9 +100,6 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
                 componentId: config.componentId,
                 pageUrl: location.href
             };
-            if (typeof Kwf != "undefined" && Kwf.sessionToken) {
-                params.kwfSessionToken = Kwf.sessionToken
-            }
 
             var request = $.ajax({
                 url: config.controllerUrl + '/json-index',
@@ -154,9 +151,6 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         componentId: config.componentId,
         pageUrl: location.href
     };
-    if (typeof Kwf != "undefined" && Kwf.sessionToken) {
-        params.kwfSessionToken = Kwf.sessionToken
-    }
     // Inital Request
     $.ajax({
         url: config.controllerUrl + '/json-index',
