@@ -65,7 +65,11 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
     {
         $ret = null;
         if (substr(strtolower($dependencyName), 0, strlen($this->_path)+1) == strtolower($this->_path).'/') {
-            $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName);
+            if (substr($dependencyName, -4) == '.css') {
+                $ret = new Kwf_Assets_Dependency_File_Css($this->_providerList, $dependencyName);
+            } else {
+                $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName);
+            }
         }
         return $ret;
     }
