@@ -1,7 +1,7 @@
 <?php
 class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
 {
-    public function renderMaster($component)
+    public function renderMaster($component, &$hasDynamicParts = false)
     {
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
@@ -41,6 +41,7 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
 
             $pass1Cacheable = true;
             $content = $this->_renderPass1($content, $pass1Cacheable);
+            if (!$pass1Cacheable) $hasDynamicParts = true;
             Kwf_Benchmark::checkpoint('render pass 1');
             if ($this->_enableCache && $pass1Cacheable) {
                 Kwf_Component_Cache::getInstance()->save($component, $content, $this->_getRendererName(), 'fullPage', '', '', $this->_minLifetime);
@@ -53,7 +54,7 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
             Kwf_Benchmark::countLog('fullpage-hit');
         }
 
-        $content = $this->_renderPass2($content);
+        $content = $this->_renderPass2($content, $hasDynamicParts);
         Kwf_Benchmark::checkpoint('render pass 2');
 
         Kwf_Component_Cache::getInstance()->writeBuffer();
