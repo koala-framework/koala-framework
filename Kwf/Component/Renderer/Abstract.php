@@ -38,6 +38,10 @@ abstract class Kwf_Component_Renderer_Abstract
      */
     public function renderComponent($component, &$hasDynamicParts = false)
     {
+        if (Kwf_Component_Data_Root::getShowInvisible()) {
+            $hasDynamicParts = true;
+        }
+
         $helper = new Kwf_Component_View_Helper_Component();
         $helper->setRenderer($this);
         $content = $helper->component($component);

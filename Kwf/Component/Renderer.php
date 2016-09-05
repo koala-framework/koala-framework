@@ -6,6 +6,10 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
 
+        if (Kwf_Component_Data_Root::getShowInvisible()) {
+            $hasDynamicParts = true;
+        }
+
         $content = false;
         if ($this->_enableCache) {
             $content = Kwf_Component_Cache::getInstance()->load($component->componentId, $this->_getRendererName(), 'fullPage');
