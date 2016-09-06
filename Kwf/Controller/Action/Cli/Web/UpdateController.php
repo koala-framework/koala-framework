@@ -50,6 +50,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
 
         $skipClearCache = $this->_getParam('skip-clear-cache');
+        $excludeClearCacheType = $this->_getParam('exclude-clear-cache-type');
 
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
 
@@ -65,7 +66,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         } else {
 
             if (!$skipClearCache) {
-                Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>true, 'refresh'=>false));
+                Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>true, 'refresh'=>false, 'excludeTypes'=>$excludeClearCacheType));
             }
 
             echo "Looking for update-scripts...";
@@ -93,6 +94,8 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         $runner->setVerbose(true);
         $runner->setEnableDebug($this->_getParam('debug'));
         $runner->setSkipClearCache($skipClearCache);
+        $runner->setExcludeClearCacheTypes($excludeClearCacheType);
+
         $checkUpdatesSettings = $runner->checkUpdatesSettings();
         if (!$checkUpdatesSettings) {
             echo "\ncheckSettings failed, update stopped\n";

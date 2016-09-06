@@ -7,6 +7,7 @@ class Kwf_Util_Update_Runner
     private $_updates;
     private $_debug = false;
     private $_skipClearCache = false;
+    private $_excludeClearCacheTypes = array();
     private $_verbose = false;
     /**
      * @var Zend_ProgressBar
@@ -22,6 +23,11 @@ class Kwf_Util_Update_Runner
     public function setSkipClearCache($v)
     {
         $this->_skipClearCache = (bool)$v;
+    }
+
+    public function setExcludeClearCacheTypes($v)
+    {
+        $this->_excludeClearCacheType = $v;
     }
 
     /**
@@ -106,6 +112,7 @@ class Kwf_Util_Update_Runner
             if ($this->_verbose) echo "\n";
             Kwf_Util_ClearCache::getInstance()->clearCache(array(
                 'types' => 'all',
+                'excludeTypes' => $this->_excludeClearCacheTypes,
                 'output' => $this->_verbose,
                 'refresh' => isset($options['refreshCache']) ? $options['refreshCache'] : true,
             ));
