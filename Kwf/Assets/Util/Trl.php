@@ -11,7 +11,7 @@ class Kwf_Assets_Util_Trl
         if (isset($trlElement['context'])) $key .= '.'.$trlElement['context'];
         $key .= '.'.str_replace("'", "\\'", $trlElement['text']);
         $replace = '';
-        if (preg_match('#^([a-z]+\.)trl#i', $b, $m)) {
+        if (preg_match('#^(_?([a-z]+(2\.default)?\.))trl#i', $b, $m)) {
             $replace = substr($b, 0, strlen($m[1]));
         }
         if ($trlElement['type'] == 'trlp' || $trlElement['type'] == 'trlcp') {
