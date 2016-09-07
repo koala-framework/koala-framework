@@ -46,7 +46,7 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
             foreach ($c->getComponent()->getFulltextComponents() as $c) {
                 $fulltextComponents = array_merge(
                     $fulltextComponents,
-                    $this->getFulltextComponents($component)
+                    $this->getFulltextComponents($c)
                 );
             }
         }
