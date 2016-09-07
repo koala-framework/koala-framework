@@ -95,7 +95,7 @@ class Kwf_Assets_Package_ComponentPackage extends Kwf_Assets_Package
     {
         $ret = parent::getPackageContents($mimeType, $language, $includeSourceMapComment);
         if ($mimeType == 'text/javascript; defer') {
-            Kwf_Assets_Package_Filter_LoadDeferred::filter($ret);
+            $ret = Kwf_Assets_Package_Filter_LoadDeferred::filter($ret);
         }
         return $ret;
     }
