@@ -18,6 +18,7 @@ class Kwc_Box_MetaTagsContent_OpenGraphImage_Component extends Kwc_Abstract_Imag
         $ret['editFilename'] = false;
         $ret['titleText'] = false;
         $ret['imageCaption'] = false;
+        $ret['flags']['hasFulltext'] = false;
         return $ret;
     }
 
