@@ -35,22 +35,48 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
 
     public function getFulltextComponents(Kwf_Component_Data $component)
     {
-        $fulltextComponents = $component->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false, 'page'=>false));
+        if (isset($component->generator->unique) && $component->generator->unique
+            && isset($component->generator->inherit) && $component->generator->inherit
+        ) {
+            return array();
+        }
+        $ret = array();
         if (Kwc_Abstract::getFlag($component->componentClass, 'hasFulltext')) {
-            $fulltextComponents[] = $component;
+            $ret[] = $component;
         }
 
-        foreach ($fulltextComponents as $c) {
+        $components = $component->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'page'=>false));
+        foreach ($components as $cmp) {
+            $checkCmp = $cmp;
+            $needsToBeIndexed = true;
+            while ($checkCmp->inherits == false) {
+                if (isset($checkCmp->generator)) {
+                    $generator = $checkCmp->generator;
+                    if (isset($generator->inherit) && $generator->inherit
+                        && isset($generator->unique) && $generator->unique
+                    ) {
+                        $needsToBeIndexed = false;
+                        break;
+                    }
+                }
+                $checkCmp = $checkCmp->parent;
+            }
+            if ($needsToBeIndexed) {
+                $ret[] = $cmp;
+            }
+        }
+
+        foreach ($ret as $c) {
             if (!method_exists($c->getComponent(), 'getFulltextComponents')) continue;
             //components can return other components that should be included in fulltext content
             foreach ($c->getComponent()->getFulltextComponents() as $c) {
-                $fulltextComponents = array_merge(
-                    $fulltextComponents,
+                $ret = array_merge(
+                    $ret,
                     $this->getFulltextComponents($c)
                 );
             }
         }
-        return $fulltextComponents;
+        return $ret;
     }
 
     public function getFulltextContentForPage(Kwf_Component_Data $page, array $fulltextComponents = array())
