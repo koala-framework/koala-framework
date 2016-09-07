@@ -123,8 +123,13 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             }
 
             if ($update === array()) {
-                //using keys command here is ok as that happens only when executing "clear-view-cache --all" on cli
-                $keysToDelete = $this->_redis->keys('viewcache:*');
+                //only when executing "clear-view-cache --all" on cli
+                $it = null;
+                while ($keys = $this->_redis->scan($it, 'viewcache:*')) {
+                    $keysToDelete = array_merge($keys);
+                }
+                $keysToDelete = array_unique($keysToDelete);
+
             } else {
                 $keysToDelete = $this->_redis->sInter($keys);
             }
