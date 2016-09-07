@@ -404,6 +404,24 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return self::getBemClass($this, $class, $nonBemFallback);
     }
 
+    public static function getMasterBemClass($component, $class)
+    {
+        if (!is_string($component)) $component = $component->getData()->componentClass;
+        static $up;
+        if (!isset($up)) $up = Kwf_Config::getValue('application.uniquePrefix');
+        if (!$up) {
+            throw new Kwf_Exception_NotYetImplemented();
+        } else {
+            if (substr($class, 0, 2) != '--') $class = '__'.$class;
+            return Kwf_Component_Abstract::formatRootElementClass($component, '').'Master'.$class;
+        }
+    }
+
+    protected function _getMasterBemClass($class)
+    {
+        return self::getMasterBemClass($this, $class);
+    }
+
     /**
      * Returns variables that can be used in Master.tpl
      * @param e.g. for accessing recipient in Mail_Renderer
