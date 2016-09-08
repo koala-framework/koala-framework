@@ -76,6 +76,7 @@ class Kwf_Component_PagesMetaRow extends Kwf_Model_Proxy_Row
         $this->domain_component_id = $domainCmp ? $domainCmp->componentId : null;
         $this->subroot_component_id = $page->getSubroot()->componentId;
         $this->url = $page->getAbsoluteUrl();
+        if (!$this->url) $this->url = '';
 
         $this->sitemap_priority = '0.5';
         $this->sitemap_changefreq = 'weekly';

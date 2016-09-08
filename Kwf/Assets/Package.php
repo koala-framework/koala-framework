@@ -483,11 +483,16 @@ class Kwf_Assets_Package
             return $ret;
         }
 
+        return $this->_buildPackageUrls($mimeType, $language);
+    }
+
+    protected function _buildPackageUrls($mimeType, $language)
+    {
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
         }
 
-        if ($mimeType == 'text/css; ie8' && !$this->_enableLegacySupport) {
+        if (($mimeType == 'text/css; ie8' || $mimeType == 'text/javascript; ie8') && !$this->_enableLegacySupport) {
             return array();
         }
 

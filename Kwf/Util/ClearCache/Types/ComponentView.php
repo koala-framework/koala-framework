@@ -7,6 +7,10 @@ class Kwf_Util_ClearCache_Types_ComponentView extends Kwf_Util_ClearCache_Types_
             $this->_output("skipped: (won't delete, use clear-view-cache to clear)\n");
             return;
         }
+        if (!Kwf_Setup::hasDb()) {
+            $this->_output("skipped: (no db configured)\n");
+            return;
+        }
         Kwf_Component_Cache::getInstance()->deleteViewCache(array());
     }
 

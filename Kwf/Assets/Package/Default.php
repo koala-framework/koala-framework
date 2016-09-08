@@ -18,7 +18,23 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
         return self::$_instances[$dependencyName];
     }
 
-    public function clearInstances()
+    /**
+     * Returns the AdminMain package used by Admin views
+     *
+     * AdminMain is Admin plus Main.js for running Kwf.main
+     *
+     * @return self
+     */
+    public static function getAdminMainInstance()
+    {
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            return Kwf_Assets_Package_ComponentAdmin::getInstance();
+        } else {
+            return self::getInstance('AdminMain');
+        }
+    }
+
+    public static function clearInstances()
     {
         self::$_instances = array();
     }
@@ -77,7 +93,7 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
             }
             $packages[] = Kwf_Assets_Package_ComponentAdmin::getInstance();
         } else {
-            $packages[] = self::getInstance('Admin');
+            $packages[] = self::getInstance('AdminMain');
         }
         foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
             $packages[] = self::getInstance($i);

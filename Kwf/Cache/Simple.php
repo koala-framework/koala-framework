@@ -288,7 +288,11 @@ class Kwf_Cache_Simple
             while ($keys = self::getRedis()->scan($it, 'simple:*')) {
                 self::getRedis()->delete($keys);
             }
-        } else if (self::getBackend() == 'apc' || self::getBackend() == 'apcu' || self::getBackend() == 'file') {
+        } else if (self::getBackend() == 'file') {
+            foreach(glob('cache/simple/*') as $i) {
+                unlink($i);
+            }
+        } else if (self::getBackend() == 'apc' || self::getBackend() == 'apcu') {
             //those are cleared using their own clear-cache type
         } else {
             if (!isset(self::$_zendCache)) self::getZendCache();

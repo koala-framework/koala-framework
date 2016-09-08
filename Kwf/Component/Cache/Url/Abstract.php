@@ -4,7 +4,7 @@ abstract class Kwf_Component_Cache_Url_Abstract
     static private $_instance;
 
     /**
-     * @return Kwf_Component_Cache_Mysql
+     * @return Kwf_Component_Cache_Url_Mysql
      */
     public static function getInstance()
     {

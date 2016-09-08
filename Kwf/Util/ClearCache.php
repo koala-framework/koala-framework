@@ -27,6 +27,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'assetdeps') continue; //never clear assetdeps, too expensive to regenerate
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
                 if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
+                if ($d->getFilename() == 'simple') continue; //handled by Kwf_Util_ClearCache_Types_SimpleCache
                 $ret[] = $d->getFilename();
             }
         }

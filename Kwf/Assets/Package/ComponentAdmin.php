@@ -13,7 +13,7 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
 
     public function __construct()
     {
-        parent::__construct('Admin');
+        parent::__construct('AdminMain'); //Admin + Main to start ext2 application
     }
 
     public function toUrlParameter()
@@ -26,12 +26,11 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
         return self::getInstance();
     }
 
-    public function getPackageUrls($mimeType, $language)
+    private function _getFrontendPackages()
     {
         $ret = array();
 
-        $frontendPackage = Kwf_Assets_Package_ComponentFrontend::getInstance();
-        $ret = array_merge($ret, $frontendPackage->getPackageUrls($mimeType, $language));
+        $ret[] = Kwf_Assets_Package_ComponentFrontend::getInstance();
 
         $packageNames = array();
         foreach (Kwc_Abstract::getComponentClasses() as $cls) {
@@ -39,22 +38,55 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
                 $packageName = Kwc_Abstract::getFlag($cls, 'assetsPackage');
                 if ($packageName != 'Default' && !in_array($packageName, $packageNames)) {
                     $packageNames[] = $packageName;
-                    $ret = array_merge($ret, Kwf_Assets_Package_ComponentPackage::getInstance($packageName)->getPackageUrls($mimeType, $language));
+                    $ret[] = Kwf_Assets_Package_ComponentPackage::getInstance($packageName);
                 }
             }
         }
+        return $ret;
+    }
 
-        $ret = array_merge($ret, parent::getPackageUrls($mimeType, $language));
+    protected function _buildPackageUrls($mimeType, $language)
+    {
+        $ret = array();
+
+        if (($mimeType == 'text/css; ie8' || $mimeType == 'text/javascript; ie8') && !$this->_enableLegacySupport) {
+            return array();
+        }
+
+        foreach ($this->_getFrontendPackages() as $package) {
+            $ret = array_merge($ret, $package->_buildPackageUrls($mimeType, $language));
+        }
+
+        $ret = array_merge($ret, parent::_buildPackageUrls($mimeType, $language));
+
         return $ret;
     }
 
     protected function _getFilteredUniqueDependencies($mimeType)
     {
-        $ret = parent::_getFilteredUniqueDependencies($mimeType);
+        if ($mimeType == 'text/javascript') {
+            return array();
+        }
 
-        $frontendPackage = Kwf_Assets_Package_ComponentFrontend::getInstance();
 
-        $loadedDeps = $frontendPackage->_getFilteredUniqueDependencies($mimeType);
+        if ($mimeType == 'text/javascript; defer') {
+            $ret = parent::_getFilteredUniqueDependencies('text/javascript');
+            foreach (parent::_getFilteredUniqueDependencies('text/javascript; defer') as $i) {
+                if (!in_array($i, $ret, true)) {
+                    $ret[] = $i;
+                }
+            }
+        } else {
+            $ret = parent::_getFilteredUniqueDependencies($mimeType);
+        }
+
+        $loadedDeps = array();
+        foreach ($this->_getFrontendPackages() as $package) {
+            if ($mimeType == 'text/javascript; defer') {
+                $loadedDeps = array_merge($loadedDeps, $package->_getFilteredUniqueDependencies('text/javascript'));
+            }
+            $loadedDeps = array_merge($loadedDeps, $package->_getFilteredUniqueDependencies($mimeType));
+        }
 
         foreach ($ret as $k=>$i) {
             if (in_array($i, $loadedDeps, true)) {
@@ -69,12 +101,31 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
 
     protected function _getCommonJsData($mimeType)
     {
-        $commonJsData = parent::_getCommonJsData($mimeType);
+        if ($mimeType == 'text/javascript') {
+            return array();
+        }
 
-        $frontendPackage = Kwf_Assets_Package_ComponentFrontend::getInstance();
+
+
+        if ($mimeType == 'text/javascript; defer') {
+            $commonJsData = parent::_getCommonJsData('text/javascript');
+            foreach (parent::_getCommonJsData('text/javascript; defer') as $k=>$i) {
+                if (!isset($commonJsData[$k])) {
+                    $commonJsData[$k] = $i;
+                }
+            }
+        } else {
+            $commonJsData = parent::_getCommonJsData($mimeType);
+        }
 
         if ($commonJsData) {
-            $deps = $frontendPackage->_getFilteredUniqueDependencies($mimeType);
+            $deps = array();
+            foreach ($this->_getFrontendPackages() as $package) {
+                if ($mimeType == 'text/javascript; defer') {
+                    $deps = array_merge($deps, $package->_getFilteredUniqueDependencies('text/javascript'));
+                }
+                $deps = array_merge($deps, $package->_getFilteredUniqueDependencies($mimeType));
+            }
             foreach ($deps as $i) {
                 $data = array();
                 $commonJsDeps = $this->_getCommonJsDeps($i, $data);
@@ -86,5 +137,14 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
             }
         }
         return $commonJsData;
+    }
+
+    public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
+    {
+        $ret = parent::getPackageContents($mimeType, $language, $includeSourceMapComment);
+        if ($mimeType == 'text/javascript; defer') {
+            $ret = Kwf_Assets_Package_Filter_LoadDeferred::filter($ret);
+        }
+        return $ret;
     }
 }

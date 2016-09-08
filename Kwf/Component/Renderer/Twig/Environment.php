@@ -18,7 +18,7 @@ class Kwf_Component_Renderer_Twig_Environment extends Kwf_View_Twig_Environment
     public static function bemClass($context, $class, $nonBemFallback = null)
     {
         $bemClass = $context['bemClass'];
-        if ($bemClass === false) {
+        if (!$bemClass) {
             if ($nonBemFallback) return $nonBemFallback;
             return $class;
         }

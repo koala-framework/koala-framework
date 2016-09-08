@@ -11,7 +11,7 @@ class Kwf_Controller_Action_Form_Controller extends Kwf_Controller_Action
                 throw new Kwf_Exception_AccessDenied();
             }
         }
-        $this->view->dep = Kwf_Assets_Package_Default::getInstance('Admin');
+        $this->view->dep = Kwf_Assets_Package_Default::getAdminMainInstance();
 
         parent::preDispatch();
     }

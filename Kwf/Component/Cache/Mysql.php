@@ -135,18 +135,23 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             } else {
                 $and = array();
                 foreach ($values as $k => $v) {
-                    if (substr($v, -1) == '%') {
-                        $v = substr($v, 0, -1);
-                        $and[] = new Kwf_Model_Select_Expr_Or(array(
-                            new Kwf_Model_Select_Expr_Equal($k, $v),
-                            new Kwf_Model_Select_Expr_Like($k, $v.'-%'),
-                            new Kwf_Model_Select_Expr_Like($k, $v.'_%'),
-                        ));
-                    } else if (strpos($v, '%') !== false) {
-                        $and[] = new Kwf_Model_Select_Expr_Like($k, $v);
-                    } else {
-                        $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
+                    if (!is_array($v)) $v = array($v);
+
+                    $ors = array();
+                    foreach ($v as $value) {
+                        if (substr($value, -1) == '%') {
+                            $value = substr($value, 0, -1);
+                            $ors[] = new Kwf_Model_Select_Expr_Equal($k, $value);
+                            $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'-%');
+                            $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'_%');
+                        } else if (strpos($value, '%') !== false) {
+                            $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'_%');
+                        } else {
+                            $ors[] = new Kwf_Model_Select_Expr_Equal($k, $value);
+                        }
                     }
+
+                    $and[] = new Kwf_Model_Select_Expr_Or($ors);
                 }
                 if ($and) {
                     $and = new Kwf_Model_Select_Expr_And($and);
@@ -173,7 +178,11 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     public function deleteViewCache(array $updates, $progressBarAdapter = null)
     {
         $select = $this->_buildSelectForDelete($updates);
+        return $this->_deleteViewCacheBySelect( $select, $progressBarAdapter);
+    }
 
+    private function _deleteViewCacheBySelect(Kwf_Model_Select $select, $progressBarAdapter = null)
+    {
         //execute select
         $microtime = $this->_getMicrotime();
         $model = $this->getModel();
@@ -249,7 +258,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                         $log->log("type=fullPage component_id={$id}", Zend_Log::INFO);
                     }
                 }
-                $this->deleteViewCache($s);
+                $this->_deleteViewCacheBySelect($s);
             }
         }
 

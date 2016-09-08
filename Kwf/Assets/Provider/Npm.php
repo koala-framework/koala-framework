@@ -15,19 +15,19 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
 
         $ret = null;
         if (file_exists($dir . '/index.js')) {
-            $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $path . '/index.js');
+            $ret = $path . '/index.js';
         } else if (file_exists($dir . "/$path.js")) {
-            $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $path . "/$path.js");
+            $ret = $path . "/$path.js";
         } else {
             throw new Kwf_Exception("Can't find dependency for $dependencyName in node_modules/$this->_path");
         }
         return $ret;
     }
 
-    public function getDependency($dependencyName)
+    public function getDependencyNameByAlias($aliasDependencyName)
     {
         $ret = null;
-        if ($dependencyName == $this->_path) {
+        if ($aliasDependencyName == $this->_path) {
             $type = $this->_path;
             if (substr($type, -3) == '.js') {
                 $type = substr($type, 0, -3);
@@ -36,19 +36,39 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
             if (file_exists($dir.'/package.json')) {
                 $package = json_decode(file_get_contents($dir.'/package.json'), true);
                 if (isset($package['main'])) {
-                    $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $type.'/'.$package['main']);
+                    if (file_exists($dir . "/" . $package['main'])) {
+                        $ret = $type.'/'.$package['main'];
+                    } else {
+                        $ret = $type.'/'.$package['main'] . '.js';
+                    }
+
                 } else {
-                    $ret = $this->_guessMainFiles($dependencyName);
+                    $ret = $this->_guessMainFiles($aliasDependencyName);
                 }
             } else {
-                $ret = $this->_guessMainFiles($dependencyName);
+                $ret = $this->_guessMainFiles($aliasDependencyName);
             }
-        } else if  (substr(strtolower($dependencyName), 0, strlen($this->_path)+1) == strtolower($this->_path).'/') {
+        } else if  (substr(strtolower($aliasDependencyName), 0, strlen($this->_path)+1) == strtolower($this->_path).'/') {
             //absolute path to single file path given
-            if (file_exists("node_modules/$dependencyName.js")) {
-                $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName . '.js');
-            } else if (is_dir("node_modules/$dependencyName/") && file_exists("node_modules/$dependencyName/index.js")) {
-                $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName . '/index.js');
+            if (is_file("node_modules/$aliasDependencyName")) {
+                $ret = $aliasDependencyName;
+            } else if (file_exists("node_modules/$aliasDependencyName.js")) {
+                $ret = $aliasDependencyName . '.js';
+            } else if (is_dir("node_modules/$aliasDependencyName/") && file_exists("node_modules/$aliasDependencyName/index.js")) {
+                $ret = $aliasDependencyName . '/index.js';
+            }
+        }
+        return $ret;
+    }
+
+    public function getDependency($dependencyName)
+    {
+        $ret = null;
+        if (substr(strtolower($dependencyName), 0, strlen($this->_path)+1) == strtolower($this->_path).'/') {
+            if (substr($dependencyName, -4) == '.css') {
+                $ret = new Kwf_Assets_Dependency_File_Css($this->_providerList, $dependencyName);
+            } else {
+                $ret = new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName);
             }
         }
         return $ret;
