@@ -42,7 +42,8 @@ class Kwf_Util_Maintenance
         rename('bootstrap.php', 'bootstrap.php.backup');
         file_put_contents('bootstrap.php', $offlineBootstrap);
         if ($output) echo "\nwrote offline bootstrap.php\n\n";
-        Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/bootstrap.php'));
+
+        Kwf_Util_ClearCache::clearOptcode(getcwd().'/bootstrap.php');
     }
 
     public static function writeMaintenanceBootstrap($output = true)
@@ -73,7 +74,8 @@ class Kwf_Util_Maintenance
         unlink('bootstrap.php');
         rename('bootstrap.php.backup', 'bootstrap.php');
         if ($output) echo "\nrestored bootstrap.php\n";
-        Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/bootstrap.php'));
+
+        Kwf_Util_ClearCache::clearOptcode(getcwd().'/bootstrap.php');
     }
 
     public static function restoreMaintenanceBootstrap($output = true)
