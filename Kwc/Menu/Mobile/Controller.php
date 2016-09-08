@@ -158,8 +158,8 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                     $ret[$i]['children'] = $this->_getChildPagesRecursive($page, $levels);
                     $ret[$i]['hasChildren'] = !empty($ret[$i]['children']);
                 } else {
-                    foreach ($page->getChildPages(array('showInMenu'=>true)) as $page) {
-                        if (!$this->_showPage($page)) {
+                    foreach ($page->getChildPages(array('showInMenu'=>true)) as $childPage) {
+                        if (!$this->_showPage($childPage)) {
                             continue;
                         }
                         $ret[$i]['hasChildren'] = true;
