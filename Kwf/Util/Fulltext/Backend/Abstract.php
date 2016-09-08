@@ -59,6 +59,10 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
                         break;
                     }
                 }
+                if (Kwc_Abstract::getFlag($checkCmp->componentClass, 'skipFulltextRecursive')) {
+                    $needsToBeIndexed = false;
+                    break;
+                }
                 $checkCmp = $checkCmp->parent;
             }
             if ($needsToBeIndexed) {
