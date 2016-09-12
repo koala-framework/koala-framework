@@ -129,9 +129,12 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
 
             if ($update === array()) {
                 //only when executing "clear-view-cache --all" on cli
+                $prefixLength = strlen($this->_redis->_prefix(''));
                 $it = null;
-                while ($keys = $this->_redis->scan($it, 'viewcache:*')) {
-                    $keysToDelete = array_merge($keys);
+                while ($keys = $this->_redis->scan($it, $this->_redis->_prefix('viewcache:*'))) {
+                    foreach ($keys as $i) {
+                        $keysToDelete[] = substr($i, $prefixLength);
+                    }
                 }
                 $keysToDelete = array_unique($keysToDelete);
 
@@ -300,9 +303,11 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     {
         foreach ($pageParentChanges as $changes) {
             $pattern = "viewids:recexpandedid:$changes[oldParentId]_$changes[componentId]*";
+            $prefixLength = strlen($this->_redis->_prefix(''));
             $it = null;
-            while ($keys = $this->_redis->scan($it, $pattern)) {
+            while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
                 foreach ($keys as $key) {
+                    $key = substr($key, $prefixLength);
                     $newKey = "viewids:recexpandedid:".$changes['newParentId'].substr($key, strlen("viewids:recexpandedid:$changes[oldParentId]"));
                     $this->_redis->rename($key, $newKey);
                 }
@@ -313,9 +318,11 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     public function collectGarbage($debug)
     {
         $pattern = "viewids:*";
+        $prefixLength = strlen($this->_redis->_prefix(''));
         $it = null;
-        while ($keys = $this->_redis->scan($it, $pattern)) {
+        while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
             foreach ($keys as $key) {
+                $key = substr($key, $prefixLength);
                 foreach ($this->_redis->sMembers($key) as $viewId) {
                     if (!$this->_redis->exists($viewId)) {
                         if ($debug) {

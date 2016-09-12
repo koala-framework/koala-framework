@@ -56,14 +56,21 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
     public function clear()
     {
         $pattern = "url:*";
+        $prefixLength = strlen($this->_redis->_prefix(''));
         $it = null;
-        while ($keys = $this->_redis->scan($it, $pattern)) {
+        while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
+            foreach ($keys as $k=>$i) {
+                $keys[$k] = substr($i, $prefixLength);
+            }
             $this->_redis->delete($keys);
         }
 
         $pattern = "urlids:*";
         $it = null;
-        while ($keys = $this->_redis->scan($it, $pattern)) {
+        while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
+            foreach ($keys as $k=>$i) {
+                $keys[$k] = substr($i, $prefixLength);
+            }
             $this->_redis->delete($keys);
         }
     }
@@ -71,9 +78,11 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
     public function collectGarbage($debug)
     {
         $pattern = "urlids:*";
+        $prefixLength = strlen($this->_redis->_prefix(''));
         $it = null;
-        while ($keys = $this->_redis->scan($it, $pattern)) {
+        while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
             foreach ($keys as $key) {
+                $key = substr($key, $prefixLength);
                 foreach ($this->_redis->sMembers($key) as $viewId) {
                     if (!$this->_redis->exists($viewId)) {
                         if ($debug) {

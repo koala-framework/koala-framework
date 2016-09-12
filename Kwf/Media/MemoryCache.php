@@ -138,8 +138,12 @@ class Kwf_Media_MemoryCache
                 Kwf_Cache_Simple::getMemcache()->delete($prefix.$id);
             }
         } else if ($be == 'redis') {
+            $prefixLength = strlen(Kwf_Cache_Simple::getRedis()->_prefix(''));
             $it = null;
-            while ($keys = Kwf_Cache_Simple::getRedis()->scan($it, 'media:*')) {
+            while ($keys = Kwf_Cache_Simple::getRedis()->scan($it, Kwf_Cache_Simple::getRedis()->_prefix('media:*'))) {
+                foreach ($keys as $k=>$i) {
+                    $keys[$k] = substr($i, $prefixLength);
+                }
                 Kwf_Cache_Simple::getRedis()->delete($keys);
             }
         } else if ($be == 'file') {

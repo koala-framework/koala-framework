@@ -101,6 +101,7 @@ class Kwf_Cache_Simple
         $redis = new Redis();
         $redis->connect(self::$redisHost, self::$redisPort);
         $redis->setOption(Redis::OPT_PREFIX, self::$uniquePrefix);
+        $redis->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY);
         return $redis;
     }
 
@@ -261,9 +262,13 @@ class Kwf_Cache_Simple
                 }
             }
         } else if (self::getBackend() == 'redis') {
+            $prefixLength = strlen(self::getRedis()->_prefix(''));
             if (!Kwf_Config::getValue('cacheSimpleNamespace')) {
                 $it = null;
-                while ($keys = self::getRedis()->scan($it, 'simple:*')) {
+                while ($keys = self::getRedis()->scan($it, self::getRedis()->_prefix('simple:*'))) {
+                    foreach ($keys as $k=>$i) {
+                        $keys[$k] = substr($i, $prefixLength);
+                    }
                     self::getRedis()->delete($keys);
                 }
             }
