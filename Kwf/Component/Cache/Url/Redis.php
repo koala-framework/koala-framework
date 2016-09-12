@@ -21,14 +21,14 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
             }
         }
 
-        $this->_redis->setEx('url:'.$cacheUrl, 365*24*60*60, $data->kwfSerialize());
+        $this->_redis->setEx('url:'.$cacheUrl, 365*24*60*60, serialize($data->kwfSerialize()));
     }
 
     public function load($cacheUrl)
     {
         $ret = $this->_redis->get('url:'.$cacheUrl);
         if ($ret) {
-            $ret = Kwf_Component_Data::kwfUnserialize($ret);
+            $ret = Kwf_Component_Data::kwfUnserialize(unserialize($ret));
         }
         return $ret;
     }

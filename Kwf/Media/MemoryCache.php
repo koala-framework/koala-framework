@@ -80,7 +80,7 @@ class Kwf_Media_MemoryCache
                     Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $ret, $flags, $ttl);
                 } else if ($be == 'redis') {
                     if (!$ttl) $ttl = 365*24*60*60;
-                    Kwf_Cache_Simple::getRedis()->setEx('media:'.$id, $ttl, $ret);
+                    Kwf_Cache_Simple::getRedis()->setEx('media:'.$id, $ttl, serialize($ret));
                 } else {
                     Kwf_Cache_Simple::add('media-'.$id, $ret, $ttl);
                 }
@@ -101,7 +101,7 @@ class Kwf_Media_MemoryCache
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $data, $flags, $ttl);
         } else if ($be == 'redis') {
             if (!$ttl) $ttl = 365*24*60*60;
-            return Kwf_Cache_Simple::getRedis()->setEx('media:'.$id, $ttl, $data);
+            return Kwf_Cache_Simple::getRedis()->setEx('media:'.$id, $ttl, serialize($data));
         } else if ($be == 'file') {
             //use secondlevel cache only
             return true;
