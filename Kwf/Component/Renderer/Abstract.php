@@ -38,6 +38,10 @@ abstract class Kwf_Component_Renderer_Abstract
      */
     public function renderComponent($component, &$hasDynamicParts = false)
     {
+        if (Kwf_Component_Data_Root::getShowInvisible()) {
+            $hasDynamicParts = true;
+        }
+
         $helper = new Kwf_Component_View_Helper_Component();
         $helper->setRenderer($this);
         $content = $helper->component($component);
@@ -74,7 +78,6 @@ abstract class Kwf_Component_Renderer_Abstract
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
 
         while (($start = strpos($ret, '<plugin'.$pluginType.' ')) !== false) {
-            $hasDynamicParts = true;
             $startEnd = strpos($ret, '>', $start);
             $args = explode(' ', substr($ret, $start+9, $startEnd-$start-9));
             $end = strpos($ret, '</plugin'.$pluginType.' '.$args[0].'>');
@@ -83,11 +86,16 @@ abstract class Kwf_Component_Renderer_Abstract
             $plugin = Kwf_Component_Plugin_Abstract::getInstance($args[1], $args[2]);
             if ($pluginType == self::PLUGIN_TYPE_USECACHE) {
                 if (!$plugin->useViewCache($this)) {
+                    $hasDynamicParts = true;
                     $content = $this->_getHelper('component')->render($args[2], array());
+                } else {
+                    //don't set hasDynamicParts=true as the value of useViewCache MUST NOT depend on any session stored data (eg. logged in user)
                 }
             } else if ($pluginType == self::PLUGIN_TYPE_AFTER || $pluginType == self::PLUGIN_TYPE_BEFORE) {
+                $hasDynamicParts = true;
                 $content = $plugin->processOutput($content, $this);
             } else if ($pluginType == self::PLUGIN_TYPE_REPLACE) {
+                $hasDynamicParts = true;
                 $c = $plugin->replaceOutput($this);
                 if ($c !== false) {
                     $content = $c;

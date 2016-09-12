@@ -1396,8 +1396,7 @@ class Kwf_Component_Data
         $output = new Kwf_Component_Renderer();
         if ($enableCache !== null) $output->setEnableCache($enableCache);
         if ($renderMaster) {
-            $hasDynamicParts = true;
-            return $output->renderMaster($this);
+            return $output->renderMaster($this, $hasDynamicParts);
         } else {
             return $output->renderComponent($this, $hasDynamicParts);
         }
