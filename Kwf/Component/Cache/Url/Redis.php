@@ -9,15 +9,15 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
 
     public function save($cacheUrl, Kwf_Component_Data $data)
     {
-        $this->_redis->sAdd('urlids:pageid:'.$data->page_id, 'url:'.$cacheUrl);
-        $this->_redis->sAdd('urlids:expandedid:'.$data->page_id, 'url:'.$cacheUrl);
+        $this->_redis->sAdd('urlids:pageid:'.$data->getPage()->componentId, 'url:'.$cacheUrl);
+        $this->_redis->sAdd('urlids:expandedid:'.$data->getExpandedComponentId(), 'url:'.$cacheUrl);
 
         $parts = preg_split('/([_\-])/', $data->getExpandedComponentId(), -1, PREG_SPLIT_DELIM_CAPTURE);
         $id = '';
         foreach ($parts as $part) {
             $id .= $part;
             if ($part != '-' && $part != '_' && $id != 'root') {
-                $this->_redis->sAdd('urlids:recexpandedid:'.$id, $key);
+                $this->_redis->sAdd('urlids:recexpandedid:'.$id, 'url:'.$cacheUrl);
             }
         }
 
