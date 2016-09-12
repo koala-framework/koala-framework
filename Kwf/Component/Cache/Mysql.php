@@ -40,7 +40,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'microtime' => $microtime,
             'expire' => is_null($lifetime) ? null : time() + $lifetime,
             'deleted' => false,
-            'content' => $content
+            'content' => $content,
+            'url' => $type == 'fullPage' ? $component->url : null
         );
         $options = array(
             'buffer' => true,
@@ -189,7 +190,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $log = Kwf_Events_Log::getInstance();
         $cacheIds = array();
         $options = array(
-            'columns' => array('component_id', 'renderer', 'type', 'value'),
+            'columns' => array('component_id', 'renderer', 'type', 'value', 'url'),
         );
         $partialIds = array();
         $deleteIds = array();
@@ -202,6 +203,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $step = 0;
             $progress = new Zend_ProgressBar($progressBarAdapter, 0, $steps);
         }
+        $fullPageUrls = array();
         foreach ($rows as $key => $row) {
             if ($progress && ($key%100) == 0) {
                 $step += 100;
@@ -226,6 +228,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 $deleteIds[$type][] = $cId;
             } else {
                 throw new Kwf_Exception('Should not happen.');
+            }
+            if ($type == 'fullPage') {
+                $fullPageUrls[$row['component_id']] = $row['url'];
             }
         }
 
@@ -288,6 +293,11 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             )));
             $model->updateRows(array('deleted' => true), $select);
         }
+
+        if ($fullPageUrls) {
+            Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_ViewCache_ClearFullPage(get_class($this), $fullPageUrls));
+        }
+
         $this->_afterDatabaseDelete($select); // For unit testing - DO NOT DELETE!
 
         if ($progress) $progress->finish();

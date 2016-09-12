@@ -11,12 +11,17 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     {
         $key = self::_getCacheId($component->componentId, $renderer, $type, $value);
 
-        $this->_redis->sAdd('viewids:componentid:'.$component->componentId, $key);
-        $this->_redis->sAdd('viewids:dbid:'.$component->dbId, $key);
-        $this->_redis->sAdd('viewids:pagedbid:'.$component->getPageOrRoot()->dbId, $key);
-        $this->_redis->sAdd('viewids:cls:'.$component->componentClass, $key);
+        $setKey = $key; //key that will be stored in sets
+        if ($type == 'fullPage') {
+            $setKey .= ':'.$component->url;
+        }
+
+        $this->_redis->sAdd('viewids:componentid:'.$component->componentId, $setKey);
+        $this->_redis->sAdd('viewids:dbid:'.$component->dbId, $setKey);
+        $this->_redis->sAdd('viewids:pagedbid:'.$component->getPageOrRoot()->dbId, $setKey);
+        $this->_redis->sAdd('viewids:cls:'.$component->componentClass, $setKey);
         if ($tag) {
-            $this->_redis->sAdd('viewids:tag:'.$tag, $key);
+            $this->_redis->sAdd('viewids:tag:'.$tag, $setKey);
         }
 
         $parts = preg_split('/([_\-])/', $component->getExpandedComponentId(), -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -24,7 +29,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
         foreach ($parts as $part) {
             $id .= $part;
             if ($part != '-' && $part != '_' && $id != 'root') {
-                $this->_redis->sAdd('viewids:recexpandedid:'.$id, $key);
+                $this->_redis->sAdd('viewids:recexpandedid:'.$id, $setKey);
             }
         }
 
@@ -145,6 +150,9 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                     }
                     if ($key['type'] != 'fullPage') {
                         $checkIncludeIds[$key['componentId'].':'.$key['type']] = true;
+                    } else {
+                        //type == fullPage, in this case $key also contains the url which we don't have in the view cache key, so generate cacheId
+                        $keysToDelete[$keyIndex] = self::_getCacheId($key['componentId'], $key['renderer'], $key['type'], $key['value']);
                     }
                 }
                 if (!$dryRun) {
@@ -171,12 +179,18 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                 foreach (call_user_func_array(array($this->_redis, 'sUnion'), $keys) as $i) {
                     $parts = self::_parseCacheId($i);
                     if ($parts['type'] == 'fullPage') {
-                        $fullPageKeysToDelete[] = $i;
+                        $fullPageKeysToDelete[] = self::_getCacheId($parts['componentId'], $parts['renderer'], $parts['type'], $parts['value']);
+                        $fullPageUrls[$parts['componentId']] = $parts['url'];
                     }
                 }
                 $this->_redis->delete($fullPageKeysToDelete);
             }
         }
+
+        if ($fullPageUrls) {
+            Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_ViewCache_ClearFullPage(get_class($this), $fullPageUrls));
+        }
+
         return $ret;
     }
 
@@ -239,12 +253,14 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     protected static function _parseCacheId($key)
     {
         $key = explode(':', $key);
-        return array(
+        $ret =  array(
             'componentId' => $key[1],
             'renderer' => $key[2],
             'type' => $key[3],
             'value' => $key[4],
         );
+        if (isset($key[5])) $ret['url'] = $key[5];
+        return $ret;
     }
 
     protected static function _getCacheId($componentId, $renderer, $type, $value)
