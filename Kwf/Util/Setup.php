@@ -292,6 +292,16 @@ class Kwf_Util_Setup
         Kwf_Cache_Simple::$backend = null; //unset to re-calculate
         $ret .= "Kwf_Cache_Simple::\$backend = '".Kwf_Cache_Simple::getBackend()."';\n";
 
+        $cacheUniquePrefix = Kwf_Config::getValue('cachePrefix'); //can be '' when only a single web runs in memcache instance
+        if ($cacheUniquePrefix === null) {
+            $cacheUniquePrefix = getcwd().'-'.Kwf_Setup::getConfigSection().'-';
+        }
+        $ret .= "Kwf_Cache_Simple::\$uniquePrefix = '".$cacheUniquePrefix."';\n";
+        if (Kwf_Config::getValue('cacheSimpleNamespace')) {
+            $ret .= "Kwf_Cache_Simple::\$namespace = '".Kwf_Config::getValue('cacheSimpleNamespace')."';\n";
+        }
+        unset($cacheUniquePrefix);
+
         if (Kwf_Config::getValue('server.memcache.host')) {
             $host = Kwf_Config::getValue('server.memcache.host');
             $ret .= "Kwf_Cache_Simple::\$memcacheHost = '".$host."';\n";
@@ -404,7 +414,7 @@ class Kwf_Util_Setup
             $ret .= "    ini_set('session.save_handler', 'redis');\n";
             $ret .= "    ini_set('session.save_path', 'tcp://".Kwf_Config::getValue('server.redis.host').":".Kwf_Config::getValue('server.redis.port')."?prefix=".substr(md5(Kwf_Cache_Simple::getUniquePrefix()), 0, 10)."');\n";
             $ret .= "}\n";
-        } else if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
+        } else if (Kwf_Config::getValue('server.memcache.host') && Kwf_Setup::hasDb()) {
             $ret .= "\nif (PHP_SAPI != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
