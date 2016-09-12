@@ -198,7 +198,6 @@ FormComponent.prototype = {
         var data = this.el.find('form').serialize();
         data += '&'+$.param(this.config.baseParams);
         data += '&'+this.el.find('.kwfUp-submitWrapper .kwfUp-button button').prop('name')+'=1';
-        if (Kwf.sessionToken) data += '&kwfSessionToken='+Kwf.sessionToken;
         $.ajax({
             url: this.config.controllerUrl + '/json-save',
             type: 'POST',

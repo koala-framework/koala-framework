@@ -404,13 +404,6 @@ abstract class Kwf_Component_Renderer_Abstract
         while ($target = $this->_getNextRenderTarget($ret, 2, $offset)) {
             if ($benchmarkEnabled) $startTime = microtime(true);
 
-            if ($target['type'] == 'dynamic' && $target['config']['class'] == 'Kwf_Component_Dynamic_SessionToken' && !Kwf_Setup::hasAuthedUser()) {
-                $hasDynamicParts = true;
-                //yes, this is cheating, but a very common case that's worth optimizing using this hack
-                $ret = substr($ret, 0, $target['start']).''.substr($ret, $target['end']+1);
-                continue;
-            }
-
             $helper = $this->_getHelper($target['type']);
 
             $statType = null;
