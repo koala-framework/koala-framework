@@ -38,11 +38,17 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             'expire' => is_null($lifetime) ? null : time()+$lifetime
         );
 
-        if (is_null($lifetime)) {
-            //Set a TTL for view contents http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
-            $lifetime = 365*24*60*60;
+        if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            $ret = Kwf_Cache_Simple::getMemcache()->set($prefix.$key, $cacheContent, MEMCACHE_COMPRESSED, $lifetime);
+        } else {
+            if (is_null($lifetime)) {
+                //Set a TTL for view contents http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
+                $lifetime = 365*24*60*60;
+            }
+            $ret = $this->_redis->setEx($key, $lifetime, serialize($cacheContent));
         }
-        $ret = $this->_redis->setEx($key, $lifetime, serialize($cacheContent));
 
         return $ret;
     }
@@ -60,7 +66,15 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             $componentId = $componentId->componentId;
         }
         $key = self::_getCacheId($componentId, $renderer, $type, $value);
-        $ret = unserialize($this->_redis->get($key));
+
+        if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            $ret = Kwf_Cache_Simple::getMemcache()->get($prefix.$key);
+        } else {
+            $ret = unserialize($this->_redis->get($key));
+        }
+
         return $ret;
     }
 
@@ -160,11 +174,21 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                         $keysToDelete[$keyIndex] = self::_getCacheId($key['componentId'], $key['renderer'], $key['type'], $key['value']);
                     }
                 }
-                if (!$dryRun) {
-                    $ret += $this->_redis->delete($keysToDelete);
+                if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+                    if (!$dryRun) {
+                        foreach ($keysToDelete as $key) {
+                            Kwf_Cache_Simple::getMemcache()->delete($key);
+                        }
+                    } else {
+                        $ret = count(Kwf_Cache_Simple::getMemcache()->get($keysToDelete));
+                    }
                 } else {
-                    foreach ($keysToDelete as $i) {
-                        $ret += $this->_redis->exists($i);
+                    if (!$dryRun) {
+                        $ret += $this->_redis->delete($keysToDelete);
+                    } else {
+                        foreach ($keysToDelete as $i) {
+                            $ret += $this->_redis->exists($i);
+                        }
                     }
                 }
 
@@ -189,7 +213,13 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                         $fullPageUrls[$parts['componentId']] = $parts['url'];
                     }
                 }
-                $this->_redis->delete($fullPageKeysToDelete);
+                if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+                    foreach ($fullPageKeysToDelete as $key) {
+                        Kwf_Cache_Simple::getMemcache()->delete($key);
+                    }
+                } else {
+                    $this->_redis->delete($fullPageKeysToDelete);
+                }
             }
         }
 

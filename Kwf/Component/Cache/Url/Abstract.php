@@ -9,7 +9,7 @@ abstract class Kwf_Component_Cache_Url_Abstract
     public static function getInstance()
     {
         if (!self::$_instance) {
-            if (Kwf_Cache_Simple::getBackend() == 'redis') {
+            if (Kwf_Cache_Simple::$redisHost) {
                 self::$_instance = new Kwf_Component_Cache_Url_Redis;
             } else {
                 self::$_instance = new Kwf_Component_Cache_Url_Mysql;

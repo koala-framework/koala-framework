@@ -29,10 +29,11 @@ class Kwf_Cache_Simple
         if (isset(self::$backend)) {
             return self::$backend;
         }
-        if (Kwf_Config::getValue('server.redis.host')) {
-            $ret = 'redis';
-        } else if (Kwf_Config::getValue('server.memcache.host')) {
+        if (Kwf_Config::getValue('server.memcache.host')) {
+            //prefer memcache over redis
             $ret = 'memcache';
+        } else if (Kwf_Config::getValue('server.redis.host')) {
+            $ret = 'redis';
         } else if (extension_loaded('apcu') && !Kwf_Config::getValue('server.apcStaticOnly')) {
             $ret = 'apcu';
         } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
