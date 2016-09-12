@@ -131,11 +131,13 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                 //only when executing "clear-view-cache --all" on cli
                 $prefixLength = strlen($this->_redis->_prefix(''));
                 $it = null;
+                $keysToDelete = array();
                 while ($keys = $this->_redis->scan($it, $this->_redis->_prefix('viewcache:*'))) {
                     foreach ($keys as $i) {
                         $keysToDelete[] = substr($i, $prefixLength);
                     }
                 }
+
                 $keysToDelete = array_unique($keysToDelete);
 
             } else {
@@ -171,6 +173,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
         }
 
         // FullPage
+        $fullPageUrls = array();
         if (!$dryRun && $checkIncludeIds) {
             $ids = array_keys($this->_fetchIncludesTree(array_keys($checkIncludeIds)));
             if ($ids) {
