@@ -95,9 +95,20 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
         $this->_sourceRow->_resetDirty();
     }
 
-    protected function _isDirty()
+    protected function _isDirty($column = null)
     {
-        return $this->_sourceRow->isDirty();
+        if ($column) {
+            $mapping = $this->_model->getUnionColumnMapping();
+            $columns = get_class_vars($mapping);
+            $columns = $columns['columns'];
+            if (in_array($column, $columns)) {
+                return $this->_sourceRow->isDirty($column);
+            } else {
+                return parent::_isDirty($column);
+            }
+        } else {
+            return parent::_isDirty() || $this->_sourceRow->isDirty();
+        }
     }
 
     public function getDirtyColumns()
