@@ -154,6 +154,15 @@ class Kwf_Media_MemoryCache
             }
         }
         $this->_getSecondLevelCache()->clean();
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator('cache/media', RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($files as $fileinfo) {
+            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            $todo($fileinfo->getRealPath());
+        }
     }
 
 }
