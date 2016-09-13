@@ -5,23 +5,23 @@
  * If available it uses apc user cache or memcache directly (highly recommended!!), else it falls
  * back to Zend_Cache using a (slow) file backend.
  *
- * If aws.simpleCacheCluster is set Aws ElastiCache will be used.
  */
 class Kwf_Cache_Simple
 {
     public static $backend; //set in Setup
+    public static $uniquePrefix; //set in Setup
+    public static $namespace; //set in Setup
     public static $memcacheHost; //set in Setup
     public static $memcachePort; //set in Setup
     public static $redisHost; //set in Setup
     public static $redisPort; //set in Setup
 
     private static $_zendCache = null;
-    private static $_cacheNamespace = null;
 
     public static function resetZendCache()
     {
         self::$_zendCache = null;
-        self::$_cacheNamespace = null;
+        self::$namespace = null;
     }
 
     public static function getBackend()
@@ -29,12 +29,11 @@ class Kwf_Cache_Simple
         if (isset(self::$backend)) {
             return self::$backend;
         }
-        if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-            $ret = 'elastiCache';
+        if (Kwf_Config::getValue('server.memcache.host')) {
+            //prefer memcache over redis
+            $ret = 'memcache';
         } else if (Kwf_Config::getValue('server.redis.host')) {
             $ret = 'redis';
-        } else if (Kwf_Config::getValue('server.memcache.host')) {
-            $ret = 'memcache';
         } else if (extension_loaded('apcu') && !Kwf_Config::getValue('server.apcStaticOnly')) {
             $ret = 'apcu';
         } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
@@ -49,18 +48,7 @@ class Kwf_Cache_Simple
     {
         if (!isset(self::$_zendCache)) {
             $be = self::getBackend();
-            if ($be == 'elastiCache') {
-                //TODO: use similar like memcache without Zend_Cache
-                self::$_zendCache = new Zend_Cache_Core(array(
-                    'lifetime' => null,
-                    'write_control' => false,
-                    'automatic_cleaning_factor' => 0,
-                    'automatic_serialization' => true
-                ));
-                self::$_zendCache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
-                    'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
-                )));
-            } else if ($be == 'apc' || $be == 'apcu') {
+            if ($be == 'apc' || $be == 'apcu') {
                 self::$_zendCache = false;
             } else {
                 self::$_zendCache = new Zend_Cache_Core(array(
@@ -80,19 +68,7 @@ class Kwf_Cache_Simple
             if (self::$_zendCache) {
                 $be = self::$_zendCache->getBackend();
                 if ($be instanceof Zend_Cache_Backend_Memcached) {
-                    //namespace is incremented in Kwf_Util_ClearCache
-                    //use memcache directly as Zend would not save the integer directly and we can't increment it then
-                    $v = self::$_zendCache->getBackend()->getMemcache()->get(self::getUniquePrefix().'cache_namespace');
-                    if (!$v) {
-                        $v = time();
-                        self::$_zendCache->getBackend()->getMemcache()->set(self::getUniquePrefix().'cache_namespace', $v);
-                    }
-                    if ($be instanceof Kwf_Util_Aws_ElastiCache_CacheBackend) {
-                        //Kwf_Util_Aws_ElastiCache_CacheBackend doesn't use Kwf_Cache_Backend_Memcached, so we don't have a app prefix
-                        //set app prefix ourselves
-                        $v = Kwf_Config::getValue('application.id').Kwf_Setup::getConfigSection().$v;
-                    }
-                    self::$_zendCache->setOption('cache_id_prefix', $v);
+                    self::$_zendCache->setOption('cache_id_prefix', self::_getMemcachePrefix());
                 }
             }
         }
@@ -125,24 +101,25 @@ class Kwf_Cache_Simple
         }
         $redis = new Redis();
         $redis->connect(self::$redisHost, self::$redisPort);
-        $redis->setOption(Redis::OPT_PREFIX, self::getUniquePrefix());
+        $redis->setOption(Redis::OPT_PREFIX, self::$uniquePrefix);
+        $redis->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY);
         return $redis;
     }
 
     private static function _getMemcachePrefix()
     {
-        if (!isset(self::$_cacheNamespace)) {
+        if (!isset(self::$namespace)) {
             $mc = self::getMemcache();
             //namespace is incremented in Kwf_Util_ClearCache
             //use memcache directly as Zend would not save the integer directly and we can't increment it then
-            $v = $mc->get(self::getUniquePrefix().'cache_namespace');
+            $v = $mc->get(self::$uniquePrefix.'cache_namespace');
             if (!$v) {
                 $v = time();
-                $mc->set(self::getUniquePrefix().'cache_namespace', $v);
+                $mc->set(self::$uniquePrefix.'cache_namespace', $v);
             }
-            self::$_cacheNamespace = self::getUniquePrefix().'-'.$v;
+            self::$namespace = self::$uniquePrefix.'-'.$v;
         }
-        return self::$_cacheNamespace;
+        return self::$namespace;
     }
 
     //for 'file' backend
@@ -162,7 +139,7 @@ class Kwf_Cache_Simple
             $success = $ret !== false;
             return $ret;
         } else if (self::getBackend() == 'redis') {
-            $ret = self::getRedis()->get('simple:'.$cacheId);
+            $ret = self::getRedis()->get('simple:'.self::$namespace.':'.$cacheId);
             $success = $ret !== false;
             if ($success) {
                 $ret = unserialize($ret);
@@ -170,11 +147,11 @@ class Kwf_Cache_Simple
             return $ret;
         } else if (self::getBackend() == 'apc') {
             static $prefix;
-            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
             return apc_fetch($prefix.$cacheId, $success);
         } else if (self::getBackend() == 'apcu') {
             static $prefix;
-            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
             return apcu_fetch($prefix.$cacheId, $success);
         } else if (self::getBackend() == 'file') {
             $file = self::_getFileNameForCacheId($cacheId);
@@ -205,15 +182,15 @@ class Kwf_Cache_Simple
             return self::getMemcache()->set(self::_getMemcachePrefix().md5($cacheId), $data, 0, $ttl);
         } else if (self::getBackend() == 'redis') {
             if (!$ttl) $ttl = 365*24*60*60; //Set a TTL so it can be evicted http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
-            $ret = self::getRedis()->setEx('simple:'.$cacheId, $ttl, serialize($data));
+            $ret = self::getRedis()->setEx('simple:'.self::$namespace.':'.$cacheId, $ttl, serialize($data));
             return $ret;
         } else if (self::getBackend() == 'apc') {
             static $prefix;
-            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
             return apc_add($prefix.$cacheId, $data, $ttl);
         } else if (self::getBackend() == 'apcu') {
             static $prefix;
-            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
             return apcu_add($prefix.$cacheId, $data, $ttl);
         } else if (self::getBackend() == 'file') {
              $file = self::_getFileNameForCacheId($cacheId);
@@ -232,7 +209,7 @@ class Kwf_Cache_Simple
 
         if (self::getBackend() == 'redis') {
             foreach ($cacheIds as &$id) {
-                $id = 'simple:'.$id;
+                $id = 'simple:'.self::$namespace.':'.$id;
             }
             return self::getRedis()->delete($cacheIds);
         }
@@ -243,11 +220,11 @@ class Kwf_Cache_Simple
                 $r = self::getMemcache()->delete(self::_getMemcachePrefix().md5($cacheId));
             } else if (self::getBackend() == 'apc') {
                 static $prefix;
-                if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+                if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
                 $r = apc_delete($prefix.$cacheId);
             } else if (self::getBackend() == 'apcu') {
                 static $prefix;
-                if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+                if (!isset($prefix)) $prefix = self::$uniquePrefix.'-';
                 $r = apcu_delete($prefix.$cacheId);
             } else if (self::getBackend() == 'file') {
                 $r = true;
@@ -278,15 +255,23 @@ class Kwf_Cache_Simple
     public static function _clear()
     {
         if (self::getBackend() == 'memcache') {
-            //increment namespace
-            $mc = Kwf_Cache_Simple::getMemcache();
-            if ($mc->get(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace')) {
-                $mc->increment(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace');
+            if (!Kwf_Config::getValue('cacheSimpleNamespace')) {
+                //increment namespace
+                $mc = Kwf_Cache_Simple::getMemcache();
+                if ($mc->get(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace')) {
+                    $mc->increment(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace');
+                }
             }
         } else if (self::getBackend() == 'redis') {
-            $it = null;
-            while ($keys = self::getRedis()->scan($it, 'simple:*')) {
-                self::getRedis()->delete($keys);
+            $prefixLength = strlen(self::getRedis()->_prefix(''));
+            if (!Kwf_Config::getValue('cacheSimpleNamespace')) {
+                $it = null;
+                while ($keys = self::getRedis()->scan($it, self::getRedis()->_prefix('simple:*'))) {
+                    foreach ($keys as $k=>$i) {
+                        $keys[$k] = substr($i, $prefixLength);
+                    }
+                    self::getRedis()->delete($keys);
+                }
             }
         } else if (self::getBackend() == 'file') {
             foreach(glob('cache/simple/*') as $i) {
@@ -302,10 +287,6 @@ class Kwf_Cache_Simple
 
     public static function getUniquePrefix()
     {
-        static $ret;
-        if (!isset($ret)) {
-            $ret = getcwd().'-'.Kwf_Setup::getConfigSection().'-';
-        }
-        return $ret;
+        return self::$uniquePrefix;
     }
 }

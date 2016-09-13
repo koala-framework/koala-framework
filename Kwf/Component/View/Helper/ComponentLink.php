@@ -69,9 +69,11 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
             } else {
                 $config['cssClass'] = self::_replaceKwfUp($config['cssClass']);
             }
+        } else {
+            $config['cssClass'] = '';
         }
         if ($linkClass) {
-            $config['cssClass'][] = self::_replaceKwfUp($linkClass);
+            $config['cssClass'] .= ' '.self::_replaceKwfUp($linkClass);
         }
 
         $url = $targetPage[0];

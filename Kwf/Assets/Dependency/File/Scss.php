@@ -99,7 +99,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         }
         $map = json_decode(file_get_contents("{$buildFile}.map"));
         $sources = array();
-        $masterFiles = $this->_configMasterFiles;
+        $masterFiles = array_values($this->_configMasterFiles);
         foreach ($map->sources as $k=>$i) {
             //sources are relative to cache/sass, strip that
             if (substr($i, 0, 15) == 'scss-generated/' || substr($i, 0, 3) == 'scw') {

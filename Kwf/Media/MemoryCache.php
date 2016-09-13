@@ -80,7 +80,7 @@ class Kwf_Media_MemoryCache
                     Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $ret, $flags, $ttl);
                 } else if ($be == 'redis') {
                     if (!$ttl) $ttl = 365*24*60*60;
-                    Kwf_Cache_Simple::getRedis()->setEx('media:'.$id, $ttl, $ret);
+                    Kwf_Cache_Simple::getRedis()->setEx('media:'.$id, $ttl, serialize($ret));
                 } else {
                     Kwf_Cache_Simple::add('media-'.$id, $ret, $ttl);
                 }
@@ -101,7 +101,7 @@ class Kwf_Media_MemoryCache
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $data, $flags, $ttl);
         } else if ($be == 'redis') {
             if (!$ttl) $ttl = 365*24*60*60;
-            return Kwf_Cache_Simple::getRedis()->setEx('media:'.$id, $ttl, $data);
+            return Kwf_Cache_Simple::getRedis()->setEx('media:'.$id, $ttl, serialize($data));
         } else if ($be == 'file') {
             //use secondlevel cache only
             return true;
@@ -138,8 +138,12 @@ class Kwf_Media_MemoryCache
                 Kwf_Cache_Simple::getMemcache()->delete($prefix.$id);
             }
         } else if ($be == 'redis') {
+            $prefixLength = strlen(Kwf_Cache_Simple::getRedis()->_prefix(''));
             $it = null;
-            while ($keys = Kwf_Cache_Simple::getRedis()->scan($it, 'media:*')) {
+            while ($keys = Kwf_Cache_Simple::getRedis()->scan($it, Kwf_Cache_Simple::getRedis()->_prefix('media:*'))) {
+                foreach ($keys as $k=>$i) {
+                    $keys[$k] = substr($i, $prefixLength);
+                }
                 Kwf_Cache_Simple::getRedis()->delete($keys);
             }
         } else if ($be == 'file') {
@@ -150,6 +154,16 @@ class Kwf_Media_MemoryCache
             }
         }
         $this->_getSecondLevelCache()->clean();
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator('cache/media', RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($files as $fileinfo) {
+            if ($fileinfo->getFilename() == '.gitignore') continue;
+            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            $todo($fileinfo->getRealPath());
+        }
     }
 
 }

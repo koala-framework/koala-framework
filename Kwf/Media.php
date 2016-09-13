@@ -152,8 +152,8 @@ class Kwf_Media
         $output = Kwf_Media_MemoryCache::getInstance()->load($cacheId);
 
         if ($output && !isset($output['file']) && !isset($output['contents'])) {
-            //scaled image is not cached in apc as it might be larger - load from disk
-            $output['file'] = 'cache/media/'.$cacheId;
+            //cache entry from older kwf version where file was not set
+            $output = false;
         }
         if (isset($output['file']) && !file_exists($output['file'])) $output = false;
 
@@ -197,7 +197,10 @@ class Kwf_Media
                 $cacheData = $output;
                 if (isset($cacheData['contents']) && strlen($cacheData['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
-                    file_put_contents('cache/media/'.$cacheId, $cacheData['contents']);
+                    $cacheFileName = 'cache/media/'.$class.'/'.$id.'/'.$type;
+                    if (!is_dir(dirname($cacheFileName))) @mkdir(dirname($cacheFileName), 0777, true);
+                    file_put_contents($cacheFileName, $cacheData['contents']);
+                    $cacheData['file'] = $cacheFileName;
                     unset($cacheData['contents']);
                 }
                 Kwf_Media_MemoryCache::getInstance()->save($cacheData, $cacheId, $specificLifetime);

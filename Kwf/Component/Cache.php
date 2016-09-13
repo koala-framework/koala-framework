@@ -10,7 +10,7 @@ abstract class Kwf_Component_Cache
     public static function getInstance()
     {
         if (!self::$_instance) {
-            if (Kwf_Cache_Simple::getBackend() == 'redis') {
+            if (Kwf_Cache_Simple::$redisHost) {
                 self::$_instance = new Kwf_Component_Cache_Redis;
             } else {
                 self::$_instance = new Kwf_Component_Cache_Mysql;
@@ -22,7 +22,7 @@ abstract class Kwf_Component_Cache
     public static function setInstance($backend)
     {
         self::clearInstance();
-        self::$_backend = $backend;
+        self::$_instance = $backend;
     }
 
     public static function clearInstance()

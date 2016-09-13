@@ -16,13 +16,7 @@ class Kwf_Component_Cache_MemoryZend extends Zend_Cache_Core
 
         $be = Kwf_Cache_Simple::getBackend();
 
-        if ($be == 'elastiCache') {
-            $this->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
-                'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
-                'compression' => true,
-            )));
-            //do *not* use cache_namespace for this cache (we don't want to delete it on clear-cache)
-        } else if ($be == 'memcache' || $be == 'redis') {
+        if ($be == 'memcache' || $be == 'redis') {
             throw new Kwf_Exception("don't use thru Zend_Cache");
         } else if ($be == 'apc') {
             $this->setBackend(new Kwf_Cache_Backend_Apc());
