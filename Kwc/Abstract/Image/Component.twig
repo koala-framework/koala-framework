@@ -3,8 +3,7 @@
         {% block image %}
         <{% if inlineTags %}span{% else %}div{% endif %} class="{{ "outerContainer"|bemClass }}">
             <{% if inlineTags %}span{% else %}div{% endif %} class="{{ containerClass }}" style="padding-bottom: {{aspectRatio}}%"
-                data-min-width="{{ minWidth }}"
-                data-max-width="{{ maxWidth }}"
+                data-width-steps="{{ widthSteps|json_encode }}"
                 data-src="{{ baseUrl }}">
                 {% if outputImgTag %}
                 <noscript>

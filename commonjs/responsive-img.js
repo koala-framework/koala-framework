@@ -48,28 +48,13 @@ $(function() {
 });
 
 
-function getResponsiveWidthStep(width,  minWidth, maxWidth) {
-    var steps = getResponsiveWidthSteps(minWidth, maxWidth);
-    for (var i = 0; i < steps.length; i++) {
-        if (width <= steps[i]) {
-            return steps[i];
+function getResponsiveWidthStep(width,  widthSteps) {
+    for (var i = 0; i < widthSteps.length; i++) {
+        if (width <= widthSteps[i]) {
+            return widthSteps[i];
         }
     }
-    return steps[steps.length-1];
-};
-
-// Has similar algorithm in Kwf_Media_Image
-function getResponsiveWidthSteps(minWidth, maxWidth) {
-    var width = minWidth; // startwidth or minwidth
-    var steps = [];
-    do {
-        steps.push(width);
-        width += 100;
-    } while (width < maxWidth);
-    if (width - 100 != maxWidth) {
-        steps.push(maxWidth);
-    }
-    return steps;
+    return widthSteps[steps.length-1];
 };
 
 function initResponsiveImgEl(el) {
@@ -81,15 +66,10 @@ function initResponsiveImgEl(el) {
     el[0].responsiveImgInitDone = true; //don't save as el.data to avoid getting it copied when cloning elements
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
     var baseUrl = el.data("src");
-    var minWidth = parseInt(el.data("minWidth"));
-    var maxWidth = parseInt(el.data("maxWidth"));
 
     el.data('baseUrl', baseUrl);
-    el.data('minWidth', minWidth);
-    el.data('maxWidth', maxWidth);
 
-    var width = getResponsiveWidthStep(
-            elWidth * devicePixelRatio, minWidth, maxWidth);
+    var width = getResponsiveWidthStep(elWidth * devicePixelRatio, el.data("widthSteps"));
     el.data('loadedWidth', width);
     var sizePath = baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
             DONT_HASH_TYPE_PREFIX+width);
@@ -117,8 +97,7 @@ function checkResponsiveImgEl(responsiveImgEl) {
     var elWidth = getCachedWidth(responsiveImgEl);
     if (elWidth == 0) return;
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
-    var width = getResponsiveWidthStep(elWidth * devicePixelRatio,
-            responsiveImgEl.data('minWidth'), responsiveImgEl.data('maxWidth'));
+    var width = getResponsiveWidthStep(elWidth * devicePixelRatio, responsiveImgEl.data("widthSteps"));
     if (width > responsiveImgEl.data('loadedWidth')) {
         responsiveImgEl.data('loadedWidth', width);
         var sizePath = responsiveImgEl.data('baseUrl').replace(DONT_HASH_TYPE_PREFIX+'{width}',
