@@ -16,6 +16,7 @@ class Kwc_Advanced_IntegratorTemplate_Component extends Kwc_Abstract
         );
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['flags']['noIndex'] = true;
+        $ret['editComponents'] = array('embed');
         return $ret;
     }
 }
