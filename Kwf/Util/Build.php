@@ -56,7 +56,7 @@ class Kwf_Util_Build
         Kwf_Cache_SimpleStatic::disableFileCache();
         Kwf_Events_ModelObserver::getInstance()->disable();
 
-        Kwf_Util_MemoryLimit::set(1024);
+        Kwf_Util_MemoryLimit::set(1024*2);
         Kwf_Registry::set('db', false);
 
         if ($typeNames == 'all') {
