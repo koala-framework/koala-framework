@@ -160,6 +160,7 @@ class Kwf_Media_MemoryCache
             RecursiveIteratorIterator::CHILD_FIRST
         );
         foreach ($files as $fileinfo) {
+            if ($fileinfo->getFilename() == '.gitignore') continue;
             $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
             $todo($fileinfo->getRealPath());
         }
