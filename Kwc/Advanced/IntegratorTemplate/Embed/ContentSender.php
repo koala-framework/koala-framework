@@ -13,7 +13,7 @@ class Kwc_Advanced_IntegratorTemplate_Embed_ContentSender extends Kwf_Component_
         $up = Kwf_Config::getValue('uniquePrefix');
         $up = $up ? $up.'-' : '';
         $class = str_replace('kwfUp-', $up, Kwf_Component_Abstract::formatRootElementClass($this->_data->componentClass, '').'Master');
-        $ret = preg_replace('#<body class="([^"]+)"#', '<body class="\\1 '.$class.'" data-'.$up.'domain="'.$domain.'" ', $ret);
+        $ret = preg_replace('#<body class="([^"]+)"#', '<body class="\\1 '.$class.'" data-'.$up.'base-url="'.$domain.'" ', $ret);
         return $ret;
     }
 }
