@@ -81,6 +81,9 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
             case Zend_Cache::CLEANING_MODE_ALL:
                 $ret = true;
                 if (php_sapi_name() == 'cli') {
+                    if (Kwf_Config::getValue('externalClearCacheScript')) {
+                        throw new Kwf_Exception("Dont't delete complete apc-user cache via cli.");
+                    }
                     $ret = Kwf_Util_Apc::callClearCacheByCli(array(
                         'type' => 'user'
                     ));
