@@ -108,7 +108,7 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
                     //in edit-mode allow already used componentClass
                 } else {
                     unset($componentValues[$key]);
-                    continue 2;
+                    continue;
                 }
             }
 
