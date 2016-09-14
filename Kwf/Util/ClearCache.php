@@ -47,6 +47,43 @@ class Kwf_Util_ClearCache
         return $ret;
     }
 
+    public static function clearOptcode($files = null)
+    {
+        if ($files && !is_array($files)) $files = array($files);
+
+        if ($cmd = Kwf_Config::getValue('externalClearCacheScript')) {
+            $cmd .= ' optcode';
+            if ($files) {
+                $cmd .= ' '.implode(',', $files);
+            }
+            exec($cmd, $output, $ret);
+            if ($ret) {
+                echo "\n\n".implode("\n   ",$output)."\n";
+                throw new Kwf_Exception("Error with external script: $cmd");
+            }
+        } else {
+            if ($files) {
+                Kwf_Util_Apc::callClearCacheByCli(array('files' => implode(',', $files)));
+            } else {
+                Kwf_Util_Apc::callClearCacheByCli(array('type' => 'file'));
+            }
+        }
+    }
+
+    public static function clearApcUser()
+    {
+        if ($cmd = Kwf_Config::getValue('externalClearCacheScript')) {
+            $cmd .= ' apc-user';
+            exec($cmd, $output, $ret);
+            if ($ret) {
+                echo "\n\n".implode("\n   ",$output)."\n";
+                throw new Kwf_Exception("Error with external script: $cmd");
+            }
+        } else {
+            Kwf_Util_Apc::callClearCacheByCli(array('type' => 'user'));
+        }
+    }
+
     //we use it internal for copy-data-to-git
     public function getDbCacheTables()
     {
