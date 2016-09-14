@@ -121,7 +121,7 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
             foreach (Kwf_Component_Generator_Abstract::getInstances($component) as $g) {
                 if ($g->getGeneratorFlag('page')) continue;
                 if (!array_key_exists($g->getClass().'.'.$g->getGeneratorKey(), $generatorForms)) {
-                    $f = $g->getPagePropertiesForm();
+                    $f = $g->getPagePropertiesForm($componentOrParent);
                     if ($f) {
                         $f->setName('gen_'.$g->getClass().'_'.$g->getGeneratorKey());
                         $f->setIdTemplate('{0}-'.$g->getGeneratorKey());
