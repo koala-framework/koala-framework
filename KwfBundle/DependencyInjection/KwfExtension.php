@@ -54,27 +54,5 @@ class KwfExtension extends Extension implements PrependExtensionInterface
             ),
             'param_fetcher_listener' => true
         ));
-
-        $container->prependExtensionConfig('security', array(
-            'providers' => array(
-                'kwf_user_provider' => array('id' => 'kwf_user_provider')
-            ),
-            'firewalls' => array(
-                //disables authentication for assets and the profiler, adapt it according to your needs
-                'dev' => array(
-                    'pattern' => '^/kwf/symfony/(_(profiler|wdt)|css|images|js)/',
-                    'security' => false
-                ),
-                'main' => array(
-                    'anonymous' => null,
-                    'stateless' => true,
-                    'simple_preauth' => array(
-                        'authenticator' => 'kwf_authenticator',
-                    ),
-                    'provider' => 'kwf_user_provider',
-                    'entry_point' => 'kwf.security.entrypoint.api',
-                )
-            )
-        ));
     }
 }
