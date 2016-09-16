@@ -16,7 +16,7 @@ class SubmitHandlerErrorNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = array())
     {
         $errors = array();
         foreach ($object->getErrors() as $error) {
