@@ -299,7 +299,7 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         return $postData;
     }
 
-    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
+    public function prepareSave($row, $postData)
     {
         if (!isset($postData[$this->getFieldName()])) {
             throw new Kwf_Exception("No postData found '".$this->getFieldName()."'");
@@ -362,7 +362,7 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         }
     }
 
-    public function save(Kwf_Model_Row_Interface $row, $postData)
+    public function save($row, $postData)
     {
         $postData = $postData[$this->getFieldName()];
 

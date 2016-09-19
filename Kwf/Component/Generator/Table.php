@@ -334,7 +334,8 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
         $targetGen = Kwf_Component_Generator_Abstract::getInstance($parentTarget->componentClass, $this->getGeneratorKey());
-        $target = array_pop($targetGen->getChildData($parentTarget, array('id'=>$id, 'ignoreVisible'=>true, 'limit'=>1)));
+        $targetChildData = $targetGen->getChildData($parentTarget, array('id'=>$id, 'ignoreVisible'=>true, 'limit'=>1));
+        $target = array_pop($targetChildData);
         if (!$target) {
             return null;
         }

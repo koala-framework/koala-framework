@@ -8,7 +8,7 @@ class Kwc_Abstract_Composite_ChildData extends Kwf_Data_Abstract implements Kwf_
         $this->_parentData = $parentData;
     }
 
-    public function load($row)
+    public function load($row, array $info)
     {
         $ret = $this->_parentData->load($row);
         return $ret;
