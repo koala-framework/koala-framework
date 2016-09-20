@@ -190,6 +190,23 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
     }
     */
 
+    public function hasMasterTemplate()
+    {
+        $ret = (bool)Kwc_Abstract::getMasterTemplateFile($this->getData()->componentClass);
+        if (!$ret) {
+            $ret = $this->getData()->chained->getComponent()->hasMasterTemplate();
+        }
+        return $ret;
+    }
+
+    public function getMasterTemplateVars(Kwf_Component_Data $innerComponent, Kwf_Component_Renderer_Abstract $renderer)
+    {
+        $ret = $this->getData()->chained->getComponent()->getMasterTemplateVars($innerComponent, $renderer);
+        $template = Kwc_Abstract::getMasterTemplateFile($this->getData()->componentClass);
+        if ($template) $ret['template'] = $template;
+        return $ret;
+    }
+
     protected static final function _getChainedByMaster($masterData, $chainedData, $chainedType, $select = array())
     {
         if (!$masterData) return null;

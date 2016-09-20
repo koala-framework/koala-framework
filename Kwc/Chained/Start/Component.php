@@ -38,8 +38,20 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
         return $ret;
     }
 
+    public function hasMasterTemplate()
+    {
+        $ret = (bool)Kwc_Abstract::getMasterTemplateFile($this->getData()->componentClass);
+        if (!$ret) {
+            $ret = $this->getData()->chained->getComponent()->hasMasterTemplate();
+        }
+        return $ret;
+    }
+
     public function getMasterTemplateVars(Kwf_Component_Data $innerComponent, Kwf_Component_Renderer_Abstract $renderer)
     {
-        return $this->getData()->chained->getComponent()->getMasterTemplateVars($innerComponent, $renderer);
+        $ret = $this->getData()->chained->getComponent()->getMasterTemplateVars($innerComponent, $renderer);
+        $template = Kwc_Abstract::getMasterTemplateFile($this->getData()->componentClass);
+        if ($template) $ret['template'] = $template;
+        return $ret;
     }
 }

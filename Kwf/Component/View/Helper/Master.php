@@ -23,9 +23,7 @@ class Kwf_Component_View_Helper_Master extends Kwf_Component_View_Renderer
             'data' => $component
         );
         while ($component) {
-            if (Kwc_Abstract::getTemplateFile($component->componentClass, 'Master') ||
-                Kwc_Abstract::hasSetting($component->componentClass, 'masterTemplate')
-            ) {
+            if ($component->getComponent()->hasMasterTemplate()) {
                 $ret[] = array(
                     'type' => 'master',
                     'data' => $component

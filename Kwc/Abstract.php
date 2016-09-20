@@ -422,6 +422,11 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return self::getMasterBemClass($this, $class);
     }
 
+    public function hasMasterTemplate()
+    {
+        return (bool)self::getMasterTemplateFile($this->getData()->componentClass);
+    }
+
     /**
      * Returns variables that can be used in Master.tpl
      * @param e.g. for accessing recipient in Mail_Renderer
@@ -432,6 +437,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret = array();
         $ret['component'] = $innerComponent;
         $ret['data'] = $innerComponent;
+        $ret['template'] = self::getMasterTemplateFile($this->getData()->componentClass);
         $ret['pageLanguage'] = $innerComponent->getLanguage();
         $ret['boxes'] = array();
         foreach ($innerComponent->getPageOrRoot()->getChildBoxes() as $box) {
@@ -503,6 +509,14 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     public static function getTemplateFile($componentClass, $filename = 'Component')
     {
         return Kwc_Admin::getComponentFile($componentClass, $filename, array('tpl', 'twig'));
+    }
+
+    public static function getMasterTemplateFile($componentClass)
+    {
+        if (self::hasSetting($componentClass, 'masterTemplate')) {
+            return self::getSetting($componentClass, 'masterTemplate');
+        }
+        return self::getTemplateFile($componentClass, 'Master');
     }
 
     /**
