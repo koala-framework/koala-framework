@@ -28,6 +28,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
                 if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
                 if ($d->getFilename() == 'simple') continue; //handled by Kwf_Util_ClearCache_Types_SimpleCache
+                if ($d->getFilename() == 'symfony') continue; //handled by Kwf_Util_ClearCache_Types_Symfony
                 $ret[] = $d->getFilename();
             }
         }
@@ -149,6 +150,9 @@ class Kwf_Util_ClearCache
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
         $types[] = new Kwf_Util_ClearCache_Types_Assets();
+        if (file_exists('symfony/bin/console')) {
+            $types[] = new Kwf_Util_ClearCache_Types_Symfony();
+        }
 
         if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && VENDOR_PATH != '../vendor') {
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();

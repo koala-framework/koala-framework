@@ -1,0 +1,36 @@
+parameters:
+    fos_rest.view_handler.default.class: KwfBundle\Rest\ViewHandler
+
+services:
+    kwf.session.storage:
+        class: KwfBundle\HttpFoundation\Session\KwfSessionStorage
+        public: false
+
+    kwf.rest.apidoc.extractor:
+        class: KwfBundle\Rest\ApiDocExtractor
+        tags:
+            - { name: nelmio_api_doc.extractor.handler }
+        public: false
+
+    kwf_authenticator:
+        class:  KwfBundle\Security\KwfUserAuthenticator
+        public: false
+
+    kwf_user_provider:
+        class: KwfBundle\Security\KwfUserProvider
+
+    kwf.security.entrypoint.api:
+        class: KwfBundle\Security\EntryPoint
+
+    kwf.model_normalizer:
+        class: KwfBundle\Serializer\KwfModelNormalizer
+        tags:
+            - { name: serializer.normalizer }
+        public: false
+
+    kwf.submit_handler_error_normalizer:
+        class: KwfBundle\Serializer\SubmitHandlerErrorNormalizer
+        arguments: ['@translator']
+        tags:
+            - { name: serializer.normalizer, priority: -10 }
+        public: false
