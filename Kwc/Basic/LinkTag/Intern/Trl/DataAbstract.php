@@ -54,11 +54,13 @@ abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwc_Basic_LinkT
 
     public function getLinkDataAttributes()
     {
+        if (!$this->getLinkData()) return array();
         return $this->getLinkedData()->getLinkDataAttributes();
     }
 
     public function getLinkClass()
     {
+        if (!$this->getLinkData()) return '';
         return $this->getLinkedData()->getLinkClass();
     }
 }
