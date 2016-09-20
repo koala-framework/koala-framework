@@ -39,15 +39,8 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
             )
         );
 
-        if (($model = $source->getComponent()->getOwnModel()) && $source->dbId != $target->dbId) {
-            $row = $model->getRow($source->dbId);
-            if ($row) {
-                $targetRow = $model->getRow($target->dbId);
-                if ($targetRow) { $targetRow->delete(); }
-                $newRow = $row->duplicate(array(
-                    'component_id' => $target->dbId
-                ));
-            }
+        if ($source->getComponent()->getOwnModel() && $source->dbId != $target->dbId) {
+            $this->_duplicateOwnRow($source, $target);
         }
 
         $s = array('ignoreVisible'=>true);
@@ -66,6 +59,21 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
             }
             $c->generator->duplicateChild($c, $target, $progressBar);
         }
+    }
+
+    protected function _duplicateOwnRow($source, $target)
+    {
+        $newRow = null;
+        $model = $source->getComponent()->getOwnModel();
+        $row = $model->getRow($source->dbId);
+        if ($row) {
+            $targetRow = $model->getRow($target->dbId);
+            if ($targetRow) { $targetRow->delete(); }
+            $newRow = $row->duplicate(array(
+                'component_id' => $target->dbId
+            ));
+        }
+        return $newRow;
     }
 
     /**
