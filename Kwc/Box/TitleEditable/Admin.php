@@ -19,4 +19,9 @@ class Kwc_Box_TitleEditable_Admin extends Kwc_Abstract_Admin
         //others have no title
         return null;
     }
+
+    protected function _duplicateOwnRow($source, $target)
+    {
+        //NOOP, contents should not be duplicated
+    }
 }
