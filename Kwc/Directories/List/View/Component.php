@@ -189,7 +189,8 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
             } else if ($partial instanceof Kwf_Component_Partial_Paging) {
                 $select = $this->_getSelect()->limit(1, $nr);
             }
-            $ret['item'] = array_shift($this->_getItems($select));
+            $items = $this->_getItems($select);
+            $ret['item'] = array_shift($items);
         } else {
             throw new Kwf_Exception('Unsupported partial type '.get_class($partial));
         }
