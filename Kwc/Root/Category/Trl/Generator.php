@@ -3,9 +3,9 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
 {
     protected $_eventsClass = 'Kwc_Root_Category_Trl_GeneratorEvents';
 
-    public function getPagesControllerConfig($component)
+    public function getPagesControllerConfig($component, $generatorClass = null)
     {
-        $ret = parent::getPagesControllerConfig($component);
+        $ret = parent::getPagesControllerConfig($component, $generatorClass);
         foreach ($ret['actions'] as &$a) $a = false;
         $ret['actions']['properties'] = true;
         $ret['actions']['visible'] = true;

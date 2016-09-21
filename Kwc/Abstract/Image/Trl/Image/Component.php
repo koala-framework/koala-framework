@@ -1,12 +1,12 @@
 <?php
 class Kwc_Abstract_Image_Trl_Image_Component extends Kwc_Abstract_Image_Component
 {
-    public static function getSettings($masterImageComponentClass)
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings($masterImageComponentClass);
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwc_Abstract_Image_Trl_Image_Model';
         //dimesion wird autom. vom master verwendet
-        $ret['masterImageComponentClass'] = $masterImageComponentClass;
+        $ret['masterImageComponentClass'] = $param;
         $ret['editFilename'] = false;
         $ret['altText'] = false;
         $ret['titleText'] = false;
