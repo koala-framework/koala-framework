@@ -132,6 +132,10 @@ class Kwf_Assets_Package
                 if (!$ret) {
                     throw new Kwf_Exception("Dependency '$dep' didn't return contents");
                 }
+                foreach ($dep->getFilters() as $filter) {
+                    if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Dependency_Filter_', '', get_class($filter)));
+                    $ret = $filter->filter($ret);
+                }
                 foreach ($this->getProviderList()->getFilters() as $filter) {
                     if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
                         && $filter->getMimeType() == $dep->getMimeType()
