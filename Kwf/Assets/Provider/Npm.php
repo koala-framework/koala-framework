@@ -2,6 +2,7 @@
 class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
 {
     private $_path;
+    private $_alternativeBrowserFiles = array();
     public function __construct($path)
     {
         $path = substr($path, strlen('node_modules/'));
@@ -24,6 +25,15 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
         return $ret;
     }
 
+    private function _replaceMainWithBrowserFile($mainFile)
+    {
+        if (array_key_exists($mainFile, $this->_alternativeBrowserFiles)) {
+            return $this->_alternativeBrowserFiles[$mainFile];
+        }
+
+        return $mainFile;
+    }
+
     public function getDependencyNameByAlias($aliasDependencyName)
     {
         $ret = null;
@@ -35,13 +45,22 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
             $dir = 'node_modules/'.$this->_path;
             if (file_exists($dir.'/package.json')) {
                 $package = json_decode(file_get_contents($dir.'/package.json'), true);
+                if (isset($package['browser'])) {
+                    if (is_string($package['browser'])) {
+                        $this->_alternativeBrowserFiles[$package['main']] = $package['browser'];
+                    } else {
+                        foreach ($package['browser'] as $key => $value) {
+                            $this->_alternativeBrowserFiles[$key] = $value;
+                        }
+                    }
+                }
+
                 if (isset($package['main'])) {
                     if (file_exists($dir . "/" . $package['main'])) {
-                        $ret = $type.'/'.$package['main'];
+                        $ret = $type.'/'. $this->_replaceMainWithBrowserFile($package['main']);
                     } else {
-                        $ret = $type.'/'.$package['main'] . '.js';
+                        $ret = $type.'/'. $this->_replaceMainWithBrowserFile($package['main'] . '.js');
                     }
-
                 } else {
                     $ret = $this->_guessMainFiles($aliasDependencyName);
                 }
