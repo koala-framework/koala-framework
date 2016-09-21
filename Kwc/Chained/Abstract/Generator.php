@@ -133,7 +133,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
                     if (!$slaveData) {
                         $pData = Kwc_Chained_Abstract_Component::getAllChainedByMaster($component->parent, $chainedType, $parentDataSelect);
                     } else {
-                        $chainedComponent = Kwc_Chained_Abstract_Component::getChainedByMaster($component->parent, $slaveData, $chainedType, $parentDataSelect);
+                        $chainedComponent = Kwc_Chained_Abstract_Component::getChainedByMasterAndType($component->parent, $slaveData, $chainedType, $parentDataSelect);
                         if ($chainedComponent) $pData = array($chainedComponent);
                     }
                 } else {

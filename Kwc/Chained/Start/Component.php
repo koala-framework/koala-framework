@@ -32,7 +32,7 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
                     continue;
                 }
             }
-            $i = Kwc_Chained_Abstract_Component::getChainedByMaster($master, $chainedStart, $chainedType, $parentDataSelect);
+            $i = Kwc_Chained_Abstract_Component::getChainedByMasterAndType($master, $chainedStart, $chainedType, $parentDataSelect);
             if ($i) $ret[] = $i;
         }
         return $ret;

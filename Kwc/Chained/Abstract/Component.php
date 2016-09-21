@@ -181,14 +181,10 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         return $this->_pdfWriter;
     }
 
-    /*
-    //use Kwc_Chained_Cc_Component::getChainedByMaster or Kwc_Chained_Trl_Component::getChainedByMaster instead
-    //if this method is needed, rename it
-    public static function getChainedByMaster($masterData, $chainedData, $chainedType, $select = array())
+    public static function getChainedByMasterAndType($masterData, $chainedData, $chainedType, $select = array())
     {
         return self::_getChainedByMaster($masterData, $chainedData, $chainedType, $select);
     }
-    */
 
     public function hasMasterTemplate()
     {
