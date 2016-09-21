@@ -12,7 +12,7 @@ var renderMap = function(map) {
     renderedMaps.push(map);
 
     var cfg = map.find(".options", true);
-    if (!cfg) return;
+    if (!cfg.length) return;
     cfg = $.parseJSON(cfg.val());
 
     var text = map.find("div.text");
