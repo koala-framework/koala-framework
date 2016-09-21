@@ -54,7 +54,7 @@ function getResponsiveWidthStep(width,  widthSteps) {
             return widthSteps[i];
         }
     }
-    return widthSteps[steps.length-1];
+    return widthSteps[widthSteps.length-1];
 };
 
 function initResponsiveImgEl(el) {
