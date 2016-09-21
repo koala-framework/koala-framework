@@ -60,8 +60,16 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         } else {
             throw new Kwf_Exception_NotYetImplemented();
         }
-        $deps = self::_getCache()->load($cacheId);
-        if ($deps === false) {
+        $cacheId .= "v2"; //versioned cache id as clear-cache doesn't clear it
+
+        $sourceChanged = false;
+        $deps = array();
+
+        $cachedData = self::_getCache()->load($cacheId);
+        if ($cachedData !== false) {
+            $deps = $cachedData['deps'];
+            $sourceChanged = $cachedData['sourceChanged'];
+        } else {
             if ($src['type'] == 'file') {
                 $contents = file_get_contents($src['file']);
             } else if ($src['type'] == 'contents') {
@@ -73,14 +81,24 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 $src['contents'] = $dependency->getContentsPacked()->getFileContents(); //we have to use complied contents as babel adds require() statements
             }
             if ($src['type'] == 'file') {
-                $deps = Kwf_Assets_CommonJs_Parser::parse($src['file']);
+                $parsedFile = Kwf_Assets_CommonJs_ModuleDepsParser::parse($src['file']);
+                $deps = $parsedFile['deps'];
             } else if ($src['type'] == 'contents') {
                 $temp = tempnam('temp/', 'commonjs');
                 file_put_contents($temp, $src['contents']);
-                $deps = Kwf_Assets_CommonJs_Parser::parse($temp);
+                $parsedFile = Kwf_Assets_CommonJs_ModuleDepsParser::parse($temp);
+                $deps = $parsedFile['deps'];
                 unlink($temp);
             }
-            self::_getCache()->save($deps, $cacheId);
+            $sourceChanged = $parsedFile['source'] != $contents;
+            self::_getCache()->save(array(
+                'deps' => $deps,
+                'sourceChanged' => $sourceChanged
+            ), $cacheId);
+        }
+
+        if ($sourceChanged) {
+            $dependency->addFilter(new Kwf_Assets_CommonJs_ModuleDepsFilter());
         }
 
         foreach ($deps as $depName) {
