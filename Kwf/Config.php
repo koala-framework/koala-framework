@@ -4,9 +4,7 @@ class Kwf_Config
     public static function getValueArray($var)
     {
         $ret = self::getValue($var);
-        if (!is_array($ret)) {
-            throw new Kwf_Exception("getValueArray expects $var to be an array");
-        }
+        if (!$ret) $ret = array();
         return $ret;
     }
 
