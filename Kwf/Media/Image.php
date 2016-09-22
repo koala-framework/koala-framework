@@ -46,6 +46,10 @@ class Kwf_Media_Image
             );
         }
 
+        if (!$imageDimensions['width']) {
+            throw new Kwf_Exception("Image must have a width");
+        }
+
         $maxWidth = $dim['width'] * 2;
         if ($imageDimensions['width'] < $dim['width'] * 2) {
             $maxWidth = $imageDimensions['width'];
