@@ -13,7 +13,8 @@ class Kwc_Columns_Abstract_Row extends Kwc_Abstract_List_Row
             }
 
             $columnTypes = Kwc_Abstract::getSetting($this->getModel()->getComponentClass(), 'columns');
-            $typeName = array_shift(array_keys($columnTypes));
+            $typeName = array_keys($columnTypes);
+            $typeName = array_shift($typeName);
             if ($parentRow = $this->getParentRow('Component')) $typeName = $parentRow->type;
             $type = $columnTypes[$typeName];
             if ($name == 'columns') return array_sum($type['colSpans']);

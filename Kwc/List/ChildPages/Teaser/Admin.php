@@ -2,7 +2,7 @@
 class Kwc_List_ChildPages_Teaser_Admin extends Kwc_Abstract_Admin
 {
     private $_duplicated = array();
-    public function duplicate($source, $target, $progressBar = null)
+    public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
         parent::duplicate($source, $target, $progressBar);
         $this->_duplicated[] = array(
