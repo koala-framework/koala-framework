@@ -1,5 +1,26 @@
 {% if showBanner %}
 <div class="{{ rootElementClass }}">
     {{ config|hiddenOptions }}
+    <div class="{{ 'innerOptBox'|bemClass }}">
+        {% if headline %}
+        <div class="kwfUp-statisticsOptBox__headline">
+            {{ headline }}
+        </div>
+        {% endif %}
+        {% if text %}
+        <div class="kwfUp-statisticsOptBox__text">
+            {{ text }}
+        </div>
+        {% endif %}
+        <div class="kwfUp-statisticsOptBox__info">
+            {% if linktag.hasContent() %}
+            {{ renderer.component(linktag) }}
+                {{ moreText }}
+            {% endif %}
+
+            {% if linktag.hasContent() %}</a>{% endif %}
+        </div>
+        <a href="#" class="{{ 'accept'|bemClass }}"><span>{{ acceptText }}</span></a>
+    </div>
 </div>
 {% endif %}

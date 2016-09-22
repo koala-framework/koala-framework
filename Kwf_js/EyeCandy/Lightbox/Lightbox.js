@@ -40,6 +40,7 @@ $(document).on('click', 'a.kwfUp-kwcLightbox', function(event) {
     });
     historyState.currentState.lightbox = href;
     historyState.pushState(document.title, href);
+    statistics.trackView(href);
 
     event.preventDefault();
 });
@@ -388,8 +389,6 @@ Lightbox.prototype = {
         }
         this.lightboxEl.addClass('kwfUp-kwfLightboxOpen');
         this.style.afterShow(options);
-
-        statistics.trackView(this.href);
     },
     close: function(options) {
         lightboxHelper.currentOpen = null;
