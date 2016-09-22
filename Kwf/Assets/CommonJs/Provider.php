@@ -60,8 +60,18 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         } else {
             throw new Kwf_Exception_NotYetImplemented();
         }
-        $deps = self::_getCache()->load($cacheId);
-        if ($deps === false) {
+        $cacheId .= "v2"; //versioned cache id as clear-cache doesn't clear it
+
+        $sourceChanged = false;
+        $deps = array();
+        $depBrowserAlternatives = array();
+
+        $cachedData = self::_getCache()->load($cacheId);
+        if ($cachedData !== false) {
+            $deps = $cachedData['deps'];
+            $depBrowserAlternatives = $cachedData['alternatives'];
+            $sourceChanged = $cachedData['sourceChanged'];
+        } else {
             if ($src['type'] == 'file') {
                 $contents = file_get_contents($src['file']);
             } else if ($src['type'] == 'contents') {
@@ -73,18 +83,51 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 $src['contents'] = $dependency->getContentsPacked()->getFileContents(); //we have to use complied contents as babel adds require() statements
             }
             if ($src['type'] == 'file') {
-                $deps = Kwf_Assets_CommonJs_Parser::parse($src['file']);
+                $parsedFile = Kwf_Assets_CommonJs_ModuleDepsParser::parse($src['file']);
+                $deps = $parsedFile['deps'];
             } else if ($src['type'] == 'contents') {
                 $temp = tempnam('temp/', 'commonjs');
                 file_put_contents($temp, $src['contents']);
-                $deps = Kwf_Assets_CommonJs_Parser::parse($temp);
+                $parsedFile = Kwf_Assets_CommonJs_ModuleDepsParser::parse($temp);
+                $deps = $parsedFile['deps'];
                 unlink($temp);
             }
-            self::_getCache()->save($deps, $cacheId);
+
+            if (file_exists("node_modules/" . (string)$dependency)) {
+                $dep = (string)$dependency;
+                $package = json_decode(file_get_contents("node_modules/" . substr($dep, 0, strpos($dep, "/")) . '/package.json'), true);
+                if (isset($package['browser'])) {
+                    if (is_string($package['browser'])) {
+                        $depBrowserAlternatives[$package['main']] = $package['browser'];
+                    } else {
+                        foreach ($package['browser'] as $key => $value) {
+                            $depBrowserAlternatives[$key] = $value;
+                        }
+                    }
+                }
+            }
+
+            $sourceChanged = $parsedFile['source'] != $contents;
+            self::_getCache()->save(array(
+                'deps' => $deps,
+                'alternatives' => $depBrowserAlternatives,
+                'sourceChanged' => $sourceChanged
+            ), $cacheId);
+        }
+
+        if ($sourceChanged) {
+            $dependency->addFilter(new Kwf_Assets_CommonJs_ModuleDepsFilter());
         }
 
         foreach ($deps as $depName) {
             $dep = $depName;
+
+            if ($depBrowserAlternatives) {
+                if (array_key_exists($dep, $depBrowserAlternatives)) {
+                    $dep = $depBrowserAlternatives[$dep];
+                }
+            }
+
             if (substr($dep, 0, 2) == './') {
                 $fn = $dependency->getFileNameWithType();
                 $dir = substr($fn, 0, strrpos($fn, '/')+1);
@@ -99,7 +142,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 $dep = $dir . '/'. $dep;
             }
             $d = $this->_providerList->findDependency($dep);
-            if (!$d) throw new Kwf_Exception("Can't resolve dependency: require '$depName' for $dependency");
+            if (!$d) throw new Kwf_Exception("Can't resolve dependency: require '$depName' => '$dep' for $dependency");
             $ret[$depName] = $d;
 
             $requires = $d->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES);

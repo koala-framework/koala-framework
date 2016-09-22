@@ -57,4 +57,9 @@ abstract class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Depen
     {
         return $this->_dep->getDependencies($type);
     }
+
+    public function getFilters()
+    {
+        return array_merge(parent::getFilters(), $this->_dep->getFilters());
+    }
 }
