@@ -1,10 +1,22 @@
 var $ = require('jQuery');
 
-function assetUrlEqual(a, b) {
+function normalizeUrl(url) {
     //remove v (version) paramete before comparing url
-    a = a.replace(/\?.*$/, '');
-    b = b.replace(/\?.*$/, '');
-    return a == b;
+    url = url.replace(/\?.*$/, '');
+    if (url.match(/^[a-z]+:\/\//)) {
+        //absolute url
+    } else if (url.match(/^\/\//)
+        //protocol relative url (starting with //)
+        url = location.protocol+url;
+    } else {
+        //relative url (starting with /)
+        url = location.protocol+'://'+location.host+url;
+    }
+    return url;
+}
+
+function assetUrlEqual(a, b) {
+    return normalizeUrl(a) == normalizeUrl(b);
 }
 
 
@@ -31,7 +43,7 @@ function injectAssets(html, re, type, callbackOptions) {
         if (type == 'text/css') {
             var alreadyLoaded = false;
             $.each(document.getElementsByTagName('link'), function(k, i) {
-                if (i.rel == 'stylesheet' && assetUrlEqual(i.href, location.protocol+'//'+location.host+m[1])) {
+                if (i.rel == 'stylesheet' && assetUrlEqual(i.href, m[1])) {
                     alreadyLoaded = true;
                 }
             });
@@ -43,7 +55,7 @@ function injectAssets(html, re, type, callbackOptions) {
         } else {
             var alreadyLoaded = false;
             $.each(document.getElementsByTagName('script'), function(k, i) {
-                if (assetUrlEqual(i.src, location.protocol+'//'+location.host+m[1])) {
+                if (assetUrlEqual(i.src, m[1])) {
                     alreadyLoaded = true;
                 }
             });
