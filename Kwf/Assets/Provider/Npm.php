@@ -38,10 +38,6 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
     {
         $ret = null;
         if ($aliasDependencyName == $this->_path) {
-            $type = $this->_path;
-            if (substr($type, -3) == '.js') {
-                $type = substr($type, 0, -3);
-            }
             $dir = 'node_modules/'.$this->_path;
             if (file_exists($dir.'/package.json')) {
                 $package = json_decode(file_get_contents($dir.'/package.json'), true);
@@ -57,9 +53,9 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
 
                 if (isset($package['main'])) {
                     if (file_exists($dir . "/" . $package['main'])) {
-                        $ret = $type.'/'. $this->_replaceMainWithBrowserFile($package['main']);
+                        $ret = $this->_path.'/'. $this->_replaceMainWithBrowserFile($package['main']);
                     } else {
-                        $ret = $type.'/'. $this->_replaceMainWithBrowserFile($package['main'] . '.js');
+                        $ret = $this->_path.'/'. $this->_replaceMainWithBrowserFile($package['main'] . '.js');
                     }
                 } else {
                     $ret = $this->_guessMainFiles($aliasDependencyName);
