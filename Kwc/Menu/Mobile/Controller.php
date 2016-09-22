@@ -122,15 +122,6 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         }
         return true;
     }
-    
-    protected function _getPageData($page)
-    {
-        return array(
-            'name' => $page->name,
-            'url' => $page->url,
-            'id' => $page->componentId
-        );
-    }
 
     protected function _getChildPagesRecursive($parentPage, $levels)
     {
