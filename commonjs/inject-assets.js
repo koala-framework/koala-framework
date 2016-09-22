@@ -5,7 +5,7 @@ function normalizeUrl(url) {
     url = url.replace(/\?.*$/, '');
     if (url.match(/^[a-z]+:\/\//)) {
         //absolute url
-    } else if (url.match(/^\/\//)
+    } else if (url.match(/^\/\//) {
         //protocol relative url (starting with //)
         url = location.protocol+url;
     } else {
