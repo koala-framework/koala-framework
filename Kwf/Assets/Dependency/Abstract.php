@@ -10,6 +10,7 @@ abstract class Kwf_Assets_Dependency_Abstract
 
     private $_deferLoad = false;
     private $_isCommonJsEntry = false;
+    private $_filters = array();
 
     public function __construct(Kwf_Assets_ProviderList_Abstract $providerList)
     {
@@ -286,5 +287,15 @@ abstract class Kwf_Assets_Dependency_Abstract
             }
         }
         return $ret;
+    }
+
+    public function addFilter(Kwf_Assets_Dependency_Filter_Interface $filter)
+    {
+        $this->_filters[] = $filter;
+    }
+
+    public function getFilters()
+    {
+        return $this->_filters;
     }
 }
