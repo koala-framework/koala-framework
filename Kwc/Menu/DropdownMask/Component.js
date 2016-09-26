@@ -1,3 +1,4 @@
+var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var $ = require('jQuery');
 
@@ -8,7 +9,7 @@ onReady.onRender('.kwcClass', function(target, config) {
 
     $(config.maskParent).prepend($(maskClone));
 
-    if(config.maskParent !== 'body') {
+    if (config.maskParent !== 'body') {
         $(maskClone).addClass('notBody');
     }
 

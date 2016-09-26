@@ -27,38 +27,36 @@
     width: inherit;
     height: 30px;
 
-    &.kwcMenuDropdown {
-        ul {
-            li {
-                .dropdown {
-                    margin-left: 0;
-                    z-index: 50;
-                    display: none;
-                    ul {
-                        margin: 0;
-                        background: #FFFFFF;
-                        min-width: 150px;
+    ul {
+        li {
+            .dropdown {
+                margin-left: 0;
+                z-index: 50;
+                display: none;
+                ul {
+                    margin: 0;
+                    background: #FFFFFF;
+                    min-width: 150px;
 
-                        li {
-                            @include box-sizing(border-box);
-                            float: left;
-                            width: 100%;
-                            display: block;
-                            a {
-                                padding: 5px 10px;
-                            }
+                    li {
+                        @include box-sizing(border-box);
+                        float: left;
+                        width: 100%;
+                        display: block;
+                        a {
+                            padding: 5px 10px;
+                        }
 
-                            &.first {
-                                padding-top: 10px;
-                            }
-                            &.last {
-                                margin-bottom: 10px;
-                            }
+                        &.first {
+                            padding-top: 10px;
+                        }
+                        &.last {
+                            margin-bottom: 10px;
                         }
                     }
-                    &.blocked {
-                        display: none;
-                    }
+                }
+                &.blocked {
+                    display: none;
                 }
             }
         }
