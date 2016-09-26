@@ -59,7 +59,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
             }
         }
 
-        $text = self::_replaceHtmlKwfUp($text);
+        $text = self::replaceHtmlKwfUp($text);
         if (isset($config['cssClass'])) {
             if (is_array($config['cssClass'])) {
                 foreach ($config['cssClass'] as &$i) {
