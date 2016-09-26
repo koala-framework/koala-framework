@@ -129,7 +129,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             //simple case no. 2: get 'em all
             $ret = array();
             foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
-                $ret = array_merge($ret, $g['component']);
+                $ret = array_merge($ret, array_values($g['component']));
             }
             return array_unique($ret);
 
