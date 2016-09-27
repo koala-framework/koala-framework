@@ -51,7 +51,7 @@ class Kwf_Update_20151012UploadsDimensions extends Kwf_Update
         foreach ($it as $row) {
             $this->_progressBar->next(1, 'calculating dimension '.$row->id);
             if (file_exists($row->getFileSource())) {
-                $size = getimagesize($row->getFileSource());
+                $size = @getimagesize($row->getFileSource());
                 if ($size) {
                     $width = $size[0];
                     $height = $size[1];
