@@ -32,17 +32,21 @@
                     <p class="{{ 'text'|bemClass }}">{{ item.row.teaser|nl2br }}</p>
 
                     {% block readMoreTeaser %}
-                        <div class="{{ 'readMoreLink'|bemClass }}">
-                            {{ renderer.componentLink(item, placeholder.readMore) }}
-                        </div>
+                        {% if item.hasContent %}
+                            <div class="{{ 'readMoreLink'|bemClass }}">
+                                {{ renderer.componentLink(item, placeholder.readMore) }}
+                            </div>
+                        {% endif %}
                     {% endblock %}
                 </div>
             {% endblock %}
-        {% elseif item.hasContent and placeholder.readMore %}
+        {% elseif placeholder.readMore %}
             {% block readMore %}
-                <div class="{{ 'readMoreLink'|bemClass }}">
-                    {{ renderer.componentLink(item, placeholder.readMore) }}
-                </div>
+                {% if item.hasContent %}
+                    <div class="{{ 'readMoreLink'|bemClass }}">
+                        {{ renderer.componentLink(item, placeholder.readMore) }}
+                    </div>
+                {% endif %}
             {% endblock %}
         {% endif %}
 
