@@ -10,7 +10,7 @@ function normalizeUrl(url) {
         url = location.protocol+url;
     } else {
         //relative url (starting with /)
-        url = location.protocol+'://'+location.host+url;
+        url = location.protocol+'//'+location.host+url;
     }
     return url;
 }
