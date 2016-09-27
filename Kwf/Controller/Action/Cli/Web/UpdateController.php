@@ -66,7 +66,10 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         } else {
 
             if (!$skipClearCache) {
-                Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>true, 'refresh'=>false, 'excludeTypes'=>$excludeClearCacheType));
+                $excludeTypes = $excludeClearCacheType;
+                if ($excludeTypes) $excludeTypes .= ',';
+                $excludeTypes .= 'componentView,componentUrl'; //never clear before updating (table structure might have changed)
+                Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>true, 'refresh'=>false, 'excludeTypes'=>$excludeTypes));
             }
 
             echo "Looking for update-scripts...";
