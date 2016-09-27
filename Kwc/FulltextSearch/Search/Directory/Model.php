@@ -33,7 +33,7 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
     private function _getSearchQueryByExpr($expr)
     {
         if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
-            return $expr->getField().':'.$expr->getValue();
+            return $expr->getField().':'.($expr->getValue()?'true':'false');
         } else if ($expr instanceof Kwf_Model_Select_Expr_Or) {
             $queries = array();
             foreach ($expr->getExpressions() as $orExpr) {
