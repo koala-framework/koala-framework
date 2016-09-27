@@ -12,8 +12,7 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
 
     public function prepareSave($row, $postData)
     {
-        parent::prepareSave($row, $postData);
-
+        //dont' call parent, we are a show field that doesn't save
     }
 
     public function validate($row, $postData)
