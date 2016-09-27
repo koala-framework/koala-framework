@@ -20,7 +20,7 @@
         <?php if ($this->baseUrl) { ?>
         <div class="kwfUp-image" style="max-width:<?=$this->width;?>px;">
             <div class="kwfUp-container" style="padding-bottom:<?=$this->aspectRatio;?>%;"
-                    data-width-steps="{{ json_encode($this->widthSteps) }}"
+                    data-width-steps="<?=json_encode($this->widthSteps)?>"
                     data-src="<?=$this->baseUrl;?>">
                 <noscript>
                     <img class="kwfUp-centerImage kwfUp-hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
