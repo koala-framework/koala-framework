@@ -1,7 +1,7 @@
 <?php
 class Kwc_Abstract_Image_Trl_Form_ImageData extends Kwc_Abstract_Image_Trl_ImageData
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $src = $this->_getMasterImageUrl($row->component_id);
         if ($src) {

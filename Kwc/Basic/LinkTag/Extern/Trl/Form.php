@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_LinkTag_Extern_Trl_Form_OriginalData extends Kwf_Data_Abstract
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
         // das ist nötig weil bei der übersetzung bei den link-cards

@@ -9,7 +9,7 @@ class Kwc_Abstract_Image_Trl_ImageData extends Kwf_Data_Abstract implements Kwf_
         $this->_size = $size;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $componentId = $row->component_id . '-' . $row->id;
         if ($this->_subComponent) {

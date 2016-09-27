@@ -10,7 +10,7 @@ class Kwf_Data_Trl_OriginalComponentFromData extends Kwf_Data_Abstract
         }
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         return $this->_getChainedRow($row)->{$this->getFieldname()};
     }

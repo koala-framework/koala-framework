@@ -15,7 +15,7 @@ class Kwf_Controller_Action_User_Users_RoleData extends Kwf_Data_Abstract
         }
     }
 
-    public function load($row, array $info)
+    public function load($row, array $info = array())
     {
         if (isset($this->_roles[$row->role])) {
             return $this->_roles[$row->role];

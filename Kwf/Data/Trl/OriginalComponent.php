@@ -10,7 +10,7 @@ class Kwf_Data_Trl_OriginalComponent extends Kwf_Data_Abstract
         }
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $pk = $row->getModel()->getPrimaryKey();
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->$pk, array('ignoreVisible'=>true));
