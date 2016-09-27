@@ -5,7 +5,6 @@ class Kwc_Columns_Abstract_Model extends Kwc_Abstract_List_Model
     protected $_componentClass;
 
     protected $_default = array(
-        'type' => '2col-50_50',
         'visible' => 1
     );
 
