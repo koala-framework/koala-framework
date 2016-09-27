@@ -41,6 +41,11 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                                 'event' => 'Kwf_Component_Event_Component_Removed',
                                 'callback' => 'onDirectoryDetailRemoved'
                             );
+                            $ret[] = array(
+                                'class' => $detailClass,
+                                'event' => 'Kwf_Component_Event_Component_HasContentChanged',
+                                'callback' => 'onDirectoryDetailHasContentChanged'
+                            );
                         }
 
                         $ret[] = array(
@@ -131,6 +136,17 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         $directory = $event->component->parent;
         $this->_fireTagEvent('ContentChanged', $directory);
         $this->_fireTagEvent('PartialsChanged', $directory);
+        if ($this->_usesPartialId()) {
+            $this->_fireTagEvent('PartialChanged', $directory, $event->component->id);
+        } else {
+            $this->_fireTagEvent('AllPartialChanged', $directory);
+        }
+    }
+
+    public function onDirectoryDetailHasContentChanged(Kwf_Component_Event_Component_HasContentChanged $event)
+    {
+        $subroot = $event->component->getSubroot();
+        $directory = $event->component->parent;
         if ($this->_usesPartialId()) {
             $this->_fireTagEvent('PartialChanged', $directory, $event->component->id);
         } else {
