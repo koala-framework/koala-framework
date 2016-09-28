@@ -7,6 +7,7 @@ onReady.onRender('.kwcClass', function (el, config) {
         if (config.showBanner) {
             setTimeout(function(){
                 $('body').addClass('kwfUp-showCookieBanner');
+                onReady.callOnContentReady($('body'), { action: 'widthChange' });
             }, 1000);
         }
         el.show();
@@ -15,6 +16,7 @@ onReady.onRender('.kwcClass', function (el, config) {
             cookieOpt.setOpt('in');
             el.hide();
             $('body').removeClass('kwfUp-showCookieBanner');
+            onReady.callOnContentReady($('body'), { action: 'widthChange' });
         });
     }
 });
