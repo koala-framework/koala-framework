@@ -61,12 +61,12 @@ class Kwf_Component_Plugin_AccessByMail_Form_Component extends Kwc_Form_Componen
     {
         parent::_afterInsert($row);
 
-        $link = $this->getData()->url.'?key='.$row->key;
+        $link = $this->getData()->getAbsoluteUrl().'?key='.$row->key;
 
         $mail = new Kwf_Mail_Template($this->getData());
         $mail->addTo($row->email);
         $mail->subject = $this->_getPlaceholder('subject');
-        $mail->link = 'http://'.Kwf_Registry::get('config')->server->domain.$link;
+        $mail->link = $link;
         $mail->send();
     }
 }
