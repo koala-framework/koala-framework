@@ -52,7 +52,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
         return $template;
     }
 
-    public function renderComponent($component)
+    public function renderComponent($component, &$hasDynamicParts = false)
     {
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
