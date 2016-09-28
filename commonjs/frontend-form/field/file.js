@@ -112,12 +112,12 @@ var File = kwfExtend(Field, {
     },
     getFieldName: function() {
         var inp = this.el.find('input.fileSelector');
-        if (!inp) return null;
+        if (!inp.length) return null;
         return inp.get(0).name;
     },
     getValue: function() {
         var inp = this.el.find('input[type="hidden"]');
-        if (!inp) return null;
+        if (!inp.length) return null;
         var ret = inp.get(0).value;
         return ret;
     },

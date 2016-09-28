@@ -28,12 +28,12 @@ var FieldSet = kwfExtend(Field, {
     },
     getFieldName: function() {
         var inp = this.el.find('fieldset > legend > input');
-        if (!inp) return null;
+        if (!inp.length) return null;
         return inp.get(0).name;
     },
     getValue: function() {
         var inp = this.el.find('fieldset > legend > input');
-        if (!inp) return null;
+        if (!inp.length) return null;
         return inp.get(0).checked;
     },
     clearValue: function() {
