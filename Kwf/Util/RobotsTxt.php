@@ -5,8 +5,7 @@ class Kwf_Util_RobotsTxt
     {
         $baseUrl = Kwf_Setup::getBaseUrl();
         $contents = "User-agent: *\n".
-            "Disallow: $baseUrl/admin/\n".
-            "Disallow: $baseUrl/kwf/util/kwc/render\n"; //used to load eg. lightbox content async, we don't want getting that indexed
+            "Disallow: $baseUrl/admin/\n";
 
         $contents .= "Sitemap: http".(isset($_SERVER['HTTPS']) ? 's' : '')."://"
                         .$_SERVER['HTTP_HOST'].$baseUrl."/sitemap.xml\n";
