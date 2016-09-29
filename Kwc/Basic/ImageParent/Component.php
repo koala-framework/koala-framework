@@ -68,7 +68,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         return Kwf_Media_Image::calculateScaleDimensions($data['file'], $dimension);
     }
 
-    protected final function _getImageComponent()
+    protected function _getImageComponent()
     {
         return $this->getData()->parent->getComponent();
     }
