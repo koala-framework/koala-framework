@@ -68,6 +68,13 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         return Kwf_Media_Image::calculateScaleDimensions($data['file'], $dimension);
     }
 
+    /**
+     * Returns the source image component using for image data
+     *
+     * returns parent by default.
+     *
+     * WARNING: when overriding this you also have to write custom Events to take care of clearing caches
+     */
     protected function _getImageComponent()
     {
         return $this->getData()->parent->getComponent();
