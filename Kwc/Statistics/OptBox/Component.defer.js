@@ -5,17 +5,15 @@ var cookieOpt = require('kwf/cookie-opt');
 onReady.onRender('.kwcClass', function (el, config) {
     if (!cookieOpt.isSetOpt()) {
         if (config.showBanner) {
-            setTimeout(function(){
-                $('body').addClass('kwfUp-showCookieBanner');
-                onReady.callOnContentReady($('body'), { action: 'widthChange' });
-            }, 1000);
+            $('body').addClass('kwfUp-showCookieBanner');
+            onReady.callOnContentReady($('body'), { action: 'widthChange' });
         }
         el.show();
         el.find('.kwcBem__accept').click(function(e) {
             e.preventDefault();
             cookieOpt.setOpt('in');
             el.hide();
-            $('body').removeClass('kwfUp-showCookieBanner');
+            $('body').removeClass('kwfUp-showCookieBanner').addClass('kwfUp-cookieAccepted');
             onReady.callOnContentReady($('body'), { action: 'widthChange' });
         });
     }
