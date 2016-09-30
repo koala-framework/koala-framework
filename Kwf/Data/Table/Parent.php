@@ -14,7 +14,7 @@ class Kwf_Data_Table_Parent extends Kwf_Data_Abstract
         $this->_dataIndex = $dataIndex;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $name = $this->_dataIndex;
         if (is_string($this->_parentTable) || !is_array($this->_parentTable)) {
