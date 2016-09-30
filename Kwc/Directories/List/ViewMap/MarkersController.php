@@ -76,4 +76,9 @@ class Kwc_Directories_List_ViewMap_MarkersController extends Kwf_Controller_Acti
     protected function _validateSessionToken()
     {
     }
+
+    protected function _isAllowedComponent()
+    {
+        return true;
+    }
 }
