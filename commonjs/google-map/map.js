@@ -330,7 +330,7 @@ Map.prototype = {
         marker.setMap(this.gmap);
         this.markers.push(marker);
         if (markerConfig.infoHtml) {
-            google.maps.event.addListener(marker, 'click', $.proxy(this.toggleWindow, this, [ marker ]));
+            google.maps.event.addListener(marker, 'click', $.proxy(this.toggleWindow, this, marker));
         }
     },
 
