@@ -240,7 +240,7 @@ class Kwf_Component_Data
         } else if ($var == 'inherits') {
             return false;
         } else if ($var == 'visible') {
-            if (isset($this->row->visible)) {
+            if (isset($this->row) && isset($this->row->visible)) {
                 return $this->row->visible;
             } else {
                 return true;
@@ -305,7 +305,7 @@ class Kwf_Component_Data
      */
     public function __isset($var)
     {
-        if ($var == 'url' || $var == 'rel' || $var == 'filename') {
+        if ($var == 'url' || $var == 'rel' || $var == 'filename' || $var == 'visible') {
             return true;
         }
         if (substr($var, 0, 5) != '_lazy') {
