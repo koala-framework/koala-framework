@@ -1,7 +1,7 @@
 <?php
 class Kwc_Composite_TextImageLink_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
-    public static function getSettings($mastetComponentClass)
+    public static function getSettings($mastetComponentClass = null)
     {
         $ret = parent::getSettings($mastetComponentClass);
         $ret['ownModel'] = 'Kwc_Composite_TextImageLink_Model';

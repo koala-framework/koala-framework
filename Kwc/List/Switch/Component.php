@@ -35,9 +35,9 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
 
-    public static function validateSettings($settings)
+    public static function validateSettings($settings, $componentClass)
     {
-        parent::validateSettings($settings);
+        parent::validateSettings($settings, $componentClass);
         if (isset($settings['hideArrowsAtEnds'])) {
             throw new Kwf_Exception('hideArrowsAtEnds setting got removed, hide them using css (.listSwitchEnd)');
         }
