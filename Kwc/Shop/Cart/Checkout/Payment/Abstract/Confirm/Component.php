@@ -36,6 +36,10 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Kwc_Edit
             //this order was already confirmed
             header("Location: ".$this->getData()->parent->parent->parent->parent->url);
             exit;
+        } else if (!$o->payment) {
+            //this order has no customer data
+            header("Location: ".$this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component')->url);
+            exit;
         }
         $this->getData()->parent->getComponent()->confirmOrder($o);
     }
