@@ -240,10 +240,10 @@ class Kwf_Component_Data
         } else if ($var == 'inherits') {
             return false;
         } else if ($var == 'visible') {
-            if (isset($this->row) && isset($this->row->visible)) {
-                return $this->row->visible;
-            } else {
+            if (!isset($this->invisible)) {
                 return true;
+            } else {
+                return !$this->invisible;
             }
         } else if ($var == 'inheritClasses') {
             if (!isset($this->_inheritClasses)) {
