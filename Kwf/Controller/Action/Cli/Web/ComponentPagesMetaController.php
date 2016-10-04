@@ -25,7 +25,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
             $queue = explode("\n", $queue);
             if ($this->_getParam('debug')) echo "queued: ".count($queue).' :: '.round(memory_get_usage()/1024/1024, 2)."MB\n";
-            $componentId = array_shift($queue);
+            $componentId = array_pop($queue);
             file_put_contents($queueFile, implode("\n", $queue));
             $stats['pages']++;
 
