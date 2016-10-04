@@ -962,4 +962,9 @@ abstract class Kwf_Component_Generator_Abstract
     {
         return Kwf_Component_Data::DEVICE_VISIBLE_ALL;
     }
+
+    public function setVisible(Kwf_Component_Data $data, $visible)
+    {
+        throw new Kwf_Exception("Changing visible not possible for this generator");
+    }
 }

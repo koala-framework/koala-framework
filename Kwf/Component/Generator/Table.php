@@ -393,4 +393,13 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         );
         return $ret;
     }
+
+    public function setVisible(Kwf_Component_Data $data, $visible)
+    {
+        if ($this->_getModel()->hasColumn('visible')) {
+            $data->row->visible = $visible;
+        } else {
+            throw new Kwf_Exception("Visible column doesn't exist");
+        }
+    }
 }
