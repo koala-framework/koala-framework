@@ -20,6 +20,15 @@ class Kwf_View_Helper_Link
         if (is_array($target)) {
             $url = $target['url'];
             $rel = isset($target['rel']) ? $target['rel'] : '';
+            if (isset($target['dataAttributes'])) {
+                if (!isset($config['dataAttributes'])) $config['dataAttributes'] = array();
+                $config['dataAttributes'] = array_merge($config['dataAttributes'], $target['dataAttributes']);
+            }
+            if (isset($target['class'])) {
+                if (!isset($config['cssClass'])) $config['cssClass'] = '';
+                if ($config['cssClass']) $config['cssClass'] .= ' ';
+                $config['cssClass'] .= $target['class'];
+            }
         } else {
             $url = $target;
             $rel = '';
