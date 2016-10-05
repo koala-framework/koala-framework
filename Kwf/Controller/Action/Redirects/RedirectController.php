@@ -82,7 +82,8 @@ class Kwf_Controller_Action_Redirects_RedirectController extends Kwf_Controller_
         parent::_beforeSave($row);
         $domains = self::getDomains();
         if ($domains && count($domains) == 1) {
-            $row->domain_component_id = array_pop(array_keys($domains));
+            $keys = array_keys($domains);
+            $row->domain_component_id = array_pop($keys);
         }
     }
 
