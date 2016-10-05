@@ -526,6 +526,17 @@ class Kwf_Util_Setup
                 }
             }
 
+            $ret .= "    if (isset(\$_SERVER['X_KWF_AUTHORIZATION'])) {\n";
+            $ret .= "        \$authValue = explode(' ', \$_SERVER['X_KWF_AUTHORIZATION']);\n";
+            $ret .= "        if (count(\$authValue) == 2 && strtolower(\$authValue[0]) == 'basic') {\n";
+            $ret .= "            \$authorization = explode(':', base64_decode(\$authValue[1]));\n";
+            $ret .= "            if (count(\$authorization) == 2) {\n";
+            $ret .= "                \$_SERVER['PHP_AUTH_PW'] = \$authorization[0];\n";
+            $ret .= "                \$_SERVER['PHP_AUTH_USER'] = \$authorization[1];\n";
+            $ret .= "            }\n";
+            $ret .= "        }\n";
+            $ret .= "    }\n";
+
             $ret .= "    if (!\$ignore && (empty(\$_SERVER['PHP_AUTH_USER'])\n";
             $ret .= "           || empty(\$_SERVER['PHP_AUTH_PW'])\n";
             $ret .= "            || \$_SERVER['PHP_AUTH_USER']!='".Kwf_Config::getValue('preLoginUser')."'\n";
