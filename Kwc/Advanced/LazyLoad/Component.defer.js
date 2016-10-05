@@ -6,7 +6,8 @@ onReady.onRender('.kwcClass', function(el) {
     $.ajax({
         url: getKwcRenderUrl(),
         data: {
-            componentId: el.attr('data-load-id')
+            componentId: el.attr('data-load-id'),
+            pageUrl: location.href
         },
         success: function(data) {
             el.removeClass('loading');

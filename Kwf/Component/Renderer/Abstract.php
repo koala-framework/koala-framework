@@ -42,9 +42,14 @@ abstract class Kwf_Component_Renderer_Abstract
         $helper->setRenderer($this);
         $content = $helper->component($component);
 
-        $ret = $this->_renderPass2($content, $hasDynamicParts);
+        $content = $this->_renderPass2($content, $hasDynamicParts);
         Kwf_Component_Cache::getInstance()->writeBuffer();
-        return $ret;
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_PostRender') as $plugin) {
+            $content = $plugin->processOutput($content);
+        }
+
+        return $content;
     }
 
     protected abstract function _getRendererName();
