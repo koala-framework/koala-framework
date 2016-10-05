@@ -348,56 +348,6 @@ class Kwf_Util_Setup
         $ret .= "}\n";
         $ret .= "\n";
 
-        if (Kwf_Config::getValue('server.https') !== 'unknown') {
-            $redirectHttpsCode  = "    if (\$_SERVER['REQUEST_METHOD'] != 'GET') {\n";
-            $redirectHttpsCode .= "        header('HTTP/1.1 400 Bad Request');\n";
-            $redirectHttpsCode .= "        echo 'Invalid protocol, https required';\n";
-            $redirectHttpsCode .= "        exit;\n";
-            $redirectHttpsCode .= "    }\n";
-            $redirectHttpsCode .= "    \$redirect = 'https://'.\$_SERVER['HTTP_HOST'].\$_SERVER['REQUEST_URI'];\n";
-            $redirectHttpsCode .= "    header('Location: '.\$redirect, true, 301);\n";
-            $redirectHttpsCode .= "    Kwf_Benchmark::shutDown();\n";
-            $redirectHttpsCode .= "    exit;\n";
-            $redirectHttpCode = str_replace('https', 'http', $redirectHttpsCode);
-
-            $ret .= "if (PHP_SAPI != 'cli' && isset(\$_SERVER['HTTP_HOST'])) {\n";
-            if (!Kwf_Config::getValue('server.https')) {
-                $ret .= "if (isset(\$_SERVER['HTTPS'])) {\n";
-                $ret .= "    $redirectHttpCode";
-                $ret .= "}\n";
-            } else {
-                if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
-                    $ret .= "\$domains = array(";
-                    foreach ($domains as $d) {
-                        if (substr($d, 0, 2) != '*.') {
-                            $ret .= "'".$d."'=>true, ";
-                        }
-                    }
-                    $ret .= ");\n";
-                    $ret .= "\$supportsHttps = isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
-                    foreach ($domains as $d) {
-                        if (substr($d, 0, 2) == '*.') {
-                            $ret .= "    if (!\$supportsHttps && '".substr($d, 1)."' == substr(\$_SERVER['HTTP_HOST'], strpos(\$_SERVER['HTTP_HOST'], '.'))) {\n";
-                            $ret .= "        \$supportsHttps = true;\n";
-                            $ret .= "    }\n";
-                        }
-                    }
-                    $ret .= "if (\$supportsHttps != isset(\$_SERVER['HTTPS'])) {\n";
-                    $ret .= "    if (\$supportsHttps) {\n";
-                    $ret .= "        $redirectHttpsCode";
-                    $ret .= "    } else {\n";
-                    $ret .= "        $redirectHttpCode";
-                    $ret .= "    }\n";
-                    $ret .= "}\n";
-                } else {
-                    $ret .= "if (!isset(\$_SERVER['HTTPS'])) {\n";
-                    $ret .= "$redirectHttpsCode";
-                    $ret .= "}\n";
-                }
-            }
-            $ret .= "}\n";
-        }
-        
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
         $ret .= " '".Kwf_Setup::getBaseUrl()."/',";   //path
@@ -501,6 +451,56 @@ class Kwf_Util_Setup
             $ret .= "    }\n";
             $ret .= "}\n";
 
+        }
+
+        if (Kwf_Config::getValue('server.https') !== 'unknown') {
+            $redirectHttpsCode  = "    if (\$_SERVER['REQUEST_METHOD'] != 'GET') {\n";
+            $redirectHttpsCode .= "        header('HTTP/1.1 400 Bad Request');\n";
+            $redirectHttpsCode .= "        echo 'Invalid protocol, https required';\n";
+            $redirectHttpsCode .= "        exit;\n";
+            $redirectHttpsCode .= "    }\n";
+            $redirectHttpsCode .= "    \$redirect = 'https://'.\$_SERVER['HTTP_HOST'].\$_SERVER['REQUEST_URI'];\n";
+            $redirectHttpsCode .= "    header('Location: '.\$redirect, true, 301);\n";
+            $redirectHttpsCode .= "    Kwf_Benchmark::shutDown();\n";
+            $redirectHttpsCode .= "    exit;\n";
+            $redirectHttpCode = str_replace('https', 'http', $redirectHttpsCode);
+
+            $ret .= "if (PHP_SAPI != 'cli' && isset(\$_SERVER['HTTP_HOST'])) {\n";
+            if (!Kwf_Config::getValue('server.https')) {
+                $ret .= "if (isset(\$_SERVER['HTTPS'])) {\n";
+                $ret .= "    $redirectHttpCode";
+                $ret .= "}\n";
+            } else {
+                if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
+                    $ret .= "\$domains = array(";
+                    foreach ($domains as $d) {
+                        if (substr($d, 0, 2) != '*.') {
+                            $ret .= "'".$d."'=>true, ";
+                        }
+                    }
+                    $ret .= ");\n";
+                    $ret .= "\$supportsHttps = isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
+                    foreach ($domains as $d) {
+                        if (substr($d, 0, 2) == '*.') {
+                            $ret .= "    if (!\$supportsHttps && '".substr($d, 1)."' == substr(\$_SERVER['HTTP_HOST'], strpos(\$_SERVER['HTTP_HOST'], '.'))) {\n";
+                            $ret .= "        \$supportsHttps = true;\n";
+                            $ret .= "    }\n";
+                        }
+                    }
+                    $ret .= "if (\$supportsHttps != isset(\$_SERVER['HTTPS'])) {\n";
+                    $ret .= "    if (\$supportsHttps) {\n";
+                    $ret .= "        $redirectHttpsCode";
+                    $ret .= "    } else {\n";
+                    $ret .= "        $redirectHttpCode";
+                    $ret .= "    }\n";
+                    $ret .= "}\n";
+                } else {
+                    $ret .= "if (!isset(\$_SERVER['HTTPS'])) {\n";
+                    $ret .= "$redirectHttpsCode";
+                    $ret .= "}\n";
+                }
+            }
+            $ret .= "}\n";
         }
 
         if (Kwf_Config::getValue('preLogin')) {
