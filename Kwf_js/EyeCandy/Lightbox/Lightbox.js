@@ -19,10 +19,16 @@ $(document).on('click', 'a.kwfUp-kwcLightbox', function(event) {
     var el = event.currentTarget;
     var $el = $(el);
     var options = $el.data('kwc-lightbox');
+
     var href = $el.attr('href');
     if (options.lightboxUrl) {
+        //for legacy view cache entries
         href = options.lightboxUrl; //ImagePage passes lightboxUrl as href points to img directly
     }
+    if ($el.data('kwc-lightbox-href')) {
+        href = $el.data('kwc-lightbox-href'); //ImagePage passes lightboxUrl as href points to img directly
+    }
+
     if (allByUrl[href]) {
         l = allByUrl[href];
     } else {
