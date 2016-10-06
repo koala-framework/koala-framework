@@ -21,7 +21,8 @@ class Kwf_Util_Maintenance
         $offlineBootstrap .= "if (PHP_SAPI == 'cli' || (
             substr(\$requestUri, 0, 14) == '/kwf/util/apc/' ||
             \$requestUri == '/kwf/json-progress-status' ||
-            substr(\$requestUri, 0, 8) == '/assets/'
+            substr(\$requestUri, 0, 8) == '/assets/' ||
+            substr(\$requestUri, 0, 10) == '/check.php'
         )) {\n";
         $offlineBootstrap .= "    require('bootstrap.php.backup');\n";
         $offlineBootstrap .= "} else {\n";
