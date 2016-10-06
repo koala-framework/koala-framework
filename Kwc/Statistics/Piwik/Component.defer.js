@@ -5,9 +5,6 @@ var statistics = require('kwf/statistics');
 window._paq = [];
 
 onReady.onRender('.kwcClass', function(el, config) {
-    if (config.disableCookies || cookieOpt.getOpt() == 'out') {
-        _paq.push(['disableCookies']);
-    }
     if (config.customTrackingDomain) {
         _paq.push(['setCookieDomain', '*.' + config.customTrackingDomain]);
         _paq.push(['setDomains', '*.' + config.customTrackingDomain]);
@@ -28,12 +25,18 @@ onReady.onRender('.kwcClass', function(el, config) {
     var u=(("https:" == document.location.protocol) ? "https" : "http") + "://" + config.domain + '/';
     _paq.push(['setTrackerUrl', u+'piwik.php']);
 
-    if (!config.ignore && !location.search.match(/[\?&]kwcPreview/)) {
-        (function() {
-            var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
-            g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
-        })();
-    }
+    cookieOpt.load(function(api) {
+        if (config.disableCookies || api.getOpt() == 'out') {
+            _paq.push(['disableCookies']);
+        }
+        if (!config.ignore && !location.search.match(/[\?&]kwcPreview/)) {
+            (function() {
+                var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+                g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+            })();
+        }
+    })
+
 });
 
 statistics.onView(function(url) {
