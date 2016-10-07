@@ -7,6 +7,7 @@ var KwfBaseUrl = require('kwf/base-url');
 onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var slideDuration = 400;
     var menuLink = el.children('.kwfUp-showMenu');
+    var closeMask = el.children('.kwfUp-closeMask');
     var baseUrl = KwfBaseUrl.get();
     var left = 100;
 
@@ -119,9 +120,9 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         }
     });
 
-    menuLink.click(function(e) {
+    function toggleMenu() {
         menuLink.trigger('menuToggle', slideDuration);
-        e.preventDefault();
+
         var slider = el.find('.kwfUp-slider');
         var menu = el.find('.kwfUp-slider > ul.kwfUp-menu');
 
@@ -146,6 +147,16 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
             slider.animate({height: menu.height()}, slideDuration);
         }
         menuLink.parent().toggleClass('kwfUp-open');
+    };
+
+    menuLink.on('click', function(e) {
+        e.preventDefault();
+        toggleMenu();
+    });
+
+    closeMask.on('touchstart', function(e) {
+        e.preventDefault();
+        toggleMenu();
     });
 
     var params = {
