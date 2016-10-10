@@ -54,10 +54,11 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
 
         //--- and now add the more complicated additional forms
         $fields = $this->_form->fields;
+        $componentField = $this->_form->getComponentField();
 
-        if (isset($fields['component'])) {
-            $possibleComponentClasses = $fields['component']->getPossibleComponentClasses();
-            $this->_componentField = $fields['component'];
+        if ($componentField) {
+            $possibleComponentClasses = $componentField->getPossibleComponentClasses();
+            $this->_componentField = $componentField;
         } else {
             if (!$this->_getParam('id')) {
                 throw new Kwf_Exception("not supported for adding");
@@ -97,8 +98,8 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
         $componentForms = array();
         $formsForComponent = array();
         $componentValues = array();
-        if (isset($fields['component'])) {
-            $componentValues = $fields['component']->getValues();
+        if ($componentField) {
+            $componentValues = $componentField->getValues();
         }
         foreach ($possibleComponentClasses as $key=>$componentClass) {
             $ev = new Kwf_Component_Event_Component_FilterAddComponentClass($componentClass, $componentOrParent);
@@ -169,9 +170,9 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
             }
         }
 
-        if (isset($fields['component'])) {
-            $fields['component']->setValues($componentValues);
-            $fields['component']->setFormsForComponent($formsForComponent);
+        if ($componentField) {
+            $componentField->setValues($componentValues);
+            $componentField->setFormsForComponent($formsForComponent);
         }
 
         $this->_form->setId($this->_getParam('id'));
