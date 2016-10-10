@@ -526,8 +526,8 @@ class Kwf_Util_Setup
                 }
             }
 
-            $ret .= "    if (isset(\$_SERVER['X_KWF_AUTHORIZATION'])) {\n";
-            $ret .= "        \$authValue = explode(' ', \$_SERVER['X_KWF_AUTHORIZATION']);\n";
+            $ret .= "    if (isset(\$_SERVER['HTTP_X_KWF_AUTHORIZATION'])) {\n";
+            $ret .= "        \$authValue = explode(' ', \$_SERVER['HTTP_X_KWF_AUTHORIZATION']);\n";
             $ret .= "        if (count(\$authValue) == 2 && strtolower(\$authValue[0]) == 'basic') {\n";
             $ret .= "            \$authorization = explode(':', base64_decode(\$authValue[1]));\n";
             $ret .= "            if (count(\$authorization) == 2) {\n";
