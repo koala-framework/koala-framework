@@ -401,5 +401,6 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         } else {
             throw new Kwf_Exception("Visible column doesn't exist");
         }
+        $data->invisible = !$visible;
     }
 }
