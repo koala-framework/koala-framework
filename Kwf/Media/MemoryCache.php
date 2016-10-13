@@ -39,7 +39,7 @@ class Kwf_Media_MemoryCache
                 'automatic_serialization' => true,
             ));
             $c->setBackend(new Kwf_Cache_Backend_File(array(
-                'cache_dir' => 'cache/mediameta',
+                'cache_dir' => Kwf_Config::getValue('mediametaCacheDir'),
                 'hashed_directory_level' => 2,
             )));
             $this->_secondLevelCache = $c;
