@@ -30,7 +30,7 @@ class Kwf_Media_Output_Component
     public static function getMediaOutputForDimension($data, $dim, $type)
     {
         if (isset($data['url'])) {
-            $file = 'cache/media/remotefile_' . md5($data['url']);
+            $file = Kwf_Config::getValue('mediaCacheDir').'/remotefile_' . md5($data['url']);
             if (!is_file($file)) {
                 $httpClientConfig = array(
                     'timeout' => 20,

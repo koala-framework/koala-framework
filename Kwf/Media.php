@@ -197,7 +197,7 @@ class Kwf_Media
                 $cacheData = $output;
                 if (isset($cacheData['contents']) && strlen($cacheData['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
-                    $cacheFileName = 'cache/media/'.$class.'/'.$id.'/'.$type;
+                    $cacheFileName = Kwf_Config::getValue('mediaCacheDir').'/'.$class.'/'.$id.'/'.$type;
                     if (!is_dir(dirname($cacheFileName))) @mkdir(dirname($cacheFileName), 0777, true);
                     file_put_contents($cacheFileName, $cacheData['contents']);
                     $cacheData['file'] = $cacheFileName;
