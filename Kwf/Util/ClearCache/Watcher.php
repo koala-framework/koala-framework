@@ -378,7 +378,6 @@ class Kwf_Util_ClearCache_Watcher
 
         $dependenciesChanged = false;
         $generatorssChanged = false;
-        $dimensionsChanged = false;
         $menuConfigChanged = false;
         foreach ($componentClasses as $c) {
             Kwf_Component_Settings::$_rebuildingSettings = true;
@@ -401,9 +400,6 @@ class Kwf_Util_ClearCache_Watcher
                 $generatorssChanged = true;
                 $oldChildComponentClasses = self::_getComponentClassesFromGeneratorsSetting($settings[$c]['generators']);
                 $newChildComponentClasses = self::_getComponentClassesFromGeneratorsSetting($newSettings['generators']);
-            }
-            if (isset($newSettings['dimensions']) && $newSettings['dimensions'] != $settings[$c]['dimensions']) {
-                $dimensionsChanged = true;
             }
             if (isset($newSettings['menuConfig']) && $newSettings['menuConfig'] != $settings[$c]['menuConfig']) {
                 $menuConfigChanged = true;
@@ -458,21 +454,6 @@ class Kwf_Util_ClearCache_Watcher
         }
         echo "\n";
 
-        if ($dimensionsChanged) {
-            echo "dimensions changed...\n";
-            $clearCacheSimple = array();
-            foreach ($componentClasses as $c) {
-                $idPrefix = str_replace(array('.', '>'), array('___', '____'), $c) . '_';
-                $clearCacheSimple[] = 'media-output-'.$idPrefix;
-                $clearCacheSimple[] = 'media-output-mtime-'.$idPrefix;
-                foreach (glob('cache/media/'.$idPrefix.'*') as $f) {
-                    echo $f." [DELETED]\n";
-                    unlink($f);
-                }
-            }
-            Kwf_Cache_Simple::delete($clearCacheSimple);
-            echo "cleared media cache...\n";
-        }
         if ($menuConfigChanged) {
             echo "menu config changed...\n";
             Kwf_Acl::clearCache();
