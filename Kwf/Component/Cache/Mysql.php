@@ -42,7 +42,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'deleted' => false,
             'content' => $content,
             'url' => $type == 'fullPage' ? $component->url : null,
-            'domain_component_id' => $type == 'fullPage' ? $component->getDomainComponent()->componentId : null,
+            'domain_component_id' => $type == 'fullPage' ? $component->getDomainComponentId() : null,
         );
         $options = array(
             'buffer' => true,

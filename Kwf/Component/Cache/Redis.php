@@ -13,7 +13,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
 
         $setKey = $key; //key that will be stored in sets
         if ($type == 'fullPage') {
-            $setKey .= ':'.$component->getDomainComponent()->componentId.':'.$component->url;
+            $setKey .= ':'.$component->getDomainComponentId().':'.$component->url;
         }
 
         $this->_redis->sAdd('viewids:componentid:'.$component->componentId, $setKey);
