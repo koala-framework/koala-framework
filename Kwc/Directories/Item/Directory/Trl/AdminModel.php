@@ -95,7 +95,7 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
         return $this->_proxyModel->countRows($select);
     }
 
-    public function getRowByProxiedRow($proxiedRow, $componentId)
+    public function getRowByProxiedRowAndComponentId($proxiedRow, $componentId)
     {
         $id = $proxiedRow->getInternalId().$componentId;
         if (!isset($this->_rows[$id])) {
