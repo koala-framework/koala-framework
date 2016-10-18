@@ -27,6 +27,7 @@ class Kwc_Box_MetaTagsContent_Admin extends Kwc_Abstract_Admin
     protected function _duplicateOwnRow($source, $target)
     {
         $ret = parent::_duplicateOwnRow($source, $target);
+        if (!$ret) return $ret;
 
         //these meta tags should not get duplicated
         $ret->description = null;
