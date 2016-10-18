@@ -15,6 +15,9 @@ module.exports = function (selector) {
         } else {
             if (el.hasClass('kwfUp-loadImmediately') || isElementInView(el)) {
                 initResponsiveImgEl(el);
+                if (deferredImages.indexOf(el) != -1) {
+                    deferredImages.splice(deferredImages.indexOf(el), 1);
+                }
             } else {
                 if (!el.data('responsiveImgInitDeferred')) {
                     deferredImages.push(el);
@@ -40,7 +43,9 @@ $(function() {
             if (isElementInView(el)) {
                 deferredImages.splice(i, 1);
                 i--;
-                initResponsiveImgEl(el);
+                if (!el[0].responsiveImgInitDone) {
+                    initResponsiveImgEl(el);
+                }
             }
         }
     }
