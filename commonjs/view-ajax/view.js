@@ -4,6 +4,7 @@ var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var statistics = require('kwf/statistics');
 var formRegistry = require('kwf/frontend-form/form-registry');
+var injectAssets = require('kwf/inject-assets');
 
 var byComponentId = {};
 var byDirectoryViewComponentId = {};
