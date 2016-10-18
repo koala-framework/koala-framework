@@ -377,6 +377,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['uniquePrefix'] = Kwf_Config::getValue('application.uniquePrefix');
         if ($ret['uniquePrefix']) $ret['uniquePrefix'] .= '-';
 
+        $ret['submitCaption'] = $this->_getPlaceholder('submitButton');
+
         return $ret;
     }
 
