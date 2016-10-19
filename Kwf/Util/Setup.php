@@ -548,7 +548,7 @@ class Kwf_Util_Setup
             $ret .= "    ) {\n";
             $ret .= "        \$realm = 'Testserver';\n";
             $ret .= "        header('WWW-Authenticate: Basic realm=\"'.\$realm.'\"');\n";
-            $ret .= "        throw new Kwf_Exception_AccessDenied();\n";
+            $ret .= "        throw new Kwf_Exception_Unauthorized('PreLogin required');\n";
             $ret .= "    }\n";
             $ret .= "}\n";
 
