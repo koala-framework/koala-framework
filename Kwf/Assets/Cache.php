@@ -25,7 +25,13 @@ class Kwf_Assets_Cache
     {
         static $cache;
         if (!isset($cache)) {
-            $cache = new self();
+            if (Kwf_Config::getValue('assets.cacheSimpleStatic')) {
+                //two level cache, SimpleStatic (apc) plus file
+                $cache = new self();
+            } else {
+                //only file
+                $cache = new Kwf_Assets_Cache_File();
+            }
         }
         return $cache;
     }

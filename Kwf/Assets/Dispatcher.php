@@ -55,14 +55,21 @@ class Kwf_Assets_Dispatcher
 
         if ($encoding != 'none') {
             //own cache for encoded contents, not using Kwf_Assets_Cache as we don't need to in two-level cache
-            $cacheId = 'as_'.$this->_getCacheIdByUrl($url).'_'.$encoding;
-            $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            $cacheId = false;
+            if (Kwf_Config::getValue('assets.cacheSimpleStatic')) {
+                $cacheId = 'as_'.$this->_getCacheIdByUrl($url).'_'.$encoding;
+            }
+            if ($cacheId) {
+                $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            } else {
+                $ret = false;
+            }
 
             if ($ret === false) {
                 $ret = $this->_getOutputForUrlNoEncoding($url);
                 $ret['contents'] = Kwf_Media_Output::encode($ret['contents'], $encoding);
                 $ret['encoding'] = $encoding;
-                Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+                if ($cacheId) Kwf_Cache_SimpleStatic::add($cacheId, $ret);
             }
             return $ret;
         } else {
