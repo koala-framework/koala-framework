@@ -3,7 +3,7 @@ class Kwf_Exception_Conflict extends Kwf_Exception
 {
     public function __construct($message = "Conflict")
     {
-        parent::__construct($message);
+        parent::__construct($message, 409);
     }
 
     public function getHeader()

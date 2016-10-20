@@ -75,13 +75,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                     if (substr($ip, -strlen($i)) == $i) $ignore = true;
                 }
             }
-            if (!$ignore && (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW']) ||
-                $_SERVER['PHP_AUTH_USER'] != $this->_data->getBaseProperty('preLoginUser') ||
-                $_SERVER['PHP_AUTH_PW'] != $this->_data->getBaseProperty('preLoginPassword')
-            )) {
-                header('WWW-Authenticate: Basic realm="Page locked by preLogin"');
-                throw new Kwf_Exception_AccessDenied();
-            }
+            Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
         }
 
         $benchmarkEnabled = Kwf_Benchmark::isEnabled();
