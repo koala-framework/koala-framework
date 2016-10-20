@@ -13,6 +13,11 @@ abstract class Kwf_Exception_Abstract extends Exception
         $this->_logId = $logId;
     }
 
+    public function getLogId()
+    {
+        return $this->_logId;
+    }
+
     public function getTemplate()
     {
         return 'Error';
@@ -125,11 +130,26 @@ abstract class Kwf_Exception_Abstract extends Exception
             $header = $this->getHeader();
             $this->log();
 
-            $output = $this->_renderHtml($exception, $msg);
+            $format = 'html';
+            if (isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] == 'application/json') {
+                // Is mainly used for Exceptions in setup or bootstrap if called from native application
+                $format = 'json';
+            }
+
+            if ($format == 'json') {
+                $output = $this->_renderJson($exception, $msg);
+            } else {
+                $output = $this->_renderHtml($exception, $msg);
+            }
+
 
             if (!headers_sent()) {
                 header($header);
-                header('Content-Type: text/html; charset=utf-8');
+                if ($format == 'json') {
+                    header('Content-Type: application/json; charset=utf-8');
+                } else {
+                    header('Content-Type: text/html; charset=utf-8');
+                }
             }
 
             echo $output;
@@ -152,6 +172,31 @@ abstract class Kwf_Exception_Abstract extends Exception
                 echo '<p>An Error ocurred. Please try again later.</p>';
             }
         }
+    }
 
-   }
+    protected function _renderJson($exception, $msg)
+    {
+        $data = array(
+            'error' => array(
+                'code' => $exception->code,
+                'errorId' => $exception->getLogId(),
+                'message' => 'An Error occured. Please try again later',
+            )
+        );
+        if (Kwf_Exception::isDebug()) {
+            $data = array(
+                'error' => array(
+                    'code' => $exception->code,
+                    'errorId' => $exception->getLogId(),
+                    'message' => $exception->message,
+                    'exception' => array(array(
+                        'message' => $exception->message,
+                        'class' => get_class($exception),
+                        'trace' => $exception->getTrace()
+                    ))
+                )
+            );
+        }
+        return json_encode($data);
+    }
 }

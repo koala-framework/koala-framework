@@ -18,8 +18,8 @@
             <pre><?= $this->query ?></pre>
             <?php } ?>
         <?php } else { ?>
-            An Error ocurred. Please try again later.
-            <div><?= trlKwf('ErrorId')?>{logId}</div>
+            <p>An Error ocurred. Please try again later.</p>
+            <p>ErrorId: {logId}</p>
         <?php } ?>
         <?php if ($this->debug || isset($_COOKIE['unitTest'])) { ?>
         <?php try {
