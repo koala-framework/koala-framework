@@ -3,7 +3,7 @@ class Kwf_Exception_Unauthorized extends Kwf_Exception_Abstract
 {
     public function __construct($message = "Unauthorized")
     {
-        parent::__construct($message);
+        parent::__construct($message, 401);
     }
 
     public function getHeader()
