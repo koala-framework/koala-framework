@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>401 <?= $this->data->trlKwf('Unauthorized'); ?></title>
+        <title>403 <?= $this->data->trlKwf('Access Denied'); ?></title>
     </head>
     <body>
         <h1><?=$this->message;?></h1>

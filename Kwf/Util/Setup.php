@@ -526,29 +526,8 @@ class Kwf_Util_Setup
                 }
             }
 
-            $ret .= "    if (isset(\$_SERVER['HTTP_X_KWF_AUTHORIZATION'])) {\n";
-            $ret .= "        \$authValue = explode(' ', \$_SERVER['HTTP_X_KWF_AUTHORIZATION']);\n";
-            $ret .= "        if (count(\$authValue) == 2 && strtolower(\$authValue[0]) == 'basic') {\n";
-            $ret .= "            \$authorization = explode(':', base64_decode(\$authValue[1]));\n";
-            $ret .= "            if (count(\$authorization) == 2) {\n";
-            $ret .= "                \$_SERVER['X_KWF_AUTH_USER'] = \$authorization[0];\n";
-            $ret .= "                \$_SERVER['X_KWF_AUTH_PW'] = \$authorization[1];\n";
-            $ret .= "            }\n";
-            $ret .= "        }\n";
-            $ret .= "    }\n";
-
-            $ret .= "    \$authUser = !empty(\$_SERVER['PHP_AUTH_USER']) ? \$_SERVER['PHP_AUTH_USER'] : false;\n";
-            $ret .= "    \$authUser = !empty(\$_SERVER['X_KWF_AUTH_USER']) ? \$_SERVER['X_KWF_AUTH_USER'] : \$authUser;\n";
-            $ret .= "    \$authPW = !empty(\$_SERVER['PHP_AUTH_PW']) ? \$_SERVER['PHP_AUTH_PW'] : false;\n";
-            $ret .= "    \$authPW = !empty(\$_SERVER['X_KWF_AUTH_PW']) ? \$_SERVER['X_KWF_AUTH_PW'] : \$authPW;\n";
-
-            $ret .= "    if (!\$ignore && (!\$authUser || !\$authPW\n";
-            $ret .= "            || \$authUser != '".Kwf_Config::getValue('preLoginUser')."'\n";
-            $ret .= "           || \$authPW != '".Kwf_Config::getValue('preLoginPassword')."')\n";
-            $ret .= "    ) {\n";
-            $ret .= "        \$realm = 'Testserver';\n";
-            $ret .= "        header('WWW-Authenticate: Basic realm=\"'.\$realm.'\"');\n";
-            $ret .= "        throw new Kwf_Exception_AccessDenied();\n";
+            $ret .= "    if (!\$ignore) {\n";
+            $ret .= "        Kwf_Setup::checkPreLogin('".Kwf_Config::getValue('preLoginUser')."', '".Kwf_Config::getValue('preLoginPassword')."');\n";
             $ret .= "    }\n";
             $ret .= "}\n";
 
