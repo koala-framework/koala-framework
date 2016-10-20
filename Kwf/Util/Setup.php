@@ -465,7 +465,7 @@ class Kwf_Util_Setup
             $redirectHttpsCode .= "    exit;\n";
             $redirectHttpCode = str_replace('https', 'http', $redirectHttpsCode);
 
-            $ret .= "if (PHP_SAPI != 'cli' && isset(\$_SERVER['HTTP_HOST'])) {\n";
+            $ret .= "if (PHP_SAPI != 'cli' && isset(\$_SERVER['HTTP_HOST']) && substr(\$requestUri, 0, 7) != '/media/') {\n";
             if (!Kwf_Config::getValue('server.https')) {
                 $ret .= "if (isset(\$_SERVER['HTTPS'])) {\n";
                 $ret .= "    $redirectHttpCode";
