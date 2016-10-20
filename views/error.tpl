@@ -19,6 +19,7 @@
             <?php } ?>
         <?php } else { ?>
             An Error ocurred. Please try again later.
+            <div><?= trlKwf('ErrorId')?>{logId}</div>
         <?php } ?>
         <?php if ($this->debug || isset($_COOKIE['unitTest'])) { ?>
         <?php try {

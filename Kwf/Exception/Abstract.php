@@ -2,10 +2,16 @@
 abstract class Kwf_Exception_Abstract extends Exception
 {
     public static $logErrors; //overrides debug.error.log
+    protected $_logId;
 
     public abstract function getHeader();
 
     public abstract function log();
+
+    public function setLogId($logId)
+    {
+        $this->_logId = $logId;
+    }
 
     public function getTemplate()
     {
@@ -59,7 +65,7 @@ abstract class Kwf_Exception_Abstract extends Exception
                 ->getComponentByClass($this->getComponentClass(), array('limit'=>1, 'subroot'=>$data));
 
             if ($notFound) {
-                return $notFound->render(null, true);
+                return str_replace('{logId}', $this->_logId, $notFound->render(null, true));
             }
         }
 
