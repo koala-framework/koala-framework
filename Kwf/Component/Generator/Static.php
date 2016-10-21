@@ -170,7 +170,8 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
         $id = $this->_idSeparator . array_pop((explode($this->_idSeparator, $source->componentId)));
         $target = $parentTarget->getChildComponent($id);
         if (!$target) {
-            throw new Kwf_Exception("Didn't get child component '$id' from '$parentTarget->componentId' in generator '{$this->getGeneratorKey()}' of '$this->_class'");
+            //can be not found if two different components are used (eg. in two Domains)
+            return null;
         }
         Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
         return $target;
