@@ -78,7 +78,7 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
             throw new Kwf_Exception("invalid select");
         }
         $proxyRow = $this->_proxyModel->getRow($select);
-        return $this->getRowByProxiedRow($proxyRow, $componentId);
+        return $this->getRowByProxiedRowAndComponentId($proxyRow, $componentId);
     }
 
     public function countRows($where = array())
