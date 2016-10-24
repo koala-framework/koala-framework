@@ -11,6 +11,6 @@ class Kwc_Basic_Table_Trl_ModelRowset extends Kwf_Model_Proxy_Rowset
     {
         $row = $this->_rowset->current();
         if (is_null($row)) return null;
-        return $this->_model->getRowByProxiedRow($row, $this->_componentId);
+        return $this->_model->getRowByProxiedRowAndComponentId($row, $this->_componentId);
     }
 }
