@@ -380,7 +380,7 @@ ViewAjax.prototype = {
                 if ($(el).attr('href') == directoryUrl) {
                     $(el).click((function(ev) {
                         if (history.length > 1) {
-                            if (Kwf.Utils.HistoryState.entries > 0 || document.referrer.indexOf(document.domain) >= 0) {
+                            if (historyState.entries > 0 || document.referrer.indexOf(document.domain) >= 0) {
                                 ev.preventDefault();
                                 ev.stopPropagation();
                                 history.back(); //keeps scroll position
