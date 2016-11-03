@@ -24,6 +24,19 @@
         display: none;
     }
 
+    .kwcBem__outerYoutubeContainer {
+        &.youtubeActive {
+            .kwcBem {
+                &__youtubeContainer {
+                    position: relative;
+                }
+                &__youtubePlayer {
+                    display: block;
+                }
+            }
+        }
+    }
+
     &.kwcBem--ratio16x9 {
         .kwcBem__youtubeContainer {
             padding-bottom: 56.27%;
