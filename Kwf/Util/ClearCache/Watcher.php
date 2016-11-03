@@ -145,7 +145,7 @@ class Kwf_Util_ClearCache_Watcher
             }
         }
 
-        $watcher->addListener('filewatcher.queue_full', function($e) {
+        $watcher->addListener('filewatcher.queue_full', function($e) use ($watcher) {
             echo "more than 100 events (".count($e->eventsQueue)."), did you switch branches or something?\n";
             echo "I'm giving up.\n";
             //TODO: clear-cache and restart clear-cache-watcher
