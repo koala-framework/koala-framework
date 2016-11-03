@@ -36,7 +36,7 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 
     }
 
-    protected function _beforeInsert($row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row, $submitRow)
     {
         $row->visible = Kwc_Abstract::getSetting($this->_getParam('class'), 'defaultVisible');
     }
@@ -60,8 +60,8 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         foreach ($uploadIds as $uploadId) {
             $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($uploadId);
             $row = $this->_model->createRow();
-            $this->_beforeInsert($row);
-            $this->_beforeSave($row);
+            $this->_beforeInsert($row, null);
+            $this->_beforeSave($row, null);
             $row->save();
             $form = Kwc_Abstract_Form::createChildComponentForm($this->_getParam('class'), 'child');
             $form->setIdTemplate(null);

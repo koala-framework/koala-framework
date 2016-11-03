@@ -1,37 +1,29 @@
-var componentEvent = require('kwf/component-event');
-var cookies = require('js-cookie');
 var $ = require('jQuery');
+var defaultAdapter = require('kwf/cookie-opt/adapter');
 
-var CookieOpt = {};
+var promise = $.Deferred();
+var adapterPromise;
+var adapter;
 
-CookieOpt.getDefaultOpt = function() {
-    var defaultOpt = $('body').data('cookieDefaultOpt');
-    if (defaultOpt != 'in' && defaultOpt != 'out') defaultOpt = 'in';
-    return defaultOpt;
-};
+setTimeout(function() {
+    if (!adapter) adapter = defaultAdapter;
+}, 1);
 
-CookieOpt.isSetOpt = function() {
-    return !!cookies.get('cookieOpt');
-};
-
-CookieOpt.getOpt = function() {
-    if (CookieOpt.isSetOpt()) {
-        return cookies.get('cookieOpt');
-    } else {
-        return CookieOpt.getDefaultOpt();
+module.exports = {
+    setAdapter: function(a) {
+        adapter = a;
+    },
+    load: function(callback) {
+        if (!adapterPromise) {
+            adapterPromise = $.Deferred();
+            if (!adapter) adapter = defaultAdapter;
+            adapter(adapterPromise);
+            adapterPromise.done(function(api) {
+                promise.resolve(api);
+            });
+        }
+        promise.done(function(api) {
+            callback(api);
+        });
     }
-};
-
-CookieOpt.setOpt = function(value) {
-    var opt = cookies.get('cookieOpt');
-    cookies.set('cookieOpt', value, { expires: 3*365 });
-    if (opt != value) {
-        componentEvent.trigger('cookieOptChanged', value);
-    }
-};
-
-CookieOpt.onOptChange = function(callback) {
-    componentEvent.on('cookieOptChanged', callback);
-};
-
-module.exports = CookieOpt;
+}

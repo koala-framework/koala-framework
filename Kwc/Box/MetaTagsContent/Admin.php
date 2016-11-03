@@ -23,4 +23,18 @@ class Kwc_Box_MetaTagsContent_Admin extends Kwc_Abstract_Admin
         }
         return null;
     }
+
+    protected function _duplicateOwnRow($source, $target)
+    {
+        $ret = parent::_duplicateOwnRow($source, $target);
+        if (!$ret) return $ret;
+
+        //these meta tags should not get duplicated
+        $ret->description = null;
+        $ret->og_title = null;
+        $ret->og_description = null;
+
+        $ret->save();
+        return $ret;
+    }
 }

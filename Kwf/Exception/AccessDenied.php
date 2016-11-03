@@ -3,17 +3,17 @@ class Kwf_Exception_AccessDenied extends Kwf_Exception_Abstract
 {
     public function __construct($message = "Access denied")
     {
-        parent::__construct($message);
+        parent::__construct($message, 403);
     }
 
     public function getHeader()
     {
-        return 'HTTP/1.1 401 Access Denied';
+        return 'HTTP/1.1 403 Forbidden';
     }
 
     public function getTemplate()
     {
-        return 'Error401';
+        return 'Error403';
     }
 
     public function getComponentClass()

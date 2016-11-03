@@ -40,7 +40,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'microtime' => $microtime,
             'expire' => is_null($lifetime) ? null : time() + $lifetime,
             'deleted' => false,
-            'content' => $content
+            'content' => $content,
+            'url' => $type == 'fullPage' ? $component->url : null
         );
         $options = array(
             'buffer' => true,
@@ -135,18 +136,23 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             } else {
                 $and = array();
                 foreach ($values as $k => $v) {
-                    if (substr($v, -1) == '%') {
-                        $v = substr($v, 0, -1);
-                        $and[] = new Kwf_Model_Select_Expr_Or(array(
-                            new Kwf_Model_Select_Expr_Equal($k, $v),
-                            new Kwf_Model_Select_Expr_Like($k, $v.'-%'),
-                            new Kwf_Model_Select_Expr_Like($k, $v.'_%'),
-                        ));
-                    } else if (strpos($v, '%') !== false) {
-                        $and[] = new Kwf_Model_Select_Expr_Like($k, $v);
-                    } else {
-                        $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
+                    if (!is_array($v)) $v = array($v);
+
+                    $ors = array();
+                    foreach ($v as $value) {
+                        if (substr($value, -1) == '%') {
+                            $value = substr($value, 0, -1);
+                            $ors[] = new Kwf_Model_Select_Expr_Equal($k, $value);
+                            $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'-%');
+                            $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'_%');
+                        } else if (strpos($value, '%') !== false) {
+                            $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'_%');
+                        } else {
+                            $ors[] = new Kwf_Model_Select_Expr_Equal($k, $value);
+                        }
                     }
+
+                    $and[] = new Kwf_Model_Select_Expr_Or($ors);
                 }
                 if ($and) {
                     $and = new Kwf_Model_Select_Expr_And($and);
@@ -173,14 +179,18 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     public function deleteViewCache(array $updates, $progressBarAdapter = null)
     {
         $select = $this->_buildSelectForDelete($updates);
+        return $this->_deleteViewCacheBySelect( $select, $progressBarAdapter);
+    }
 
+    private function _deleteViewCacheBySelect(Kwf_Model_Select $select, $progressBarAdapter = null)
+    {
         //execute select
         $microtime = $this->_getMicrotime();
         $model = $this->getModel();
         $log = Kwf_Events_Log::getInstance();
         $cacheIds = array();
         $options = array(
-            'columns' => array('component_id', 'renderer', 'type', 'value'),
+            'columns' => array('component_id', 'renderer', 'type', 'value', 'url'),
         );
         $partialIds = array();
         $deleteIds = array();
@@ -193,6 +203,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $step = 0;
             $progress = new Zend_ProgressBar($progressBarAdapter, 0, $steps);
         }
+        $fullPageUrls = array();
         foreach ($rows as $key => $row) {
             if ($progress && ($key%100) == 0) {
                 $step += 100;
@@ -217,6 +228,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 $deleteIds[$type][] = $cId;
             } else {
                 throw new Kwf_Exception('Should not happen.');
+            }
+            if ($type == 'fullPage') {
+                $fullPageUrls[$row['component_id']] = $row['url'];
             }
         }
 
@@ -249,7 +263,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                         $log->log("type=fullPage component_id={$id}", Zend_Log::INFO);
                     }
                 }
-                $this->deleteViewCache($s);
+                $this->_deleteViewCacheBySelect($s);
             }
         }
 
@@ -279,6 +293,11 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             )));
             $model->updateRows(array('deleted' => true), $select);
         }
+
+        if ($fullPageUrls) {
+            Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_ViewCache_ClearFullPage(get_class($this), $fullPageUrls));
+        }
+
         $this->_afterDatabaseDelete($select); // For unit testing - DO NOT DELETE!
 
         if ($progress) $progress->finish();

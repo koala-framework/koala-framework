@@ -132,6 +132,10 @@ class Kwf_Assets_Package
                 if (!$ret) {
                     throw new Kwf_Exception("Dependency '$dep' didn't return contents");
                 }
+                foreach ($dep->getFilters() as $filter) {
+                    if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Dependency_Filter_', '', get_class($filter)));
+                    $ret = $filter->filter($ret);
+                }
                 foreach ($this->getProviderList()->getFilters() as $filter) {
                     if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
                         && $filter->getMimeType() == $dep->getMimeType()
@@ -483,11 +487,16 @@ class Kwf_Assets_Package
             return $ret;
         }
 
+        return $this->_buildPackageUrls($mimeType, $language);
+    }
+
+    protected function _buildPackageUrls($mimeType, $language)
+    {
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
         }
 
-        if ($mimeType == 'text/css; ie8' && !$this->_enableLegacySupport) {
+        if (($mimeType == 'text/css; ie8' || $mimeType == 'text/javascript; ie8') && !$this->_enableLegacySupport) {
             return array();
         }
 

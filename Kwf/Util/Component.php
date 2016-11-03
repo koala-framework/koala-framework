@@ -79,6 +79,11 @@ class Kwf_Util_Component
         if ((!isset($_REQUEST['url']) || !$_REQUEST["url"]) && (!isset($_REQUEST['componentId']) || !$_REQUEST['componentId']) && (!isset($_REQUEST['dbId']) || !$_REQUEST['dbId'])) {
             throw new Kwf_Exception_NotFound();
         }
+        if (isset($_REQUEST['pageUrl'])) {
+            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_PreDispatch') as $plugin) {
+                $plugin->preDispatch($_REQUEST['pageUrl']);
+            }
+        }
         if (isset($_REQUEST['componentId'])) {
             $data = Kwf_Component_Data_Root::getInstance()->getComponentById($_REQUEST['componentId']);
         } else if (isset($_REQUEST['dbId'])) {
@@ -96,6 +101,9 @@ class Kwf_Util_Component
                     $_GET[substr($get, 0, $pos)] = substr($get, $pos+1); //ouch
                     $_REQUEST[substr($get, 0, $pos)] = substr($get, $pos+1); //ouch
                 }
+            }
+            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_PreDispatch') as $p) {
+                $p->preDispatch($url);
             }
             $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl($url, null);
         }

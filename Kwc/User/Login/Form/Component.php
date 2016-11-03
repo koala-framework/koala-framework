@@ -10,7 +10,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
-    public function preProcessInput($postData)
+    public function preProcessInput(array $postData)
     {
         $this->_processInput($postData);
         parent::preProcessInput($postData);

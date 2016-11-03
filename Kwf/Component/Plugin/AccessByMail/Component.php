@@ -40,7 +40,9 @@ class Kwf_Component_Plugin_AccessByMail_Component extends Kwf_Component_Plugin_A
         $template = Kwc_Admin::getComponentFile($this, 'Component', 'tpl');
         $view = new Kwf_Component_View($renderer);
         $view->assign($templateVars);
-        return $view->render($template);
+        $ret = $view->render($template);
+        $ret = Kwf_Component_View_Renderer::replaceHtmlKwfUp($ret);
+        return $ret;
     }
 
     public function skipProcessInput(Kwf_Component_Data $data)

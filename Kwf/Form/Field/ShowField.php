@@ -10,8 +10,9 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
         $this->setXtype('showfield');
     }
 
-    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
+    public function prepareSave($row, $postData)
     {
+        //dont' call parent, we are a show field that doesn't save
     }
 
     public function validate($row, $postData)

@@ -34,10 +34,14 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
         } else {
             $reference = $this->getReference();
             if ($reference) {
-                if ($referenceField = $this->getReferenceField()) {
-                    $ret[$this->getFieldName()] = $row->getParentRow($reference)->$referenceField;
+                if ($row->getParentRow($reference)) {
+                    if ($referenceField = $this->getReferenceField()) {
+                        $ret[$this->getFieldName()] = $row->getParentRow($reference)->$referenceField;
+                    } else {
+                        $ret[$this->getFieldName()] = $row->getParentRow($reference)->__toString();
+                    }
                 } else {
-                    $ret[$this->getFieldName()] = $row->getParentRow($reference)->__toString();
+                    $ret[$this->getFieldName()] = null;
                 }
             }
         }

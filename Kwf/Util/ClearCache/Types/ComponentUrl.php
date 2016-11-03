@@ -3,6 +3,11 @@ class Kwf_Util_ClearCache_Types_ComponentUrl extends Kwf_Util_ClearCache_Types_A
 {
     protected function _clearCache($options)
     {
+        if (!Kwf_Setup::hasDb()) {
+            $this->_output("skipped: (no db configured)\n");
+            return;
+        }
+
         Kwf_Component_Cache_Url_Abstract::getInstance()->clear();
     }
 

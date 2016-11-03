@@ -14,10 +14,14 @@ Kwc.Paragraphs.PanelJsonReader = Ext2.extend(Ext2.data.JsonReader,
         }
         if (o.masterLayoutContexts) {
             this.paragraphsPanel.dataView.setMasterLayoutContexts(o.masterLayoutContexts);
-            this.paragraphsPanel.actions.addparagraph.setMasterLayoutContexts(o.masterLayoutContexts);
+            if (this.paragraphsPanel.actions.addparagraph) {
+                this.paragraphsPanel.actions.addparagraph.setMasterLayoutContexts(o.masterLayoutContexts);
+            }
         }
         this.paragraphsPanel.dataView.setDeniedComponentClasses(o.deniedComponentClasses);
-        this.paragraphsPanel.actions.addparagraph.setDeniedComponentClasses(o.deniedComponentClasses);
+        if (this.paragraphsPanel.actions.addparagraph) {
+            this.paragraphsPanel.actions.addparagraph.setDeniedComponentClasses(o.deniedComponentClasses);
+        }
         return ret;
     }
 });

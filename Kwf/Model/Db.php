@@ -84,6 +84,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         else if ($type == 'timestamp') $type = self::TYPE_DATETIME;
         else if ($type == 'date') $type = self::TYPE_DATE;
         else if ($type == 'decimal') $type = self::TYPE_FLOAT;
+        else if ($type == 'float') $type = self::TYPE_FLOAT;
         else if (substr($type, 0, 6) == 'double') $type = self::TYPE_FLOAT;
         else if ($type == 'time') $type = null;
         else $type = null;

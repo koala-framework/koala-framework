@@ -3,6 +3,7 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
 {
     private $_componentOrParent;
     private $_generator;
+    private $_componentField;
 
     public $toSaveGeneratorProperty = array();
 
@@ -49,7 +50,7 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
             ->setAllowBlank(false)
             ->setVtype('alphanum');
 
-        $fields->add(new Kwf_Form_Field_Select('component',  trlKwf('Pagetype')))
+        $this->_componentField = $fields->add(new Kwf_Form_Field_Select('component',  trlKwf('Pagetype')))
             ->setValues($componentNames)
             ->setPossibleComponentClasses($componentClasses) //just for PageController
             ->setTpl('<tpl for="."><div class="x2-combo-list-item">{name}</div></tpl>')
@@ -106,5 +107,10 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
             }
             $i['plugin']->saveGeneratorPropertyValue($data, $i['value']);
         }
+    }
+
+    public function getComponentField()
+    {
+        return $this->_componentField;
     }
 }

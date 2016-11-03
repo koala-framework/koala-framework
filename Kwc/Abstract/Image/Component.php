@@ -186,15 +186,56 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return false;
     }
 
-    public function getAbsoluteImageUrl()
+    private function _getAbsoluteUrl($url)
     {
-        $ret = $this->getImageUrl();
-        if ($ret && substr($ret, 0, 1) == '/' && substr($ret, 0, 2) != '//') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
+        if ($url && substr($url, 0, 1) == '/' && substr($url, 0, 2) != '//') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
             $domain = $this->getData()->getDomain();
             $protocol = Kwf_Util_Https::domainSupportsHttps($domain) ? 'https' : 'http';
-            $ret = "$protocol://$domain$ret";
+            $url = "$protocol://$domain$url";
         }
-        return $ret;
+        return $url;
+    }
+
+    public function getAbsoluteImageUrl()
+    {
+        return $this->_getAbsoluteUrl($this->getImageUrl());
+    }
+
+    public function getMaxResolutionAbsoluteImageUrl()
+    {
+        return $this->_getAbsoluteUrl($this->getMaxResolutionImageUrl());
+    }
+
+    public function getMaxResolutionImageUrl()
+    {
+        $data = $this->_getImageDataOrEmptyImageData();
+        if ($data) {
+            $s = $this->getImageDimensions();
+            $imageData = $this->_getImageDataOrEmptyImageData();
+            $widths = Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['dimensions']);
+            return $this->_getImageUrl(end($widths));
+        }
+        return null;
+    }
+
+    private function _getImageUrl($width)
+    {
+        if (Kwc_Abstract::getSetting($this->getData()->componentClass, 'useDataUrl')) {
+            $id = $this->getData()->componentId;
+            $type = str_replace('{width}', $width, $this->getBaseType());
+            $data = self::getMediaOutput($id, $type, $this->getData()->componentClass);
+            if (isset($data['file'])) {
+                $c = file_get_contents($data['file']);
+            } else {
+                $c = $data['contents'];
+            }
+            $base64 = base64_encode($c);
+            if (strlen($base64) < 32*1024) {
+                $mime = $data['mimeType'];
+                return "data:$mime;base64,$base64";
+            }
+        }
+        return str_replace('{width}', $width, $this->getBaseImageUrl());
     }
 
     public function getImageUrl()
@@ -205,22 +246,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $imageData = $this->_getImageDataOrEmptyImageData();
             $width = Kwf_Media_Image::getResponsiveWidthStep($s['width'],
                                 Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['dimensions']));
-            if (Kwc_Abstract::getSetting($this->getData()->componentClass, 'useDataUrl')) {
-                $id = $this->getData()->componentId;
-                $type = str_replace('{width}', $width, $this->getBaseType());
-                $data = self::getMediaOutput($id, $type, $this->getData()->componentClass);
-                if (isset($data['file'])) {
-                    $c = file_get_contents($data['file']);
-                } else {
-                    $c = $data['contents'];
-                }
-                $base64 = base64_encode($c);
-                if (strlen($base64) < 32*1024) {
-                    $mime = $data['mimeType'];
-                    return "data:$mime;base64,$base64";
-                }
-            }
-            return str_replace('{width}', $width, $this->getBaseImageUrl());
+            return $this->_getImageUrl($width);
         }
         return null;
     }
@@ -263,13 +289,15 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
         $filename .= '.'.$fileRow->extension;
         $file = $fileRow->getFileSource();
+        $dimensions = $fileRow->getImageDimensions();
+        if (!$dimensions) return null;
         if (!$file) return null;
         return array(
             'filename' => $filename,
             'file' => $file,
             'mimeType' => $fileRow->mime_type,
             'row' => $row,
-            'dimensions' => $fileRow->getImageDimensions(),
+            'dimensions' => $dimensions,
             'uploadId' => $fileRow->id
         );
     }

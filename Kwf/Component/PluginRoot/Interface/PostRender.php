@@ -1,7 +1,7 @@
 <?php
 interface Kwf_Component_PluginRoot_Interface_PostRender
 {
-    public function processOutput($output);
+    public function processOutput($output, Kwf_Component_Data $component);
 
     //if returns true processUrl doesn't have to be called
     public function canIgnoreProcessUrl();

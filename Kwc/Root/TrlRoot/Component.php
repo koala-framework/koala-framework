@@ -36,7 +36,7 @@ class Kwc_Root_TrlRoot_Component extends Kwc_Root_Abstract
         return self::getChildPageByPath($this->getData(), $path, $acceptLanguage);
     }
 
-    public static function getChildPageByPath($component, $path, $acceptLanguage)
+    public static function getChildPageByPath($component, $path, $acceptLanguage = null)
     {
         if ($path == '') {
             return self::getChildDataByAcceptLanguage($component, $acceptLanguage);

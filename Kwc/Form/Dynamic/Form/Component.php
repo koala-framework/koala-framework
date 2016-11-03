@@ -13,9 +13,8 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['paragraphs'] = $this->getData()->parent->getChildComponent('-paragraphs');
-        $ret['submitCaption'] = $this->getData()->parent->getComponent()->getRow()->submit_caption;
-        if (!$ret['submitCaption']) {
-            $ret['submitCaption'] = $this->_getPlaceholder('submitButton');
+        if ($this->getData()->parent->getComponent()->getRow()->submit_caption) {
+            $ret['submitCaption'] = $this->getData()->parent->getComponent()->getRow()->submit_caption;
         }
         return $ret;
     }
@@ -116,6 +115,12 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
                 $body .= $msg;
                 $mail->setSubject(str_replace('%number%', $row->id, $settings['confirm_subject']));
                 $mail->setBodyText($body);
+
+                $hostNonWww = preg_replace('#^www\\.#', '', $this->getData()->getDomain());
+                $fromAddress = str_replace('%host%', $hostNonWww, $this->getData()->getBaseProperty('email.from.address'));
+                $fromName = str_replace('%host%', $hostNonWww, $this->getData()->getBaseProperty('email.from.name'));
+                $mail->setFrom($fromAddress, $fromName);
+
                 $mail->addTo($recipient);
                 $mail->send();
             }

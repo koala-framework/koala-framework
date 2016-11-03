@@ -240,10 +240,10 @@ class Kwf_Component_Data
         } else if ($var == 'inherits') {
             return false;
         } else if ($var == 'visible') {
-            if (isset($this->row->visible)) {
-                return $this->row->visible;
-            } else {
+            if (!isset($this->invisible)) {
                 return true;
+            } else {
+                return !$this->invisible;
             }
         } else if ($var == 'inheritClasses') {
             if (!isset($this->_inheritClasses)) {
@@ -305,7 +305,7 @@ class Kwf_Component_Data
      */
     public function __isset($var)
     {
-        if ($var == 'url' || $var == 'rel' || $var == 'filename') {
+        if ($var == 'url' || $var == 'rel' || $var == 'filename' || $var == 'visible') {
             return true;
         }
         if (substr($var, 0, 5) != '_lazy') {
@@ -1396,8 +1396,7 @@ class Kwf_Component_Data
         $output = new Kwf_Component_Renderer();
         if ($enableCache !== null) $output->setEnableCache($enableCache);
         if ($renderMaster) {
-            $hasDynamicParts = true;
-            return $output->renderMaster($this);
+            return $output->renderMaster($this, $hasDynamicParts);
         } else {
             return $output->renderComponent($this, $hasDynamicParts);
         }

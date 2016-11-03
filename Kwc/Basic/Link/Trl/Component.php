@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_Link_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
-    public static function getSettings($mainComponentClass)
+    public static function getSettings($mainComponentClass = null)
     {
         $ret = parent::getSettings($mainComponentClass);
         $ret['ownModel'] = Kwc_Abstract::getSetting($mainComponentClass, 'ownModel');

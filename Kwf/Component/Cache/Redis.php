@@ -11,12 +11,17 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     {
         $key = self::_getCacheId($component->componentId, $renderer, $type, $value);
 
-        $this->_redis->sAdd('viewids:componentid:'.$component->componentId, $key);
-        $this->_redis->sAdd('viewids:dbid:'.$component->dbId, $key);
-        $this->_redis->sAdd('viewids:pagedbid:'.$component->getPageOrRoot()->dbId, $key);
-        $this->_redis->sAdd('viewids:cls:'.$component->componentClass, $key);
+        $setKey = $key; //key that will be stored in sets
+        if ($type == 'fullPage') {
+            $setKey .= ':'.$component->url;
+        }
+
+        $this->_redis->sAdd('viewids:componentid:'.$component->componentId, $setKey);
+        $this->_redis->sAdd('viewids:dbid:'.$component->dbId, $setKey);
+        $this->_redis->sAdd('viewids:pagedbid:'.$component->getPageOrRoot()->dbId, $setKey);
+        $this->_redis->sAdd('viewids:cls:'.$component->componentClass, $setKey);
         if ($tag) {
-            $this->_redis->sAdd('viewids:tag:'.$tag, $key);
+            $this->_redis->sAdd('viewids:tag:'.$tag, $setKey);
         }
 
         $parts = preg_split('/([_\-])/', $component->getExpandedComponentId(), -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -24,7 +29,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
         foreach ($parts as $part) {
             $id .= $part;
             if ($part != '-' && $part != '_' && $id != 'root') {
-                $this->_redis->sAdd('viewids:recexpandedid:'.$id, $key);
+                $this->_redis->sAdd('viewids:recexpandedid:'.$id, $setKey);
             }
         }
 
@@ -33,11 +38,17 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             'expire' => is_null($lifetime) ? null : time()+$lifetime
         );
 
-        if (is_null($lifetime)) {
-            //Set a TTL for view contents http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
-            $lifetime = 365*24*60*60;
+        if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            $ret = Kwf_Cache_Simple::getMemcache()->set($prefix.$key, $cacheContent, MEMCACHE_COMPRESSED, $lifetime);
+        } else {
+            if (is_null($lifetime)) {
+                //Set a TTL for view contents http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
+                $lifetime = 365*24*60*60;
+            }
+            $ret = $this->_redis->setEx($key, $lifetime, serialize($cacheContent));
         }
-        $ret = $this->_redis->setEx($key, $lifetime, serialize($cacheContent));
 
         return $ret;
     }
@@ -55,7 +66,15 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             $componentId = $componentId->componentId;
         }
         $key = self::_getCacheId($componentId, $renderer, $type, $value);
-        $ret = unserialize($this->_redis->get($key));
+
+        if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            $ret = Kwf_Cache_Simple::getMemcache()->get($prefix.$key);
+        } else {
+            $ret = unserialize($this->_redis->get($key));
+        }
+
         return $ret;
     }
 
@@ -123,8 +142,18 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             }
 
             if ($update === array()) {
-                //using keys command here is ok as that happens only when executing "clear-view-cache --all" on cli
-                $keysToDelete = $this->_redis->keys('viewcache:*');
+                //only when executing "clear-view-cache --all" on cli
+                $prefixLength = strlen($this->_redis->_prefix(''));
+                $it = null;
+                $keysToDelete = array();
+                while ($keys = $this->_redis->scan($it, $this->_redis->_prefix('viewcache:*'))) {
+                    foreach ($keys as $i) {
+                        $keysToDelete[] = substr($i, $prefixLength);
+                    }
+                }
+
+                $keysToDelete = array_unique($keysToDelete);
+
             } else {
                 $keysToDelete = $this->_redis->sInter($keys);
             }
@@ -140,13 +169,26 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                     }
                     if ($key['type'] != 'fullPage') {
                         $checkIncludeIds[$key['componentId'].':'.$key['type']] = true;
+                    } else {
+                        //type == fullPage, in this case $key also contains the url which we don't have in the view cache key, so generate cacheId
+                        $keysToDelete[$keyIndex] = self::_getCacheId($key['componentId'], $key['renderer'], $key['type'], $key['value']);
                     }
                 }
-                if (!$dryRun) {
-                    $ret += $this->_redis->delete($keysToDelete);
+                if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+                    if (!$dryRun) {
+                        foreach ($keysToDelete as $key) {
+                            Kwf_Cache_Simple::getMemcache()->delete($key);
+                        }
+                    } else {
+                        $ret = count(Kwf_Cache_Simple::getMemcache()->get($keysToDelete));
+                    }
                 } else {
-                    foreach ($keysToDelete as $i) {
-                        $ret += $this->_redis->exists($i);
+                    if (!$dryRun) {
+                        $ret += $this->_redis->delete($keysToDelete);
+                    } else {
+                        foreach ($keysToDelete as $i) {
+                            $ret += $this->_redis->exists($i);
+                        }
                     }
                 }
 
@@ -155,6 +197,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
         }
 
         // FullPage
+        $fullPageUrls = array();
         if (!$dryRun && $checkIncludeIds) {
             $ids = array_keys($this->_fetchIncludesTree(array_keys($checkIncludeIds)));
             if ($ids) {
@@ -166,12 +209,24 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                 foreach (call_user_func_array(array($this->_redis, 'sUnion'), $keys) as $i) {
                     $parts = self::_parseCacheId($i);
                     if ($parts['type'] == 'fullPage') {
-                        $fullPageKeysToDelete[] = $i;
+                        $fullPageKeysToDelete[] = self::_getCacheId($parts['componentId'], $parts['renderer'], $parts['type'], $parts['value']);
+                        $fullPageUrls[$parts['componentId']] = $parts['url'];
                     }
                 }
-                $this->_redis->delete($fullPageKeysToDelete);
+                if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+                    foreach ($fullPageKeysToDelete as $key) {
+                        Kwf_Cache_Simple::getMemcache()->delete($key);
+                    }
+                } else {
+                    $this->_redis->delete($fullPageKeysToDelete);
+                }
             }
         }
+
+        if ($fullPageUrls) {
+            Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_ViewCache_ClearFullPage(get_class($this), $fullPageUrls));
+        }
+
         return $ret;
     }
 
@@ -234,12 +289,14 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     protected static function _parseCacheId($key)
     {
         $key = explode(':', $key);
-        return array(
+        $ret =  array(
             'componentId' => $key[1],
             'renderer' => $key[2],
             'type' => $key[3],
             'value' => $key[4],
         );
+        if (isset($key[5])) $ret['url'] = $key[5];
+        return $ret;
     }
 
     protected static function _getCacheId($componentId, $renderer, $type, $value)
@@ -279,9 +336,11 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     {
         foreach ($pageParentChanges as $changes) {
             $pattern = "viewids:recexpandedid:$changes[oldParentId]_$changes[componentId]*";
+            $prefixLength = strlen($this->_redis->_prefix(''));
             $it = null;
-            while ($keys = $this->_redis->scan($it, $pattern)) {
+            while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
                 foreach ($keys as $key) {
+                    $key = substr($key, $prefixLength);
                     $newKey = "viewids:recexpandedid:".$changes['newParentId'].substr($key, strlen("viewids:recexpandedid:$changes[oldParentId]"));
                     $this->_redis->rename($key, $newKey);
                 }
@@ -292,9 +351,11 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     public function collectGarbage($debug)
     {
         $pattern = "viewids:*";
+        $prefixLength = strlen($this->_redis->_prefix(''));
         $it = null;
-        while ($keys = $this->_redis->scan($it, $pattern)) {
+        while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
             foreach ($keys as $key) {
+                $key = substr($key, $prefixLength);
                 foreach ($this->_redis->sMembers($key) as $viewId) {
                     if (!$this->_redis->exists($viewId)) {
                         if ($debug) {

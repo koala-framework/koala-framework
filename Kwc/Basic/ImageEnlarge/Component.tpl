@@ -2,8 +2,7 @@
 <?php if ($this->baseUrl) { ?>
     <?=$this->component($this->linkTag)?>
     <div class="<?=$this->containerClass?>" style="padding-bottom:<?=$this->aspectRatio?>%;"
-            data-min-width="<?=$this->minWidth;?>"
-            data-max-width="<?=$this->maxWidth;?>"
+            data-width-steps="<?= json_encode($this->widthSteps) ?>"
             data-src="<?=$this->baseUrl;?>">
         <noscript>
             <?=$this->image($this->image, $this->altText, $this->imgAttributes)?>

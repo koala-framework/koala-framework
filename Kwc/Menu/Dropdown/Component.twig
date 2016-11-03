@@ -1,10 +1,11 @@
 {% if menu|length %}
     <nav class="{{ rootElementClass }}">
         <input type="hidden" value="{{ config|json_encode() }}" />
-        <ul class="menu">
+        <ul class="{{ 'menu'|bemClass }}">
             {% for m in menu %}
                 {{ m.preHtml|raw }}
-                <li class="{{ m.class }}{% if m.submenu is defined and m.submenu|length %} hasSubMenu{% endif %}">
+                <li class="{{ m.class }}{% if m.submenu is defined and m.submenu|length %}
+                    {{ 'item--hasSubMenu'|bemClass('hasSubMenu') }}{% endif %}">
                     {% block menuLink %}
                     {{ renderer.componentLink(m.data, null, '' ~ "link"|bemClass ) }}
                     {% endblock %}

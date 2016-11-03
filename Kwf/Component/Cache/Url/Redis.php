@@ -9,26 +9,26 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
 
     public function save($cacheUrl, Kwf_Component_Data $data)
     {
-        $this->_redis->sAdd('urlids:pageid:'.$data->page_id, 'url:'.$cacheUrl);
-        $this->_redis->sAdd('urlids:expandedid:'.$data->page_id, 'url:'.$cacheUrl);
+        $this->_redis->sAdd('urlids:pageid:'.$data->getPage()->componentId, 'url:'.$cacheUrl);
+        $this->_redis->sAdd('urlids:expandedid:'.$data->getExpandedComponentId(), 'url:'.$cacheUrl);
 
         $parts = preg_split('/([_\-])/', $data->getExpandedComponentId(), -1, PREG_SPLIT_DELIM_CAPTURE);
         $id = '';
         foreach ($parts as $part) {
             $id .= $part;
             if ($part != '-' && $part != '_' && $id != 'root') {
-                $this->_redis->sAdd('urlids:recexpandedid:'.$id, $key);
+                $this->_redis->sAdd('urlids:recexpandedid:'.$id, 'url:'.$cacheUrl);
             }
         }
 
-        $this->_redis->setEx('url:'.$cacheUrl, 365*24*60*60, $data->kwfSerialize());
+        $this->_redis->setEx('url:'.$cacheUrl, 365*24*60*60, serialize($data->kwfSerialize()));
     }
 
     public function load($cacheUrl)
     {
         $ret = $this->_redis->get('url:'.$cacheUrl);
         if ($ret) {
-            $ret = Kwf_Component_Data::kwfUnserialize($ret);
+            $ret = Kwf_Component_Data::kwfUnserialize(unserialize($ret));
         }
         return $ret;
     }
@@ -56,14 +56,21 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
     public function clear()
     {
         $pattern = "url:*";
+        $prefixLength = strlen($this->_redis->_prefix(''));
         $it = null;
-        while ($keys = $this->_redis->scan($it, $pattern)) {
+        while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
+            foreach ($keys as $k=>$i) {
+                $keys[$k] = substr($i, $prefixLength);
+            }
             $this->_redis->delete($keys);
         }
 
         $pattern = "urlids:*";
         $it = null;
-        while ($keys = $this->_redis->scan($it, $pattern)) {
+        while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
+            foreach ($keys as $k=>$i) {
+                $keys[$k] = substr($i, $prefixLength);
+            }
             $this->_redis->delete($keys);
         }
     }
@@ -71,9 +78,11 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
     public function collectGarbage($debug)
     {
         $pattern = "urlids:*";
+        $prefixLength = strlen($this->_redis->_prefix(''));
         $it = null;
-        while ($keys = $this->_redis->scan($it, $pattern)) {
+        while ($keys = $this->_redis->scan($it, $this->_redis->_prefix($pattern))) {
             foreach ($keys as $key) {
+                $key = substr($key, $prefixLength);
                 foreach ($this->_redis->sMembers($key) as $viewId) {
                     if (!$this->_redis->exists($viewId)) {
                         if ($debug) {

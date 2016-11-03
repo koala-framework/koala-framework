@@ -40,7 +40,7 @@ class Kwf_Component_Partial_Abstract
         return true;
     }
 
-    public function _useViewCacheDynamic($disableCacheParams)
+    public static function _useViewCacheDynamic($disableCacheParams)
     {
         foreach ($disableCacheParams as $param) {
             if (isset($_REQUEST[$param])) return false;

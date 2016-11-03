@@ -2,10 +2,13 @@ var onReady = require('kwf/on-ready');
 var _ = require('underscore');
 var $ = require('jQuery');
 var t = require('kwf/trl');
+var KwfBaseUrl = require('kwf/base-url');
 
 onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var slideDuration = 400;
     var menuLink = el.children('.kwfUp-showMenu');
+    var closeMask = el.children('.kwfUp-closeMask');
+    var baseUrl = KwfBaseUrl.get();
     var left = 100;
 
     // Store
@@ -19,7 +22,7 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
                 '<% _.each(item.pages, function(page) { %>' +
                     '<% if (!page.hidden) {  %>\n' +
                     '<li class="<% if (page.hasChildren) {  %>kwfUp-hasChildren<% } else if (page.isParent) { %>kwfUp-parent<% } %>">\n' +
-                        '<a href="<%= page.url %>" data-id="<%= page.id %>" data-children="<%= (page.hasChildren || page.children && page.children.length) || false %>"><%= page.name %></a>\n'+
+                        '<a href="'+baseUrl+'<%= page.url %>" data-id="<%= page.id %>" data-children="<%= (page.hasChildren || page.children && page.children.length) || false %>"><%= page.name %></a>\n'+
                     '</li>\n'+
                     '<% } %>\n' +
                 '<% }) %>'+
@@ -30,7 +33,7 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
                 '<% _.each(item.children, function(child) { %>'+
                     '<% if (!child.hidden) {  %>\n' +
                     '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %>">\n' +
-                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="kwfUp-overview">('+t.trlKwf('Overview')+')</span><% } %></a>\n'+
+                        '<a href="'+baseUrl+'<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="kwfUp-overview">('+t.trlKwf('Overview')+')</span><% } %></a>\n'+
                     '</li>\n' +
                     '<% } %>\n' +
                 '<% }) %>' +
@@ -100,9 +103,6 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
                 componentId: config.componentId,
                 pageUrl: location.href
             };
-            if (typeof Kwf != "undefined" && Kwf.sessionToken) {
-                params.kwfSessionToken = Kwf.sessionToken
-            }
 
             var request = $.ajax({
                 url: config.controllerUrl + '/json-index',
@@ -120,9 +120,9 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         }
     });
 
-    menuLink.click(function(e) {
+    function toggleMenu() {
         menuLink.trigger('menuToggle', slideDuration);
-        e.preventDefault();
+
         var slider = el.find('.kwfUp-slider');
         var menu = el.find('.kwfUp-slider > ul.kwfUp-menu');
 
@@ -147,6 +147,16 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
             slider.animate({height: menu.height()}, slideDuration);
         }
         menuLink.parent().toggleClass('kwfUp-open');
+    };
+
+    menuLink.on('click', function(e) {
+        e.preventDefault();
+        toggleMenu();
+    });
+
+    closeMask.on('touchstart', function(e) {
+        e.preventDefault();
+        toggleMenu();
     });
 
     var params = {
@@ -154,9 +164,6 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         componentId: config.componentId,
         pageUrl: location.href
     };
-    if (typeof Kwf != "undefined" && Kwf.sessionToken) {
-        params.kwfSessionToken = Kwf.sessionToken
-    }
     // Inital Request
     $.ajax({
         url: config.controllerUrl + '/json-index',

@@ -3,7 +3,7 @@ class Kwf_Component_Abstract_ToStringData extends Kwf_Data_Abstract implements K
 {
     private $_subComponent = null;
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         //$row ist die von der parent, also zB der List
         $componentId = $row->component_id . '-' . $row->id;

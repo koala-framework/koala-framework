@@ -201,7 +201,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
             if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
                 $exactMatch = true;
                 if ($ret->isVisible()) {
-                    Kwf_Component_Cache_Url_Abstract::getInstance()->save($ret);
+                    Kwf_Component_Cache_Url_Abstract::getInstance()->save($cacheUrl, $ret);
                 }
             } else {
                 $exactMatch = false;

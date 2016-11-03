@@ -19,7 +19,7 @@ class Kwc_List_ChildPages_Teaser_Update_20150309Legacy00002 extends Kwf_Update
             foreach (Kwf_Model_Abstract::getInstance('Kwc_List_ChildPages_Teaser_Model')->getRows($s) as $row) {
                 $childPage = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->target_page_id, array('ignoreVisible'=>true, 'limit'=>1));
                 $row->visible = isset($childPage->row) && isset($childPage->row->visible) ? $childPage->row->visible : true;
-
+                $row->save();
             }
             Kwf_Model_Abstract::clearAllRows();
         }

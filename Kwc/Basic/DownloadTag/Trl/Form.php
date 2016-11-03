@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_DownloadTag_Trl_Form_OriginalData extends Kwf_Data_Trl_OriginalComponent
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $pk = $row->getModel()->getPrimaryKey();
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->$pk, array('ignoreVisible'=>true));
@@ -9,7 +9,7 @@ class Kwc_Basic_DownloadTag_Trl_Form_OriginalData extends Kwf_Data_Trl_OriginalC
         // natürlich gleich alle geladen werden und im chained dann zB ein
         // download-tag drin ist und kein externer / etc.
         if ($c && is_instance_of($c->componentClass, 'Kwc_Basic_DownloadTag_Trl_Component')) {
-            return parent::load($row);
+            return parent::load($row, $info);
         } else {
             return '';
         }

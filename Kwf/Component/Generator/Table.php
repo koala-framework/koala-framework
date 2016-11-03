@@ -334,7 +334,8 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
         $targetGen = Kwf_Component_Generator_Abstract::getInstance($parentTarget->componentClass, $this->getGeneratorKey());
-        $target = array_pop($targetGen->getChildData($parentTarget, array('id'=>$id, 'ignoreVisible'=>true, 'limit'=>1)));
+        $targetChildData = $targetGen->getChildData($parentTarget, array('id'=>$id, 'ignoreVisible'=>true, 'limit'=>1));
+        $target = array_pop($targetChildData);
         if (!$target) {
             return null;
         }
@@ -391,5 +392,15 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             'model' => $this->getModel()
         );
         return $ret;
+    }
+
+    public function setVisible(Kwf_Component_Data $data, $visible)
+    {
+        if ($this->_getModel()->hasColumn('visible')) {
+            $data->row->visible = $visible;
+        } else {
+            throw new Kwf_Exception("Visible column doesn't exist");
+        }
+        $data->invisible = !$visible;
     }
 }

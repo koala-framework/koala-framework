@@ -145,7 +145,7 @@ class Kwf_Util_ClearCache_Watcher
             }
         }
 
-        $watcher->addListener('filewatcher.queue_full', function($e) {
+        $watcher->addListener('filewatcher.queue_full', function($e) use ($watcher) {
             echo "more than 100 events (".count($e->eventsQueue)."), did you switch branches or something?\n";
             echo "I'm giving up.\n";
             //TODO: clear-cache and restart clear-cache-watcher
@@ -165,7 +165,7 @@ class Kwf_Util_ClearCache_Watcher
     {
         $eventStart = microtime(true);
         Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
-        if (substr($event->filename, -4)=='.css' || substr($event->filename, -3)=='.js' || substr($event->filename, -5)=='.scss' || substr($event->filename, -15)=='.underscore.tpl') {
+        if (substr($event->filename, -4)=='.css' || substr($event->filename, -3)=='.js' || substr($event->filename, -4)=='.jsx' || substr($event->filename, -5)=='.scss' || substr($event->filename, -15)=='.underscore.tpl') {
             echo "asset modified\n";
             if ($event instanceof Event\Modify) {
 
@@ -174,6 +174,7 @@ class Kwf_Util_ClearCache_Watcher
                 $assetsType = substr($event->filename, strrpos($event->filename, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 if ($assetsType == 'tpl') $assetsType = 'js';
+                if ($assetsType == 'jsx') $assetsType = 'js';
                 self::_clearAssetsAll($assetsType);
 
 
@@ -377,7 +378,6 @@ class Kwf_Util_ClearCache_Watcher
 
         $dependenciesChanged = false;
         $generatorssChanged = false;
-        $dimensionsChanged = false;
         $menuConfigChanged = false;
         foreach ($componentClasses as $c) {
             Kwf_Component_Settings::$_rebuildingSettings = true;
@@ -400,9 +400,6 @@ class Kwf_Util_ClearCache_Watcher
                 $generatorssChanged = true;
                 $oldChildComponentClasses = self::_getComponentClassesFromGeneratorsSetting($settings[$c]['generators']);
                 $newChildComponentClasses = self::_getComponentClassesFromGeneratorsSetting($newSettings['generators']);
-            }
-            if (isset($newSettings['dimensions']) && $newSettings['dimensions'] != $settings[$c]['dimensions']) {
-                $dimensionsChanged = true;
             }
             if (isset($newSettings['menuConfig']) && $newSettings['menuConfig'] != $settings[$c]['menuConfig']) {
                 $menuConfigChanged = true;
@@ -457,21 +454,6 @@ class Kwf_Util_ClearCache_Watcher
         }
         echo "\n";
 
-        if ($dimensionsChanged) {
-            echo "dimensions changed...\n";
-            $clearCacheSimple = array();
-            foreach ($componentClasses as $c) {
-                $idPrefix = str_replace(array('.', '>'), array('___', '____'), $c) . '_';
-                $clearCacheSimple[] = 'media-output-'.$idPrefix;
-                $clearCacheSimple[] = 'media-output-mtime-'.$idPrefix;
-                foreach (glob('cache/media/'.$idPrefix.'*') as $f) {
-                    echo $f." [DELETED]\n";
-                    unlink($f);
-                }
-            }
-            Kwf_Cache_Simple::delete($clearCacheSimple);
-            echo "cleared media cache...\n";
-        }
         if ($menuConfigChanged) {
             echo "menu config changed...\n";
             Kwf_Acl::clearCache();

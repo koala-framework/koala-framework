@@ -77,7 +77,11 @@ class Kwf_Component_Model_Row extends Kwf_Model_Row_Abstract
             }
         }
         foreach ($this->_setValues as $key) {
-            $row->$key = $this->_data->$key;
+            if ($key == 'visible' && !($this->_data->generator instanceof Kwc_Root_Category_Generator)) {
+                $this->_data->generator->setVisible($this->_data, $this->_data->visible);
+            } else {
+                $row->$key = $this->_data->$key;
+            }
         }
         $ret = $row->save();
         if ($id) {

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Generator
 {
-    protected function _getChainedChildComponents($parentData, Kwf_Component_Select $select)
+    protected function _getChainedChildComponents($parentData, $select)
     {
         $limitCount = $limitOffset = null;
         if ($select->hasPart(Kwf_Component_Select::LIMIT_COUNT) || $select->hasPart(Kwf_Component_Select::LIMIT_OFFSET)) {
@@ -128,7 +128,7 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
                 $fn = '';
             }
             if (!isset($detailGen['filenameColumn']) || !$detailGen['filenameColumn']) {
-                $ret['filename'] = $row->id.'_';
+                $ret['filename'] = $row->id.'-';
             }
             $ret['filename'] .= Kwf_Filter::filterStatic($fn, 'Ascii');
         }

@@ -28,6 +28,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
                 if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
                 if ($d->getFilename() == 'simple') continue; //handled by Kwf_Util_ClearCache_Types_SimpleCache
+                if ($d->getFilename() == 'symfony') continue; //handled by Kwf_Util_ClearCache_Types_Symfony
                 $ret[] = $d->getFilename();
             }
         }
@@ -45,6 +46,43 @@ class Kwf_Util_ClearCache
             }
         }
         return $ret;
+    }
+
+    public static function clearOptcode($files = null)
+    {
+        if ($files && !is_array($files)) $files = array($files);
+
+        if ($cmd = Kwf_Config::getValue('externalClearCacheScript')) {
+            $cmd .= ' optcode';
+            if ($files) {
+                $cmd .= ' '.implode(',', $files);
+            }
+            exec($cmd, $output, $ret);
+            if ($ret) {
+                echo "\n\n".implode("\n   ",$output)."\n";
+                throw new Kwf_Exception("Error with external script: $cmd");
+            }
+        } else {
+            if ($files) {
+                Kwf_Util_Apc::callClearCacheByCli(array('files' => implode(',', $files)));
+            } else {
+                Kwf_Util_Apc::callClearCacheByCli(array('type' => 'file'));
+            }
+        }
+    }
+
+    public static function clearApcUser()
+    {
+        if ($cmd = Kwf_Config::getValue('externalClearCacheScript')) {
+            $cmd .= ' apc-user';
+            exec($cmd, $output, $ret);
+            if ($ret) {
+                echo "\n\n".implode("\n   ",$output)."\n";
+                throw new Kwf_Exception("Error with external script: $cmd");
+            }
+        } else {
+            Kwf_Util_Apc::callClearCacheByCli(array('type' => 'user'));
+        }
     }
 
     //we use it internal for copy-data-to-git
@@ -78,7 +116,7 @@ class Kwf_Util_ClearCache
     {
         $types = array();
         $simpleCacheBackend = Kwf_Cache_Simple::getBackend();
-        if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'redis' || $simpleCacheBackend == 'elastiCache') {
+        if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'redis') {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         }
         if (Kwf_Util_Apc::isAvailable()) {
@@ -112,6 +150,9 @@ class Kwf_Util_ClearCache
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
         $types[] = new Kwf_Util_ClearCache_Types_Assets();
+        if (file_exists('symfony/bin/console')) {
+            $types[] = new Kwf_Util_ClearCache_Types_Symfony();
+        }
 
         if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && VENDOR_PATH != '../vendor') {
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();

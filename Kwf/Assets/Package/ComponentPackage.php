@@ -91,31 +91,12 @@ class Kwf_Assets_Package_ComponentPackage extends Kwf_Assets_Package
         return $commonJsData;
     }
 
-
     public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
     {
         $ret = parent::getPackageContents($mimeType, $language, $includeSourceMapComment);
-
         if ($mimeType == 'text/javascript; defer') {
-
-            $uniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
-            if ($uniquePrefix) $uniquePrefix = $uniquePrefix.'.';
-            $head = '
-            '.$uniquePrefix.'Kwf.loadDeferred(function() {
-            ';
-
-            $foot = '
-            });
-            ';
-
-            $map = Kwf_SourceMaps_SourceMap::createEmptyMap('');
-            $map->concat(Kwf_SourceMaps_SourceMap::createEmptyMap($head));
-            $map->concat($ret);
-            $map->concat(Kwf_SourceMaps_SourceMap::createEmptyMap($foot));
-            $ret = $map;
-
+            $ret = Kwf_Assets_Package_Filter_LoadDeferred::filter($ret);
         }
         return $ret;
     }
-
 }

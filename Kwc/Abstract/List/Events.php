@@ -49,7 +49,7 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
                 }
                 $generator = Kwf_Component_Generator_Abstract::getInstance($this->_class, 'child');
                 $child = $c->getChildComponent(array(
-                    'id' => $generator->getIdSeparator() . $event->row->id,
+                    'id' => $generator->getIdSeparator() . $event->row->{$generator->getIdColumn()},
                     'ignoreVisible' => true
                 ));
                 if ($event instanceof Kwf_Events_Event_Row_Inserted) {
@@ -67,7 +67,7 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
             if ($c->componentClass == $this->_class) {
                 $generator = Kwf_Component_Generator_Abstract::getInstance($this->_class, 'child');
                 $child = $c->getChildComponent(array(
-                    'id' => $generator->getIdSeparator() . $event->row->id,
+                    'id' => $generator->getIdSeparator() . $event->row->{$generator->getIdColumn()},
                     'ignoreVisible' => true
                 ));
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(

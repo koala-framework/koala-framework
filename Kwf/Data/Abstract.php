@@ -24,7 +24,7 @@ abstract class Kwf_Data_Abstract implements Kwf_Data_Interface
         throw new Kwf_Exception("Delete is not possible for '".get_class($this)."'");
     }
 
-    public function load($row, array $info)
+    public function load($row, array $info = array())
     {
         throw new Kwf_Exception("Implement load '".get_class($this)."'");
     }

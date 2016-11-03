@@ -129,7 +129,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             //simple case no. 2: get 'em all
             $ret = array();
             foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
-                $ret = array_merge($ret, $g['component']);
+                $ret = array_merge($ret, array_values($g['component']));
             }
             return array_unique($ret);
 
@@ -404,6 +404,29 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return self::getBemClass($this, $class, $nonBemFallback);
     }
 
+    public static function getMasterBemClass($component, $class)
+    {
+        if (!is_string($component)) $component = $component->getData()->componentClass;
+        static $up;
+        if (!isset($up)) $up = Kwf_Config::getValue('application.uniquePrefix');
+        if (!$up) {
+            throw new Kwf_Exception_NotYetImplemented();
+        } else {
+            if (substr($class, 0, 2) != '--') $class = '__'.$class;
+            return Kwf_Component_Abstract::formatRootElementClass($component, '').'Master'.$class;
+        }
+    }
+
+    protected function _getMasterBemClass($class)
+    {
+        return self::getMasterBemClass($this, $class);
+    }
+
+    public function hasMasterTemplate()
+    {
+        return (bool)self::getMasterTemplateFile($this->getData()->componentClass);
+    }
+
     /**
      * Returns variables that can be used in Master.tpl
      * @param e.g. for accessing recipient in Mail_Renderer
@@ -414,6 +437,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret = array();
         $ret['component'] = $innerComponent;
         $ret['data'] = $innerComponent;
+        $ret['template'] = self::getMasterTemplateFile($this->getData()->componentClass);
         $ret['pageLanguage'] = $innerComponent->getLanguage();
         $ret['boxes'] = array();
         foreach ($innerComponent->getPageOrRoot()->getChildBoxes() as $box) {
@@ -485,6 +509,14 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     public static function getTemplateFile($componentClass, $filename = 'Component')
     {
         return Kwc_Admin::getComponentFile($componentClass, $filename, array('tpl', 'twig'));
+    }
+
+    public static function getMasterTemplateFile($componentClass)
+    {
+        if (self::hasSetting($componentClass, 'masterTemplate')) {
+            return self::getSetting($componentClass, 'masterTemplate');
+        }
+        return self::getTemplateFile($componentClass, 'Master');
     }
 
     /**

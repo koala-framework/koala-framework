@@ -64,9 +64,9 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         );
     }
 
-    protected static function _replaceHtmlKwfUp($ret)
+    public static function replaceHtmlKwfUp($ret)
     {
-        $ret = preg_replace_callback('#((class|id)="[^"]*)"#', array('Kwf_Component_View_Helper_Component', '_replaceKwfUpCb'), $ret);
+        $ret = preg_replace_callback('#((class|id)="[^"]*)"#', array('Kwf_Component_View_Renderer', '_replaceKwfUpCb'), $ret);
         return $ret;
     }
 

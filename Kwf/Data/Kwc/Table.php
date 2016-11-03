@@ -32,7 +32,7 @@ class Kwf_Data_Kwc_Table extends Kwf_Data_Table_Parent
         return $ret;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $row = $this->_getParentRow($row);
         $name = $this->_dataIndex;

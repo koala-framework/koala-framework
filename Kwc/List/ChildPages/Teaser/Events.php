@@ -22,6 +22,11 @@ class Kwc_List_ChildPages_Teaser_Events extends Kwc_Abstract_Events
             'event' => 'Kwf_Component_Event_Page_PositionChanged',
             'callback' => 'onPageAddedOrRemoved'
         );
+        $ret[] = array(
+            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'event' => 'Kwf_Events_Event_Row_Updated',
+            'callback' => 'onChildModelUpdated'
+        );
         return $ret;
     }
 
@@ -35,6 +40,17 @@ class Kwc_List_ChildPages_Teaser_Events extends Kwc_Abstract_Events
         // deleting by component would cause on every page change searching for ChildPages_Teaser_Component, this is faster and sufficent
         if ($ev->component->generator instanceof Kwc_Root_Category_Generator) {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $ev->component));
+        }
+    }
+
+    public function onChildModelUpdated(Kwf_Events_Event_Row_Updated $ev)
+    {
+        if ($ev->isDirty('visible')) {
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($ev->row->component_id) as $c) {
+                if ($c->componentClass == $this->_class) {
+                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+                }
+            }
         }
     }
 }

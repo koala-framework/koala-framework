@@ -4,6 +4,7 @@ var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var statistics = require('kwf/statistics');
 var formRegistry = require('kwf/frontend-form/form-registry');
+var injectAssets = require('kwf/inject-assets');
 
 var byComponentId = {};
 var byDirectoryViewComponentId = {};
@@ -87,9 +88,6 @@ ViewAjax.prototype = {
         this.baseParams = {
             componentId: this.componentId
         };
-        if (typeof Kwf != 'undefined' && Kwf.sessionToken) {
-            this.baseParams.kwfSessionToken = Kwf.sessionToken;
-        }
 
         if (this.searchFormComponentId) {
             this.searchForm = formRegistry.getFormByComponentId(this.searchFormComponentId);
@@ -382,7 +380,7 @@ ViewAjax.prototype = {
                 if ($(el).attr('href') == directoryUrl) {
                     $(el).click((function(ev) {
                         if (history.length > 1) {
-                            if (Kwf.Utils.HistoryState.entries > 0 || document.referrer.indexOf(document.domain) >= 0) {
+                            if (historyState.entries > 0 || document.referrer.indexOf(document.domain) >= 0) {
                                 ev.preventDefault();
                                 ev.stopPropagation();
                                 history.back(); //keeps scroll position

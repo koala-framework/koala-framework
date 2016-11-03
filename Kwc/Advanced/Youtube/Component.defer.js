@@ -36,8 +36,8 @@ onReady.onRender('.kwcClass .kwcBem__youtubePlayer', function(el) {
             });
             kwcAdvancedYoutube.data('player', player);
             if (config.size == 'custom') {
-                kwcAdvancedYoutube.dom.style.width = 'auto';
-                kwcAdvancedYoutube.dom.style.maxWidth = config.width + 'px';
+                kwcAdvancedYoutube.css('width', 'auto');
+                kwcAdvancedYoutube.css('max-width', config.width + 'px');
             }
         }, this);
     }

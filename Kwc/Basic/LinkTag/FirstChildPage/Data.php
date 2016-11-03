@@ -47,6 +47,6 @@ class Kwc_Basic_LinkTag_FirstChildPage_Data extends Kwf_Component_Data
     public function getLinkClass()
     {
         $page = $this->_getFirstChildPage();
-        return $page ? $page->getLinkClass() : array();
+        return $page ? $page->getLinkClass() : '';
     }
 }

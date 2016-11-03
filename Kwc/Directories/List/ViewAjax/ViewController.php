@@ -8,7 +8,7 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
         parent::__construct();
     }
 
-    public function load($row, $info)
+    public function load($row, array $info = array())
     {
         $primaryKeyValue = $row->id;
         $config = array(
@@ -96,6 +96,9 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
         return true;
     }
 
+    protected function _validateSessionToken()
+    {
+    }
 
     public function jsonDataAction()
     {

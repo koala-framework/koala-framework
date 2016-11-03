@@ -61,7 +61,6 @@ var File = kwfExtend(Field, {
 
         var xhr = new XMLHttpRequest();
         var url = '/kwf/media/upload/json-upload';
-        if (Kwf.sessionToken) url += '?kwfSessionToken='+Kwf.sessionToken;
         xhr.open('POST', url);
         xhr.setRequestHeader('X-Upload-Name', encodeURIComponent(file.name));
         xhr.setRequestHeader('X-Upload-Size', file.size);
@@ -113,12 +112,12 @@ var File = kwfExtend(Field, {
     },
     getFieldName: function() {
         var inp = this.el.find('input.fileSelector');
-        if (!inp) return null;
+        if (!inp.length) return null;
         return inp.get(0).name;
     },
     getValue: function() {
         var inp = this.el.find('input[type="hidden"]');
-        if (!inp) return null;
+        if (!inp.length) return null;
         var ret = inp.get(0).value;
         return ret;
     },

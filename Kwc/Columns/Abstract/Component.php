@@ -9,6 +9,7 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
         $ret['componentCategory'] = 'layout';
         $ret['componentPriority'] = 100;
         $ret['childModel'] = 'Kwc_Columns_Abstract_Model';
+        $ret['ownModel'] = 'Kwc_Columns_Abstract_OwnModel';
 
         $ret['generators']['child'] = array(
             'class' => 'Kwc_Columns_Abstract_Generator',
@@ -89,7 +90,8 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
         $type = $row->type;
         if (!$type) {
             //default is first
-            $type = array_shift(array_keys($columnTypes));
+            $type = array_keys($columnTypes);
+            $type = array_shift($type);
         }
         $columns = $columnTypes[$type];
 

@@ -70,6 +70,7 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
             $chainedStart = $t['chainedStart'];
             $m = $master;
             $targetReached = false;
+            $isPageGenerator = false;
             $ids = array();
             while ($m) {
                 $pos = max(
@@ -83,6 +84,7 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
                 }
                 if ((int)$id > 0) { // nicht mit is_numeric wegen Bindestrich, das als minus interpretiert wird
                     $id = '_' . $id;
+                    $isPageGenerator = true;
                 }
                 $m = $m->parent;
                 if ($m) {
@@ -91,7 +93,7 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
             }
             if (!$targetReached) continue;
             $chainedTarget = $chainedStart->getChildComponent('-target');
-            if ($chainedTarget->chained == $target) {
+            if (!$isPageGenerator) {
                 //targetComponent or child of targetComponent
                 $chained = $chainedTarget;
             } else {

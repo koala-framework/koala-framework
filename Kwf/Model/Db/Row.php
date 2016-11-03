@@ -135,7 +135,12 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
         if ($this->_model->getToStringField()) {
             return $this->{$this->_model->getToStringField()};
         }
-        return $this->_row->__toString();
+        if (method_exists($this->_row, '__toString')) {
+            return $this->_row->__toString();
+        } else {
+            $pk = $this->_model->getPrimaryKey();
+            return get_class($this->_model).': '.$this->_row->$pk;
+        }
     }
 
     public function getRow()

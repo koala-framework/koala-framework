@@ -5,6 +5,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
     {
         if ($this->getRequest()->getActionName() != 'json-logout-user'
             && $this->getRequest()->getActionName() != 'json-login-user'
+            && $this->getRequest()->getActionName() != 'json-get-session-token'
         ) {
             parent::_validateSessionToken();
         }
@@ -326,11 +327,16 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         //do nothing
     }
 
+    public function jsonGetSessionTokenAction()
+    {
+        $this->view->sessionToken = Kwf_Util_SessionToken::getSessionToken();
+    }
+
     public function errorAction()
     {
         $this->getHelper('viewRenderer')->setNoController(true);
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
-        $this->view->dep = Kwf_Assets_Package_Default::getInstance('Admin');
+        $this->view->dep = Kwf_Assets_Package_Default::getAdminMainInstance();
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('login-error');
         $this->view->errorMessage = $this->_getParam('errorMessage');
         $redirect = $this->_getParam('redirect');

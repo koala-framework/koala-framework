@@ -8,8 +8,9 @@ class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
         $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['flags']['formField'] = true;
-        $ret['viewCache'] = false;
+        $ret['viewCache'] = true;
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
+        $ret['plugins']['useViewCache'] = 'Kwc_Form_Field_Abstract_UseViewCachePlugin';
         return $ret;
     }
 

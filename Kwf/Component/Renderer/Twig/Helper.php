@@ -54,9 +54,9 @@ class Kwf_Component_Renderer_Twig_Helper
         return new Twig_Markup($helper->formField($vars), 'utf-8');
     }
 
-    public function getComponentTemplate($componentClass)
+    public function getComponentTemplate($componentClass, $type = 'Component')
     {
-        return Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate($componentClass, 'Component');
+        return Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate($componentClass, $type);
     }
 
     public function getComponentMasterTemplate($componentClass)

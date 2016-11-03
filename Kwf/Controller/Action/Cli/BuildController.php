@@ -24,6 +24,10 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
 
     public function indexAction()
     {
+        if (file_exists(VENDOR_PATH.'/koala-framework/koala-framework/node_modules')) {
+            throw new Kwf_Exception('Please delete node_modules folder from koala-framework/koala-framework. All node packages has moved into ./node_modules');
+        }
+
         $options = array(
             'types' => $this->_getParam('type'),
             'output' => true,

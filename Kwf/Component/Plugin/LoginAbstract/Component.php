@@ -33,7 +33,9 @@ abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Componen
         $renderer = new Kwf_Component_Renderer();
         $view = new Kwf_Component_View($renderer);
         $view->assign($this->getTemplateVars($renderer));
-        return $renderer->render($view->render($template));
+        $ret = $renderer->render($view->render($template));
+        $ret = Kwf_Component_View_Renderer::replaceHtmlKwfUp($ret);
+        return $ret;
     }
 
     public function skipProcessInput(Kwf_Component_Data $data)

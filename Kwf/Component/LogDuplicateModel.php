@@ -7,12 +7,12 @@ class Kwf_Component_LogDuplicateModel extends Kwf_Model_Db_Proxy
     /**
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance($modelName = 'Kwf_Component_LogDuplicateModel')
     {
         if (isset(self::$_instance)) {
             return self::$_instance;
         }
-        return Kwf_Model_Abstract::getInstance('Kwf_Component_LogDuplicateModel');
+        return Kwf_Model_Abstract::getInstance($modelName);
     }
 
     public static function clearInstance()

@@ -87,4 +87,13 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
         }
         return array_values($ret);
     }
+
+
+    public function duplicate(array $data = array())
+    {
+        $ret = parent::duplicate($data);
+        $ret->custom_filename = false;
+        $ret->save();
+        return $ret;
+    }
 }

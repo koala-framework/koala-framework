@@ -14,6 +14,16 @@ class Kwf_Media_Image
         return end($widths);
     }
 
+    //formular that increases the offset between two width steps based on the width
+    //1000: ~100
+    //2000: ~200
+    //3000: ~400
+    //4000: ~700
+    private static function _getOffsetAtWidth($width)
+    {
+        return floor(pow($width/300, 2.5)+100);
+    }
+
     /**
      * Returns supported image-widths of specific image with given base-dimensions
      */
@@ -36,6 +46,10 @@ class Kwf_Media_Image
             );
         }
 
+        if (!$imageDimensions['width']) {
+            throw new Kwf_Exception("Image must have a width");
+        }
+
         $maxWidth = $dim['width'] * 2;
         if ($imageDimensions['width'] < $dim['width'] * 2) {
             $maxWidth = $imageDimensions['width'];
@@ -45,15 +59,24 @@ class Kwf_Media_Image
             $calculateWidth = $imageDimensions['width'];
         }
 
-        $width = $calculateWidth % 100; // startwidth or minwidth
-        if ($width == 0) $width = 100;
+        $width = $calculateWidth;
         do {
             $ret[] = $width;
-            $width += 100;
-        } while ($width < $maxWidth);
-        if ($width - 100 != $maxWidth) {
-            $ret[] = $maxWidth;
+            $width -= self::_getOffsetAtWidth($width);
+        } while ($width > 0);
+
+
+        $width = $calculateWidth;
+        while (true) {
+            $width += self::_getOffsetAtWidth($width);
+            if ($width >= $maxWidth) {
+                break;
+            }
+            $ret[] = $width;
         }
+        $ret[] = $maxWidth;
+        sort($ret);
+
         return $ret;
     }
 

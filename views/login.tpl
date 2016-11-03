@@ -2,7 +2,7 @@
 <html>
     <head>
         <?= $this->debugData(); ?>
-        <?= $this->assets(Kwf_Assets_Package_Default::getInstance('Admin')) ?>
+        <?= $this->assets(Kwf_Assets_Package_Default::getAdminMainInstance()) ?>
     </head>
     <body>
 

@@ -14,9 +14,7 @@ class Kwf_Media_Output_Component
         if (isset($dimensions['width']) && $dimensions['width'] > 0) {
             $aspectRatio = $dimensions['height'] / $dimensions['width'] * 100;
             $width = $dimensions['width'];
-            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageFile);
-            $ret['minWidth'] = $steps[0];
-            $ret['maxWidth'] = end($steps);
+            $ret['widthSteps'] = Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageFile);
         }
         $ret['width'] = $width;
         $ret['aspectRatio'] = $aspectRatio;
@@ -32,7 +30,7 @@ class Kwf_Media_Output_Component
     public static function getMediaOutputForDimension($data, $dim, $type)
     {
         if (isset($data['url'])) {
-            $file = 'cache/media/remotefile_' . md5($data['url']);
+            $file = Kwf_Config::getValue('mediaCacheDir').'/remotefile_' . md5($data['url']);
             if (!is_file($file)) {
                 $httpClientConfig = array(
                     'timeout' => 20,

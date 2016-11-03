@@ -170,10 +170,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
         $rows = $this->getChildRows('ChildComponents');
         $existingParts = array();
         foreach ($rows as $row) {
-            $t = substr($row->component, 0, 1);
             if (!in_array($row->component.$row->nr, $newPartStrings)) {
-                $admin = Kwc_Admin::getInstance($classes[$row->component]);
-                $admin->delete($this->component_id . '-' . $t.$row->nr);
                 $row->delete();
             } else {
                 if (!$row->saved) {

@@ -181,14 +181,27 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         return $this->_pdfWriter;
     }
 
-    /*
-    //use Kwc_Chained_Cc_Component::getChainedByMaster or Kwc_Chained_Trl_Component::getChainedByMaster instead
-    //if this method is needed, rename it
-    public static function getChainedByMaster($masterData, $chainedData, $chainedType, $select = array())
+    public static function getChainedByMasterAndType($masterData, $chainedData, $chainedType, $select = array())
     {
         return self::_getChainedByMaster($masterData, $chainedData, $chainedType, $select);
     }
-    */
+
+    public function hasMasterTemplate()
+    {
+        $ret = (bool)Kwc_Abstract::getMasterTemplateFile($this->getData()->componentClass);
+        if (!$ret) {
+            $ret = $this->getData()->chained->getComponent()->hasMasterTemplate();
+        }
+        return $ret;
+    }
+
+    public function getMasterTemplateVars(Kwf_Component_Data $innerComponent, Kwf_Component_Renderer_Abstract $renderer)
+    {
+        $ret = $this->getData()->chained->getComponent()->getMasterTemplateVars($innerComponent, $renderer);
+        $template = Kwc_Abstract::getMasterTemplateFile($this->getData()->componentClass);
+        if ($template) $ret['template'] = $template;
+        return $ret;
+    }
 
     protected static final function _getChainedByMaster($masterData, $chainedData, $chainedType, $select = array())
     {

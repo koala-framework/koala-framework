@@ -9,7 +9,7 @@ class Kwf_Form_Field_SuperBoxSelect extends Kwf_Form_Field_ComboBox
         $this->setXtype('superboxselect');
     }
 
-    public function load($row, array $postData = array())
+    public function load($row, $postData = array())
     {
         if (!$row) return array();
 
@@ -37,7 +37,7 @@ class Kwf_Form_Field_SuperBoxSelect extends Kwf_Form_Field_ComboBox
         return explode(',', $postData[$this->getFieldName()]);
     }
 
-    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
+    public function prepareSave($row, $postData)
     {
         //TODO remove in later branches?
         if ($this->getSave() === false || $this->getInternalSave() === false) return;

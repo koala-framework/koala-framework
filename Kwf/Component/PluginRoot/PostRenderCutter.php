@@ -6,13 +6,13 @@ abstract class Kwf_Component_PluginRoot_PostRenderCutter implements
     const MASK_CODE_BEGIN = 'Begin';
     const MASK_CODE_END = 'End';
 
-    private function _getMaskCode($maskType, $maskCode, $params)
+    private function _getMaskCode(Kwf_Component_Data $page, $maskType, $maskCode, $params)
     {
         if ($maskType == self::MASK_TYPE_NOMASK) return '';
         $params = $params ? base64_encode(json_encode($params)) : '';
         $ret = '';
         $ret .= $maskCode == self::MASK_CODE_BEGIN || $maskType == self::MASK_TYPE_SHOW ? '<!--' : '<';
-        $ret .= " postRenderPlugin$maskCode $params ";
+        $ret .= " postRenderPlugin{$maskCode}".'{'.$page->componentId.'}'." $params ";
         $ret .= $maskCode == self::MASK_CODE_END || $maskType == self::MASK_TYPE_SHOW ? '-->' : '>';
         return $ret;
     }
@@ -57,8 +57,8 @@ abstract class Kwf_Component_PluginRoot_PostRenderCutter implements
         $maskType = $mask['type'];
         $maskParams = $mask['params'];
         return array(
-            'begin' => $this->_getMaskCode($mask['type'], self::MASK_CODE_BEGIN, $mask['params']),
-            'end' => $this->_getMaskCode($mask['type'], self::MASK_CODE_END, $mask['params']),
+            'begin' => $this->_getMaskCode($page, $mask['type'], self::MASK_CODE_BEGIN, $mask['params']),
+            'end' => $this->_getMaskCode($page, $mask['type'], self::MASK_CODE_END, $mask['params']),
         );
     }
 
@@ -82,17 +82,17 @@ abstract class Kwf_Component_PluginRoot_PostRenderCutter implements
             $endTag = '-->|>';
             $startTag = '<!--|<';
         }
-        $pattern = "#(<!-- postRenderPluginBegin ($params) ($endTag))(.*?)(($startTag) postRenderPluginEnd $params -->)#s";
+        $pattern = "#(<!-- postRenderPluginBegin{([^ ]*)} ($params) ($endTag))(.*?)(($startTag) postRenderPluginEnd{\\2} $params -->)#s";
         preg_match_all($pattern, $output, $matches);
         $ret = array();
         foreach (array_keys($matches[0]) as $key) {
             $ret[] = array(
                 'maskBegin' => $matches[1][$key],
-                'maskEnd' => $matches[5][$key],
-                'params' => $matches[2][$key] ? json_decode(base64_decode($matches[2][$key]), true) : null,
-                'maskType' => $matches[3][$key] == '-->' ? self::MASK_TYPE_SHOW : self::MASK_TYPE_HIDE,
+                'maskEnd' => $matches[6][$key],
+                'params' => $matches[3][$key] ? json_decode(base64_decode($matches[3][$key]), true) : null,
+                'maskType' => $matches[4][$key] == '-->' ? self::MASK_TYPE_SHOW : self::MASK_TYPE_HIDE,
                 'output' => $matches[0][$key],
-                'maskedContent' => $matches[4][$key],
+                'maskedContent' => $matches[5][$key],
             );
         }
         return $ret;

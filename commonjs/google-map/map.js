@@ -215,6 +215,12 @@ Map.prototype = {
         this.mapContainer.on('kwfUp-map-'+event, cb);
     },
 
+    one: function(event, cb, scope)
+    {
+        if (typeof scope != 'undefined') cb = cb.bind(scope);
+        this.mapContainer.one('kwfUp-map-'+event, cb);
+    },
+
     fireEvent: function(event, obj)
     {
         this.mapContainer.trigger('kwfUp-map-'+event, obj);
@@ -227,7 +233,7 @@ Map.prototype = {
          * 3. Center all markers
          * 4. Add listener for further map-movements
          */
-        this.on('reload', function () {
+        this.one('reload', function () {
             // Listener for centering view to all shown markers on first load
             if (this.markers.length == 0) return;
             // Calculate center of all markers via google-map
@@ -242,7 +248,7 @@ Map.prototype = {
 
             google.maps.event.addListener(this.gmap, "idle",
                 $.proxy(this._reloadMarkersOnMapChange, this, []));
-        }, this, { single: true });
+        }, this);
 
         this._reloadMarkers($.extend({}, this._baseParams));
     },
@@ -330,7 +336,7 @@ Map.prototype = {
         marker.setMap(this.gmap);
         this.markers.push(marker);
         if (markerConfig.infoHtml) {
-            google.maps.event.addListener(marker, 'click', $.proxy(this.toggleWindow, this, [ marker ]));
+            google.maps.event.addListener(marker, 'click', $.proxy(this.toggleWindow, this, marker));
         }
     },
 

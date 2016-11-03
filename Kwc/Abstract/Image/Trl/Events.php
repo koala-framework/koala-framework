@@ -29,7 +29,7 @@ class Kwc_Abstract_Image_Trl_Events extends Kwc_Abstract_Composite_Trl_Events
 
     public function onMasterContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
     {
-        parent::onMasterContentChanged();
+        parent::onMasterContentChanged($event);
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
             $this->_class, $event->component
         ));

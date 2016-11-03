@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_LinkTag_BlogPost_Data extends Kwc_Basic_LinkTag_Intern_Data
 {
-    protected function _getData()
+    protected function _getData($select = array())
     {
         $m = Kwc_Abstract::createModel($this->componentClass);
         $blogPostId = $m->fetchColumnByPrimaryId('blog_post_id', $this->dbId);
