@@ -6,9 +6,7 @@ onReady.onRender('.kwcClass', function youtubePlayer(el) {
     var outerYoutubeContainer = el.find('.kwcBem__outerYoutubeContainer');
 
     imageEl.click(function(ev) {
-        imageEl.fadeOut(300, function() {
-            outerYoutubeContainer.addClass('youtubeActive');
-            onReady.callOnContentReady(youtubePlayer, {action: 'show'});
-        });
+        outerYoutubeContainer.addClass('kwcBem--youtubeActive');
+        onReady.callOnContentReady(youtubePlayer, {action: 'show'});
     });
 }, {defer: true});
