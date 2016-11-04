@@ -5,6 +5,9 @@
         position: relative;
         cursor: pointer;
         z-index: 2;
+        opacity: 1;
+        -webkit-transition: opacity 0.5s;
+        transition: opacity 0.5s;
     }
 
     .kwcBem__playButton {
@@ -18,10 +21,33 @@
         position: absolute;
         width: auto;
         z-index: 3;
+        opacity: 0;
+        -webkit-transition: opacity 0.5s;
+        transition: opacity 0.5s;
     }
 
     .kwcBem__youtubePlayer {
         display: none;
+    }
+
+    .kwcBem__outerYoutubeContainer {
+        &--youtubeActive, &.youtubeActive {
+            .kwcBem {
+                &__image {
+                    position: absolute;
+                    width: 100%;
+                    left: 0;
+                    opacity: 0;
+                }
+                &__youtubeContainer {
+                    position: relative;
+                    opacity: 1;
+                }
+                &__youtubePlayer {
+                    display: block;
+                }
+            }
+        }
     }
 
     &.kwcBem--ratio16x9 {
