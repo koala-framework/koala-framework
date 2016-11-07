@@ -56,7 +56,7 @@ class Kwf_Assets_Dispatcher
         if ($encoding != 'none') {
             //own cache for encoded contents, not using Kwf_Assets_Cache as we don't need to in two-level cache
             $cacheId = false;
-            if (Kwf_Config::getValue('assets.cacheSimpleStatic')) {
+            if (Kwf_Config::getValue('assets.useCacheSimpleStatic')) {
                 $cacheId = 'as_'.$this->_getCacheIdByUrl($url).'_'.$encoding;
             }
             if ($cacheId) {
