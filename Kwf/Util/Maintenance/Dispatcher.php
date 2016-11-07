@@ -38,12 +38,38 @@ class Kwf_Util_Maintenance_Dispatcher
         foreach (self::getAllMaintenanceJobs() as $job) {
             if ($job->getFrequency() == $jobFrequency) {
                 if ($debug) echo "executing ".get_class($job)."\n";
+                $maxTime = $job->getMaxTime();
                 $t = microtime(true);
-                if ($jobFrequency == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY) {
+                if ($jobFrequency == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY || $jobFrequency == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_HOURLY) {
                     $cmd = "php bootstrap.php maintenance-jobs run-job --job=".escapeshellarg(get_class($job));
                     if ($debug) $cmd .= " --debug";
+
+                    $descriptorspec = array();
+                    $pipes = array();
+                    $process = proc_open($cmd, $descriptorspec, $pipes);
+
+                    if (!is_resource($process)) {
+                        $e = new Kwf_Exception("Couldn't start maintenance job ".get_class($job));
+                        $e->logOrThrow();
+                        continue;
+                    }
                     $retVar = null;
-                    passthru($cmd, $retVar);
+                    while (true) {
+                        $status = proc_get_status($process);
+                        if (!$status['running']) {
+                            $retVar = $status['exitcode'];
+                            break;
+                        }
+                        if (microtime(true)-$t > $maxTime*2) {
+                            //when jobs runs maxTime twice kill it
+                            file_put_contents('php://stderr', "\nWARNING: Killing maintenance-jobs process (running > maxTime*2)...\n");
+                            proc_terminate($process);
+                            break;
+                        }
+                        sleep(1);
+                    }
+                    proc_close($process);
+
                     if ($retVar) {
                         $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code $retVar");
                         $e->logOrThrow();
@@ -60,7 +86,7 @@ class Kwf_Util_Maintenance_Dispatcher
                 $t = microtime(true)-$t;
                 if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
 
-                $maxTime = $job->getMaxTime();
+
                 if ($t > $maxTime) {
                     $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
                     file_put_contents('php://stderr', $msg."\n");
