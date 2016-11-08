@@ -5,7 +5,7 @@ class Kwf_Util_Check
     {
         $ok = true;
         $msg = '';
-        if (Kwf_Setup::hasDb()) {
+        if (Kwf_Config::getValue('kwfCheck.checkDbConnection') && Kwf_Setup::hasDb()) {
             $date = Kwf_Registry::get('db')->query("SELECT NOW()")->fetchColumn();
             if (!$date) {
                 $ok = false;
