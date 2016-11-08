@@ -16,7 +16,7 @@ onReady.onRender('.kwcClass', function(el) {
                     a.async = 1;
                     a.src = g;
                     m.parentNode.insertBefore(a, m)
-                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'kwfUp-ga');
 
                 ga('create', el.data('code'), 'auto');
                 ga('send', 'pageview');
@@ -27,11 +27,11 @@ onReady.onRender('.kwcClass', function(el) {
 
 
 statistics.onView(function(url) {
-    if (typeof(ga) == 'undefined') return;
-    ga('send', 'pageview', url);
+    if (typeof(window['kwfUp-ga']) == 'undefined') return;
+    window['kwfUp-ga']('send', 'pageview', url);
 });
 
 statistics.onEvent(function(category, action, name, value) {
-    if (typeof(ga) == 'undefined') return;
-    ga('send', 'event', category, action, name, value);
+    if (typeof(window['kwfUp-ga']) == 'undefined') return;
+    window['kwfUp-ga']('send', 'event', category, action, name, value);
 });
