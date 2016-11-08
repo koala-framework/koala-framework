@@ -2,15 +2,6 @@
 class Kwf_Assets_BuildCache_File
 {
     static private $_buildDir = "build/assets";
-    public $building = false;
-    public static function getInstance()
-    {
-        static $cache;
-        if (!isset($cache)) {
-            $cache = new self();
-        }
-        return $cache;
-    }
 
     public function load($cacheId)
     {
@@ -33,7 +24,7 @@ class Kwf_Assets_BuildCache_File
 
     public function clean()
     {
-        if (!$this->building) {
+        if (!Kwf_Assets_BuildCache::getInstance()->building) {
             throw new Kwf_Exception("Can't clear out of build");
         }
         foreach (glob(self::$_buildDir.'/*') as $f) {
@@ -48,7 +39,6 @@ class Kwf_Assets_BuildCache_File
             $fileName = self::$_buildDir.'/'.$cacheId;
             if (file_exists($fileName)) {
                 unlink($fileName);
-                return true;
             }
         }
     }
