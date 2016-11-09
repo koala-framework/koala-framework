@@ -28,6 +28,7 @@ class Kwc_Newsletter_StartMaintenanceJob extends Kwf_Util_Maintenance_Job_Abstra
             if ($newsletterRow->status != 'sending') {
                 $newsletterRow->resume_date = date('Y-m-d H:i:s');
                 $newsletterRow->status = 'sending';
+                if (is_null($newsletterRow->count_sent)) $newsletterRow->count_sent = 0;
                 $newsletterRow->save();
             }
 
