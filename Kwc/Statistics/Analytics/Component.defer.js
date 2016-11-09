@@ -1,5 +1,6 @@
 var onReady = require('kwf/on-ready');
 var cookieOpt = require('kwf/cookie-opt');
+var statistics = require('kwf/statistics');
 
 onReady.onRender('.kwcClass', function(el) {
     if (!el.data('ignore-code') && !location.search.match(/[\?&]kwcPreview/)) {
@@ -18,8 +19,8 @@ onReady.onRender('.kwcClass', function(el) {
                     m.parentNode.insertBefore(a, m)
                 })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'kwfUp-ga');
 
-                ga('create', el.data('code'), 'auto');
-                ga('send', 'pageview');
+                window['kwfUp-ga']('create', el.data('code'), 'auto');
+                window['kwfUp-ga']('send', 'pageview');
             }
         });
     }
