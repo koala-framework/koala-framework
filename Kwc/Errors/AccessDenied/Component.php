@@ -5,6 +5,7 @@ class Kwc_Errors_AccessDenied_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings($param);
         $ret['rootElementClass'] = 'kwfUp-webStandard';
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 }
