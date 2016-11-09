@@ -34,7 +34,7 @@ class Kwf_Form_Field_GoogleMapsField extends Kwf_Form_Field_SimpleAbstract
         }
     }
 
-    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
+    public function prepareSave($row, $postData)
     {
         if ($this->_latitudeFieldname && $this->_longitudeFieldname) {
             if ($this->getSave() !== false) {
