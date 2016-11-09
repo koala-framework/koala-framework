@@ -3866,7 +3866,7 @@
 <ua>d.m.Y.</ua>
 <ua>d.m.Y</ua>
 <ua>Р.М.Д.</ua>
-<ba>g-m-d</ba>
+<ba>Y-m-d</ba>
 </text>
 <text>
 <en>Y-m-d H:i</en>
