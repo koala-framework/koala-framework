@@ -60,7 +60,7 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
     public function getIcon()
     {
         $fileRow = $this->_getFileRow()->getParentRow('File');
-        if (!$fileRow) return 'page_white_get';
+        if (!$fileRow) return null;
         return Kwf_Util_FileIcon::getFileIcon($fileRow->extension);
     }
 
