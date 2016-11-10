@@ -46,6 +46,7 @@ class Kwf_Component_Data
     private $_childComponentsCache = array();
     private $_recursiveGeneratorsCache = array();
     private $_languageCache;
+    private $_domainComponentIdCache;
     private $_expandedComponentIdCache;
     private $_serializedBaseProperties = array(
         'preLogin' => null
@@ -161,7 +162,7 @@ class Kwf_Component_Data
     /**
      * Returns domain component for current component
      *
-     * @return string
+     * @return Kwf_Component_Data
      */
     public function getDomainComponent()
     {
@@ -175,6 +176,19 @@ class Kwf_Component_Data
             }
             $component = $component->parent;
         }
+    }
+
+    /**
+     * Returns domain component id for current component
+     *
+     * @return string
+     */
+    public function getDomainComponentId()
+    {
+        if (!isset($this->_domainComponentIdCache)) { //cache ist vorallem für bei kwfUnserialize nützlich
+            $this->_domainComponentIdCache = $this->getDomainComponent()->componentId;
+        }
+        return $this->_domainComponentIdCache;
     }
 
     /**
@@ -1409,6 +1423,7 @@ class Kwf_Component_Data
     {
         $this->getLanguage(); //fill _languageCache
         $this->getExpandedComponentId(); //fill _expandedComponentIdCache
+        $this->getDomainComponentId(); //fill _domainComponentIdCache
 
         foreach ($this->_serializedBaseProperties as $baseProperty => $value) {
             $this->_serializedBaseProperties[$baseProperty] = $this->getBaseProperty($baseProperty);

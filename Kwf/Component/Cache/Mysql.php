@@ -41,7 +41,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'expire' => is_null($lifetime) ? null : time() + $lifetime,
             'deleted' => false,
             'content' => $content,
-            'url' => $type == 'fullPage' ? $component->url : null
+            'url' => $type == 'fullPage' ? $component->url : null,
+            'domain_component_id' => $type == 'fullPage' ? $component->getDomainComponentId() : null,
         );
         $options = array(
             'buffer' => true,
@@ -190,7 +191,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $log = Kwf_Events_Log::getInstance();
         $cacheIds = array();
         $options = array(
-            'columns' => array('component_id', 'renderer', 'type', 'value', 'url'),
+            'columns' => array('component_id', 'renderer', 'type', 'value', 'domain_component_id', 'url'),
         );
         $partialIds = array();
         $deleteIds = array();
@@ -230,7 +231,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 throw new Kwf_Exception('Should not happen.');
             }
             if ($type == 'fullPage') {
-                $fullPageUrls[$row['component_id']] = $row['url'];
+                if (!isset($fullPageUrls[$row['domain_component_id']])) $fullPageUrls[$row['domain_component_id']] = array();
+                $fullPageUrls[$row['domain_component_id']][$row['component_id']] = $row['url'];
             }
         }
 
@@ -295,7 +297,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         }
 
         if ($fullPageUrls) {
-            Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_ViewCache_ClearFullPage(get_class($this), $fullPageUrls));
+            foreach ($fullPageUrls as $domainComponentId=>$urls) {
+                Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_ViewCache_ClearFullPage(get_class($this), $domainComponentId, $urls));
+            }
         }
 
         $this->_afterDatabaseDelete($select); // For unit testing - DO NOT DELETE!

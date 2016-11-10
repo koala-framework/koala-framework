@@ -124,6 +124,9 @@ class Kwf_Util_Setup
                 $ret .= "        \$_SERVER['REMOTE_ADDR'] = substr(\$_SERVER['REMOTE_ADDR'], 0, -".strlen($a['removeTrailing']).");\n";
                 $ret .= "    }\n";
             }
+            if (isset($a['removePattern'])) {
+                $ret .= "    \$_SERVER['REMOTE_ADDR'] = preg_replace('/".$a['removePattern']."/', '', \$_SERVER['REMOTE_ADDR']);\n";
+            }
             $ret .= "}\n";
         }
 

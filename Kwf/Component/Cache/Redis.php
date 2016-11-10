@@ -13,7 +13,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
 
         $setKey = $key; //key that will be stored in sets
         if ($type == 'fullPage') {
-            $setKey .= ':'.$component->url;
+            $setKey .= ':'.$component->getDomainComponentId().':'.$component->url;
         }
 
         $this->_redis->sAdd('viewids:componentid:'.$component->componentId, $setKey);
@@ -210,7 +210,8 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                     $parts = self::_parseCacheId($i);
                     if ($parts['type'] == 'fullPage') {
                         $fullPageKeysToDelete[] = self::_getCacheId($parts['componentId'], $parts['renderer'], $parts['type'], $parts['value']);
-                        $fullPageUrls[$parts['componentId']] = $parts['url'];
+                        if (!isset($fullPageUrls[$parts['domainComponentId']])) $fullPageUrls[$parts['domainComponentId']] = array();
+                        $fullPageUrls[$parts['domainComponentId']][$parts['componentId']] = $parts['url'];
                     }
                 }
                 if (Kwf_Cache_Simple::getBackend() == 'memcache') {
@@ -295,7 +296,8 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             'type' => $key[3],
             'value' => $key[4],
         );
-        if (isset($key[5])) $ret['url'] = $key[5];
+        if (isset($key[5])) $ret['domainComponentId'] = $key[5];
+        if (isset($key[6])) $ret['url'] = $key[6];
         return $ret;
     }
 
