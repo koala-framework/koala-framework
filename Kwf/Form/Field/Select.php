@@ -12,6 +12,7 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
 
         $this->setEditable(false);
         $this->setTriggerAction('all');
+        $this->setParenthesesAroundEmptyText(true);
         $this->setEmptyMessage(trlKwfStatic('Please select a value'));
     }
 
@@ -84,7 +85,7 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
         //      => sollte sich gleich verhalten.
         if ($this->getShowNoSelection()) {
             $emptyText = $this->getEmptyText();
-            if ($emptyText) $emptyText = '('.$emptyText.')';
+            if ($emptyText && $this->getParenthesesAroundEmptyText()) $emptyText = '('.$emptyText.')';
             array_unshift($store['data'], array('', $emptyText));
         }
 
@@ -102,5 +103,19 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
             $ret['html'] .= '<input class="submit" type="submit" value="»" />';
         $ret['html'] = '<div class="outerSelect">'.$ret['html'].'</div>';
         return $ret;
+    }
+
+
+    /**
+     * Enable Parentheses around empty text
+     *
+     * Only used in frontend when emptyText is set.
+     *
+     * @param bool
+     * @return $this
+     */
+    public function setParenthesesAroundEmptyText($value)
+    {
+        return $this->setProperty('parenthesesAroundEmptyText', $value);
     }
 }
