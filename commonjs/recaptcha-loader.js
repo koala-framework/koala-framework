@@ -1,23 +1,30 @@
-var libraryLoaded = false;
+var isRequested = false;
+var isLoaded = false;
 var callbacks = [];
 
 module.exports = function(callback) {
-    if (!libraryLoaded) {
+    if (!isLoaded) {
         callbacks.push(callback);
     } else {
-        callback.call();
+        callbacks.call();
+    }
+
+    if (!isRequested) {
+        var cb = 'kwfUp-recaptchaCallback'.replace('-', '_');
+        window[cb] = function() {
+            isLoaded = true;
+            callbacks.forEach(function(callback) {
+                callback.call();
+            });
+        };
+        (function(cb){
+            var el = document.createElement('script');
+            el.src = 'https://www.google.com/recaptcha/api.js?onload=' + cb + '&render=explicit';
+            el.type = 'text/javascript';
+            el.async = true;
+            var targetEl = document.getElementsByTagName('script')[0];
+            targetEl.parentNode.insertBefore(el, targetEl);
+        })(cb);
+        isRequested = true;
     }
 };
-
-var cb = 'kwfUp-recaptchaCallback'.replace('-', '_');
-window[cb] = function() {
-    callbacks.forEach(function(callback) {
-        callback.call();
-    });
-    libraryLoaded = true;
-};
-(function(cb){
-    a='https://www.google.com/recaptcha/api.js?onload=' + cb + '&render=explicit';
-    b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;
-    a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
-})(cb);
