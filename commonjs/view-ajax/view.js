@@ -293,6 +293,7 @@ ViewAjax.prototype = {
             for (var i=0; i<data.rows.length; i++) {
                 this.$el.append("<div class=\"kwfUp-kwfViewAjaxItem\">"+data.rows[i].content+"</div>");
             }
+            this.$el.trigger('loadMore', data);
             onReady.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
     },

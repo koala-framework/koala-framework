@@ -5,13 +5,6 @@ class Kwf_Util_Check
     {
         $ok = true;
         $msg = '';
-        if (Kwf_Setup::hasDb()) {
-            $date = Kwf_Registry::get('db')->query("SELECT NOW()")->fetchColumn();
-            if (!$date) {
-                $ok = false;
-                $msg .= 'mysql connection failed';
-            }
-        }
         if (file_exists('instance_startup')) {
             //can be used while starting up autoscaling instances
             $ok = false;

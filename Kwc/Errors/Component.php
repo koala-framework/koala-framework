@@ -13,6 +13,8 @@ class Kwc_Errors_Component extends Kwc_Abstract
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Errors_NotFound_Component'
         );
+        $ret['flags']['noIndex'] = true;
+        $ret['flags']['skipFulltextRecursive'] = true;
         return $ret;
     }
 }

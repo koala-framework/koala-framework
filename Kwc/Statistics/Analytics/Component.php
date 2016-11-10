@@ -5,7 +5,6 @@ class Kwc_Statistics_Analytics_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings($param);
         $ret['flags']['hasFooterIncludeCode'] = true;
-        $ret['plugins'] = array('Kwc_Statistics_CookieBeforePlugin', 'Kwc_Statistics_CookieAfterPlugin');
         return $ret;
     }
 

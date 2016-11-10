@@ -41,4 +41,4 @@ onReady.onRender('.kwcClass .kwcBem__youtubePlayer', function(el) {
             }
         }, this);
     }
-}, {defer: true});
+}, {defer: true, checkVisibility: true});

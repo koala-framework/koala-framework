@@ -105,10 +105,10 @@ var Map = function(config) {
     var fromEl = this.mapContainer.find("form.fromAddress");
     if (fromEl) {
         var input = this.mapContainer.find("form.fromAddress input");
-        fromEl.on('submit', function(e) {
-            this.setMapDir(input.value());
-            e.stopEvent();
-        }, this);
+        fromEl.on('submit', (function(ev) {
+            ev.preventDefault();
+            this.setMapDir(input.val());
+        }).bind(this));
     }
 
     var container = this.mapContainer.find(".container");
@@ -404,9 +404,9 @@ Map.prototype = {
     _directionsCallback: function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
             this.directionsDisplay.setDirections(response);
-            (function() {
+            setTimeout((function() {
                 onReady.callOnContentReady(this.directionsDisplay.getPanel(), { newRender: true});
-            }).defer(1, this);
+            }).bind(this), 1);
         } else {
             alert(t.trlKwf('Entered place could not been found!'));
         }
