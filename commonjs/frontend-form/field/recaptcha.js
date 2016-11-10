@@ -2,11 +2,11 @@ var fieldRegistry = require('kwf/frontend-form/field-registry');
 var Field = require('kwf/frontend-form/field/field');
 var kwfExtend = require('kwf/extend');
 var $ = require('jQuery');
-var recaptcha = require('kwf/recaptcha');
+var recaptchaLoader = require('kwf/recaptcha-loader');
 
 var Recaptcha = kwfExtend(Field, {
     initField: function() {
-        recaptcha((function() {
+        recaptchaLoader((function() {
             var options = {
                 'sitekey' : this.getField().getAttribute('data-site-key'),
                 'callback' : (function() {
