@@ -8,7 +8,7 @@ class Kwc_Newsletter_Detail_UserData extends Kwf_Data_Abstract
         $this->_fieldname = $fieldname;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $recipient = $row->getRecipient();
         if ($recipient) {

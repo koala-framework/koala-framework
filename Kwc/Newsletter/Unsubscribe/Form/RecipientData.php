@@ -12,7 +12,7 @@ class Kwc_Newsletter_Unsubscribe_Form_RecipientData extends Kwf_Data_Abstract
         $this->_method = $method;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $interfaces = class_implements($row);
         $methodAllowed = false;
