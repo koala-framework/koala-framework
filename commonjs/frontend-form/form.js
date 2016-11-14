@@ -24,6 +24,7 @@ require('kwf/frontend-form/field/multi-checkbox');
 require('kwf/frontend-form/field/radio');
 require('kwf/frontend-form/field/select');
 require('kwf/frontend-form/field/static');
+require('kwf/frontend-form/field/recaptcha');
 require('kwf/frontend-form/field/text-area');
 require('kwf/frontend-form/field/text-field');
 
