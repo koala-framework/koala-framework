@@ -137,9 +137,11 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
     {
         $ret = parent::getLinkDataAttributes();
         $options = $this->_getOptions();
-        $kwfUniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
-        if ($kwfUniquePrefix) $kwfUniquePrefix = $kwfUniquePrefix.'-';
-        $options['cssClass'] = str_replace('kwfUp-', $kwfUniquePrefix, $options['cssClass']);
+        if (isset($options['cssClass'])) {
+            $kwfUniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
+            if ($kwfUniquePrefix) $kwfUniquePrefix = $kwfUniquePrefix . '-';
+            $options['cssClass'] = str_replace('kwfUp-', $kwfUniquePrefix, $options['cssClass']);
+        }
         $ret['kwc-lightbox'] = json_encode((object)$options);
         return $ret;
     }
