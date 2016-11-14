@@ -17,6 +17,7 @@
                         {% endblock %}
                     {% endif %}
                     {% if m.submenu|length %}
+                        {% block subMenu %}
                         <ul class="subMenu">
                             {% for sm in m.submenu %}
                                 {{ sm.preHtml|raw }}
@@ -28,6 +29,7 @@
                                 {{ sm.postHtml|raw }}
                             {% endfor %}
                         </ul>
+                        {% endblock %}
                     {% endif %}
                 </li>
                 {{ m.postHtml|raw }}
