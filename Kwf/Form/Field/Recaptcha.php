@@ -15,7 +15,19 @@ class Kwf_Form_Field_Recaptcha extends Kwf_Form_Field_Abstract
 
         $validated = false;
 
-        $client = new Zend_Http_Client('https://www.google.com/recaptcha/api/siteverify');
+        $httpClientConfig = array(
+            'timeout' => 5,
+            'persistent' => false
+        );
+        $proxy = Kwf_Config::getValueArray('http.proxy');
+        if (isset($proxy['host']) && $proxy['host']) {
+            $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
+            $httpClientConfig['proxy_host'] = $proxy['host'];
+            if (isset($proxy['port']) && $proxy['port']) {
+                $httpClientConfig['proxy_port'] = $proxy['port'];
+            }
+        }
+        $client = new Zend_Http_Client('https://www.google.com/recaptcha/api/siteverify', $httpClientConfig);
         $client->setParameterPost(array(
             'secret' => Kwf_Config::getValue('recaptcha.privateKey'),
             'response' => $_REQUEST["g-recaptcha-response"],
