@@ -34,8 +34,9 @@ class Kwc_Directories_Item_Directory_FormController extends Kwf_Controller_Actio
         if (count($forms) == 1) {
             $this->_form->add(reset($forms));
         } else {
+            $keys = array_keys($detailClasses);
             $cards = $this->_form->add(new Kwf_Form_Container_Cards('component', trlKwf('Type')))
-                ->setDefaultValue(reset(array_keys($detailClasses)));
+                ->setDefaultValue(reset($keys));
             $cards->getCombobox()
                 ->setWidth(250)
                 ->setListWidth(250)
