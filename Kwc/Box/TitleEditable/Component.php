@@ -9,25 +9,41 @@ class Kwc_Box_TitleEditable_Component extends Kwc_Box_Title_Component
         return $ret;
     }
 
+    protected function _getParentTitleComponents()
+    {
+        $ret = array();
+        $data = $this->getData();
+        $ids = array();
+        while ($data && !$data->inherits) {
+            $ids[] = strrchr($data->componentId, '-');
+            $data = $data->parent;
+        }
+        while ($data) {
+            if (($data->inherits && Kwc_Abstract::getFlag($data->componentClass, 'subroot')) || $data->componentId == 'root') {
+                $d = $data;
+                foreach (array_reverse($ids) as $id) {
+                    $d = $d->getChildComponent($id);
+                }
+                if ($d && $this->getData()->componentClass == $d->componentClass) {
+                    $ret[] = $d;
+                }
+            }
+            $data = $data->parent;
+        }
+        return $ret;
+    }
+
     protected function _getTitle()
     {
         if (trim($this->_getRow()->title)) return $this->_getRow()->title;
 
-        //if no title is configured get from next subroot/root
-        $c = $this->getData()->parent;
-        while($c) {
-            if (($c->inherits && Kwc_Abstract::getFlag($c->componentClass, 'subroot')) || $c->componentId == 'root') {
-                $title = $c->getChildComponent(array('id'=>'-'.$this->getData()->id, 'componentClass'=>$this->getData()->componentClass));
-                if ($title) {
-                    $title = $title->getComponent()->_getRow()->title;
-                }
-                if ($title) {
-                    $ret = $this->getData()->getTitle(); //append own title
-                    if ($ret) $ret .= ' - ';
-                    return $ret.$title;
-                }
+        foreach ($this->_getParentTitleComponents() as $component) {
+            $title = $component->getComponent()->_getRow()->title;
+            if ($title) {
+                $ret = $this->getData()->getTitle(); //append own title
+                if ($ret) $ret .= ' - ';
+                return $ret.$title;
             }
-            $c = $c->parent;
         }
         return parent::_getTitle();
     }
