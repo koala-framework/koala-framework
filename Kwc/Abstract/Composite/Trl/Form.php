@@ -24,11 +24,12 @@ class Kwc_Abstract_Composite_Trl_Form extends Kwc_Abstract_Form
 
         if (!$this->getClass()) return;
         $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
+        if (!isset($generators['child'])) return;
         $classes = $generators['child']['component'];
         foreach ($classes as $key => $class) {
             if (!$class) continue;
             $form = Kwc_Abstract_Form::createChildComponentForm($this->getClass(), "-$key", $key);
-            if ($form) {
+            if ($form && count($form->fields)) {
                 if ($this->_getIdTemplateForChild($key)) {
                     $form->setIdTemplate($this->_getIdTemplateForChild($key));
                 }
