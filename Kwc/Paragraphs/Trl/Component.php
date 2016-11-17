@@ -17,12 +17,15 @@ class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
         $ret = parent::getTemplateVars($renderer);
         $ret['paragraphs'] = array();
         foreach($this->getData()->getChildComponents(array('generator'=>'paragraphs')) as $paragraph) {
-            $cssClass = 'kwcParagraphItem';
+            $cssClass = $this->_getBemClass('kwcParagraphItem');
             $row = $paragraph->chained->row;
             if (Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'useMobileBreakpoints') && $row->device_visible) {
-                $cssClass .= ' ' . $row->device_visible;
+                $cssClass .= ' ' . $this->_getBemClass($row->device_visible);
             }
-            $cssClass .= ' outer'.ucfirst(Kwf_Component_Abstract::formatRootElementClass($paragraph->chained->componentClass, ''));
+            $cssClass .= ' '.$this->_getBemClass(
+                    'outer'.ucfirst($paragraph->chained->row->component),
+                    'outer'.ucfirst(substr(Kwf_Component_Abstract::formatRootElementClass($paragraph->chained->componentClass, ''), 6))
+                );
             $preHtml = '';
             $postHtml = '';
             foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_MaskComponent') as $plugin) {
