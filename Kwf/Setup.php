@@ -255,7 +255,13 @@ class Kwf_Setup
                 throw new Kwf_Exception_NotFound();
             }
             $class = rawurldecode($class);
-            Kwf_Media_Output::output(Kwf_Media::getOutput($class, $id, $type));
+            $output = Kwf_Media::getOutput($class, $id, $type);
+            Kwf_Media_Output::outputWithoutShutdown($output);
+            if (isset($output['file'])) {
+                Kwf_Util_Media::onCacheFileAccess($output['file']);
+            }
+            Kwf_Benchmark::shutDown();
+            exit;
         }
     }
 

@@ -38,7 +38,7 @@ class Kwf_Media_MemoryCache
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true,
             ));
-            $c->setBackend(new Kwf_Cache_Backend_File(array(
+            $c->setBackend(new Kwf_Media_MemoryCacheFileBackend(array(
                 'cache_dir' => Kwf_Config::getValue('mediametaCacheDir'),
                 'hashed_directory_level' => 2,
             )));

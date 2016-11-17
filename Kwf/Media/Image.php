@@ -439,6 +439,7 @@ class Kwf_Media_Image
                     $f = $previousCacheFile;
                 }
                 $im = self::_createImagickFromBlob(file_get_contents($f), $sourceSize['mime']);
+                Kwf_Util_Upload::onFileAccess($f);
                 if (!$previousCacheFile) {
                     $im = self::_processCommonImagickSettings($im); //only once
                 }
@@ -485,6 +486,7 @@ class Kwf_Media_Image
                 $ret = $source->getImageBlob();
             } else {
                 $ret = file_get_contents($source);
+                Kwf_Util_Upload::onFileAccess($source);
             }
             return $ret;
         }
@@ -503,6 +505,7 @@ class Kwf_Media_Image
                     $f = $preScale['file'];
                 }
                 $blob = file_get_contents($f);
+                Kwf_Util_Upload::onFileAccess($f);
                 if (!strlen($blob)) throw new Kwf_Exception("File is empty");
                 $im = self::_createImagickFromBlob($blob, $sourceSize['mime']);
             }
