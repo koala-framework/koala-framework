@@ -26,7 +26,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         return $this->_getParam('componentId') . '_mail';
     }
 
-    protected function _fetchData()
+    protected function _fetchData($order, $limit, $start)
     {
         $db = Kwf_Registry::get('db');
         $pos = 1;

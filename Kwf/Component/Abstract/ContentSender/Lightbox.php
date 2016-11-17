@@ -97,7 +97,9 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             if (isset($options['height'])) $style .= "height: $options[height]px";
             $class = $kwfUniquePrefix.'kwfLightbox';
             $class .= " ".$kwfUniquePrefix."kwfLightbox$options[style]";
-            if (isset($options['cssClass'])) $class .= " $options[cssClass]";
+            if (isset($options['cssClass'])) {
+                $class .= ' ' . str_replace('kwfUp-', $kwfUniquePrefix, $options['cssClass']);
+            }
             if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
             $options = htmlspecialchars(json_encode($options));
             $lightboxContent =
@@ -134,10 +136,15 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
     public function getLinkDataAttributes()
     {
         $ret = parent::getLinkDataAttributes();
-        $ret['kwc-lightbox'] = json_encode((object)$this->_getOptions());
+        $options = $this->_getOptions();
+        if (isset($options['cssClass'])) {
+            $kwfUniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
+            if ($kwfUniquePrefix) $kwfUniquePrefix = $kwfUniquePrefix . '-';
+            $options['cssClass'] = str_replace('kwfUp-', $kwfUniquePrefix, $options['cssClass']);
+        }
+        $ret['kwc-lightbox'] = json_encode((object)$options);
         return $ret;
     }
-
 
     public function getLinkClass()
     {

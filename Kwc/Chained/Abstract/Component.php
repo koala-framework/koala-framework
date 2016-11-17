@@ -277,4 +277,10 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         }
         return $ret;
     }
+
+    protected function _getBemClass($class, $nonBemFallback = null)
+    {
+        $componentClass = Kwc_Abstract::getSetting($this->getData()->componentClass, 'masterComponentClass');
+        return self::getBemClass($componentClass, $class, $nonBemFallback);
+    }
 }

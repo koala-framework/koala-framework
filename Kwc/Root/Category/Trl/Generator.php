@@ -198,4 +198,9 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
     {
         return Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
     }
+
+    public function setVisible(Kwf_Component_Data $data, $visible)
+    {
+        $data->row->visible = $visible;
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Newsletter_Detail_IsActiveData extends Kwf_Data_Abstract
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         if ($row instanceof Kwc_Mail_Recipient_UnsubscribableInterface) {
             if ($row->getMailUnsubscribe() && $row->activated) {

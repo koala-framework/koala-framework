@@ -20,7 +20,10 @@
 
             {% if linktag.hasContent() %}</a>{% endif %}
         </div>
-        <a href="#" class="{{ 'accept'|bemClass }}"><span>{{ acceptText }}</span></a>
+        <a href="#" class="{{ 'accept'|bemClass }}
+        {% if acceptText|length > 0 %}{{ 'accept--hasText'|bemClass }}{% endif %}">
+            <span class="{{ 'accept__text'|bemClass }}">{{ acceptText }}</span>
+        </a>
     </div>
 </div>
 {% endif %}
