@@ -31,13 +31,13 @@ class Kwc_Abstract_List_Trl_Component extends Kwc_Chained_Trl_Component
         $ret['listItems'] = array();
         $i = 0;
         foreach ($children as $child) {
-            $class = 'listItem ';
-            if ($i == 0) $class .= 'kwcFirst ';
-            if ($i == count($children)-1) $class .= 'kwcLast ';
+            $class = $this->_getBemClass('listItem', 'listItem').' ';
+            if ($i == 0) $class .= ' '.$this->_getBemClass('listItem--first', 'kwcFirst');
+            if ($i == count($children)-1) $class .= ' '.$this->_getBemClass('listItem--last', 'kwcLast');
             if ($i % 2 == 0) {
-                $class .= 'kwcEven ';
+                $class .= ' '.$this->_getBemClass('listItem--even', 'kwcEven');
             } else {
-                $class .= 'kwcOdd ';
+                $class .= ' '.$this->_getBemClass('listItem--odd', 'kwcOdd');
             }
             $class = trim($class);
             $i++;
