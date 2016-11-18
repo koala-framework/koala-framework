@@ -137,7 +137,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         $cacheId = $size.'_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
-            $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $sizes[$size], $fileRow->id);
+            $output['contents'] = Kwf_Media_Image::scale($fileRow, $sizes[$size]);
             $output['mimeType'] = $fileRow->mime_type;
             $cache->save($output, $cacheId);
         }
@@ -155,13 +155,15 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
             throw new Kwf_Exception_AccessDenied();
         }
+
+
         //Scale dimensions
         $dimensions = array($previewWidth, $previewHeight, 'cover' => false);
         $cache = Kwf_Assets_Cache::getInstance();
         $cacheId = 'previewLarge_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
-            $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $dimensions, $fileRow->id);
+            $output['contents'] = Kwf_Media_Image::scale($fileRow, $dimensions);
             $output['mimeType'] = $fileRow->mime_type;
             $cache->save($output, $cacheId);
         }
@@ -320,7 +322,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             'downloadFilename' => $fileRow->filename . '.' . $fileRow->extension
         );
         $targetSize = array(600, 600, 'cover' => false);
-        $image = Kwf_Media_Image::scale($fileRow->getFileSource(), $targetSize, $fileRow->id);
+        $image = Kwf_Media_Image::scale($fileRow, $targetSize);
         $outputParams['contents'] = $image;
         Kwf_Media_Output::output($outputParams);
     }

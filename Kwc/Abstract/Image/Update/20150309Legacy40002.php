@@ -29,7 +29,7 @@ class Kwc_Abstract_Image_Update_20150309Legacy40002 extends Kwf_Update
                     );
 
                     $outputSize = Kwf_Media_Image::calculateScaleDimensions(
-                        $row->getParentRow('Image')->getFileSource(), $targetSize);
+                        $row->getParentRow('Image')->getImageDimensions(), $targetSize);
                     $row->width = $outputSize['width'];
                     $row->height = $outputSize['height'];
                     $row->crop_x = $outputSize['crop']['x'];

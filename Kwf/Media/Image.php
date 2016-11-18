@@ -404,13 +404,13 @@ class Kwf_Media_Image
         return $ret;
     }
 
-    private static function _preScale($source, $sourceSize, $size, $uploadId)
+    private static function _preScale($source, $sourceSize, $mimeType, $size, $uploadId)
     {
         $preScaleFactor = 0;
         $preScaleCacheFile = null;
 
-        $preScaleWidth = $sourceSize[0];
-        $preScaleHeight = $sourceSize[1];
+        $preScaleWidth = $sourceSize['width'];
+        $preScaleHeight = $sourceSize['height'];
         if (isset($size['rotate'])
             && ($size['rotate'] == 90 || $size['rotate'] == -90)
         ) {
@@ -438,7 +438,7 @@ class Kwf_Media_Image
                 if ($previousCacheFile) {
                     $f = $previousCacheFile;
                 }
-                $im = self::_createImagickFromBlob(file_get_contents($f), $sourceSize['mime']);
+                $im = self::_createImagickFromBlob(file_get_contents($f), $mimeType);
                 Kwf_Util_Upload::onFileAccess($f);
                 if (!$previousCacheFile) {
                     $im = self::_processCommonImagickSettings($im); //only once
@@ -465,18 +465,33 @@ class Kwf_Media_Image
         );
     }
 
-    public static function scale($source, $size, $uploadId = null)
+    public static function scale($source, $size, $uploadId = null, $sourceSize = null, $mimeType = null)
     {
         if ($source instanceof Kwf_Uploads_Row) {
+            $sourceSize = $source->getImageDimensions();
+            $mimeType = $source->mime_type;
+            $uploadId = $source->id;
             $source = $source->getFileSource();
         }
         if (is_string($source) && !is_file($source)) {
             return false;
         }
 
-        $sourceSize = @getimagesize($source);
+        if (!$sourceSize || !$mimeType) {
+            $s = @getimagesize($source);
+            if (!$sourceSize) {
+                $sourceSize = array(
+                    'width' => $s[0],
+                    'height' => $s[1],
+                );
+            }
+            if (!$mimeType) {
+                $mimeType = $s['mime'];
+            }
+            unset($s);
+        }
 
-        $size = self::calculateScaleDimensions($source, $size);
+        $size = self::calculateScaleDimensions($sourceSize, $size);
         if ($size === false) return false;
 
         // if image already has the correct size return original
@@ -494,7 +509,7 @@ class Kwf_Media_Image
         if (class_exists('Imagick')) {
             $preScale = array('factor'=>0);
             if ($uploadId && !$source instanceof Imagick) {
-                $preScale = self::_preScale($source, $sourceSize, $size, $uploadId);
+                $preScale = self::_preScale($source, $sourceSize, $mimeType, $size, $uploadId);
             }
 
             if ($source instanceof Imagick) {
@@ -507,7 +522,7 @@ class Kwf_Media_Image
                 $blob = file_get_contents($f);
                 Kwf_Util_Upload::onFileAccess($f);
                 if (!strlen($blob)) throw new Kwf_Exception("File is empty");
-                $im = self::_createImagickFromBlob($blob, $sourceSize['mime']);
+                $im = self::_createImagickFromBlob($blob, $mimeType);
             }
             if (!$preScale['factor']) {
                 //preScale does this already

@@ -58,7 +58,7 @@ class Kwf_Grid_Column_Image extends Kwf_Grid_Column
                 'height' => $this->getMaxHeight(),
                 'cover' => false,
             );
-            $size = Kwf_Media_Image::calculateScaleDimensions($uploadRow->getFileSource(), $size);
+            $size = Kwf_Media_Image::calculateScaleDimensions($uploadRow->getImageDimensions(), $size);
             $ret = array(
                 'previewUrl' => Kwf_Media::getUrl(get_class($this), $uploadRow->id,
                                                   'preview-'.$width.'-'.$this->getMaxHeight(),
@@ -72,7 +72,7 @@ class Kwf_Grid_Column_Image extends Kwf_Grid_Column
                     'height' => 250,
                     'cover' => false,
                 );
-                $size = Kwf_Media_Image::calculateScaleDimensions($uploadRow->getFileSource(), $size);
+                $size = Kwf_Media_Image::calculateScaleDimensions($uploadRow->getImageDimensions(), $size);
                 $ret['hoverUrl'] = Kwf_Media::getUrl(get_class($this), $uploadRow->id, 'hover', $uploadRow);
                 $ret['hoverHeight'] = $size['height'];
                 $ret['hoverWidth'] = $size['width'];
@@ -100,7 +100,7 @@ class Kwf_Grid_Column_Image extends Kwf_Grid_Column
             throw new Kwf_Exception_NotFound();
         }
         return array(
-            'contents' => Kwf_Media_Image::scale($uploadRow->getFileSource(), $size, $uploadRow->id),
+            'contents' => Kwf_Media_Image::scale($uploadRow, $size),
             'mimeType' => $uploadRow->mime_type
         );
     }
