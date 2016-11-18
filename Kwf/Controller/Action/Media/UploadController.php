@@ -173,7 +173,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         $cropWidth = $this->_getParam('cropWidth');
         $cropHeight = $this->_getParam('cropHeight');
 
-        $imageOriginal = new Imagick($fileRow->getFileSource());
+        $sourceSize = $fileRow->getImageDimensions();
         if ($this->_getParam('cropX') == null || $this->_getParam('cropY') == null
             || $this->_getParam('cropWidth') == null || $this->_getParam('cropHeight') == null
         ) { //calculate default selection
@@ -197,16 +197,16 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
             $cropX = 0;
             $cropY = 0;
-            $cropHeight = $imageOriginal->getImageHeight();
-            $cropWidth = $imageOriginal->getImageWidth();
-            if ($imageOriginal->getImageHeight() / $dimension['height']
-                > $imageOriginal->getImageWidth() / $dimension['width']
+            $cropHeight = $sourceSize['height'];
+            $cropWidth = $sourceSize['width'];
+            if ($sourceSize['height'] / $dimension['height']
+                > $sourceSize['width'] / $dimension['width']
             ) {// orientate on width
-                $cropHeight = $dimension['height'] * $imageOriginal->getImageWidth() / $dimension['width'];
-                $cropY = ($imageOriginal->getImageHeight() - $cropHeight) /2;
+                $cropHeight = $dimension['height'] * $sourceSize['width'] / $dimension['width'];
+                $cropY = ($sourceSize['height'] - $cropHeight) /2;
             } else {// orientate on height
-                $cropWidth = $dimension['width'] * $imageOriginal->getImageHeight() / $dimension['height'];
-                $cropX = ($imageOriginal->getImageWidth() - $cropWidth) /2;
+                $cropWidth = $dimension['width'] * $sourceSize['height'] / $dimension['height'];
+                $cropX = ($sourceSize['width'] - $cropWidth) /2;
             }
         }
 
@@ -215,9 +215,9 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         $image->readImageBlob($output['contents']);
         $previewFactor = 1;
         if ($image->getImageWidth() == $previewWidth) {
-            $previewFactor = $image->getImageWidth() / $imageOriginal->getImageWidth();
+            $previewFactor = $image->getImageWidth() / $sourceSize['width'];
         } else if ($image->getImageHeight() == $previewHeight) {
-            $previewFactor = $image->getImageHeight() / $imageOriginal->getImageHeight();
+            $previewFactor = $image->getImageHeight() / $sourceSize['height'];
         }
         $cropX = floor($cropX * $previewFactor);
         $cropY = floor($cropY * $previewFactor);
