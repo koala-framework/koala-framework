@@ -100,6 +100,8 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                         $depBrowserAlternatives[$package['main']] = $package['browser'];
                     } else {
                         foreach ($package['browser'] as $key => $value) {
+                            if (substr($key, 0, 2) == './') $key = $dependency->getType() . substr($key, 1);
+                            if (substr($value, 0, 2) == './') $value = $dependency->getType() . substr($value, 1);
                             $key = str_replace('.js', '', $key);
                             $value = str_replace('.js', '', $value);
                             $depBrowserAlternatives[$key] = $value;
@@ -144,11 +146,9 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             }
 
             if ($depBrowserAlternatives) {
-                $path = Kwf_Assets_Dependency_File::calculateAbsolutePath($dep);
-                $path = str_replace('/' . $dependency->getType() . '/', './', $path);
+                $path = substr(Kwf_Assets_Dependency_File::calculateAbsolutePath($dep), 1);
                 if (array_key_exists($path, $depBrowserAlternatives)) {
                     $dep = $depBrowserAlternatives[$path];
-                    $dep = str_replace('./', $dependency->getType() . '/', $dep);
                 }
             }
 
