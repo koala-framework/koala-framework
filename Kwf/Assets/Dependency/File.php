@@ -168,7 +168,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         return null;
     }
 
-    private static function _getAbsolutePath($path)
+    public static function getAbsolutePath($path)
     {
         if (substr($path, 0, 1)=='.') $path = getcwd().'/'.$path;
         $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
@@ -192,7 +192,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     public static function getPathWithTypeByFileName(Kwf_Assets_ProviderList_Abstract $providerList, $fileName)
     {
         $paths = $providerList->getPathTypes();
-        $fileName = self::_getAbsolutePath($fileName);
+        $fileName = self::getAbsolutePath($fileName);
         $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
         foreach ($paths as $k=>$p) {
             if ($p == '.') $p = getcwd();

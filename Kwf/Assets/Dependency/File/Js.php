@@ -9,6 +9,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     public function getContentsPacked()
     {
         $fileName = $this->getFileNameWithType();
+        $fileName = $this->getAbsolutePath($fileName);
         $rawContents = file_get_contents($this->getAbsoluteFileName());
 
 
@@ -31,9 +32,9 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
         if ($usesUniquePrefix || $useTrl || $useBabel) {
             //when contents contain .cssClass we must cache per app
-            $buildFile = 'cache/uglifyjs/'.$fileName.'.v6'.md5(file_get_contents($this->getAbsoluteFileName()).Kwf_Config::getValue('application.uniquePrefix'));
+            $buildFile = 'cache/uglifyjs'.$fileName.'.v6'.md5(file_get_contents($this->getAbsoluteFileName()).Kwf_Config::getValue('application.uniquePrefix'));
         } else {
-            $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.v6'.md5(file_get_contents($this->getAbsoluteFileName()));
+            $buildFile = sys_get_temp_dir().'/kwf-uglifyjs'.$fileName.'.v6'.md5(file_get_contents($this->getAbsoluteFileName()));
         }
 
         if (!file_exists("$buildFile.min.js")) {
