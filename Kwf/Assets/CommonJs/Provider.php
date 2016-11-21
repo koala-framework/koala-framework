@@ -92,7 +92,6 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 $deps = $parsedFile['deps'];
                 unlink($temp);
             }
-
             if (file_exists("node_modules/" . (string)$dependency)) {
                 $dep = (string)$dependency;
                 $package = json_decode(file_get_contents("node_modules/" . substr($dep, 0, strpos($dep, "/")) . '/package.json'), true);
@@ -101,6 +100,8 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                         $depBrowserAlternatives[$package['main']] = $package['browser'];
                     } else {
                         foreach ($package['browser'] as $key => $value) {
+                            $key = str_replace('.js', '', $key);
+                            $value = str_replace('.js', '', $value);
                             $depBrowserAlternatives[$key] = $value;
                         }
                     }
@@ -141,6 +142,16 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 }
                 $dep = $dir . '/'. $dep;
             }
+
+            if ($depBrowserAlternatives) {
+                $path = $dependency->getAbsolutePath($dep);
+                $path = str_replace('/' . $dependency->getType() . '/', './', $path);
+                if (array_key_exists($path, $depBrowserAlternatives)) {
+                    $dep = $depBrowserAlternatives[$path];
+                    $dep = str_replace('./', $dependency->getType() . '/', $dep);
+                }
+            }
+
             $d = $this->_providerList->findDependency($dep);
             if (!$d) throw new Kwf_Exception("Can't resolve dependency: require '$depName' => '$dep' for $dependency");
             $ret[$depName] = $d;
