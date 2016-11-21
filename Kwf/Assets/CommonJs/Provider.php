@@ -165,7 +165,15 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             $d->setDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $requires);
 
             foreach ($this->_parseDependencies($d) as $index=>$i) {
-                $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $i, $index);
+                if ($i->getMimeType() == 'text/javascript') {
+                    $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $i, $index);
+                } else {
+                    //add css dependency twice: 1. empty commonjs (to make boweser-pack happy)
+                                              //2. the actual css so it will be included in the css
+                    $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, new Kwf_Assets_Dependency_Empty($i->getIdentifier().'Empty', $i->getMimeType(), $this->_providerList), $index);
+                    $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $i, $index);
+                }
+
             }
 
         }
