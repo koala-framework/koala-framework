@@ -4,14 +4,14 @@
  *
  * Will NOT get deleted on clear-cache
  */
-class Kwf_Media_MemoryCache
+class Kwf_Media_OutputCache
 {
     /**
      * @var Zend_Cache_Core
      */
     private $_secondLevelCache = null;
     /**
-     * @var self
+     * @var Kwf_Media_OutputCache
      */
     private static $_instance;
 
@@ -38,7 +38,7 @@ class Kwf_Media_MemoryCache
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true,
             ));
-            $c->setBackend(new Kwf_Media_MemoryCacheFileBackend(array(
+            $c->setBackend(new Kwf_Media_OutputCacheFileBackend(array(
                 'cache_dir' => Kwf_Config::getValue('mediametaCacheDir'),
                 'hashed_directory_level' => 2,
             )));

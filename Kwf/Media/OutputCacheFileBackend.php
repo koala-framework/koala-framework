@@ -1,5 +1,5 @@
 <?php
-class Kwf_Media_MemoryCacheFileBackend extends Kwf_Cache_Backend_File
+class Kwf_Media_OutputCacheFileBackend extends Kwf_Cache_Backend_File
 {
     protected function _fileGetContents($file)
     {
