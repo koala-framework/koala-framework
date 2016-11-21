@@ -373,7 +373,7 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
                     throw new Kwf_Exception("UploadRow '".$attachmentRow->filename."' konnte in Upload Model '".$attachmentRow->upload_model."' nicht gefunden werden");
                 }
                 $mime = new Zend_Mime_Part(file_get_contents($uploadRow->getFileSource()));
-                Kwf_Util_Upload::onFileAccess($uploadRow->getFileSource());
+                Kwf_Util_Upload::onFileRead($uploadRow->getFileSource());
                 $mime->filename = $attachmentRow->mail_filename;
                 $mime->encoding = Zend_Mime::ENCODING_BASE64;
                 $mime->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;

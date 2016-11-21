@@ -258,7 +258,7 @@ class Kwf_Setup
             $output = Kwf_Media::getOutput($class, $id, $type);
             Kwf_Media_Output::outputWithoutShutdown($output);
             if (isset($output['file'])) {
-                Kwf_Util_Media::onCacheFileAccess($output['file']);
+                Kwf_Util_Media::onCacheFileRead($output['file']);
             }
             Kwf_Benchmark::shutDown();
             exit;

@@ -201,6 +201,7 @@ class Kwf_Media
                     file_put_contents($cacheFileName, $output['contents']);
                     $output['file'] = $cacheFileName;
                     unset($output['contents']);
+                    Kwf_Util_Media::onCacheFileWrite($cacheFileName);
                 }
                 Kwf_Media_OutputCache::getInstance()->save($output, $cacheId, $specificLifetime);
             }
