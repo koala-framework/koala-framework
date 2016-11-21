@@ -133,7 +133,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             $size = 'default';
         }
 
-        $cache = Kwf_Assets_Cache::getInstance();
+        $cache = Kwf_Media_OutputCache::getInstance();
         $cacheId = $size.'_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
@@ -159,7 +159,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
         //Scale dimensions
         $dimensions = array($previewWidth, $previewHeight, 'cover' => false);
-        $cache = Kwf_Assets_Cache::getInstance();
+        $cache = Kwf_Media_OutputCache::getInstance();
         $cacheId = 'previewLarge_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
