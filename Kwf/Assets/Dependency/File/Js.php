@@ -9,7 +9,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     public function getContentsPacked()
     {
         $fileName = $this->getFileNameWithType();
-        $fileName = $this->getAbsolutePath($fileName);
+        $fileName = self::calculateAbsolutePath($fileName);
         $rawContents = file_get_contents($this->getAbsoluteFileName());
 
 

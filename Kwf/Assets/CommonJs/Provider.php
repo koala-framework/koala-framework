@@ -144,7 +144,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             }
 
             if ($depBrowserAlternatives) {
-                $path = $dependency->getAbsolutePath($dep);
+                $path = Kwf_Assets_Dependency_File::calculateAbsolutePath($dep);
                 $path = str_replace('/' . $dependency->getType() . '/', './', $path);
                 if (array_key_exists($path, $depBrowserAlternatives)) {
                     $dep = $depBrowserAlternatives[$path];
