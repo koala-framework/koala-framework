@@ -4,22 +4,6 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
     private $_config = null;
     private $_configMasterFiles = array();
 
-    private static function _getAbsolutePath($path)
-    {
-        if (substr($path, 0, 1)=='.') $path = getcwd().'/'.$path;
-        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-        $absolutes = array();
-        foreach ($parts as $part) {
-            if ('.' == $part) continue;
-            if ('..' == $part) {
-                array_pop($absolutes);
-            } else {
-                $absolutes[] = $part;
-            }
-        }
-        return DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
-    }
-
     public function getContentsPacked()
     {
         $cacheId = 'scss-v2-'.$this->getIdentifier();

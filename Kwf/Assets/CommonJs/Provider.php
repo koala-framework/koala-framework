@@ -92,7 +92,6 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 $deps = $parsedFile['deps'];
                 unlink($temp);
             }
-
             if (file_exists("node_modules/" . (string)$dependency)) {
                 $dep = (string)$dependency;
                 $package = json_decode(file_get_contents("node_modules/" . substr($dep, 0, strpos($dep, "/")) . '/package.json'), true);
@@ -101,6 +100,10 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                         $depBrowserAlternatives[$package['main']] = $package['browser'];
                     } else {
                         foreach ($package['browser'] as $key => $value) {
+                            if (substr($key, 0, 2) == './') $key = $dependency->getType() . substr($key, 1);
+                            if (substr($value, 0, 2) == './') $value = $dependency->getType() . substr($value, 1);
+                            $key = str_replace('.js', '', $key);
+                            $value = str_replace('.js', '', $value);
                             $depBrowserAlternatives[$key] = $value;
                         }
                     }
@@ -141,6 +144,14 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 }
                 $dep = $dir . '/'. $dep;
             }
+
+            if ($depBrowserAlternatives) {
+                $path = substr(Kwf_Assets_Dependency_File::calculateAbsolutePath($dep), 1);
+                if (array_key_exists($path, $depBrowserAlternatives)) {
+                    $dep = $depBrowserAlternatives[$path];
+                }
+            }
+
             $d = $this->_providerList->findDependency($dep);
             if (!$d) throw new Kwf_Exception("Can't resolve dependency: require '$depName' => '$dep' for $dependency");
             $ret[$depName] = $d;
@@ -154,7 +165,15 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             $d->setDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $requires);
 
             foreach ($this->_parseDependencies($d) as $index=>$i) {
-                $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $i, $index);
+                if ($i->getMimeType() == 'text/javascript') {
+                    $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $i, $index);
+                } else {
+                    //add css dependency twice: 1. empty commonjs (to make boweser-pack happy)
+                                              //2. the actual css so it will be included in the css
+                    $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, new Kwf_Assets_Dependency_Empty($i->getIdentifier().'Empty', $i->getMimeType(), $this->_providerList), $index);
+                    $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $i, $index);
+                }
+
             }
 
         }
