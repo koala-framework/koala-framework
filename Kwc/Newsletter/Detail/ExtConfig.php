@@ -84,7 +84,9 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
         $mailClass = (Kwc_Abstract::getChildComponentClass($this->_class, 'mail'));
         $recipientSources = Kwc_Abstract::getSetting($mailClass, 'recipientSources');
         foreach ($recipientSources as &$recipientSource) {
-            $recipientSource['title'] = Kwf_Trl::getInstance()->trlStaticExecute($recipientSource['title']);
+            if (isset($recipientSource['title'])) {
+                $recipientSource['title'] = Kwf_Trl::getInstance()->trlStaticExecute($recipientSource['title']);
+            }
         }
         return $recipientSources;
     }
