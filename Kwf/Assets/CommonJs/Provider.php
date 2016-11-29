@@ -101,9 +101,11 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                     } else {
                         foreach ($package['browser'] as $key => $value) {
                             if (substr($key, 0, 2) == './') $key = $dependency->getType() . substr($key, 1);
-                            if (substr($value, 0, 2) == './') $value = $dependency->getType() . substr($value, 1);
                             $key = str_replace('.js', '', $key);
-                            $value = str_replace('.js', '', $value);
+                            if ($value !== false) {
+                                if (substr($value, 0, 2) == './') $value = $dependency->getType() . substr($value, 1);
+                                $value = str_replace('.js', '', $value);
+                            }
                             $depBrowserAlternatives[$key] = $value;
                         }
                     }
@@ -145,14 +147,19 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 $dep = $dir . '/'. $dep;
             }
 
+            $d = null;
             if ($depBrowserAlternatives) {
                 $path = substr(Kwf_Assets_Dependency_File::calculateAbsolutePath($dep), 1);
                 if (array_key_exists($path, $depBrowserAlternatives)) {
-                    $dep = $depBrowserAlternatives[$path];
+                    if (!$depBrowserAlternatives[$path]) {
+                        $d = new Kwf_Assets_Dependency_EmptyJs($dep, $this->_providerList);
+                    } else {
+                        $dep = $depBrowserAlternatives[$path];
+                    }
                 }
             }
 
-            $d = $this->_providerList->findDependency($dep);
+            if (!$d) $d = $this->_providerList->findDependency($dep);
             if (!$d) throw new Kwf_Exception("Can't resolve dependency: require '$depName' => '$dep' for $dependency");
             $ret[$depName] = $d;
 
@@ -170,7 +177,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
                 } else {
                     //add css dependency twice: 1. empty commonjs (to make boweser-pack happy)
                                               //2. the actual css so it will be included in the css
-                    $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, new Kwf_Assets_Dependency_Empty($i->getIdentifier().'Empty', $i->getMimeType(), $this->_providerList), $index);
+                    $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, new Kwf_Assets_Dependency_EmptyJs($i->getIdentifier().'Empty', $this->_providerList), $index);
                     $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $i, $index);
                 }
 
