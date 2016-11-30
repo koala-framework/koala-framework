@@ -8,7 +8,8 @@ class Kwf_Util_ClearCache_Types_ApcUser extends Kwf_Util_ClearCache_Types_Abstra
 
     protected function _clearCache($options)
     {
-        Kwf_Util_ClearCache::clearApcUser();
+        $options['outputFn'] = array($this, 'outputFn');
+        Kwf_Util_ClearCache::clearApcUser($options);
     }
 
     public function getTypeName()
