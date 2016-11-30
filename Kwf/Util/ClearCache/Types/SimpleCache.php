@@ -3,11 +3,7 @@ class Kwf_Util_ClearCache_Types_SimpleCache extends Kwf_Util_ClearCache_Types_Ab
 {
     protected function _clearCache($options)
     {
-        if (Kwf_Config::getValue('cacheSimpleNamespace')) {
-            $this->_output("change cacheSimpleNamespace config setting to clear");
-        } else {
-            Kwf_Cache_Simple::_clear();
-        }
+        Kwf_Cache_Simple::_clear();
     }
 
     public function getTypeName()

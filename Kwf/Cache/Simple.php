@@ -261,17 +261,18 @@ class Kwf_Cache_Simple
                 if ($mc->get(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace')) {
                     $mc->increment(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace');
                 }
+            } else {
+                $mc = Kwf_Cache_Simple::getMemcache();
+                $mc->flush();
             }
         } else if (self::getBackend() == 'redis') {
             $prefixLength = strlen(self::getRedis()->_prefix(''));
-            if (!Kwf_Config::getValue('cacheSimpleNamespace')) {
-                $it = null;
-                while ($keys = self::getRedis()->scan($it, self::getRedis()->_prefix('simple:*'))) {
-                    foreach ($keys as $k=>$i) {
-                        $keys[$k] = substr($i, $prefixLength);
-                    }
-                    self::getRedis()->delete($keys);
+            $it = null;
+            while ($keys = self::getRedis()->scan($it, self::getRedis()->_prefix('simple:*'))) {
+                foreach ($keys as $k=>$i) {
+                    $keys[$k] = substr($i, $prefixLength);
                 }
+                self::getRedis()->delete($keys);
             }
         } else if (self::getBackend() == 'file') {
             foreach(glob('cache/simple/*') as $i) {
