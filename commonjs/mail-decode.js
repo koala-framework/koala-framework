@@ -21,4 +21,4 @@ onReady.onRender('span.kwfEncodedMail', function decodeMail(el)
     var txt = el.innerHTML;
     txt = txt.replace(atDecoding, '@');
     el.innerHTML = txt.replace(dotDecoding, '.');
-}, { defer: false, checkVisibility: true });
+}, { defer: false });

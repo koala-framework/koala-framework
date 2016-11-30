@@ -6,6 +6,6 @@
    @include transition-duration(0.6s);
 
    &.stick {
-        @include box-shadow;
+        @include single-box-shadow;
     }
 }
