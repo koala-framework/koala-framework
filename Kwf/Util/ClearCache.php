@@ -48,7 +48,7 @@ class Kwf_Util_ClearCache
         return $ret;
     }
 
-    public static function clearOptcode($files = null)
+    public static function clearOptcode($files = null, array $options = array())
     {
         if ($files && !is_array($files)) $files = array($files);
 
@@ -58,30 +58,46 @@ class Kwf_Util_ClearCache
                 $cmd .= ' '.implode(',', $files);
             }
             exec($cmd, $output, $ret);
+            $output = implode("\n", $output);
+            if (isset($options['outputFn']) && $output) {
+                call_user_func($options['outputFn'], $output);
+            }
             if ($ret) {
-                echo "\n\n".implode("\n   ",$output)."\n";
-                throw new Kwf_Exception("Error with external script: $cmd");
+                if (isset($options['outputFn'])) {
+                    call_user_func($options['outputFn'], 'externalClearCacheScript failed');
+                }
+                return false;
+            } else {
+                return true;
             }
         } else {
             if ($files) {
-                Kwf_Util_Apc::callClearCacheByCli(array('files' => implode(',', $files)));
+                return Kwf_Util_Apc::callClearCacheByCli(array('files' => implode(',', $files)), $options);
             } else {
-                Kwf_Util_Apc::callClearCacheByCli(array('type' => 'file'));
+                return Kwf_Util_Apc::callClearCacheByCli(array('type' => 'file'), $options);
             }
         }
     }
 
-    public static function clearApcUser()
+    public static function clearApcUser(array $options = array())
     {
         if ($cmd = Kwf_Config::getValue('externalClearCacheScript')) {
             $cmd .= ' apc-user';
             exec($cmd, $output, $ret);
+            $output = implode("\n", $output);
+            if (isset($options['outputFn']) && $output) {
+                call_user_func($options['outputFn'], $output);
+            }
             if ($ret) {
-                echo "\n\n".implode("\n   ",$output)."\n";
-                throw new Kwf_Exception("Error with external script: $cmd");
+                if (isset($options['outputFn'])) {
+                    call_user_func($options['outputFn'], 'externalClearCacheScript failed');
+                }
+                return false;
+            } else {
+                return true;
             }
         } else {
-            Kwf_Util_Apc::callClearCacheByCli(array('type' => 'user'));
+            return Kwf_Util_Apc::callClearCacheByCli(array('type' => 'user'), $options);
         }
     }
 

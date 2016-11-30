@@ -37,23 +37,17 @@ Ext2.applyIf(Function.prototype, {
 if (!Ext2.isObject) {
     //TODO Ext4: remove
     Ext2.isObject = (Ext2.toString.call(null) === '[object Object]') ?
-    function(value) {
-        // check ownerDocument here as well to exclude DOM nodes
-        return value !== null && value !== undefined && Ext2.toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
-    } :
-    function(value) {
-        return Ext2.toString.call(value) === '[object Object]';
-    };
+        function(value) {
+            // check ownerDocument here as well to exclude DOM nodes
+            return value !== null && value !== undefined && Ext2.toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
+        } :
+        function(value) {
+            return Ext2.toString.call(value) === '[object Object]';
+        };
 }
 
 Ext2.onReady(function()
 {
-//     Ext2.state.Manager.setProvider(new Ext2.state.CookieProvider());
-
-    if (Ext2.QuickTips) {
-        Ext2.QuickTips.init();
-    }
-
     if (Ext2.isIE6) {
         Ext2.each(Ext2.DomQuery.select('.addHover'), function(el) {
             var extEl = Ext2.fly(el);
