@@ -324,7 +324,7 @@ class Kwf_Util_ClearCache_Watcher
                 }
             } else if (self::_endsWith($event->filename, '/Component.tpl') || self::_endsWith($event->filename, '/Component.twig')) {
                 if ($event instanceof Event\Modify) {
-                    self::_deleteViewCache(array(array('component_class'=>$matchingClasses, 'type'=>'component', 'renderer'=>'component')));
+                    self::_deleteViewCache(array(array('component_class'=>$matchingClasses, 'type'=>'component')));
                 }
             } else if (self::_endsWith($event->filename, '/Partial.tpl') || self::_endsWith($event->filename, '/Partial.twig')) {
                 if ($event instanceof Event\Modify) {
