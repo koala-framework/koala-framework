@@ -9,6 +9,7 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
         $ret = array_merge(parent::getSettings($param), array(
             'componentName' => trlKwfStatic('Community Video'),
             'componentCategory' => 'media',
+            'componentIcon' => 'control_play',
             'ownModel'     => 'Kwc_Advanced_CommunityVideo_Model',
             'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
