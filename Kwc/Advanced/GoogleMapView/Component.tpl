@@ -39,11 +39,6 @@
             </form>
         <?php } ?>
 
-        <div class="mapDirSuggestParent">
-            <b><?= $this->data->trlKwf('Suggestions') ?></b>
-            <ul class="mapDirSuggest"></ul>
-        </div>
-
         <div class="mapDir"></div>
     <?php } else { ?>
         <?=$this->placeholder['noCoordinates']?>
