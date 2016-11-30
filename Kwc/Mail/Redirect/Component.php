@@ -17,15 +17,69 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public final function getRedirectRow()
+    public static function parseRecipientParam($recipient)
     {
-        if (!$this->_redirectRow) {
-            $this->_redirectRow = $this->_getRedirectRow();
+        $parts = explode('.', $recipient);
+        if (Kwf_Util_Hash::hash($parts[0].'.'.$parts[1].'.'.$parts[2]) != $parts[3]) {
+            throw new Kwf_Exception_AccessDenied();
         }
-        return $this->_redirectRow;
+        $redirectComponentId = $parts[0];
+        $recipientModelShortcut = $parts[1];
+        $recipientId = $parts[2];
+        $redirectComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($redirectComponentId);
+        if (!$redirectComponent) throw new Kwf_Exception_NotFound();
+        $m = Kwf_Model_Abstract::getInstance($redirectComponent->getComponent()->_getRecipientModelClass($recipientModelShortcut));
+        $ret = $m->getRow($recipientId);
+        if (!$ret) throw new Kwf_Exception_NotFound();
+        return $ret;
     }
 
-    protected function _getRedirectRow()
+    //can be overridden to customize redirect url
+    protected function _getRedirectUrl()
+    {
+        $r = $this->getRedirectRow();
+
+        if (isset($r->type) && $r->type != 'redirect') {
+            throw new Kwf_Exception('Invalid type');
+        }
+
+        return $r->value;
+    }
+
+    public final function getRedirectUrl()
+    {
+        $ret = $this->_getRedirectUrl();
+
+        //forward all get parameters except d
+        $get = $_GET;
+        unset($get['d']);
+
+        $cacheId = 'passMailReci-'.$ret;
+        $passMailRecipient = Kwf_Cache_Simple::fetch($cacheId);
+        if ($passMailRecipient === false) {
+            $passMailRecipient = 0;
+            if (substr($ret, 0, 1) == '/') {
+                $p = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$this->getData()->getDomain().$ret, null);
+                if ($p) {
+                    if (Kwc_Abstract::getFlag($p->componentClass, 'passMailRecipient')) {
+                        $passMailRecipient = true;
+                    }
+                }
+            }
+            Kwf_Cache_Simple::add($cacheId, $passMailRecipient);
+        }
+
+        if ($passMailRecipient) {
+            //internal page that also gets a prameter *might* need where they come from
+            $get['recipient'] = $this->getData()->componentId.'.'.$this->_params['recipientModelShortcut'].'.'.$this->_params['recipientId'];
+            $get['recipient'] .= '.'.Kwf_Util_Hash::hash($get['recipient']);
+        }
+        $get = http_build_query($get);
+
+        return $ret.($get ? '?'.$get : '');
+    }
+
+    protected final function _getRedirectRow()
     {
         if (!$this->_params || empty($this->_params['redirectId'])) {
             throw new Kwf_Exception("params in object must be set before _getRedirectRow is called");
@@ -90,81 +144,78 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             if (isset($_SERVER['REMOTE_ADDR'])) $statRow->ip = $_SERVER['REMOTE_ADDR'];
             $statRow->save();
         }
-
-        $r = $this->getRedirectRow();
-        if ($r->type == 'showcomponent') {
-            $recipientRow = Kwf_Model_Abstract::getInstance($params['recipientModelClass'])
-                ->getRow($params['recipientId']);
-            $c = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($r->value)->getComponent();
-            $c->processMailRedirectInput($recipientRow, $inputData);
-        }
     }
 
-    public function replaceLinks($mailText, Kwc_Mail_Recipient_Interface $recipient = null)
+    public function replaceLinks($mailText, Kwc_Mail_Recipient_Interface $recipient, $mode)
     {
-        if ($recipient) {
-            if ($recipient instanceof Kwf_Model_Row_Abstract) {
-                $class = get_class($recipient->getModel());
-                $recipientPrimary = $recipient->getModel()->getPrimaryKey();
-            } else {
-                throw new Kwf_Exception('Only models are supported.');
-            }
-            $recipientSource = $this->getRecipientModelShortcut($class);
-
-            $m = $this->getChildModel();
+        if ($mode == 'mailhtml' || $mode == 'html') {
+            $that = $this;
+            $mailText = preg_replace_callback('#(<a [^>]*href=")([^>"]+)()#', function($m) use ($that, $recipient) {
+                $link = htmlspecialchars_decode($m[2]);
+                $link = $that->_createRedirectUrl($link, $recipient);
+                return $m[1].htmlspecialchars($link).$m[3];
+            }, $mailText);
+        } else if ($mode == 'mailtext') {
+            $that = $this;
+            $mailText = preg_replace_callback('#https?://[^ \n]+#', function($m) use ($that, $recipient) {
+                $link = $m[0];
+                $link = $that->_createRedirectUrl($link, $recipient);
+                return $link;
+            }, $mailText);
         }
 
-        while (preg_match('/\*([a-zA-Z_]+?)\*(.+?)(\*\*(.+?))?\*/', $mailText, $matches)) {
-            if (!$recipient) {
-                $mailText = str_replace(
-                    $matches[0],
-                    $matches[2],
-                    $mailText
-                );
-            } else {
-                $href = htmlspecialchars_decode($matches[2]);
-                $title = '';
-                if (isset($matches[4])) {
-                    $title = urldecode(htmlspecialchars_decode($matches[4]));
-                }
-                if (!isset($this->_redirectRowsCache[$href.$title])) {
-                    $select = $m->select();
-                    $select->whereEquals('value', $href);
-                    $select->whereEquals('title', $title);
-                    $r = $m->getRow($select);
-                    if (!$r) {
-                        $r = $m->createRow(array(
-                            'value' => $href,
-                            'type' => $matches[1],
-                            'title' => $title
-                        ));
-                        $r->save();
-                    }
-                    $this->_redirectRowsCache[$href.$title] = $r;
-                }
-                $r = $this->_redirectRowsCache[$href.$title];
-
-                // $recipientSource muss immer dabei sein, auch wenn es nur ein
-                // model gibt. Würde später eines dazukommen, funktionierten die alten
-                // Links nicht mehr
-
-                // linkId_userId_userSource_hash
-                $newLink = $this->_getRedirectUrl(array(
-                    $r->id, $recipient->$recipientPrimary, $recipientSource
-                ));
-
-                $mailText = str_replace($matches[0], $newLink, $mailText);
-            }
-        }
         return $mailText;
     }
 
-    protected function _getRedirectUrl(array $parameters)
+    protected function _createRedirectUrl($href, $recipient)
+    {
+        $recipientPrimary = $recipient->getModel()->getPrimaryKey();
+        $recipientSource = $this->getRecipientModelShortcut(get_class($recipient->getModel()));
+
+        $m = $this->getChildModel();
+
+        if (substr($href, 0, 1) == '#') return $href;
+
+        $hrefParts = parse_url($href);
+        if (!isset($hrefParts['path'])) {
+            $hrefParts['path'] = '';
+        }
+        $query = isset($hrefParts['query']) ? $hrefParts['query'] : null;
+        if (!isset($hrefParts['host']) || $hrefParts['host'] == $this->getData()->getDomain()) {
+            $link = $hrefParts['path'];
+        } else {
+            $link = $hrefParts['scheme'] . '://'.$hrefParts['host'] . (isset($hrefParts['port']) ? $hrefParts['port'] : '') . $hrefParts['path'];
+        }
+
+        if (!isset($this->_redirectRowsCache[$link])) {
+            $select = $m->select();
+            $select->whereEquals('value', $link);
+            $r = $m->getRow($select);
+            if (!$r) {
+                $r = $m->createRow(array(
+                    'value' => $link,
+                ));
+                $r->save();
+            }
+            $this->_redirectRowsCache[$link] = $r;
+        }
+        $r = $this->_redirectRowsCache[$link];
+
+        // $recipientSource muss immer dabei sein, auch wenn es nur ein
+        // model gibt. Würde später eines dazukommen, funktionierten die alten
+        // Links nicht mehr
+
+        // linkId_userId_userSource_hash
+        return $this->_createHashedRedirectUrl(array(
+            $r->id, $recipient->$recipientPrimary, $recipientSource
+        )).($query ? '&'.$query : '');
+    }
+
+    protected function _createHashedRedirectUrl(array $parameters)
     {
         return $this->getData()->getAbsoluteUrl().'?d='
             .implode('_', $parameters)
-            .'_'.$this->_getHash($parameters);
+            .'_'.$this->_createRedirectHash($parameters);
     }
 
     public function getRecipientModelShortcut($recipientModelClass)
@@ -202,7 +253,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         return $recipientSources[$recipientShortcut];
     }
 
-    private function _getHash(array $hashData)
+    private function _createRedirectHash(array $hashData)
     {
         $hashData = implode('', $hashData);
         return substr(Kwf_Util_Hash::hash($hashData), 0, 6);

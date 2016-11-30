@@ -8,17 +8,17 @@
 
 <?= '-- '.$this->data->trlKwf('ACTIVATION LINK').' --'; ?>
 
-*showcomponent*<?= $this->doubleOptInComponentId; ?>*
+<?= $this->doubleOptInComponent->getAbsoluteUrl(); ?>
 
 <?php } else if ($this->unsubscribeComponentId) { ?>
 <?= $this->data->trlKwf('To unsubscribe anytime from our newsletter, click this link:'); ?>
 
-*showcomponent*<?= $this->unsubscribeComponentId; ?>*
+<?= $this->unsubscribeComponent->getAbsoluteUrl(); ?>
 
 <?php } ?>
 <?= $this->data->trlKwf('To change you data or settings, click this link:'); ?>
 
-*showcomponent*<?= $this->editComponentId; ?>*
+<?= $this->editComponent->getAbsoluteUrl(); ?>
 
 
 <?= $this->data->trlKwf('Thanks for your subscription!'); ?>
