@@ -8,7 +8,8 @@ class Kwf_Util_ClearCache_Types_ApcOptcode extends Kwf_Util_ClearCache_Types_Abs
 
     protected function _clearCache($options)
     {
-        Kwf_Util_ClearCache::clearOptcode();
+        $options['outputFn'] = array($this, 'outputFn');
+        Kwf_Util_ClearCache::clearOptcode(null, $options);
     }
 
     public function getTypeName()
