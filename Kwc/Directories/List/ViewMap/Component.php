@@ -39,7 +39,8 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         $ret['options'] = $this->_getSetting('mapOptions');
         if ($this->_getSearchForm()) {
             if (!Kwc_Abstract::getSetting($this->_getSearchForm()->componentClass, 'useAjaxRequest')) {
-                throw new Kwf_Exception_NotYetImplemented();
+                $e = new Kwf_Exception_NotYetImplemented();
+                $e->logOrThrow();
             }
             $ret['options']['searchFormComponentId'] = $this->_getSearchForm()->componentId;
         }
