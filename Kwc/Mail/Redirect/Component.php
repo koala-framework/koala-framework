@@ -19,6 +19,12 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
     public static function parseRecipientParam($recipient)
     {
+        $data = self::parseRecipientParamData($recipient);
+        return $data['recipient'];
+    }
+
+    public static function parseRecipientParamData($recipient)
+    {
         $parts = explode('.', $recipient);
         if (Kwf_Util_Hash::hash($parts[0].'.'.$parts[1].'.'.$parts[2]) != $parts[3]) {
             throw new Kwf_Exception_AccessDenied();
@@ -29,9 +35,13 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         $redirectComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($redirectComponentId);
         if (!$redirectComponent) throw new Kwf_Exception_NotFound();
         $m = Kwf_Model_Abstract::getInstance($redirectComponent->getComponent()->_getRecipientModelClass($recipientModelShortcut));
-        $ret = $m->getRow($recipientId);
-        if (!$ret) throw new Kwf_Exception_NotFound();
-        return $ret;
+        $recipient = $m->getRow($recipientId);
+        if (!$recipient) throw new Kwf_Exception_NotFound();
+        return array(
+            'recipient' => $recipient,
+            'recipientId' => $recipientId,
+            'recipientModelShortcut' => $recipientModelShortcut,
+        );
     }
 
     //can be overridden to customize redirect url
