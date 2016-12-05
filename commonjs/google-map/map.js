@@ -38,7 +38,6 @@ var maps = [];
  *     height (optional): The height of the map container in pixel. Defaults to 300.
  *     satelite (optional): 0 or 1, whether it should be possible to switch to satelite
  *            view or not. Defaults to 1.
- *     scale (optional): 0 or 1, whether to show the scale bar or not. Defaults to 1.
  *     zoomControl (optional): true to show large zoom controls. Defaults to true.
  *     overview (optional): 0 or 1, whether to show a small overview map at the bottom.
  */
@@ -53,7 +52,6 @@ var Map = function(config) {
     if (typeof this.config.width == 'undefined') this.config.width = 350;
     if (typeof this.config.height == 'undefined') this.config.height = 300;
     if (typeof this.config.satelite == 'undefined') this.config.satelite = 1;
-    if (typeof this.config.scale == 'undefined') this.config.scale = 1;
     if (typeof this.config.zoomControl == 'undefined') this.config.zoomControl = true;
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
@@ -135,7 +133,6 @@ Map.prototype = {
                 style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
                 position: google.maps.ControlPosition[this.config.zoomControlPosition]
             },
-            scaleControl: this.config.scale,
             mapTypeControl: this.config.mapType,
             overviewMapControl: this.config.overview,
             streetViewControl: this.config.streetViewControl,
