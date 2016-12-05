@@ -472,8 +472,14 @@ class Kwf_Media_Image
             return false;
         }
 
-        $sourceSize = @getimagesize($source);
-
+        if ($source instanceof Imagick) {
+            $sourceSize = array(
+                $source->getImageWidth(),
+                $source->getImageHeight()
+            );
+        } else {
+            $sourceSize = @getimagesize($source);
+        }
         $size = self::calculateScaleDimensions($source, $size);
         if ($size === false) return false;
 
