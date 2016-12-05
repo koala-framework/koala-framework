@@ -12,12 +12,17 @@ class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
         $ret['viewCache'] = false;
         $ret['flags']['skipFulltext'] = true;
         $ret['flags']['noIndex'] = true;
+        $ret['flags']['processInput'] = true;
+        $ret['flags']['passMailRecipient'] = true;
         return $ret;
     }
 
-    public function processMailRedirectInput($recipient, $params)
+    public function processInput(array $postData)
     {
-        $this->_recipient = $recipient;
+        if (!isset($postData['recipient'])) {
+            throw new Kwf_Exception_NotFound();
+        }
+        $this->_recipient = Kwc_Mail_Redirect_Component::parseRecipientParam($postData['recipient']);
         $this->processInput($params);
     }
 

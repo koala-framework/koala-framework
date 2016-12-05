@@ -8,6 +8,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
     implements Kwf_Media_Output_Interface
 {
     private $_mailData;
+    private $_recipient;
 
     public static function getSettings($param = null)
     {
@@ -40,8 +41,23 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
 
         $ret['flags']['skipFulltext'] = true;
         $ret['flags']['noIndex'] = true;
+        $ret['flags']['processInput'] = true;
+        $ret['flags']['passMailRecipient'] = true;
 
         return $ret;
+    }
+
+    public function getRecipient()
+    {
+        return $this->_recipient;
+    }
+
+    public function processInput($postData)
+    {
+        if (!isset($postData['recipient'])) {
+            throw new Kwf_Exception_NotFound();
+        }
+        $this->_recipient = Kwc_Mail_Redirect_Component::parseRecipientParam($postData['recipient']);
     }
 
     //override for dynamic recipient sources
@@ -139,7 +155,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $redirectComponent = $this->getData()->getChildComponent('_redirect');
         if ($redirectComponent) {
             $redirectComponent = $redirectComponent->getComponent();
-            $ret = $redirectComponent->replaceLinks($ret, $recipient);
+            $ret = $redirectComponent->replaceLinks($ret, $recipient, 'mailhtml');
         }
         Kwf_Benchmark::checkpoint('html: replaceLinks');
         if ($addViewTracker && $this->_getSetting('trackViews')) {
@@ -177,7 +193,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $ret = str_replace('&nbsp;', ' ', $ret);
         $redirect = $this->getData()->getChildComponent('_redirect');
         if ($redirect) {
-            $ret = $redirect->getComponent()->replaceLinks($ret, $recipient);
+            $ret = $redirect->getComponent()->replaceLinks($ret, $recipient, 'mailtext');
         }
         Kwf_Benchmark::checkpoint('text: replaceLinks');
         return $ret;
@@ -214,9 +230,11 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
     public function getPlaceholders(Kwc_Mail_Recipient_Interface $recipient = null)
     {
         $ret = array();
+        if (!$recipient) $recipient = $this->_recipient;
         if ($recipient) {
             $ret = Kwc_Mail_Recipient_Placeholders::getPlaceholders($recipient, $this->getData()->getLanguage());
         }
+
         return $ret;
     }
 

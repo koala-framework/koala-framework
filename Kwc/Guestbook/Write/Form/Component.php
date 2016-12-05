@@ -42,8 +42,8 @@ class Kwc_Guestbook_Write_Form_Component extends Kwc_Posts_Write_Form_Component
                         'email' => $row->email,
                         'url'   => $guestbookComponent->getAbsoluteUrl(),
                         'text'  => $row->content,
-                        'activateId' => $guestbookComponent->getChildComponent("-$activationChildId")->componentId,
-                        'activatePostId' => $row->id,
+                        'activateComponent' => $guestbookComponent->getChildComponent("-$activationChildId"),
+                        'activatePostId' => $row->id.'.'.Kwf_Util_Hash::hash($row->id),
                         'activationType' => $settingsRow->post_activation_type
                     ),
                     null,

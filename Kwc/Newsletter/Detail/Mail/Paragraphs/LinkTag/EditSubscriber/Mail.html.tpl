@@ -1,4 +1,2 @@
 <?php
-if ($this->data->url) {
-    echo '<a href="*showcomponent*' . $this->editSubscriber->componentId . '*">';
-}
+echo $this->componentLink($this->editSubscriber);

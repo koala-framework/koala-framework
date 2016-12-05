@@ -16,7 +16,11 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         $ret['subscribeType'] = self::CONFIRM_MAIL_ONLY;
 
         $ret['generators']['child']['component']['mail'] = 'Kwc_Newsletter_Subscribe_Mail_Component';
-        $ret['generators']['child']['component']['doubleOptIn'] = 'Kwc_Newsletter_Subscribe_DoubleOptIn_Component';
+        $ret['generators']['doubleOptIn'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Newsletter_Subscribe_DoubleOptIn_Component',
+            'name' => trlKwfStatic('Opt In')
+        );
 
         $ret['from'] = ''; // would be good if overwritten
 
@@ -109,22 +113,22 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         }
 
         $nlData = $this->getSubscribeToNewsletterComponent();
-        $editComponentId = $nlData->getChildComponent('_editSubscriber')->componentId;
-        $unsubscribeComponentId = null;
-        $doubleOptInComponentId = null;
+        $editComponent = $nlData->getChildComponent('_editSubscriber');
+        $unsubscribeComponent = null;
+        $doubleOptInComponent = null;
         if ($this->_getSetting('subscribeType') == self::DOUBLE_OPT_IN) {
-            $doubleOptInComponentId = $this->getData()->getChildComponent('-doubleOptIn')->componentId;
+            $doubleOptInComponent = $this->getData()->getChildComponent('_doubleOptIn');
         } else {
-            $unsubscribeComponentId = $nlData->getChildComponent('_unsubscribe')->componentId;
+            $unsubscribeComponent = $nlData->getChildComponent('_unsubscribe');
         }
 
         $mail = $this->getData()->getChildComponent('-mail')->getComponent();
         $mail->send($row, array(
             'formRow' => $row,
             'host' => $host,
-            'unsubscribeComponentId' => $unsubscribeComponentId,
-            'editComponentId' => $editComponentId,
-            'doubleOptInComponentId' => $doubleOptInComponentId
+            'unsubscribeComponent' => $unsubscribeComponent,
+            'editComponent' => $editComponent,
+            'doubleOptInComponent' => $doubleOptInComponent
         ));
     }
 
