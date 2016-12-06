@@ -133,11 +133,11 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             $size = 'default';
         }
 
-        $cache = Kwf_Assets_Cache::getInstance();
+        $cache = Kwf_Media_OutputCache::getInstance();
         $cacheId = $size.'_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
-            $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $sizes[$size], $fileRow->id);
+            $output['contents'] = Kwf_Media_Image::scale($fileRow, $sizes[$size]);
             $output['mimeType'] = $fileRow->mime_type;
             $cache->save($output, $cacheId);
         }
@@ -155,13 +155,15 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
             throw new Kwf_Exception_AccessDenied();
         }
+
+
         //Scale dimensions
         $dimensions = array($previewWidth, $previewHeight, 'cover' => false);
-        $cache = Kwf_Assets_Cache::getInstance();
+        $cache = Kwf_Media_OutputCache::getInstance();
         $cacheId = 'previewLarge_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
-            $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $dimensions, $fileRow->id);
+            $output['contents'] = Kwf_Media_Image::scale($fileRow, $dimensions);
             $output['mimeType'] = $fileRow->mime_type;
             $cache->save($output, $cacheId);
         }
@@ -171,7 +173,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         $cropWidth = $this->_getParam('cropWidth');
         $cropHeight = $this->_getParam('cropHeight');
 
-        $imageOriginal = new Imagick($fileRow->getFileSource());
+        $sourceSize = $fileRow->getImageDimensions();
         if ($this->_getParam('cropX') == null || $this->_getParam('cropY') == null
             || $this->_getParam('cropWidth') == null || $this->_getParam('cropHeight') == null
         ) { //calculate default selection
@@ -195,16 +197,16 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
             $cropX = 0;
             $cropY = 0;
-            $cropHeight = $imageOriginal->getImageHeight();
-            $cropWidth = $imageOriginal->getImageWidth();
-            if ($imageOriginal->getImageHeight() / $dimension['height']
-                > $imageOriginal->getImageWidth() / $dimension['width']
+            $cropHeight = $sourceSize['height'];
+            $cropWidth = $sourceSize['width'];
+            if ($sourceSize['height'] / $dimension['height']
+                > $sourceSize['width'] / $dimension['width']
             ) {// orientate on width
-                $cropHeight = $dimension['height'] * $imageOriginal->getImageWidth() / $dimension['width'];
-                $cropY = ($imageOriginal->getImageHeight() - $cropHeight) /2;
+                $cropHeight = $dimension['height'] * $sourceSize['width'] / $dimension['width'];
+                $cropY = ($sourceSize['height'] - $cropHeight) /2;
             } else {// orientate on height
-                $cropWidth = $dimension['width'] * $imageOriginal->getImageHeight() / $dimension['height'];
-                $cropX = ($imageOriginal->getImageWidth() - $cropWidth) /2;
+                $cropWidth = $dimension['width'] * $sourceSize['height'] / $dimension['height'];
+                $cropX = ($sourceSize['width'] - $cropWidth) /2;
             }
         }
 
@@ -213,9 +215,9 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         $image->readImageBlob($output['contents']);
         $previewFactor = 1;
         if ($image->getImageWidth() == $previewWidth) {
-            $previewFactor = $image->getImageWidth() / $imageOriginal->getImageWidth();
+            $previewFactor = $image->getImageWidth() / $sourceSize['width'];
         } else if ($image->getImageHeight() == $previewHeight) {
-            $previewFactor = $image->getImageHeight() / $imageOriginal->getImageHeight();
+            $previewFactor = $image->getImageHeight() / $sourceSize['height'];
         }
         $cropX = floor($cropX * $previewFactor);
         $cropY = floor($cropY * $previewFactor);
@@ -320,7 +322,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             'downloadFilename' => $fileRow->filename . '.' . $fileRow->extension
         );
         $targetSize = array(600, 600, 'cover' => false);
-        $image = Kwf_Media_Image::scale($fileRow->getFileSource(), $targetSize, $fileRow->id);
+        $image = Kwf_Media_Image::scale($fileRow, $targetSize);
         $outputParams['contents'] = $image;
         Kwf_Media_Output::output($outputParams);
     }

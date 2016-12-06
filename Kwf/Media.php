@@ -39,10 +39,10 @@ class Kwf_Media
         }
         if (is_null($time)) {
             $cacheId = 'mtime-'.self::createCacheId($class, $id, $type);
-            $time = Kwf_Media_MemoryCache::getInstance()->load($cacheId);
+            $time = Kwf_Media_OutputCache::getInstance()->load($cacheId);
             if (!$time) {
                 $time = time();
-                Kwf_Media_MemoryCache::getInstance()->save($time, $cacheId);
+                Kwf_Media_OutputCache::getInstance()->save($time, $cacheId);
             }
         }
         return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.rawurlencode($filename);
@@ -134,8 +134,8 @@ class Kwf_Media
 
         foreach ($types as $type) {
             $cacheId = self::createCacheId($class, $id, $type);
-            Kwf_Media_MemoryCache::getInstance()->remove($cacheId);
-            Kwf_Media_MemoryCache::getInstance()->remove('mtime-'.$cacheId);
+            Kwf_Media_OutputCache::getInstance()->remove($cacheId);
+            Kwf_Media_OutputCache::getInstance()->remove('mtime-'.$cacheId);
             //not required to delete cache/media/$cacheId, that will be regenerated if $cacheId is deleted
         }
     }
@@ -149,7 +149,7 @@ class Kwf_Media
     {
         $cacheId = self::createCacheId($class, $id, $type);
 
-        $output = Kwf_Media_MemoryCache::getInstance()->load($cacheId);
+        $output = Kwf_Media_OutputCache::getInstance()->load($cacheId);
 
         if ($output && !isset($output['file']) && !isset($output['contents'])) {
             //cache entry from older kwf version where file was not set
@@ -160,7 +160,7 @@ class Kwf_Media
         if ($output && isset($output['mtimeFiles'])) {
             foreach ($output['mtimeFiles'] as $f) {
                 if (filemtime($f) > $output['mtime']) {
-                    Kwf_Media_MemoryCache::getInstance()->remove($cacheId);
+                    Kwf_Media_OutputCache::getInstance()->remove($cacheId);
                     $output = false;
                     break;
                 }
@@ -194,17 +194,18 @@ class Kwf_Media
                 }
             }
             if ($useCache) {
-                $cacheData = $output;
-                if (isset($cacheData['contents']) && strlen($cacheData['contents']) > 20*1024) {
+                if (isset($output['contents']) && strlen($output['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
                     $cacheFileName = Kwf_Config::getValue('mediaCacheDir').'/'.$class.'/'.$id.'/'.$type;
                     if (!is_dir(dirname($cacheFileName))) @mkdir(dirname($cacheFileName), 0777, true);
-                    file_put_contents($cacheFileName, $cacheData['contents']);
-                    $cacheData['file'] = $cacheFileName;
-                    unset($cacheData['contents']);
+                    file_put_contents($cacheFileName, $output['contents']);
+                    $output['file'] = $cacheFileName;
+                    unset($output['contents']);
+                    Kwf_Util_Media::onCacheFileWrite($cacheFileName);
                 }
-                Kwf_Media_MemoryCache::getInstance()->save($cacheData, $cacheId, $specificLifetime);
+                Kwf_Media_OutputCache::getInstance()->save($output, $cacheId, $specificLifetime);
             }
+
         }
 
         return $output;

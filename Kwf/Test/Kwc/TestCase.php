@@ -30,7 +30,7 @@ abstract class Kwf_Test_Kwc_TestCase extends Kwf_Test_TestCase
         Kwf_Assets_Package_Default::clearInstances();
         Kwf_Component_LogDuplicateModel::setInstance(new Kwf_Model_FnF(array(
         )));
-        Kwf_Media_MemoryCache::getInstance()->clean();
+        Kwf_Media_OutputCache::getInstance()->clean();
         Kwf_Events_Subscriber::clearInstances();
         return $this->_root;
     }

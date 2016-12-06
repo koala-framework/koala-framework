@@ -46,7 +46,7 @@ class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
                 'cover' => false,
             );
             return array(
-                'contents' => Kwf_Media_Image::scale($uploadRow->getFileSource(), $size, $uploadRow->id),
+                'contents' => Kwf_Media_Image::scale($uploadRow, $size),
                 'mimeType' => $uploadRow->mime_type
             );
         } else {
