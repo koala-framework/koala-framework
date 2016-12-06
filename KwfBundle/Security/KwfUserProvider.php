@@ -17,7 +17,7 @@ class KwfUserProvider implements UserProviderInterface
 
     public function loadUserByUsername($userId)
     {
-        $userRow = $this->users->getRow($userId);
+        $userRow = $this->userModel->getRow($userId);
         if (!$userRow) {
             throw new UsernameNotFoundException($userId);
         }
