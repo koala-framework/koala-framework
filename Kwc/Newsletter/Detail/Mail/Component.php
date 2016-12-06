@@ -43,4 +43,21 @@ class Kwc_Newsletter_Detail_Mail_Component extends Kwc_Mail_Component
             }
         }
     }
+
+    public function isValidRecipient($recipient)
+    {
+        $ret = true;
+        if (!$recipient || !$recipient->getMailEmail()) {
+            $ret = false;
+
+        } else if ($recipient instanceof Kwc_Mail_Recipient_UnsubscribableInterface &&
+            $recipient->getMailUnsubscribe()) {
+            $ret = false;
+
+        } else if ($recipient instanceof Kwf_Model_Row_Abstract &&
+            $recipient->hasColumn('activated') && !$recipient->activated) {
+            $ret = false;
+        }
+        return $ret;
+    }
 }
