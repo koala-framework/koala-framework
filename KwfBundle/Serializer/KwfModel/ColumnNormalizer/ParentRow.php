@@ -25,7 +25,9 @@ class ParentRow implements ColumnNormalizerInterface, SerializerAwareInterface
             throw new \Exception("rule setting is required");
         }
         $parentRow = $row->getParentRow($settings['rule']);
-        if (isset($settings['groups'])) {
+        if (isset($settings['child_groups'])) {
+            $context['groups'] = $settings['child_groups'];
+        } else if (isset($settings['groups'])) {
             $context['groups'] = $settings['groups'];
         }
         return $this->serializer->normalize($parentRow, $format, $context);
