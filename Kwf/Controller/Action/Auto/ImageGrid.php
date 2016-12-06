@@ -144,7 +144,7 @@ abstract class Kwf_Controller_Action_Auto_ImageGrid extends Kwf_Controller_Actio
         $r['src_large'] = '/kwf/media/upload/preview?uploadId='.$row->{$imageRef['column']}.
             '&hashKey='.$hashKey.'&size=imageGridLarge';
         if ($uploadRow = $row->getParentRow($this->_imageRule)) {
-            $dim = Kwf_Media_Image::calculateScaleDimensions($uploadRow->getFileSource(), array(400, 400, 'cover' => false));
+            $dim = Kwf_Media_Image::calculateScaleDimensions($uploadRow->getImageDimensions(), array(400, 400, 'cover' => false));
             $r['src_large_width'] = $dim['width'];
             $r['src_large_height'] = $dim['height'];
         }

@@ -38,6 +38,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $this->save();
         $this->_putFileContents($contents);
         $this->_saveImageDimensions();
+        Kwf_Util_Upload::onFileWrite($this->getFileSource());
         return $this;
     }
 
