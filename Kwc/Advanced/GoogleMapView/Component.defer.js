@@ -3,11 +3,7 @@ var onReady = require('kwf/on-ready');
 var gmapLoader = require('kwf/google-map/loader');
 var gmapMap = require('kwf/google-map/map');
 
-var renderedMaps = [];
-
 var renderMap = function(el) {
-    if ($.inArray(el, renderedMaps) != -1) return;
-    renderedMaps.push(el);
 
     var cfg = el.find(".options", true);
     if (!cfg.length) return;
@@ -26,7 +22,6 @@ var renderMap = function(el) {
 
     var cls = eval(cfg.mapClass) || gmapMap;
     var myMap = new cls(cfg);
-    el.map = myMap;
 
     gmapLoader(function() {
         this.show();
@@ -36,9 +31,7 @@ var renderMap = function(el) {
 };
 
 onReady.onRender('.kwcClass', function(el) {
-    if (!el.get('gmapObject') && !el.is(':hidden')) {
-        el.data('gmapObject', renderMap(el));
-    }
+    el.data('gmapObject', renderMap(el));
 }, { checkVisibility: true });
 
 onReady.onRender('.kwcClass', function (el) {
