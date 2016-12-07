@@ -3,20 +3,18 @@ var onReady = require('kwf/on-ready');
 var gmapLoader = require('kwf/google-map/loader');
 var gmapMap = require('kwf/google-map/map');
 
-
-
 var renderedMaps = [];
 
-var renderMap = function(map) {
-    if ($.inArray(map, renderedMaps) != -1) return;
-    renderedMaps.push(map);
+var renderMap = function(el) {
+    if ($.inArray(el, renderedMaps) != -1) return;
+    renderedMaps.push(el);
 
-    var cfg = map.find(".options", true);
+    var cfg = el.find(".options", true);
     if (!cfg.length) return;
     cfg = $.parseJSON(cfg.val());
 
-    var text = map.find("div.text");
-    cfg.mapContainer = map;
+    var text = el.find("div.text");
+    cfg.mapContainer = el;
     if (!cfg.markers) {
         cfg.markers = {
             longitude : cfg.longitude,
@@ -28,7 +26,7 @@ var renderMap = function(map) {
 
     var cls = eval(cfg.mapClass) || gmapMap;
     var myMap = new cls(cfg);
-    map.map = myMap;
+    el.map = myMap;
 
     gmapLoader(function() {
         this.show();
@@ -37,9 +35,9 @@ var renderMap = function(map) {
     return myMap;
 };
 
-onReady.onRender('.kwcClass', function(map) {
-    if (!map.get('gmapObject') && !map.is(':hidden')) {
-        map.data('gmapObject', renderMap(map));
+onReady.onRender('.kwcClass', function(el) {
+    if (!el.get('gmapObject') && !el.is(':hidden')) {
+        el.data('gmapObject', renderMap(el));
     }
 }, { checkVisibility: true });
 
