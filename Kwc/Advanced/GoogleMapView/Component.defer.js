@@ -4,7 +4,6 @@ var gmapLoader = require('kwf/google-map/loader');
 var gmapMap = require('kwf/google-map/map');
 
 var renderMap = function(el) {
-
     var cfg = el.find(".options", true);
     if (!cfg.length) return;
     cfg = $.parseJSON(cfg.val());
@@ -60,3 +59,13 @@ onReady.onRender('.kwcClass', function (el) {
         }
     });
 });
+
+onReady.onResize('.kwcClass', function (el) {
+    if (el.hasClass('optimizedMobileUI')) {
+        var map = el.data('gmapObject');
+        if (map && map.gmap) { // gmap will be set once it's rendered
+            var gestureHandling = el.hasClass('gt700') ? 'auto' : 'greedy';
+            map.gmap.set('gestureHandling', gestureHandling);
+        }
+    }
+}, { priority: 5 /* after responsive-el */});
