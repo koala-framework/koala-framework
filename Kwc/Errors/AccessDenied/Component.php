@@ -1,5 +1,5 @@
 <?php
-class Kwc_Errors_AccessDenied_Component extends Kwc_Abstract
+class Kwc_Errors_AccessDenied_Component extends Kwc_Errors_Abstract_Component
 {
     public static function getSettings($param = null)
     {

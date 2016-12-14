@@ -70,6 +70,7 @@ abstract class Kwf_Exception_Abstract extends Exception
                 ->getComponentByClass($this->getComponentClass(), array('limit'=>1, 'subroot'=>$data));
 
             if ($notFound) {
+                $notFound->getComponent()->setException($exception);
                 return str_replace('{logId}', $this->_logId, $notFound->render(null, true));
             }
         }
