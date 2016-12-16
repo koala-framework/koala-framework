@@ -8,7 +8,7 @@ var renderMap = function(el) {
     if (!cfg.length) return;
     cfg = $.parseJSON(cfg.val());
 
-    var text = el.find("div.text");
+    var text = el.find("div.kwcBem__text");
     cfg.mapContainer = el;
     if (!cfg.markers) {
         cfg.markers = {

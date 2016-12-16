@@ -16,12 +16,12 @@
 
         <?php if ($this->text && ($this->text instanceof Kwf_Component_Data)) { ?>
             <?php if ($this->hasContent($this->text)) { ?>
-                <div class="text">
+                <div class="<?=$this->bemClass('text')?>">
                     <?= $this->component($this->text); ?>
                 </div>
             <?php } ?>
         <?php } else if ($this->text) { ?>
-            <div class="text">
+            <div class="<?=$this->bemClass('text')?>">
                 <?= $this->text; ?>
             </div>
         <?php } ?>
