@@ -47,7 +47,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
     //can be overridden to customize redirect url
     protected function _getRedirectUrl()
     {
-        $r = $this->getRedirectRow();
+        $r = $this->_getRedirectRow();
 
         if (isset($r->type) && $r->type != 'redirect') {
             throw new Kwf_Exception('Invalid type');
