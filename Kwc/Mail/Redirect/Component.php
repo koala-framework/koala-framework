@@ -177,7 +177,9 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         return $mailText;
     }
 
-    protected function _createRedirectUrl($href, $recipient)
+    //should be protected but that doesn't allow calling it from closure
+    //TODO: when upgrading to php 5.4 change to protected (and change $that in closure to $this)
+    public function _createRedirectUrl($href, $recipient)
     {
         $recipientPrimary = $recipient->getModel()->getPrimaryKey();
         $recipientSource = $this->getRecipientModelShortcut(get_class($recipient->getModel()));
