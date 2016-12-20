@@ -64,7 +64,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
     {
         $startPos = strpos($html, '<!-- assets -->');
         $endPos = strpos($html, '<!-- /assets -->')+16;
-        $assets = substr($html, $startPos, $endPos-$startPos-16);
+        $assets = '';
 
         $loadedAssets = array();
         foreach (self::_parseAssets($assets) as $i) {
