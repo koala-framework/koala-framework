@@ -211,7 +211,6 @@ class Kwf_Media_Image
             $sourceSize['rotation'] = self::getExifRotation($source);
         } else if ($source instanceof Imagick) {
             $sourceSize = $source->getImageGeometry();
-            $sourceSize['rotation'] = 0;
             $source = null;
         } else {
             $sourceSize = $source;
@@ -219,6 +218,7 @@ class Kwf_Media_Image
         }
 
         if (!$sourceSize) return false;
+        if (!isset($sourceSize['rotation'])) $sourceSize['rotation'] = 0;
 
         $w = null;
         if (isset($sourceSize[0])) $w = $sourceSize[0];
