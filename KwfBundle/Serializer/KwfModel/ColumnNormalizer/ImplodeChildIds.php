@@ -44,15 +44,16 @@ class ImplodeChildIds implements ColumnNormalizerInterface, ColumnDenormalizerIn
 
         $values = explode(',', $data);
         $existingRows = $row->getChildRows($settings['rule']);
+        $existingIds = array();
         foreach ($existingRows as $r) {
             $existingIds[] = $r->{$settings['column']};
         }
         foreach ($values as $v) {
             if (!in_array($v, $existingIds)) {
                 //create row
-                $row->createChildRow(array(
+                $row->createChildRow($settings['rule'], array(
                     $settings['column'] => $v
-                ))->save();
+                ));
             }
         }
         foreach ($existingRows as $r) {
