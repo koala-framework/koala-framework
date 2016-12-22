@@ -47,15 +47,10 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         return $select;
     }
 
-    protected function _getListItems()
-    {
-        return $this->getData()->getChildComponents($this->getSelect());
-    }
-
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
-        $children = $this->_getListItems();
+        $children = $this->getData()->getChildComponents($this->getSelect());
 
         // children ist die alte methode, bleibt drin wegen kompatibilität
         $ret['children'] = $children;
