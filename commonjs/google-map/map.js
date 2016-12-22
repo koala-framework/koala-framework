@@ -2,8 +2,6 @@ var $ = require('jQuery');
 var t = require('kwf/trl');
 var onReady = require('kwf/on-ready');
 
-var maps = [];
-
 /**
  * The Kwf GoogleMaps object
  *
@@ -187,19 +185,14 @@ Map.prototype = {
         // Opens the first InfoWindow. Must be deferred, because there were
         // problems opening InfoWindows in multiple maps on one site
         var showNextWindow = function() {
-            var map = maps.shift();
-            if (!map) return;
-
-            for (var i = 0; i < map.markers.length; i++) {
-                if (map.markers[i].kwfConfig.autoOpenInfoWindow) {
-                    map.showWindow(map.markers[i]);
+            for (var i = 0; i < this.markers.length; i++) {
+                if (this.markers[i].kwfConfig.autoOpenInfoWindow) {
+                    this.showWindow(this.markers[i]);
                 }
             }
         };
-        if (maps.length == 0) {
-            setTimeout($.proxy(showNextWindow, this), 1);
-        }
-        maps.push(this);
+
+        setTimeout($.proxy(showNextWindow, this), 1);
         this.fireEvent('show', this);
     },
 
