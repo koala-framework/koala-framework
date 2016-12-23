@@ -208,6 +208,7 @@ class Kwf_Media_Image
         // Get size of image (handle different param-possibilities)
         if (is_string($source)) {
             $sourceSize = @getimagesize($source);
+            $sourceSize['rotation'] = self::getExifRotation($source);
         } else if ($source instanceof Imagick) {
             $sourceSize = $source->getImageGeometry();
             $source = null;
@@ -217,6 +218,7 @@ class Kwf_Media_Image
         }
 
         if (!$sourceSize) return false;
+        if (!isset($sourceSize['rotation'])) $sourceSize['rotation'] = 0;
 
         $w = null;
         if (isset($sourceSize[0])) $w = $sourceSize[0];
@@ -245,6 +247,11 @@ class Kwf_Media_Image
 
         // get cover
         $cover = isset($targetSize['cover']) ? $targetSize['cover'] : true;
+
+        // Check if image has to be rotated
+        if ($sourceSize['rotation'] == 90) {
+            $originalSize = array($originalSize[1], $originalSize[0]);
+        }
 
         if ($outputWidth == 0 && $outputHeight == 0) {
             if ($crop) {
@@ -276,14 +283,6 @@ class Kwf_Media_Image
             }
         }
 
-        // Check if image has to be rotated
-        $rotate = 0;
-        if ($source) {
-            $rotate = self::getExifRotation($source);
-            if (abs($rotate) == 90) {
-                $originalSize = array($originalSize[1], $originalSize[0]);
-            }
-        }
 
         // Calculate missing dimension
         $calculateWidth = $originalSize[0];
@@ -385,7 +384,7 @@ class Kwf_Media_Image
         $ret = array(
             'width' => round($outputWidth),
             'height' => round($outputHeight),
-            'rotate' => $rotate,
+            'rotate' => $sourceSize['rotation'],
             'crop' => $crop
         );
 
@@ -479,20 +478,33 @@ class Kwf_Media_Image
         }
 
         if (!$sourceSize || !$mimeType) {
-            $s = @getimagesize($source);
-            if (!$sourceSize) {
-                $sourceSize = array(
-                    'width' => $s[0],
-                    'height' => $s[1],
-                );
+            if ($source instanceof Imagick) {
+                if (!$sourceSize) {
+                    $sourceSize = array(
+                        $source->getImageWidth(),
+                        $source->getImageHeight()
+                    );
+                }
+                if (!$mimeType) {
+                    $mimeType = $source->getImageMimeType();
+                }
+            } else {
+                $s = @getimagesize($source);
+                if (!$sourceSize) {
+                    $sourceSize = array(
+                        'width' => $s[0],
+                        'height' => $s[1],
+                    );
+                }
+                if (!$mimeType) {
+                    $mimeType = $s['mime'];
+                }
+                unset($s);
             }
-            if (!$mimeType) {
-                $mimeType = $s['mime'];
-            }
-            unset($s);
         }
 
         $size = self::calculateScaleDimensions($sourceSize, $size);
+
         if ($size === false) return false;
 
         // if image already has the correct size return original

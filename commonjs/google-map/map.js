@@ -2,8 +2,6 @@ var $ = require('jQuery');
 var t = require('kwf/trl');
 var onReady = require('kwf/on-ready');
 
-var maps = [];
-
 /**
  * The Kwf GoogleMaps object
  *
@@ -38,9 +36,7 @@ var maps = [];
  *     height (optional): The height of the map container in pixel. Defaults to 300.
  *     satelite (optional): 0 or 1, whether it should be possible to switch to satelite
  *            view or not. Defaults to 1.
- *     scale (optional): 0 or 1, whether to show the scale bar or not. Defaults to 1.
- *     zoomProperties (optional): 0 to show large zoom an move controls,
- *            1 to show small zoom an move controls. Defaults to 0.
+ *     zoomControl (optional): true to show large zoom controls. Defaults to true.
  *     overview (optional): 0 or 1, whether to show a small overview map at the bottom.
  */
 var Map = function(config) {
@@ -54,8 +50,7 @@ var Map = function(config) {
     if (typeof this.config.width == 'undefined') this.config.width = 350;
     if (typeof this.config.height == 'undefined') this.config.height = 300;
     if (typeof this.config.satelite == 'undefined') this.config.satelite = 1;
-    if (typeof this.config.scale == 'undefined') this.config.scale = 1;
-    if (typeof this.config.zoomProperties == 'undefined') this.config.zoomProperties = 0;
+    if (typeof this.config.zoomControl == 'undefined') this.config.zoomControl = true;
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
@@ -63,7 +58,6 @@ var Map = function(config) {
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
     if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
     if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
-    if (typeof this.config.panControl == 'undefined') this.config.panControl = false;
     if (typeof this.config.streetViewControl == 'undefined') this.config.streetViewControl = false;
 
     if (!this.config.markers) this.config.markers = [ ];
@@ -132,13 +126,11 @@ Map.prototype = {
         var mapOptions = {
             center: new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude)),
             zoom: (typeof this.config.zoom == 'number')? parseInt(this.config.zoom) : 13, //initial zoom has to be set
-            panControl: this.config.panControl,
-            zoomControl: this.config.zoomProperties,
+            zoomControl: this.config.zoomControl,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
                 position: google.maps.ControlPosition[this.config.zoomControlPosition]
             },
-            scaleControl: this.config.scale,
             mapTypeControl: this.config.mapType,
             overviewMapControl: this.config.overview,
             streetViewControl: this.config.streetViewControl,
@@ -193,19 +185,14 @@ Map.prototype = {
         // Opens the first InfoWindow. Must be deferred, because there were
         // problems opening InfoWindows in multiple maps on one site
         var showNextWindow = function() {
-            var map = maps.shift();
-            if (!map) return;
-
-            for (var i = 0; i < map.markers.length; i++) {
-                if (map.markers[i].kwfConfig.autoOpenInfoWindow) {
-                    map.showWindow(map.markers[i]);
+            for (var i = 0; i < this.markers.length; i++) {
+                if (this.markers[i].kwfConfig.autoOpenInfoWindow) {
+                    this.showWindow(this.markers[i]);
                 }
             }
         };
-        if (maps.length == 0) {
-            setTimeout($.proxy(showNextWindow, this), 1);
-        }
-        maps.push(this);
+
+        setTimeout($.proxy(showNextWindow, this), 1);
         this.fireEvent('show', this);
     },
 

@@ -70,33 +70,29 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
             $row = $nlRow->getNextQueueRow(getmypid());
             Kwf_Benchmark::checkpoint('get next recipient');
             if ($row) {
-
                 $recipient = $row->getRecipient();
-                if (!$recipient || !$recipient->getMailEmail()) {
-                    $countNoUser++;
-                    $status = 'usernotfound';
-                } else if ($recipient instanceof Kwc_Mail_Recipient_UnsubscribableInterface &&
-                    $recipient->getMailUnsubscribe())
-                {
-                    $countNoUser++;
-                    $status = 'usernotfound';
-                } else if ($recipient instanceof Kwf_Model_Row_Abstract &&
-                    $recipient->hasColumn('activated') && !$recipient->activated)
-                {
+                $mc = $nlRow->getMailComponent();
+                if (!$mc->isValidRecipient($recipient)) {
                     $countNoUser++;
                     $status = 'usernotfound';
                 } else {
                     try {
 
-                        $mc = $nlRow->getMailComponent();
-                        $t = microtime(true);
-                        $mail = $mc->createMail($recipient);
-                        $createTime = microtime(true)-$t;
+                        if ($mc instanceof Kwc_Mail_Abstract_Component) {
+                            $t = microtime(true);
+                            $mail = $mc->createMail($recipient);
+                            $createTime = microtime(true)-$t;
 
-                        $t = microtime(true);
-                        $mail->send();
-                        $sendTime = microtime(true)-$t;
-                        Kwf_Benchmark::checkpoint('send mail');
+                            $t = microtime(true);
+                            $mail->send();
+                            $sendTime = microtime(true)-$t;
+                            Kwf_Benchmark::checkpoint('send mail');
+                        } else {
+                            $t = microtime(true);
+                            $mc->send($recipient);
+                            $sendTime = microtime(true)-$t;
+                            Kwf_Benchmark::checkpoint('send mail');
+                        }
 
                         $count++;
                         $status = 'sent';

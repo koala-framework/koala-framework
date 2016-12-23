@@ -48,6 +48,8 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             if (isset($dimension['text'])) {
                 $dimension['text'] = Kwf_Trl::getInstance()->trlStaticExecute($dimension['text']);
             }
+            if (!isset($dimension['width'])) $dimension['width'] = 0;
+            if (!isset($dimension['height'])) $dimension['height'] = 0;
         }
         $imageUploadField->setDimensions($dimensions);
         $imageUploadField

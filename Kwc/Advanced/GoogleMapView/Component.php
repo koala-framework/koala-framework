@@ -29,13 +29,11 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
         $options['coordinates'] = str_replace(';', ',', $options['coordinates']);
 
         $defaults = array();
-        $defaults['zoomProperties'] = 0;
-        $defaults['panControl'] = 1;
+        $defaults['zoomControl'] = true;
         $defaults['streetView'] = 1;
         $defaults['zoom'] = 10;
         $defaults['height'] = 400;
         $defaults['width'] = ''; // use 100% width, if no width is given
-        $defaults['scale'] = 1;
         $defaults['satelite'] = 1;
         $defaults['overview'] = 1;
         $defaults['routing'] = 1;

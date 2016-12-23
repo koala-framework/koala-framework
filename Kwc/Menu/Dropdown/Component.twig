@@ -2,6 +2,7 @@
     <nav class="{{ rootElementClass }}">
         <input type="hidden" value="{{ config|json_encode() }}" />
         <ul class="{{ 'menu'|bemClass }}">
+            {% block menuItems %}
             {% for m in menu %}
                 {{ m.preHtml|raw }}
                 <li class="{{ m.class }}{% if m.submenu is defined and m.submenu|length %}
@@ -27,6 +28,7 @@
                 </li>
                 {{ m.postHtml|raw }}
             {% endfor %}
+            {% endblock %}
         </ul>
     </nav>
 {% endif %}

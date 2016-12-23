@@ -16,12 +16,12 @@
 
         <?php if ($this->text && ($this->text instanceof Kwf_Component_Data)) { ?>
             <?php if ($this->hasContent($this->text)) { ?>
-                <div class="text">
+                <div class="<?=$this->bemClass('text')?>">
                     <?= $this->component($this->text); ?>
                 </div>
             <?php } ?>
         <?php } else if ($this->text) { ?>
-            <div class="text">
+            <div class="<?=$this->bemClass('text')?>">
                 <?= $this->text; ?>
             </div>
         <?php } ?>
@@ -33,16 +33,11 @@
 
         <?php if ($this->options['routing']) { ?>
             <form action="#" class="fromAddress">
-                <input type="text" class="textBefore kwfUp-kwfClearOnFocus" placeholder="<?= $this->data->trlKwf('Place of departure: zip code, Town, Street'); ?>" />
+                <input type="text" class="textBefore" placeholder="<?= $this->data->trlKwf('Place of departure: zip code, Town, Street'); ?>" />
                 <button class="submitOn"><?= $this->data->trlKwf('Show Route') ?></button>
                 <div class="kwfUp-clear"></div>
             </form>
         <?php } ?>
-
-        <div class="mapDirSuggestParent">
-            <b><?= $this->data->trlKwf('Suggestions') ?></b>
-            <ul class="mapDirSuggest"></ul>
-        </div>
 
         <div class="mapDir"></div>
     <?php } else { ?>

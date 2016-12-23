@@ -12,6 +12,7 @@ class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Compon
             ),
         ));
         $ret['componentCategory'] = 'special';
+        $ret['componentIcon'] = 'map';
         $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
         $ret['placeholder']['noCoordinates'] = trlKwfStatic('coordinates not entered');
         $ret['assetsAdmin']['dep'][] = 'KwfGoogleMapField';
@@ -21,10 +22,14 @@ class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Compon
     protected function _getOptions()
     {
         $row = $this->_getRow();
-        $fields = array('coordinates', 'zoom', 'width', 'height', 'zoom_properties',
-                'scale', 'satelite', 'overview', 'routing', 'map_type', 'scrollwheel');
+        $fields = array('coordinates', 'zoom', 'width', 'height', 'zoomControl',
+                'satelite', 'overview', 'routing', 'map_type', 'scrollwheel');
         foreach ($fields as $f) {
-            $ret[$f] = $row->$f;
+            if ($f == 'zoomControl') {
+                $ret[$f] = $row->zoom_control;
+            } else {
+                $ret[$f] = $row->$f;
+            }
         }
         if (!isset($ret['coordinates'])) $ret['coordinates'] = '';
         return $ret;

@@ -22,6 +22,8 @@ class Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_CheckContents extends 
     {
         $startTime = microtime(true);
 
+        $secondsAsDurationHelper = new Kwf_View_Helper_SecondsAsDuration();
+
         foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $subroot) {
 
             $t = time();
@@ -31,7 +33,7 @@ class Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_CheckContents extends 
             //if ($this->_getParam('silent')) $cmd .= " --silent";
             passthru($cmd, $ret);
             if ($ret) exit($ret);
-            if ($debug) echo "[$subroot] check-for-invalid finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
+            if ($debug) echo "[$subroot] check-for-invalid finished: ".$secondsAsDurationHelper->secondsAsDuration(time()-$t)."\n\n";
 
             $t = time();
             if ($debug) echo "\n[$subroot] check-contents...\n";
@@ -41,14 +43,14 @@ class Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_CheckContents extends 
             //if ($this->_getParam('silent')) $cmd .= " --silent";
             passthru($cmd, $ret);
             if ($ret) exit($ret);
-            if ($debug) echo "[$subroot] check-contents finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
+            if ($debug) echo "[$subroot] check-contents finished: ".$secondsAsDurationHelper->secondsAsDuration(time()-$t)."\n\n";
 
             $t = time();
             if ($debug) echo "\n[$subroot] optimize...\n";
             Kwf_Util_Fulltext_Backend_Abstract::getInstance()->optimize($debug);
-            if ($debug) echo "[$subroot] optimize finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
+            if ($debug) echo "[$subroot] optimize finished: ".$secondsAsDurationHelper->secondsAsDuration(time()-$t)."\n\n";
         }
 
-        if ($debug) echo "\ncomplete fulltext check-contents finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
+        if ($debug) echo "\ncomplete fulltext check-contents finished: ".$secondsAsDurationHelper->secondsAsDuration(microtime(true)-$startTime)."s\n";
     }
 }

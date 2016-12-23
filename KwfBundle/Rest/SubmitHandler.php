@@ -31,9 +31,10 @@ class SubmitHandler
         $this->errors = array();
 
         foreach ($this->fields as $field) {
-            $value = $this->data->{$field['name']};
             if (isset($submitData[$field['name']])) {
                 $value = $submitData[$field['name']];
+            } else {
+                $value = $field['columnNormalizer']->normalize($this->data, $field['name'], $field['settings']);
             }
             if (isset($field['constraints'])) {
                 $violations = $this->validator->validate($value, $field['constraints']);

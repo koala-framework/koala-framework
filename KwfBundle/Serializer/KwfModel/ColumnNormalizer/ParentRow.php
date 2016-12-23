@@ -4,7 +4,7 @@ use Kwf_Model_Row_Interface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
 
-class ChildRows implements ColumnNormalizerInterface, SerializerAwareInterface
+class ParentRow implements ColumnNormalizerInterface, SerializerAwareInterface
 {
     /**
      * @var SerializerInterface
@@ -24,12 +24,12 @@ class ChildRows implements ColumnNormalizerInterface, SerializerAwareInterface
         if (!isset($settings['rule'])) {
             throw new \Exception("rule setting is required");
         }
-        $rows = $row->getChildRows($settings['rule']);
+        $parentRow = $row->getParentRow($settings['rule']);
         if (isset($settings['child_groups'])) {
             $context['groups'] = $settings['child_groups'];
         } else if (isset($settings['groups'])) {
             $context['groups'] = $settings['groups'];
         }
-        return $this->serializer->normalize($rows, $format, $context);
+        return $this->serializer->normalize($parentRow, $format, $context);
     }
 }
