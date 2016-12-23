@@ -4,7 +4,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     /**
      * @return Apache_Solr_Service
      */
-    private function _getSolrService($subroot)
+    protected function _getSolrService($subroot)
     {
         static $i = array();
         if (is_string($subroot) && $subroot) {
