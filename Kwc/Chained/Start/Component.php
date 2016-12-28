@@ -28,7 +28,7 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
                     $masterSr = $masterSr->parent;
                     if (!$masterSr) continue 2;
                 }
-                if ($masterSr->parent && $sr != $masterSr->parent->getSubroot()) {
+                if ($masterSr->parent && $sr->componentId != $masterSr->parent->getSubroot()->componentId) {
                     continue;
                 }
             }
