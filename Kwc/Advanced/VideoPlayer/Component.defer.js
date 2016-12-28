@@ -1,6 +1,6 @@
 var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
-require('mediaelement/build/mediaelement-and-player');
+require('kwf-jquery-plugin/mediaelement/build/mediaelement-and-player');
 // @require mediaelement/build/mediaelementplayer.css
 
 onReady.onHide('.kwcAdvancedVideoPlayer', function(el) {
