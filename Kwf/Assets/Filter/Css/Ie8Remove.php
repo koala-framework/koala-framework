@@ -11,7 +11,7 @@ class Kwf_Assets_Filter_Css_Ie8Remove extends Kwf_Assets_Filter_Css_AbstractPost
         return 'Kwf/Assets/Filter/Css/Ie8Remove';
     }
 
-    public function getPluginOptions()
+    public function getPluginOptions(Kwf_Assets_Dependency_Abstract $dependency = null)
     {
         return array(
         );

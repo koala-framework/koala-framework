@@ -9,14 +9,14 @@ abstract class Kwf_Assets_Filter_Css_AbstractPostCss extends Kwf_Assets_Filter_A
     abstract public function getPluginName();
     abstract public function getMasterFiles();
 
-    public function getPluginOptions()
+    public function getPluginOptions(Kwf_Assets_Dependency_Abstract $dependency = null)
     {
         return array();
     }
 
-    public function filter(Kwf_SourceMaps_SourceMap $sourcemap)
+    public function filter(Kwf_SourceMaps_SourceMap $sourcemap, Kwf_Assets_Dependency_Abstract $dependency = null)
     {
-        $pluginsInitCode = "plugins.push(require('".$this->getPluginName()."')(".json_encode((object)$this->getPluginOptions())."));";
+        $pluginsInitCode = "plugins.push(require('".$this->getPluginName()."')(".json_encode((object)$this->getPluginOptions($dependency))."));";
         $ret = Kwf_Assets_Filter_Css_PostCssRunner::run($pluginsInitCode, $sourcemap);
 
         $data = $ret->getMapContentsData(false);

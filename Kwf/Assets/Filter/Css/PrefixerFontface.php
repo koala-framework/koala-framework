@@ -18,7 +18,7 @@ class Kwf_Assets_Filter_Css_PrefixerFontface extends Kwf_Assets_Filter_Css_Abstr
         return 'postcss-prefixer-font-face';
     }
 
-    public function getPluginOptions()
+    public function getPluginOptions(Kwf_Assets_Dependency_Abstract $dependency = null)
     {
         return array(
             'prefix' => $this->_prefix
