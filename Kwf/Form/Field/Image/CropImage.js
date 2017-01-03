@@ -217,7 +217,7 @@ Kwf.Form.Field.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
             this._userSelectedCropRegion = null;
             cropData = this._generateDefaultCrop(preserveRatio);
         }
-        if (this.outWidth != 0 && this.outHeight != 0
+        if (this.outWidth != 0 && this.outHeight != 0 && this.cover
             && this.outWidth / this.outHeight != cropData.width / cropData.heigth
         ) {
             if (this._userSelectedCropRegion) {

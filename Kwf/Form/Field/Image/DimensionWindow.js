@@ -269,7 +269,8 @@ Kwf.Form.Field.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
             scaleFactor: this.imageData.imageHandyScaleFactor,
             width: cropImageWidth,
             height: cropImageHeight,
-            style: 'margin-left:'+cropImageWidth/-2+'px;margin-top:'+cropImageHeight/-2+'px'
+            style: 'margin-left:'+cropImageWidth/-2+'px;margin-top:'+cropImageHeight/-2+'px',
+            cover: this.value.cover
         });
         this._cropImage.on('cropChanged', function (cropData) {
             var value = {
