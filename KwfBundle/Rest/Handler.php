@@ -164,4 +164,9 @@ class Handler
     {
         return $this->model->createRow();
     }
+
+    public function getModel()
+    {
+        return $this->model;
+    }
 }
