@@ -32,6 +32,8 @@ class Kwf_View_Twig_Environment extends Twig_Environment
             array('Kwf_Component_Renderer_Twig_Environment', 'mailLink')));
         $this->addFilter(new Twig_SimpleFilter('hiddenOptions',
             array('Kwf_Component_Renderer_Twig_Environment', 'hiddenOptions')));
+        $this->addFilter(new Twig_SimpleFilter('fileSize',
+            array('Kwf_Component_Renderer_Twig_Environment', 'fileSize')));
     }
 
     public static function date($context, $date, $format = null)
@@ -111,5 +113,11 @@ class Kwf_View_Twig_Environment extends Twig_Environment
     {
         $helper = new Kwf_View_Helper_HiddenOptions();
         return new Twig_Markup($helper->hiddenOptions($options, $class), 'utf-8');
+    }
+
+    public static function fileSize($filesize)
+    {
+        $helper = new Kwf_View_Helper_FileSize();
+        return new Twig_Markup($helper->fileSize($filesize), 'utf-8');
     }
 }
