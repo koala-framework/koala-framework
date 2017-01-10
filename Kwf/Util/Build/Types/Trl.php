@@ -83,6 +83,11 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
     {
         $trlEntries = array();
         $kwfTrlFile = KWF_PATH.'/trl/'.$targetLanguage.'.po';
+        if (!file_exists($kwfTrlFile)) {
+            $trlConfig = json_decode(file_get_contents(KWF_PATH.'/composer.json'));
+            if (!file_exists(KWF_PATH.'/trl')) mkdir(KWF_PATH.'/trl');
+            $this->_downloadTrlFile($trlConfig->extra->{'kwf-lingohub'}, $kwfTrlFile, $targetLanguage);
+        }
         $kwfPoParser = \Sepia\PoParser::parseFile($kwfTrlFile);
         foreach ($kwfPoParser->entries() as $entry) {
             $entry = $this->_convertTrlEntry($entry);
@@ -190,24 +195,32 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             $composerConfig = json_decode(file_get_contents($composerFile));
             if (!isset($composerConfig->extra)) continue;
             if (!isset($composerConfig->extra->{'kwf-lingohub'})) continue;
-            $trlConfig = $composerConfig->extra->{'kwf-lingohub'};
-            $client = new Zend_Http_Client(Kwf_Registry::get('config')->trl->downloadUrl."/{$trlConfig->account}/{$trlConfig->project}/$targetLanguage");
-            $response = $client->request();
-            if ($response->isError()) {
-                if ($response->getStatus() == 404) {
-                    $file = "\n";
-                } else {
-                    throw new Kwf_Exception('Downloading resource from trl.koala-framework failed.');
-                }
-            } else {
-                $file = $response->getBody();
-            }
-            if (!$file) continue;
             if (!file_exists($trlDir)) mkdir($trlDir);
-            file_put_contents($trlFilePath, $file);
+            $trlConfig = $composerConfig->extra->{'kwf-lingohub'};
+            if (!$this->_downloadTrlFile($trlConfig, $trlFilePath, $targetLanguage)) {
+                continue;
+            }
             $existingFiles[] = $trlFilePath;
         }
         return $existingFiles;
+    }
+
+    private function _downloadTrlFile($trlConfig, $trlFilePath, $language)
+    {
+        $client = new Zend_Http_Client(Kwf_Registry::get('config')->trl->downloadUrl."/{$trlConfig->account}/{$trlConfig->project}/$language");
+        $response = $client->request();
+        if ($response->isError()) {
+            if ($response->getStatus() == 404) {
+                $file = "\n";
+            } else {
+                throw new Kwf_Exception('Downloading resource from trl.koala-framework failed.');
+            }
+        } else {
+            $file = $response->getBody();
+        }
+        if (!$file) return false;
+        file_put_contents($trlFilePath, $file);
+        return true;
     }
 
     public function getTypeName()
