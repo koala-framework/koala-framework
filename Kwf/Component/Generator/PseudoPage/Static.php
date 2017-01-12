@@ -16,26 +16,30 @@ class Kwf_Component_Generator_PseudoPage_Static extends Kwf_Component_Generator_
         return $ret;
     }
 
-    protected function _getFilenameFromRow($componentKey, $parentData)
+    protected function _getNameFromRow($componentKey, $parentData)
     {
-        $ret = false;
-
-        $c = $this->_settings;
-        if (isset($c['filename'])) {
-            $ret = $c['filename'];
-        }
-        if (!$ret && isset($c['name'])) {
-            $ret = $c['name'];
+        if (isset($this->_settings['name'])) {
+            $ret = $this->_settings['name'];
             if ($parentData) {
                 $pData = is_array($parentData) ? $parentData[0] : $parentData;
                 $ret = $pData->trlStaticExecute($ret);
             }
+        } else {
+            $ret = $componentKey;
+        }
+        return $ret;
+    }
+
+    protected function _getFilenameFromRow($componentKey, $parentData)
+    {
+        $ret = false;
+        if (isset($this->_settings['filename'])) {
+            $ret = $this->_settings['filename'];
+        }
+        if (!$ret) {
+            $ret = $this->_getNameFromRow($componentKey, $parentData);
         }
         $ret = Kwf_Filter::filterStatic($ret, 'Ascii');
-        if (!$ret) {
-            $ret = $componentKey;
-            $ret = Kwf_Filter::filterStatic($ret, 'Ascii');
-        }
         return $ret;
     }
 
@@ -44,7 +48,7 @@ class Kwf_Component_Generator_PseudoPage_Static extends Kwf_Component_Generator_
         $c = $this->_settings;
 
         $data = parent::_formatConfig($parentData, $componentKey);
-        $data['name'] = isset($c['name']) ? $parentData->trlStaticExecute($c['name']) : $componentKey;
+        $data['name'] = $this->_getNameFromRow($componentKey, $parentData);
         $data['filename'] = $this->_getFilenameFromRow($componentKey, $parentData);
         $data['rel'] = isset($c['rel']) ? $c['rel'] : '';
         $data['isPseudoPage'] = true;
