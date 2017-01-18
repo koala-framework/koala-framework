@@ -33,7 +33,7 @@ class Kwf_Component_PagesMetaRow extends Kwf_Model_Proxy_Row
         $c = $page;
         while ($c) {
             $c = $c->parent;
-            if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltextRecursive')) {
+            if (Kwc_Abstract::getFlag($c->componentClass, 'skipFulltextRecursive')) {
                 return true;
             }
         }
