@@ -27,6 +27,9 @@ class Kwf_Component_PagesMetaRow extends Kwf_Model_Proxy_Row
         if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) {
             return true;
         }
+        if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltextRecursive')) {
+            return true;
+        }
         if (!self::_canHaveFulltext($page->componentClass)) {
             return true;
         }
