@@ -27,6 +27,9 @@ class Kwf_Assets_CommonJs_Underscore_TemplateDependency extends Kwf_Assets_Depen
                     "module.exports = _.template('".$contents."');\n";
 
         $replacements = array();
+        if (strpos($contents, 'kwfLocal') !== false) {
+            $replacements['kwfLocal'] = Kwf_Assets_Filter_Css_KwfLocal::getLocalClassForDependency($this);
+        }
         if (strpos($contents, 'kwfUp-') !== false) {
             if (Kwf_Config::getValue('application.uniquePrefix')) {
                 $replacements['kwfUp-'] = Kwf_Config::getValue('application.uniquePrefix').'-';

@@ -18,11 +18,11 @@ class Kwf_Assets_Filter_Css_MultiplePostCss extends Kwf_Assets_Filter_Abstract
         return 'text/css';
     }
 
-    public function filter(Kwf_SourceMaps_SourceMap $sourcemap)
+    public function filter(Kwf_SourceMaps_SourceMap $sourcemap, Kwf_Assets_Dependency_Abstract $dependency = null)
     {
         $pluginsInitCode = "";
         foreach ($this->_filters as $f) {
-            $pluginsInitCode .= "plugins.push(require('".$f->getPluginName()."')(".json_encode((object)$f->getPluginOptions())."));\n";
+            $pluginsInitCode .= "plugins.push(require('".$f->getPluginName()."')(".json_encode((object)$f->getPluginOptions($dependency))."));\n";
         }
         $ret = Kwf_Assets_Filter_Css_PostCssRunner::run($pluginsInitCode, $sourcemap);
 
