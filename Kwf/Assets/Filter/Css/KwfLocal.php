@@ -28,7 +28,9 @@ class Kwf_Assets_Filter_Css_KwfLocal extends Kwf_Assets_Filter_Css_SelectorRepla
     {
         $ret = $dependency->getFileNameWithType();
         $ret = preg_replace('#^web/commonjs/views/#', '', $ret);
+        $ret = preg_replace('#^web/reactjs/components/#', '', $ret);
         $ret = preg_replace('#^web/components/(.*?)backbone/views/#', '\1', $ret);
+        $ret = preg_replace('#^web/components/(.*?)reactjs/components/#', '\1', $ret);
         $ret = preg_replace('#^web/#', '', $ret);
         $ret = preg_replace('#\.underscore\.tpl$#', '', $ret);
         $ret = preg_replace('#\.[a-z]+$#', '', $ret);
