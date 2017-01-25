@@ -15,10 +15,7 @@ class Kwf_Assets_Filter_Css_KwfLocal extends Kwf_Assets_Filter_Css_SelectorRepla
         }
 
         if ($dependency instanceof Kwf_Assets_Dependency_File) {
-            $prefix = Kwf_Config::getValue('application.uniquePrefix');
-            if ($prefix) $prefix .= '-';
-            else $prefix = '';
-            $replacements['kwfLocal'] = $prefix.self::getLocalClassForDependency($dependency);
+            $replacements['kwfLocal'] = self::getLocalClassForDependency($dependency);
         }
 
         return array(
@@ -40,6 +37,12 @@ class Kwf_Assets_Filter_Css_KwfLocal extends Kwf_Assets_Filter_Css_SelectorRepla
             return strtoupper($m[1]);
         }, $ret);
         $ret = str_replace('/', '', $ret);
+
+        $prefix = Kwf_Config::getValue('application.uniquePrefix');
+        if ($prefix) $prefix .= '-';
+        else $prefix = '';
+        $ret = $prefix.$ret;
+
         return $ret;
     }
 

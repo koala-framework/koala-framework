@@ -75,7 +75,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                     }
                 }
                 if (strpos($rawContents, 'kwfLocal') !== false) {
-                    $replacements['kwfLocal'] = 'kwfUp-'.Kwf_Assets_Filter_Css_KwfLocal::getLocalClassForDependency($this);
+                    $replacements['kwfLocal'] = Kwf_Assets_Filter_Css_KwfLocal::getLocalClassForDependency($this);
                 }
                 if (strpos($rawContents, 'kwfUp-') !== false) {
                     if (Kwf_Config::getValue('application.uniquePrefix')) {
