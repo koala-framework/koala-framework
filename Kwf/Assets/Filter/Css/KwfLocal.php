@@ -14,10 +14,12 @@ class Kwf_Assets_Filter_Css_KwfLocal extends Kwf_Assets_Filter_Css_SelectorRepla
             throw new Kwf_Exception("dependency is required for this filter");
         }
 
-        $prefix = Kwf_Config::getValue('application.uniquePrefix');
-        if ($prefix) $prefix .= '-';
-        else $prefix = '';
-        $replacements['kwfLocal'] = $prefix.self::getLocalClassForDependency($dependency);
+        if ($dependency instanceof Kwf_Assets_Dependency_File) {
+            $prefix = Kwf_Config::getValue('application.uniquePrefix');
+            if ($prefix) $prefix .= '-';
+            else $prefix = '';
+            $replacements['kwfLocal'] = $prefix.self::getLocalClassForDependency($dependency);
+        }
 
         return array(
             'replacements' => $replacements
