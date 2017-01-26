@@ -10,6 +10,7 @@ class Kwc_Advanced_IntegratorTemplate_Embed_ContentSender extends Kwf_Component_
         $ret = str_replace('href="/', 'href="' . $domain . '/', $ret);
         $ret = str_replace('src="/', 'src="' . $domain . '/', $ret);
         $ret = str_replace("src='/", "src='" . $domain . '/', $ret);
+        $ret = str_replace('action="/', 'action="' . $domain . '/', $ret);
         $up = Kwf_Config::getValue('uniquePrefix');
         $up = $up ? $up.'-' : '';
         $class = str_replace('kwfUp-', $up, Kwf_Component_Abstract::formatRootElementClass($this->_data->componentClass, '').'Master');
