@@ -52,8 +52,11 @@ var Tabs = function(el, config)
     // the hashPrefix value is provided by the config object,
     // containing the ID for this tab element in case of multiple tab elements
     var hash = window.location.hash;
-    var preSelect = (hash.indexOf(this.config.hashPrefix) < 0 ?
-        -1 : hash.split(this.config.hashPrefix + ':')[1]);
+    var preSelect = -1;
+    if (this.config.hashPrefix) {
+        preSelect = (hash.indexOf(this.config.hashPrefix) < 0 ?
+            -1 : hash.split(this.config.hashPrefix + ':')[1]);
+    }
     if (preSelect < 0) {
         // if preSelect turns out to be -1, show first tab as default
         if (activeTabIdx === false && this.switchEls.length) {
@@ -63,7 +66,7 @@ var Tabs = function(el, config)
         // if any preSelect value was recognized in the hash,
         // scroll down to this element and then preselect the tab with given id
         if (preSelect < this.switchEls.length) {
-            window.scrollTo(0, this.el.offsetTop);
+            window.scrollTo(0, this.el.offset().top - 30);
             activeTabIdx = preSelect;
         }
     }
@@ -152,8 +155,10 @@ Tabs.prototype = {
 
         this._activeTabIdx = idx;
 
-        // if this tab uses a hashPrefix to be recognized from the URL, set the new value.
-        window.location.hash = this.config.hashPrefix + ':' + idx;
+        if (this.config.hashPrefix) {
+            // if this tab uses a hashPrefix to be recognized from the URL, set the new value.
+            window.location.replace(window.location.href.split('#')[0] + '#' + this.config.hashPrefix + ':' + idx);
+        }
     },
 
     getIdxByContentEl: function(el) {
