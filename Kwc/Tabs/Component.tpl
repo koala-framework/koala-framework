@@ -1,4 +1,4 @@
-<div class="<?=$this->rootElementClass?> kwfUp-kwfTabs">
+<div class="<?=$this->rootElementClass?>" data-hash-prefix="<?=$this->data->componentId?>">
     <?php $i = 0; ?>
     <?php foreach ($this->listItems as $child) { ?>
         <?php

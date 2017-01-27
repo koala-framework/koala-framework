@@ -10,9 +10,9 @@ class Kwc_Tabs_Component extends Kwc_Abstract_List_Component
         $ret['componentCategory'] = 'layout';
         $ret['componentPriority'] = 80;
         $ret['rootElementClass'] = 'kwfUp-webStandard';
-        $ret['assetsDefer']['dep'][] = 'KwfTabs';
         $ret['extConfig'] = 'Kwc_Tabs_ExtConfig';
         $ret['contentWidthSubtract'] = 20;
+        $ret['flags']['hasAnchors'] = true;
         return $ret;
     }
 
@@ -21,6 +21,16 @@ class Kwc_Tabs_Component extends Kwc_Abstract_List_Component
         $ret = parent::getTemplateVars($renderer);
         foreach($ret['listItems'] as $k => $v) {
             $ret['listItems'][$k]['title'] = $v['data']->row->title;
+        }
+        return $ret;
+    }
+
+    public function getAnchors()
+    {
+        $ret = array();
+        $num = 0;
+        foreach ($this->getData()->getChildComponents(array('generator'=>'child')) as $c) {
+            $ret[$this->getData()->componentId.':'.$num++] = $c->row->title;
         }
         return $ret;
     }
