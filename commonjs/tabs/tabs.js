@@ -16,27 +16,27 @@ var Tabs = function(el, config)
     this.el = el;
     this.config = config || {};
     if (this.config.bemClass) {
-        if (!this.config.linkClass)
-            this.config.linkClass = this.config.bemClass+'__link';
-        if (!this.config.linksClass)
-            this.config.linksClass = this.config.bemClass+'__links';
-        if (!this.config.linkActiveClass)
-            this.config.linkActiveClass = this.config.bemClass+'__linkActive';
-        if (!this.config.contentClass)
-            this.config.contentClass = this.config.bemClass+'__content';
-        if (!this.config.contentsClass)
-            this.config.contentsClass = this.config.bemClass+'__contents';
-        if (!this.config.contentActiveClass)
-            this.config.contentActiveClass = this.config.bemClass+'__contentActive';
-        if (!this.config.tabFxClass)
-            this.config.tabFxClass = this.config.bemClass+'__tabFx';
+        var autoConfigs = {
+            linkClass: '__link',
+            linksClass: '__links',
+            linkActiveClass: '__link--active',
+            contentClass: '__content',
+            contentsClass: '__contents',
+            contentActiveClass: '__content--active',
+            tabFxClass: '--tabFx'
+        };
+        for (var c in autoConfigs) {
+            if (!this.config[c]) {
+                this.config[c] = this.config.bemClass + autoConfigs[c];
+            }
+        }
     }
     this.el.addClass(this.config.tabFxClass);
     this._activeTabIdx = null;
     this.switchEls = this.el.find('> .' + this.config.linkClass);
     this.contentEls = this.el.find('> .' + this.config.contentClass);
     this.fxDuration = .5;
-console.log(this);
+
     var tabsLinks = $('<div class="' + this.config.linksClass + '"></div>').appendTo(this.el.first());
     this.tabsContents = $('<div class="' + this.config.contentsClass + '" data-width="100%"></div>').appendTo(this.el.first());
 

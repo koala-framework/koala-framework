@@ -1,35 +1,35 @@
 @import "compass/utilities/general/clearfix";
 
 .kwcClass {
-  &__link {
-    background-color: #ddd;
-    float: left;
-    cursor: pointer;
-    padding: 3px 10px;
-    border: 1px solid #bbb;
-    border-bottom: none;
-    margin-right: 10px;
-  }
+    &__link {
+        background-color: #ddd;
+        float: left;
+        cursor: pointer;
+        padding: 3px 10px;
+        border: 1px solid #bbb;
+        border-bottom: none;
+        margin-right: 10px;
+        &--active {
+            background-color: #fff;
+            position: relative;
+            bottom: -1px;
+            z-index: 3;
+        }
+    }
 
-  &__linkActive {
-    background-color: #fff;
-    position: relative;
-    bottom: -1px;
-    z-index: 3;
-  }
 
-  &__content {
-    border: 1px solid #bbb;
-    padding: 3px 10px;
-    width: 100%;
-    clear: both;
-  }
+    &__content {
+        border: 1px solid #bbb;
+        padding: 3px 10px;
+        width: 100%;
+        clear: both;
+    }
 
-  &__tabsFx, &__contents {
-    position: relative;
-  }
+    &--tabsFx .kwcClass__contents {
+        position: relative;
+    }
 
-  &__links {
-    @include pie-clearfix;
-  }
+    &__links {
+        @include pie-clearfix;
+    }
 }
