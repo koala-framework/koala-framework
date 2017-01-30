@@ -1,5 +1,5 @@
 <?php
-class Kwc_Tabs_Trl_Events extends Kwc_Abstract_List_Trl_Events
+class Kwc_Legacy_Tabs_Trl_Events extends Kwc_Abstract_List_Trl_Events
 {
     public function onRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {

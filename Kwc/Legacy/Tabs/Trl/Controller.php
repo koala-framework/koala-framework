@@ -1,5 +1,5 @@
 <?php
-class Kwc_Tabs_Trl_Controller extends Kwc_Abstract_List_Trl_Controller
+class Kwc_Legacy_Tabs_Trl_Controller extends Kwc_Abstract_List_Trl_Controller
 {
     protected $_model = 'Kwc_Tabs_Trl_AdminModel';
 

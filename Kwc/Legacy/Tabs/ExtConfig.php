@@ -1,5 +1,5 @@
 <?php
-class Kwc_Tabs_ExtConfig extends Kwc_Abstract_List_ExtConfigListEditButton
+class Kwc_Legacy_Tabs_ExtConfig extends Kwc_Abstract_List_ExtConfigListEditButton
 {
     protected function _getConfig()
     {

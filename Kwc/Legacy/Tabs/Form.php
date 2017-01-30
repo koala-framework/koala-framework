@@ -1,6 +1,6 @@
 <?php
 //Standardmäßig nicht verwendet
-class Kwc_Tabs_Form extends Kwc_Abstract_List_FormWithEditButton
+class Kwc_Legacy_Tabs_Form extends Kwc_Abstract_List_FormWithEditButton
 {
     protected function _getMultiFieldsFieldset()
     {
