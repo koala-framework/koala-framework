@@ -6,20 +6,39 @@ var $ = require('jQuery');
  * Tabs class used to implement tab functionality on a Tabs_Component
  * @param el anchor element
  * @param config configuration object
+ *      The configuration object can contain the bemClass property, which is used to derive all BEM class names.
+ *      If no bemClass is provided, all classes have to be provided manually (i.e. when using the legacy tab component,
+ *      or when using a custom template/css classes)
  * @constructor
  */
 var Tabs = function(el, config)
 {
     this.el = el;
     this.config = config || {};
-    this.el.addClass('kwfUp-kwfTabsFx');
+    if (this.config.bemClass) {
+        if (!this.config.linkClass)
+            this.config.linkClass = this.config.bemClass+'__link';
+        if (!this.config.linksClass)
+            this.config.linksClass = this.config.bemClass+'__links';
+        if (!this.config.linkActiveClass)
+            this.config.linkActiveClass = this.config.bemClass+'__linkActive';
+        if (!this.config.contentClass)
+            this.config.contentClass = this.config.bemClass+'__content';
+        if (!this.config.contentsClass)
+            this.config.contentsClass = this.config.bemClass+'__contents';
+        if (!this.config.contentActiveClass)
+            this.config.contentActiveClass = this.config.bemClass+'__contentActive';
+        if (!this.config.tabFxClass)
+            this.config.tabFxClass = this.config.bemClass+'__tabFx';
+    }
+    this.el.addClass(this.config.tabFxClass);
     this._activeTabIdx = null;
     this.switchEls = this.el.find('> .' + this.config.linkClass);
     this.contentEls = this.el.find('> .' + this.config.contentClass);
     this.fxDuration = .5;
-
-    var tabsLinks = $('<div class="kwfUp-kwfTabsLinks"></div>').appendTo(this.el.first());
-    this.tabsContents = $('<div class="kwfUp-kwfTabsContents" data-width="100%"></div>').appendTo(this.el.first());
+console.log(this);
+    var tabsLinks = $('<div class="' + this.config.linksClass + '"></div>').appendTo(this.el.first());
+    this.tabsContents = $('<div class="' + this.config.contentsClass + '" data-width="100%"></div>').appendTo(this.el.first());
 
     for (var i = 0; i < this.contentEls.length; i++) {
         this.tabsContents.append(this.contentEls[i]);
@@ -31,16 +50,16 @@ var Tabs = function(el, config)
         var swEl = $(this.switchEls[i]);
 
         $(this.contentEls[i]).hide();
-        $(this.switchEls[i]).removeClass('kwfUp-kwfTabsLinkActive');
+        $(this.switchEls[i]).removeClass(this.config.linkActiveClass);
 
         // if it is important, show on startup
         if ($(this.contentEls[i]).children('.kwfUp-kwfImportant').length) {
             activeTabIdx = i;
         }
 
-        if (activeTabIdx === false && $(this.contentEls[i]).hasClass('kwfUp-kwfTabsContentActive')) {
+        if (activeTabIdx === false && $(this.contentEls[i]).hasClass(this.config.contentActiveClass)) {
             activeTabIdx = i;
-            $(this.contentEls[i]).removeClass('kwfUp-kwfTabsContentActive');
+            $(this.contentEls[i]).removeClass(this.config.contentActiveClass);
         }
 
         swEl.click({ idx: i }, (function(e) {
@@ -72,7 +91,7 @@ var Tabs = function(el, config)
     }
 
     if (activeTabIdx !== false) {
-        $(this.switchEls[activeTabIdx]).addClass('kwfUp-kwfTabsLinkActive');
+        $(this.switchEls[activeTabIdx]).addClass(this.config.linkActiveClass);
         $(this.contentEls[activeTabIdx]).show();
         this._activeTabIdx = activeTabIdx;
     }
@@ -94,14 +113,15 @@ Tabs.prototype = {
 
     activateTab: function(idx) {
         // passed arguments are: this, newIndex, oldIndex
+        var el = this;
         this.fireEvent('beforeTabActivate', this, idx, this._activeTabIdx);
         if (this._activeTabIdx == idx) return;
 
         var newContentEl = $(this.contentEls[idx]);
-        $(this.switchEls[idx]).addClass('kwfUp-kwfTabsLinkActive');
+        $(this.switchEls[idx]).addClass(this.config.linkActiveClass);
         newContentEl.css('z-index', '1');
         newContentEl.show();
-        newContentEl.addClass('kwfUp-kwfTabsContentActive');
+        newContentEl.addClass(this.config.contentActiveClass);
 
         var oldContentEl = $(this.contentEls[this._activeTabIdx]);
 
@@ -109,7 +129,7 @@ Tabs.prototype = {
         newContentEl.stop();
         this.tabsContents.stop();
         if (this._activeTabIdx !== null) {
-            $(this.switchEls[this._activeTabIdx]).removeClass('kwfUp-kwfTabsLinkActive');
+            $(this.switchEls[this._activeTabIdx]).removeClass(this.config.linkActiveClass);
             oldContentEl.css({
                 'z-index': 2,
                 'position': 'absolute'
@@ -138,7 +158,7 @@ Tabs.prototype = {
                 duration: this.fxDuration,
                 complete: function() {
                     oldContentEl.css('position', 'static');
-                    oldContentEl.removeClass('kwfUp-kwfTabsContentActive');
+                    oldContentEl.removeClass(el.config.contentActiveClass);
                     newContentEl.css('position', 'static');
                     newContentEl.show();
                     newContentEl.css('height', 'auto');
