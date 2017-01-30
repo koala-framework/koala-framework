@@ -16,6 +16,15 @@ class Kwc_Tabs_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
 
+    public static function validateSettings($settings, $componentClass)
+    {
+        parent::validateSettings($settings, $componentClass);
+        if (!Kwf_Config::getValue('application.uniquePrefix')) {
+            throw new Kwf_Exception("Kwc_Tabs_Component is not compatible without uniquePrefix, consider using Kwc_Legacy_Tabs_Component");
+        }
+    }
+
+
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);

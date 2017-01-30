@@ -5,8 +5,12 @@ var Tabs = require('kwf/tabs/tabs');
 
 onReady.onRender('div.kwfUp-kwfTabs', function tabs(el) {
     el.data('tabsObject', new Tabs(el, {
-        hashPrefix: el.data('hash-prefix'),
         linkClass: 'kwfUp-kwfTabsLink',
-        contentClass: 'kwfUp-kwfTabsContent'
+        linksClass: 'kwfUp-kwfTabsLinks',
+        linkActiveClass: 'kwfUp-kwfTabsLinkActive',
+        contentClass: 'kwfUp-kwfTabsContent',
+        contentsClass: 'kwfUp-kwfTabsContents',
+        contentActiveClass: 'kwfUp-kwfTabsContentActive',
+        tabFxClass: 'kwfUp-kwfTabsFx'
     }));
 });

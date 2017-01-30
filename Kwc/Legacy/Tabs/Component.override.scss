@@ -6,16 +6,15 @@
 .kwfUp-kwfTabsLinks { @include pie-clearfix; }
 
 .kwfUp-kwfTabsLink {
-  background-color: #ddd;
-  float: left; cursor: pointer;
-  padding: 3px 10px; border: 1px solid #bbb;
-  border-bottom: none; margin-right: 10px;
+    background-color: #ddd;
+    float: left; cursor: pointer;
+    padding: 3px 10px; border: 1px solid #bbb;
+    border-bottom: none; margin-right: 10px;
 }
 
 .kwfUp-kwfTabsContent {
-  border: 1px solid #bbb;
-  padding: 3px 10px;
-  width: 100%;
-  clear: both;
+    border: 1px solid #bbb;
+    padding: 3px 10px;
+    width: 100%;
+    clear: both;
 }
-
