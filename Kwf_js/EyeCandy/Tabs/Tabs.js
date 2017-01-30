@@ -4,5 +4,5 @@ var $ = require('jQuery');
 var Tabs = require('kwf/tabs/tabs');
 
 onReady.onRender('div.kwfUp-kwfTabs', function tabs(el) {
-    el.tabsObject = new Tabs(el);
+    el.data('tabsObject', new Tabs(el));
 });
