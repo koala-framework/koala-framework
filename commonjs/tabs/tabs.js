@@ -14,8 +14,8 @@ var Tabs = function(el, config)
     this.config = config || {};
     this.el.addClass('kwfUp-kwfTabsFx');
     this._activeTabIdx = null;
-    this.switchEls = this.el.find('> .kwfUp-kwfTabsLink');
-    this.contentEls = this.el.find('> .kwfUp-kwfTabsContent');
+    this.switchEls = this.el.find('> .' + this.config.linkClass);
+    this.contentEls = this.el.find('> .' + this.config.contentClass);
     this.fxDuration = .5;
 
     var tabsLinks = $('<div class="kwfUp-kwfTabsLinks"></div>').appendTo(this.el.first());
