@@ -98,6 +98,7 @@ Kwf.Form.Field.Image.UploadField = Ext2.extend(Ext2.Panel, {
     },
 
     _setPreviewUrl: function(value) {
+        // This function changes value. This is bad behaviour!
         var previewParams = {
             componentId: this.baseParams.componentId
         };
@@ -108,7 +109,7 @@ Kwf.Form.Field.Image.UploadField = Ext2.extend(Ext2.Panel, {
                 var outWidth = (dimension.width == 'user' || dimension.aspectRatio) ? value.width : dimension.width;
                 var outHeight = (dimension.height == 'user' || dimension.aspectRatio) ? value.height : dimension.height;
                 if (dimension && value.cropData) {
-                    if (outWidth != 0 && outHeight != 0
+                    if (outWidth != 0 && outHeight != 0 && dimension.cover
                         && Math.floor(outWidth * 100 / outHeight)
                             != Math.floor(value.cropData.width * 100 / value.cropData.height)
                     ) {

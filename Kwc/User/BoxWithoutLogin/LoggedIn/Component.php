@@ -32,7 +32,7 @@ class Kwc_User_BoxWithoutLogin_LoggedIn_Component extends Kwc_Abstract
 
         $ret['logoutLink'] = '/kwf/user/logout';
         if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI']) {
-            $ret['logoutLink'] .= '?redirect=' . $_SERVER['REQUEST_URI'];
+            $ret['logoutLink'] .= '?redirect=' . rawurlencode($_SERVER['REQUEST_URI']);
         }
         return $ret;
     }

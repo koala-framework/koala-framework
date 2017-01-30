@@ -31,7 +31,7 @@ class SubmitHandler
         $this->errors = array();
 
         foreach ($this->fields as $field) {
-            if (isset($submitData[$field['name']])) {
+            if (array_key_exists($field['name'], $submitData)) {
                 $value = $submitData[$field['name']];
             } else {
                 $value = $field['columnNormalizer']->normalize($this->data, $field['name'], $field['settings']);
@@ -50,7 +50,7 @@ class SubmitHandler
         }
         if (!count($this->errors)) {
             foreach ($this->fields as $field) {
-                if (isset($submitData[$field['name']])) {
+                if (array_key_exists($field['name'], $submitData)) {
                     $field['columnNormalizer']->denormalize($submitData[$field['name']], $this->data, $field['name'], $field['settings']);
                 }
             }

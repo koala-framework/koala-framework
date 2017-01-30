@@ -42,7 +42,7 @@ class ImplodeChildIds implements ColumnNormalizerInterface, ColumnDenormalizerIn
             throw new \Exception("column setting is required");
         }
 
-        $values = explode(',', $data);
+        $values = $data ? explode(',', $data) : array();
         $existingRows = $row->getChildRows($settings['rule']);
         $existingIds = array();
         foreach ($existingRows as $r) {

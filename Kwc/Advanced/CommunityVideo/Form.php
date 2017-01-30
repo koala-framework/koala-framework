@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_CommunityVideo_Form extends Kwc_Abstract_Form
 {
-    public function __construct($name, $class, $id = null)
+    protected function _init()
     {
-        parent::__construct($name, $class, $id);
+        parent::_init();
         $this->fields->add(new Kwf_Form_Field_Static(trlKwfStatic('Please insert the web address to your YouTube or Vimeo video.')))
             ->setWidth(400);
         $this->fields->add(new Kwf_Form_Field_TextField('url', trlKwfStatic('URL')))

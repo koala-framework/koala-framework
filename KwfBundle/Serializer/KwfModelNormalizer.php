@@ -31,7 +31,7 @@ class KwfModelNormalizer extends AbstractNormalizer
                 } else {
                     $type = 'Column';
                 }
-                if (!class_exists($type)) {
+                if ($type == 'Column' || $type == 'ParentRow' || $type == 'ChildRows' || !class_exists($type)) {
                     $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\'.$type;
                 }
                 $columnNormalizer = new $type;

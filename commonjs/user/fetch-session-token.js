@@ -11,9 +11,10 @@ function fetchSessionToken(cb, scope) {
     } else {
         $.ajax({
             method: "POST",
-            url: "/kwf/user/json-get-session-token",
+            url: "/kwf/user/login/json-get-session-token",
             dataType: "json"
         }).done(function(data) {
+            if (!window.Kwf) window.Kwf = {};
             window.Kwf.sessionToken = data.sessionToken;
             dfd.resolve(data.sessionToken);
             if (cb) cb.call(scope || window, data.sessionToken);

@@ -71,7 +71,11 @@ abstract class Kwf_Exception_Abstract extends Exception
 
             if ($notFound) {
                 $notFound->getComponent()->setException($exception);
-                return str_replace('{logId}', $this->_logId, $notFound->render(null, true));
+                $contentSender = Kwc_Abstract::getSetting($notFound->componentClass, 'contentSender');
+                $contentSender = new $contentSender($notFound);
+                $content = $contentSender->getContent(true);
+                $content = $content['content'];
+                return str_replace('{logId}', $this->_logId, $content);
             }
         }
 
