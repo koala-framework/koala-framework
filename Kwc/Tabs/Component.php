@@ -19,6 +19,7 @@ class Kwc_Tabs_Component extends Kwc_Abstract_List_Component
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
+        $ret['hashPrefix'] = $this->getData()->componentId;
         foreach($ret['listItems'] as $k => $v) {
             $ret['listItems'][$k]['title'] = $v['data']->row->title;
         }
