@@ -19,11 +19,12 @@
         padding: 3px 10px;
         width: 100%;
         clear: both;
-        transition: all 0.5s ease-in-out;
+        transition: all 0.3s ease-in-out;
         position: absolute;
         opacity: 0;
         z-index: 1;
         &--active {
+            position: relative;
             opacity: 1;
             z-index: 2;
         }
@@ -31,7 +32,8 @@
 
     &__contents {
         position: relative;
-        transition: height 0.5s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        height: auto;
     }
 
     &--tabsFx {
