@@ -8,6 +8,7 @@
 .kwfUp-kwfTabsContents {
     position: relative;
     transition: height 0.5s ease-in-out;
+    height: auto;
 }
 
 .kwfUp-kwfTabsLink {
@@ -35,6 +36,7 @@
 }
 
 .kwfUp-kwfTabsContentActive {
+    position: relative;
     opacity: 1;
     z-index: 2;
 }

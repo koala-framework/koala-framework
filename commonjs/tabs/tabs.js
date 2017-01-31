@@ -118,11 +118,20 @@ Tabs.prototype = {
         var oldLinkEl = $(this.switchEls[this._activeTabIdx]);
 
         $(this.tabsContents).css('height', newContentEl.css('height'));
+        oneTransitionEnd(this.tabsContents, function() {
+            $(this.tabsContents).css('height', 'auto');
+        }.bind(this));
 
         oldLinkEl.removeClass(this.config.linkActiveClass);
         newLinkEl.addClass(this.config.linkActiveClass);
+
         oldContentEl.removeClass(this.config.contentActiveClass);
+        this.contentEls.css('position', 'absolute');
         newContentEl.addClass(this.config.contentActiveClass);
+        newContentEl.data('idx', idx);
+        oneTransitionEnd(newContentEl, function() {
+            if (this._activeTabIdx == newContentEl.data('idx')) $(newContentEl).css('position', 'relative');
+        }.bind(this));
 
         onReady.callOnContentReady(this.contentEls[idx], {newRender: false});
         onReady.callOnContentReady(this.el, {action: 'show'});

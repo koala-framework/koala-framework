@@ -24,6 +24,7 @@
         opacity: 0;
         z-index: 1;
         &--active {
+            position: relative;
             opacity: 1;
             z-index: 2;
         }
@@ -32,6 +33,7 @@
     &__contents {
         position: relative;
         transition: height 0.5s ease-in-out;
+        height: auto;
     }
 
     &--tabsFx {
