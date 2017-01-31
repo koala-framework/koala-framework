@@ -117,10 +117,7 @@ Tabs.prototype = {
         var newLinkEl = $(this.switchEls[idx]);
         var oldLinkEl = $(this.switchEls[this._activeTabIdx]);
 
-        $(this.tabsContents).css('height', newContentEl.css('height'));
-        oneTransitionEnd(this.tabsContents, function() {
-            $(this.tabsContents).css('height', 'auto');
-        }.bind(this));
+        $(this.tabsContents).css('min-height', newContentEl.css('height'));
 
         oldLinkEl.removeClass(this.config.linkActiveClass);
         newLinkEl.addClass(this.config.linkActiveClass);
