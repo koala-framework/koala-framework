@@ -1,5 +1,6 @@
 var onReady = require('kwf/on-ready');
 var statistics = require('kwf/statistics');
+var oneTransitionEnd = require('kwf/element/one-transition-end');
 var $ = require('jQuery');
 
 /***
