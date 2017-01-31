@@ -94,7 +94,10 @@ var $ = require('jQuery');
         if (typeof elOrSelector == 'string') {
             onReady.onRender(elOrSelector, function(el) {
                 SwitchDisplay(el, config);
-            }, { defer: true });
+            }, {
+                defer: true,
+                priority: -1 // initialize before tabs
+            });
             onReady.onRender(elOrSelector, function(el, config) {
                 if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('kwfUp-active')) {
                     el.find(config.container || 'div.kwfUp-switchContent').hide();
