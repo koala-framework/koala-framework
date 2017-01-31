@@ -128,14 +128,17 @@ Tabs.prototype = {
         onReady.callOnContentReady(this.el, {action: 'show'});
 
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);
-        statistics.trackView(document.location.href + '#tab' + (idx + 1));
-
         this._activeTabIdx = idx;
 
+        var url;
         if (this.config.hashPrefix) {
             // if this tab uses a hashPrefix to be recognized from the URL, set the new value.
-            window.location.replace(window.location.href.split('#')[0] + '#' + this.config.hashPrefix + ':' + idx);
+            url = window.location.href.split('#')[0] + '#' + this.config.hashPrefix + ':' + idx;
+            window.location.replace(url);
+        } else {
+            url = document.location.href + '#tab' + (idx + 1);
         }
+        statistics.trackView(url);
     }
 };
 
