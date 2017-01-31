@@ -2,30 +2,39 @@
 
 .kwcClass {
     &__link {
-        background-color: #ddd;
+        color: #555;
         float: left;
         cursor: pointer;
         padding: 3px 10px;
-        border: 1px solid #bbb;
-        border-bottom: none;
         margin-right: 10px;
         &--active {
-            background-color: #fff;
+            color: #000;
             position: relative;
-            bottom: -1px;
             z-index: 3;
         }
     }
 
 
     &__content {
-        border: 1px solid #bbb;
         padding: 3px 10px;
         width: 100%;
         clear: both;
+        transition: all 0.5s ease-in-out;
+        position: absolute;
+        opacity: 0;
+        z-index: 1;
+        &--active {
+            opacity: 1;
+            z-index: 2;
+        }
     }
 
-    &--tabsFx .kwcClass__contents {
+    &__contents {
+        position: relative;
+        transition: height 0.5s ease-in-out;
+    }
+
+    &--tabsFx {
         position: relative;
     }
 
