@@ -6,7 +6,7 @@ class Kwc_Legacy_Tabs_Component extends Kwc_Tabs_Component
     {
         $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Tabs Legacy');
-        $ret['assetsDefer']['dep'][] = 'KwfTabs';
+        $ret['assetsDefer']['dep'][] = 'KwfLegacyTabs';
         $ret['flags']['hasAnchors'] = false;
         return $ret;
     }
