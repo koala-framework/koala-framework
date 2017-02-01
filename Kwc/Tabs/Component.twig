@@ -1,0 +1,10 @@
+<div class="{{ rootElementClass }}" data-hash-prefix="{{ hashPrefix }}">
+    {% for item in listItems %}
+        <div class="{{ item.class }} {{ 'link'|bemClass }}">
+            {{ item.title }}
+        </div>
+        <div class="{{ item.class }} {{ 'content'|bemClass }}">
+            {{ renderer.component(item.data) }}
+        </div>
+    {% endfor %}
+</div>
