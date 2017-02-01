@@ -63,7 +63,7 @@ var Tabs = function(el, config)
         }
 
         swEl.click({ idx: i }, (function(e) {
-            this.activateTab(e.data.idx);
+            this.activateTab(e.data.idx, { changeHash: true });
         }).bind(this));
     }
 
@@ -91,7 +91,7 @@ var Tabs = function(el, config)
     }
 
     if (activeTabIdx !== false) {
-        this.activateTab(activeTabIdx);
+        this.activateTab(activeTabIdx, { changeHash: false });
         this._activeTabIdx = activeTabIdx;
     }
 };
@@ -108,7 +108,12 @@ Tabs.prototype = {
         $(this.el).trigger('kwfUp-tabs-'+event, args);
     },
 
-    activateTab: function(idx) {
+    /**
+     *
+     * @param idx
+     * @param options: { changeHash: true }
+     */
+    activateTab: function(idx, options) {
         this.fireEvent('beforeTabActivate', this, idx, this._activeTabIdx);
         if (this._activeTabIdx == idx) return;
 
@@ -136,15 +141,17 @@ Tabs.prototype = {
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);
         this._activeTabIdx = idx;
 
-        var url;
-        if (this.config.hashPrefix) {
-            // if this tab uses a hashPrefix to be recognized from the URL, set the new value.
-            url = window.location.href.split('#')[0] + '#' + this.config.hashPrefix + ':' + idx;
-            window.location.replace(url);
-        } else {
-            url = document.location.href + '#tab' + (idx + 1);
+        if (!options || typeof options.changeHash == 'undefined' || options.changeHash) {
+            var url;
+            if (this.config.hashPrefix) {
+                // if this tab uses a hashPrefix to be recognized from the URL, set the new value.
+                url = window.location.href.split('#')[0] + '#' + this.config.hashPrefix + ':' + idx;
+                window.location.replace(url);
+            } else {
+                url = document.location.href + '#tab' + (idx + 1);
+            }
+            statistics.trackView(url);
         }
-        statistics.trackView(url);
     }
 };
 
