@@ -44,7 +44,6 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'url' => $type == 'fullPage' ? $component->url : null
         );
         $options = array(
-            'buffer' => true,
             'replace' => true,
             'skipModelObserver' => true
         );
