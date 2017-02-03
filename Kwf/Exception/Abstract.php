@@ -188,7 +188,13 @@ abstract class Kwf_Exception_Abstract extends Exception
                 'message' => 'An Error occured. Please try again later',
             )
         );
-        if (Kwf_Exception::isDebug()) {
+        $debug = Kwf_Exception::isDebug();
+        try {
+            if (Kwf_Registry::get('userModel') && Kwf_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
+                $debug = true;
+            }
+        } catch (Exception $e) {}
+        if ($debug) {
             $data = array(
                 'error' => array(
                     'code' => $exception->code,
