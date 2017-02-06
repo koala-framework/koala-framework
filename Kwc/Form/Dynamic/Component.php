@@ -12,6 +12,7 @@ class Kwc_Form_Dynamic_Component extends Kwc_Abstract_Composite_Component
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['editComponents'] = array('paragraphs');
         $ret['menuConfig'] = 'Kwc_Form_Dynamic_MenuConfig';
+        $ret['extConfig'] = 'Kwc_Form_Dynamic_ExtConfig';
         return $ret;
     }
 
