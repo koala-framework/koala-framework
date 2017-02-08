@@ -478,7 +478,10 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         if (!isset($this->_sourceRows[$id])) {
             foreach ($this->_models as $modelKey => $m) {
                 if (substr($id, 0, strlen($modelKey)) == $modelKey) {
-                    $this->_sourceRows[$id] = $m->getRow(substr($id, strlen($modelKey)));
+                    $select = new Kwf_Model_Select();
+                    $select->ignoreDeleted(true);
+                    $select->whereId(substr($id, strlen($modelKey)));
+                    $this->_sourceRows[$id] = $m->getRow($select);
                 }
             }
         }
