@@ -6,6 +6,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         if ($this->getRequest()->getActionName() != 'json-logout-user'
             && $this->getRequest()->getActionName() != 'json-login-user'
             && $this->getRequest()->getActionName() != 'json-get-session-token'
+            && $this->getRequest()->getActionName() != 'json-keep-alive'
         ) {
             parent::_validateSessionToken();
         }

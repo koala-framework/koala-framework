@@ -42,7 +42,7 @@ class Kwc_Articles_CategorySimple_List_Component
         if ($cnt === false) {
             $component = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId)->getComponent();
             $cnt = $component->getItemDirectory()->countChildComponents($component->getSelect());
-            $ttl = strtotime(date('Y-m-d', strtotime("+1 day"))) - mktime();
+            $ttl = strtotime(date('Y-m-d', strtotime("+1 day"))) - time();
             Kwf_Cache_Simple::add($cacheId, $cnt, $ttl);
         }
         return $cnt;
