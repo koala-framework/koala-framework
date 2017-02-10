@@ -18,7 +18,7 @@ class Kwc_Directories_CategorySimple_CategoryController extends Kwf_Controller_A
         $this->_form->add(new Kwf_Form_Field_TextField('name', 'Name'));
     }
 
-    protected function _beforeInsert($row)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         $row->component_id = $this->_getParam('componentId');
         $row->parent_id = $this->_getParam('parent_id') ? $this->_getParam('parent_id') : null;
