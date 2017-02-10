@@ -118,4 +118,34 @@ abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Com
     {
         return null;
     }
+
+    public function getItemIds($select = null)
+    {
+        $itemDirectory = $this->getItemDirectory();
+        if (is_string($itemDirectory)) {
+            $c = Kwc_Abstract::getComponentClassByParentClass($itemDirectory);
+            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
+            $items = $generator->getChildIds(null, $select);
+        } else {
+            $items = $itemDirectory->getChildIds($select);
+        }
+        return $items;
+    }
+
+    public function getItems($select = null)
+    {
+        $itemDirectory = $this->getItemDirectory();
+        if (is_string($itemDirectory)) {
+            $c = Kwc_Abstract::getComponentClassByParentClass($itemDirectory);
+            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
+            $items = $generator->getChildData(null, $select);
+        } else {
+            $select->whereGenerator('detail');
+            $items = $itemDirectory->getChildComponents($select);
+        }
+        foreach ($items as &$item) {
+            $item->parent->getComponent()->callModifyItemData($item);
+        }
+        return $items;
+    }
 }
