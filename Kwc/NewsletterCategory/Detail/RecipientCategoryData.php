@@ -12,7 +12,7 @@ class Kwc_NewsletterCategory_Detail_RecipientCategoryData extends Kwf_Data_Abstr
         $this->_categoryId = $categoryId;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $model = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_Subscribe_SubscriberToCategory');
         $hasCategory = $model->getRow($model->select()
