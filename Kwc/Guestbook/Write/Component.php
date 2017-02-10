@@ -16,6 +16,6 @@ class Kwc_Guestbook_Write_Component extends Kwc_Posts_Write_Component
 
     public function getInfoMailComponent()
     {
-        return $this->getData()->parent->getChildComponent('-mail');
+        return $this->getData()->parent->getChildComponent('_mail');
     }
 }

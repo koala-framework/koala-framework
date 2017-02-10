@@ -6,7 +6,7 @@ class Kwc_Mail_Trl_Component extends Kwc_Chained_Trl_Component
         $ret = parent::getSettings($masterComponentClass);
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['generators']['mail'] = array(
-            'class' => 'Kwf_Component_Generator_Static',
+            'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Mail_Trl_Mail_Component.' . $masterComponentClass
         );
         return $ret;
@@ -14,7 +14,7 @@ class Kwc_Mail_Trl_Component extends Kwc_Chained_Trl_Component
 
     public function send(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null, $addViewTracker = true)
     {
-        return $this->getData()->getChildComponent('-mail')->getComponent()->send(
+        return $this->getData()->getChildComponent('_mail')->getComponent()->send(
             $recipient, $data, $toAddress, $format, $addViewTracker
         );
     }

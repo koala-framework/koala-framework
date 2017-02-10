@@ -4,7 +4,8 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
     public static function getSettings($param = null)
     {
         $ret = parent::getSettings($param);
-        $ret['generators']['child']['component']['mail'] = 'Kwc_NewsletterCategory_Subscribe_Mail_Component';
+        $ret['generators']['mail']['component'] = 'Kwc_NewsletterCategory_Subscribe_Mail_Component';
+
         $ret['extConfig'] = 'Kwc_NewsletterCategory_Subscribe_ExtConfig';
         return $ret;
     }

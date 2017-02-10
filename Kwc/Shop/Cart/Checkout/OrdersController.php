@@ -184,7 +184,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
                 ->getComponentById($order->checkout_component_id);
             if (!$checkout) throw new Kwf_Exception("Can't find checkout component");
             $mail = $checkout->getChildComponent('-'.$order->payment)
-                ->getChildComponent('-shippedMail');
+                ->getChildComponent('_shippedMail');
             if ($mail) { //mail is optional
                 $data = array(
                     'order' => $order,

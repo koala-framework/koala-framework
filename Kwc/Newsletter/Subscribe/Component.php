@@ -15,7 +15,10 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         $ret['placeholder']['submitButton'] = trlKwfStatic('Subscribe the newsletter');
         $ret['subscribeType'] = self::CONFIRM_MAIL_ONLY;
 
-        $ret['generators']['child']['component']['mail'] = 'Kwc_Newsletter_Subscribe_Mail_Component';
+        $ret['generators']['mail'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Newsletter_Subscribe_Mail_Component'
+        );
         $ret['generators']['doubleOptIn'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Newsletter_Subscribe_DoubleOptIn_Component',
@@ -122,7 +125,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             $unsubscribeComponent = $nlData->getChildComponent('_unsubscribe');
         }
 
-        $mail = $this->getData()->getChildComponent('-mail')->getComponent();
+        $mail = $this->getData()->getChildComponent('_mail')->getComponent();
         $mail->send($row, array(
             'formRow' => $row,
             'host' => $host,

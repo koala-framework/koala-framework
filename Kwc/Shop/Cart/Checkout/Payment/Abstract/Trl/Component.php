@@ -28,7 +28,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Trl_Component extends Kwc_Abstract
 
     public function sendConfirmMail(Kwc_Shop_Cart_Order $order)
     {
-        $mail = $this->getData()->getChildComponent('-mail')->getComponent();
+        $mail = $this->getData()->getChildComponent('_mail')->getComponent();
         $data = array(
             'order' => $order,
             'sumRows' => $this->getData()->chained->parent->getComponent()->getSumRows($order)
