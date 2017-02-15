@@ -1,6 +1,14 @@
 <?php
 class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 {
+    protected function _isAllowedResource()
+    {
+        if ($this->getRequest()->getActionName() == 'download') {
+            return true;
+        }
+        return parent::_isAllowedResource();
+    }
+
     protected function _validateSessionToken()
     {
     }
