@@ -288,13 +288,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $filename = $fileRow->filename;
         }
         $filename .= '.'.$fileRow->extension;
-        $file = $fileRow->getFileSource();
         $dimensions = $fileRow->getImageDimensions();
         if (!$dimensions) return null;
-        if (!$file) return null;
         return array(
             'filename' => $filename,
-            'file' => $file,
+            'file' => $fileRow,
             'mimeType' => $fileRow->mime_type,
             'row' => $row,
             'dimensions' => $dimensions,

@@ -39,6 +39,8 @@ class Kwf_Media_Image
                 'width' => $size[0],
                 'height' => $size[1],
             );
+        } else if ($imageDimensions instanceof Kwf_Uploads_Row) {
+            $imageDimensions = $imageDimensions->getImageDimensions();
         } else if ($imageDimensions instanceof Imagick) {
             $imageDimensions = array(
                 'width' => $imageDimensions->getImageWidth(),
@@ -205,12 +207,16 @@ class Kwf_Media_Image
      */
     public static function calculateScaleDimensions($source, $targetSize)
     {
+
         // Get size of image (handle different param-possibilities)
         if (is_string($source)) {
             $sourceSize = @getimagesize($source);
             $sourceSize['rotation'] = self::getExifRotation($source);
         } else if ($source instanceof Imagick) {
             $sourceSize = $source->getImageGeometry();
+            $source = null;
+        } else if ($source instanceof Kwf_Uploads_Row) {
+            $sourceSize = $source->getImageDimensions();
             $source = null;
         } else {
             $sourceSize = $source;

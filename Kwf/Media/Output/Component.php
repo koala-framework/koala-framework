@@ -65,6 +65,9 @@ class Kwf_Media_Output_Component
                 'height' => $data['image']->getImageHeight()
             );
         } else if (isset($data['file'])) {
+            if (!is_string($data['file'])) {
+                throw new Kwf_Exception("file must be a string (filename) or dimensions must be passed");
+            }
             $s = @getimagesize($data['file']);
             $sourceSize = array(
                 'width' => $s[0],
@@ -110,7 +113,12 @@ class Kwf_Media_Output_Component
         }
         $ret['mimeType'] = $data['mimeType'];
 
-        $ret['mtime'] = filemtime($data['file']);
+        if ($data['file'] instanceof Kwf_Uploads_Row) {
+            $file = $data['file']->getFileSource();
+        } else {
+            $file = $data['file'];
+        }
+        $ret['mtime'] = filemtime($file);
         return $ret;
     }
 
