@@ -41,3 +41,8 @@ services:
         tags:
             - { name: serializer.normalizer, priority: -10 }
         public: false
+
+    kwf.exception_handler:
+        class: KwfBundle\ExceptionHandler
+        tags:
+            - { name: kernel.event_subscriber }
