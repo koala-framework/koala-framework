@@ -988,9 +988,19 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         $dbSelect->reset(Zend_Db_Select::COLUMNS);
         $dbSelect->setIntegrityCheck(false);
         if ($dbSelect->getPart('group')) {
-            $group = current($dbSelect->getPart('group'));
-            $dbSelect->reset(Zend_Db_Select::GROUP);
-            $dbSelect->from(null, new Zend_Db_Expr("COUNT(DISTINCT $group) c"));
+            $group = $dbSelect->getPart('group');
+            if (count($group) > 1) {
+                $group = implode(', ', $group);
+                $dbSelect->reset(Zend_Db_Select::GROUP);
+                $dbSelect->from(null, new Zend_Db_Expr("DISTINCT $group c"));
+                $outerDbSelect = new Zend_Db_Select($this->getTable()->getAdapter());
+                $outerDbSelect->from($dbSelect, new Zend_Db_Expr("COUNT(*) d"));
+                $dbSelect = $outerDbSelect;
+            } else {
+                $group = current($group);
+                $dbSelect->reset(Zend_Db_Select::GROUP);
+                $dbSelect->from(null, new Zend_Db_Expr("COUNT(DISTINCT $group) c"));
+            }
         } else {
             $dbSelect->from(null, new Zend_Db_Expr('COUNT(*) c'));
         }
