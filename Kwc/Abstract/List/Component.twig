@@ -1,11 +1,11 @@
 <div class="{{ rootElementClass }}" data-width="100%">
     {% spaceless %}
     {% for child in listItems %}
-        {{ child.preHtml }}
+        {{ child.preHtml|raw }}
         <div class="{{ child.class }}" style="{{ child.style }}">
             {{ renderer.component(child.data) }}
         </div>
-        {{ child.postHtml }}
+        {{ child.postHtml|raw }}
     {% endfor %}
     {% endspaceless %}
 </div>
