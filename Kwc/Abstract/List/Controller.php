@@ -50,7 +50,7 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if ($max) {
             $s = new Kwf_Model_Select();
             $s->whereEquals('component_id', $this->_getParam('componentId'));
-            if ($this->_model->countRows($s)+count($uploadIds) >= $max) {
+            if ($this->_model->countRows($s)+count($uploadIds) > $max) {
                 throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
             }
         }
@@ -161,7 +161,7 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if ($max) {
             $s = new Kwf_Model_Select();
             $s->whereEquals('component_id', $this->_getParam('componentId'));
-            if ($this->_model->countRows($s)+1 >= $max) {
+            if ($this->_model->countRows($s)+1 > $max) {
                 throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
             }
         }
