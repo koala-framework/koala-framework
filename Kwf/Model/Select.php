@@ -148,6 +148,9 @@ class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
 
     public function whereId($id)
     {
+        if (is_null($id)) {
+            throw new Kwf_Exception('value is required');
+        }
         $this->_parts[self::WHERE_ID] = $id;
         return $this;
     }
