@@ -173,6 +173,9 @@ class Kwf_Media
                 throw new Kwf_Exception_NotFound();
             }
             $output = call_user_func(array($classWithoutDot, 'getMediaOutput'), $id, $type, $class);
+            if (isset($output['file']) && $output['file'] instanceof Kwf_Uploads_Row) {
+                $output['file'] = $output['file']->getFileSource();
+            }
             $specificLifetime = false;
             $useCache = true;
             if (isset($output['lifetime'])) {
