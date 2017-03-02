@@ -201,6 +201,8 @@ class Kwc_Mail_HtmlParser
         $html = Kwf_Util_Tidy::repairHtml($html, array(
             'show-body-only' => false,
             'wrap'           => false,
+            'enclose-block-text'=>false,
+            'enclose-text'   => false,
         ));
 
         $this->_stack = array();
