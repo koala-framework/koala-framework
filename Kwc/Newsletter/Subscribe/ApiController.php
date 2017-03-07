@@ -48,7 +48,6 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
         $row->firstname = $this->_getParam('firstname');
         $row->lastname = $this->_getParam('lastname');
         $row->email = $this->_getParam('email');
-        $row->subscribe_date = date('Y-m-d H:i:s');
 
         $row->setLogSource(($url = $this->_getParam('url')) ? $url : $this->_subscribe->trlKwf('Subscribe API'));
         $row->setLogIp($this->_getParam('ip'));

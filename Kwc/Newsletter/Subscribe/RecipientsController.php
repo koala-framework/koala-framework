@@ -63,10 +63,6 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
         $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('First name'), 110));
         $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Last name'), 110));
 
-        if ($this->_model->hasColumn('subscribe_date')) {
-            $this->_columns->add(new Kwf_Grid_Column('subscribe_date', trlKwf('Subscribe date'), 110));
-        }
-
         $this->_columns->add(new Kwf_Grid_Column('activated', trlKwf('Active?'), 80))
             ->setData(new Kwc_Newsletter_Detail_IsActiveData())
             ->setRenderer('newsletterState')

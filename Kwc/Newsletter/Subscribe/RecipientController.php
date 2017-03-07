@@ -43,7 +43,6 @@ class Kwc_Newsletter_Subscribe_RecipientController extends Kwf_Controller_Action
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
-        $row->subscribe_date = date('Y-m-d H:i:s');
         if ($row->getModel()->hasColumn('activated')) {
             $row->activated = 1;
         }

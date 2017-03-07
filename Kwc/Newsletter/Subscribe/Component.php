@@ -98,7 +98,6 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
-        $row->subscribe_date = date('Y-m-d H:i:s');
         if ($this->_getSetting('subscribeType') == self::CONFIRM_MAIL_ONLY) {
             $row->unsubscribed = 0;
             $row->activated = 1;
