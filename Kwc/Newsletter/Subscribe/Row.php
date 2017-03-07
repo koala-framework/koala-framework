@@ -65,7 +65,7 @@ class Kwc_Newsletter_Subscribe_Row extends Kwf_Model_Db_Row
 
     public function getLogIp()
     {
-        return ($this->_logIp) ? $this->_logIp : $_SERVER['REMOTE_ADDR'];
+        return ($this->_logIp) ? $this->_logIp : (array_key_exists('REMOTE_ADDR', $_SERVER)) ? $_SERVER['REMOTE_ADDR'] : null;
     }
 
     public function writeLog($message, $saveImmediatly = false)
