@@ -1,7 +1,7 @@
 <?php
 class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subscribe_AbstractRecipientsController
 {
-    protected $_buttons = array('add', 'delete', 'xls');
+    protected $_buttons = array('add', 'unsubscribe', 'xls');
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
@@ -11,10 +11,11 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
     public function indexAction()
     {
         parent::indexAction();
-        $formControllerUrl = Kwc_Admin::getInstance($this->_getParam('class'))
-            ->getControllerUrl('Recipient');
+        $admin = Kwc_Admin::getInstance($this->_getParam('class'));
+        $formControllerUrl = $admin->getControllerUrl('Recipient');
 
         $this->view->formControllerUrl = $formControllerUrl;
+        $this->view->logsControllerUrl = $admin->getControllerUrl('Logs');
         $this->view->xtype = 'kwc.newsletter.subscribe.recipients';
         $this->view->model = get_class($this->_model);
         $this->view->baseParams = array(
@@ -62,10 +63,6 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
         $this->_columns->add(new Kwf_Grid_Column('firstname', trlKwf('First name'), 110));
         $this->_columns->add(new Kwf_Grid_Column('lastname', trlKwf('Last name'), 110));
 
-        if ($this->_model->hasColumn('subscribe_date')) {
-            $this->_columns->add(new Kwf_Grid_Column('subscribe_date', trlKwf('Subscribe date'), 110));
-        }
-
         $this->_columns->add(new Kwf_Grid_Column('activated', trlKwf('Active?'), 80))
             ->setData(new Kwc_Newsletter_Detail_IsActiveData())
             ->setRenderer('newsletterState')
@@ -87,5 +84,21 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
             }
         }
         return $ret;
+    }
+
+    public function jsonUnsubscribeAction()
+    {
+        $row = $this->_getModel()->getRow($this->_getParam('id'));
+        if (!$row->unsubscribed) {
+            $row->unsubscribed = true;
+
+            $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row->newsletter_component_id, array('ignoreVisible' => true));
+            $user = Kwf_Registry::get('userModel')->getAuthedUser();
+
+            $row->setLogSource($c->trlKwf('Backend'));
+            $row->writeLog($c->trlKwf('Unsubscribed from {0}', array($user->name)));
+
+            $row->save();
+        }
     }
 }

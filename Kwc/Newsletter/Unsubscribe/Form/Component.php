@@ -22,9 +22,18 @@ class Kwc_Newsletter_Unsubscribe_Form_Component extends Kwc_Form_Component
         }
     }
 
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
+    {
+        parent::_beforeSave($row);
+
+        $row->setLogSource($this->getData()->getAbsoluteUrl());
+        $row->writeLog($this->getData()->trlKwf('Unsubscribed'));
+    }
+
     protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
         parent::_afterSave($row);
+
         $row->mailUnsubscribe();
     }
 

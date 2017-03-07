@@ -19,6 +19,10 @@ class Kwc_Newsletter_Subscribe_DoubleOptIn_Component extends Kwc_Form_Success_Co
 
         $recipient->unsubscribed = 0;
         $recipient->activated = 1;
+
+        $recipient->setLogSource($this->getData()->getAbsoluteUrl());
+        $recipient->writeLog($this->getData()->trlKwf('Activated'));
+
         $recipient->save();
     }
 }

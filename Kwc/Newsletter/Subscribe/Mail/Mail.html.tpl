@@ -2,7 +2,7 @@
 
 <?= $this->data->trlKwf('You have just been subscribed to the newsletter at {0}.', $this->host); ?><br /><br />
 
-<?php if ($this->doubleOptInComponentId) { ?>
+<?php if ($this->doubleOptInComponent) { ?>
     <?= '-- '.$this->data->trlKwf('ACTIVATION LINK').' --'; ?><br />
     <?=$this->componentLink($this->doubleOptInComponent, $this->data->trlKwf('Please click here, to confirm your E-Mail address and to receive our newsletters in future.')); ?><br /><br />
 <?php } else if ($this->unsubscribeComponentId) { ?>
