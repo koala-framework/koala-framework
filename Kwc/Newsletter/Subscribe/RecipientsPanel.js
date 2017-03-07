@@ -29,6 +29,24 @@ Kwc.Newsletter.Subscribe.RecipientsPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
             };
         }
 
+        this._subscribersGrid.actions.unsubscribe = new Ext2.Action({
+            text: trlKwf('Unsubscribe'),
+            icon: '/assets/silkicons/table_delete.png',
+            cls: 'x2-btn-text-icon',
+            needsSelection: true,
+            handler : function() {
+                Ext2.Ajax.request({
+                    url: this.controllerUrl + '/json-unsubscribe',
+                    params: Ext2.apply(this.getBaseParams(), { id: this.getSelectedId() }),
+                    success: function(response, options, r) {
+                        this.reload();
+                    },
+                    scope : this
+                });
+            },
+            scope: this
+        });
+
         this.layout = 'border';
         this.region = 'center';
         this.items = [this._subscribersGrid, this._logsGrid];
