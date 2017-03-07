@@ -173,9 +173,14 @@ class Kwf_Mail extends Zend_Mail
         }
 
         if (!$transport) {
+
             static $smtpTransport;
             if (isset($smtpTransport)) {
-                $transport = $smtpTransport; //reuse previously created smtp connection
+                $transport = $smtpTransport; //reuse previously created transport to reuse connection
+            } else if (Kwf_Config::getValue('email.transport')) {
+                $transport = Kwf_Config::getValue('email.transport');
+                $transport = new $transport();
+                $smtpTransport = $transport;
             } else if (Kwf_Config::getValue('email.smtp.host')) {
                 $smtpTransport = new Zend_Mail_Transport_Smtp(
                     Kwf_Config::getValue('email.smtp.host'),
