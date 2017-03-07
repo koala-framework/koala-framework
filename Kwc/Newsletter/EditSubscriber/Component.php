@@ -23,7 +23,7 @@ class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
             throw new Kwf_Exception_NotFound();
         }
         $this->_recipient = Kwc_Mail_Redirect_Component::parseRecipientParam($postData['recipient']);
-        $this->processInput($params);
+        parent::processInput($postData);
     }
 
     protected function _initForm()
