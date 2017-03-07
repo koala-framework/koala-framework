@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>404 - <?=$this->data->trlKwf('File not found');?> - <?=Kwf_Config::getValue('application.name')?></title>
-        <?= $this->assets(Kwf_Assets_Package_Default::getInstance('Frontend')) ?>
+        <?= $this->assets('Frontend') ?>
         <?= $this->debugData() ?>
         <link rel="shortcut icon" href="/assets/web/images/favicon.ico" />
     </head>
