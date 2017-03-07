@@ -20,7 +20,7 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
             }
         }
         $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
-        $classes = $generators['child']['component'];
+        $classes = isset($generators['child']) ? $generators['child']['component'] : array();
         if (isset($classes['link']) && $classes['link']) {
             $cfg = new Kwf_Component_Abstract_ExtConfig_Form($classes['link']);
             $c = $cfg->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
