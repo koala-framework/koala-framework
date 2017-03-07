@@ -1,9 +1,9 @@
 <?php
 class Kwc_Newsletter_Subscribe_Update_20170307InitSubscriberLog extends Kwf_Update
 {
-    public function postUpdate()
+    public function update()
     {
-        $ret = parent::postUpdate();
+        $ret = parent::update();
 
         $rows = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Subscribe_Model')->export(
             Kwf_Model_Abstract::FORMAT_ARRAY, array()
@@ -12,17 +12,15 @@ class Kwc_Newsletter_Subscribe_Update_20170307InitSubscriberLog extends Kwf_Upda
 
         $data = array();
         foreach ($rows as $row) {
-            $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row['newsletter_component_id'], array('ignoreVisible' => true));
-
             if ($row['unsubscribed'] == true) {
                 $date = new Kwf_DateTime(date('Y-m-d H:i:s'));
-                $logMessage = $c->trlKwf('Unsubscribed');
+                $logMessage = trlKwf('Unsubscribed');
             } else if ($row['activated'] == false) {
                 $date = new Kwf_DateTime(($row['subscribe_date'] != '0000-00-00 00:00:00') ? $row['subscribe_date'] : date('Y-m-d H:i:s'));
-                $logMessage = $c->trlKwf('Subscribed');
+                $logMessage = trlKwf('Subscribed');
             } else {
                 $date = new Kwf_DateTime(($row['subscribe_date'] != '0000-00-00 00:00:00') ? $row['subscribe_date'] : date('Y-m-d H:i:s'));
-                $logMessage = $c->trlKwf('Subscribed and activated');
+                $logMessage = trlKwf('Subscribed and activated');
             }
 
             $data[] = array(
@@ -30,7 +28,7 @@ class Kwc_Newsletter_Subscribe_Update_20170307InitSubscriberLog extends Kwf_Upda
                 'date' => $date->format('Y-m-d H:i:s'),
                 'ip' => null,
                 'message' => $logMessage,
-                'source' => $c->trlKwf('Initial')
+                'source' => trlKwf('Initial')
             );
         }
 
