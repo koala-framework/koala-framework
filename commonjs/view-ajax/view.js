@@ -1,10 +1,10 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var historyState = require('kwf/history-state');
-var getKwcRenderUrl = require('kwf/get-kwc-render-url');
-var statistics = require('kwf/statistics');
-var formRegistry = require('kwf/frontend-form/form-registry');
-var injectAssets = require('kwf/inject-assets');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var historyState = require('kwf/commonjs/history-state');
+var getKwcRenderUrl = require('kwf/commonjs/get-kwc-render-url');
+var statistics = require('kwf/commonjs/statistics');
+var formRegistry = require('kwf/commonjs/frontend-form/form-registry');
+var injectAssets = require('kwf/commonjs/inject-assets');
 
 var byComponentId = {};
 var byDirectoryViewComponentId = {};

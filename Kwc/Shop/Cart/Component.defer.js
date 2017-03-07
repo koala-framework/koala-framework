@@ -1,2 +1,2 @@
-var keepSessionAlive = require('kwf/keep-session-alive');
+var keepSessionAlive = require('kwf/commonjs/keep-session-alive');
 keepSessionAlive();

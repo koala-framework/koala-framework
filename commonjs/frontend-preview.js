@@ -1,5 +1,5 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
 
 onReady.onContentReady(function kwcPreviewLink(el) {
     if (location.search.match(/[\?&]kwcPreview/)) {

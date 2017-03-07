@@ -1,4 +1,4 @@
-var $ = require('jQuery');
+var $ = require('jquery');
 var QUnit = require('qunit');
 
 var templates = {

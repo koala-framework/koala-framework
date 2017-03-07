@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-var t = require('kwf/trl');
+var onReady = require('kwf/commonjs/on-ready');
+var t = require('kwf/commonjs/trl');
 
 onReady.onContentReady(function(el) {
     Ext2.query('.kwcClass', el).each(function(el) {

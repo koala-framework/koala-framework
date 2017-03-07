@@ -1,9 +1,9 @@
-var $ = require('jQuery');
-var ErrorStyleAbove = require('kwf/frontend-form/error-style/above');
-var kwfExtend = require('kwf/extend');
-var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
-var onReady = require('kwf/on-ready');
-var elementIsVisible = require('kwf/element/is-visible');
+var $ = require('jquery');
+var ErrorStyleAbove = require('kwf/commonjs/frontend-form/error-style/above');
+var kwfExtend = require('kwf/commonjs/extend');
+var errorStyleRegistry = require('kwf/commonjs/frontend-form/error-style-registry');
+var onReady = require('kwf/commonjs/on-ready');
+var elementIsVisible = require('kwf/commonjs/element/is-visible');
 
 var ErrorStyleIconBubble = kwfExtend(ErrorStyleAbove, {
     showErrors: function(r) {

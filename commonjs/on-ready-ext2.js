@@ -1,4 +1,4 @@
-var onReadyJquery = require('kwf/on-ready');
+var onReadyJquery = require('kwf/commonjs/on-ready');
 
 module.exports = {
 

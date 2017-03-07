@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready-ext2');
+var onReady = require('kwf/commonjs/on-ready-ext2');
 
 onReady.onRender('.kwcClass', function(el, config) {
     var form = el.child('form');

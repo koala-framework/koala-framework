@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-window.$ = require('jQuery'); //leak for qunit
+var onReady = require('kwf/commonjs/on-ready');
+window.$ = require('jquery'); //leak for qunit
 
 $(function() {
     $('#show').click(function() {

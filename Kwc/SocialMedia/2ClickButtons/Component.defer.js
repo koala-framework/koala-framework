@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 var socialshareprivacy = require('kwf-jquery-plugin/jquery.socialshareprivacy');
 
 onReady.onRender('.kwcClass', function(el, config) {

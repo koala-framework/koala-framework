@@ -1,5 +1,5 @@
-var $ = require('jQuery');
-var benchmarkBox = require('kwf/benchmark/box');
+var $ = require('jquery');
+var benchmarkBox = require('kwf/commonjs/benchmark/box');
 
 module.exports = function elementIsVisible(el) {
     if (el.dom) el = el.dom; //ExtJS Element (hopefully)

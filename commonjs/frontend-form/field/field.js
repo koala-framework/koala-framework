@@ -1,4 +1,4 @@
-var fieldRegistry = require('kwf/frontend-form/field-registry');
+var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
 var _ = require('underscore');
 
 var Field = function(fieldEl, form) {

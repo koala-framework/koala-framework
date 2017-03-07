@@ -1,4 +1,6 @@
-if (typeof Kwf == 'undefined') Kwf = {};
+if (typeof window.Kwf == 'undefined') {
+    window.Kwf = {};
+}
 
-Kwf.namespace = require('kwf/namespace');
-Kwf.extend = require('kwf/extend');
+window.Kwf.namespace = require('kwf/commonjs/namespace');
+window.Kwf.extend = require('kwf/commonjs/extend');

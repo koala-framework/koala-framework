@@ -1,6 +1,6 @@
-var onReady = require('kwf/on-ready');
-var $ = require('jQuery');
-var ViewAjax = require('kwf/view-ajax/view');
+var onReady = require('kwf/commonjs/on-ready');
+var $ = require('jquery');
+var ViewAjax = require('kwf/commonjs/view-ajax/view');
 
 onReady.onRender('.kwcClass', function initViewAjax(el, config) {
 

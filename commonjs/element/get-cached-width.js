@@ -1,6 +1,6 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var benchmarkBox = require('kwf/benchmark/box');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var benchmarkBox = require('kwf/commonjs/benchmark/box');
 
 var cachedWidthEls = [];
 module.exports = function getCachedWidth(e) {

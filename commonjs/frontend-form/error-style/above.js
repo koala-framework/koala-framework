@@ -1,6 +1,6 @@
-var ErrorStyleAbstract = require('kwf/frontend-form/error-style/abstract');
-var kwfExtend = require('kwf/extend');
-var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
+var ErrorStyleAbstract = require('kwf/commonjs/frontend-form/error-style/abstract');
+var kwfExtend = require('kwf/commonjs/extend');
+var errorStyleRegistry = require('kwf/commonjs/frontend-form/error-style-registry');
 
 var ErrorStyleAbove = kwfExtend(ErrorStyleAbstract, {
     showErrors: function(r) {

@@ -1,8 +1,8 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 var _ = require('underscore');
-var $ = require('jQuery');
-var t = require('kwf/trl');
-var KwfBaseUrl = require('kwf/base-url');
+var $ = require('jquery');
+var t = require('kwf/commonjs/trl');
+var KwfBaseUrl = require('kwf/commonjs/base-url');
 
 onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var slideDuration = 400;

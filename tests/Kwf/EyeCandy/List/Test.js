@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 
 onReady.onContentReady(function() {
     var lists = Ext2.query('.testItemWrapper');

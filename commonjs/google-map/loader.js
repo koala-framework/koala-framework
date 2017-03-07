@@ -1,5 +1,5 @@
 var apiKeys = require('DynamicGoogleMapsApiKeys');
-var t = require('kwf/trl');
+var t = require('kwf/commonjs/trl');
 var isLoaded = false;
 var isCallbackCalled = false;
 var callbacks = [];

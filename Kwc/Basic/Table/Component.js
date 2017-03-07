@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 
 onReady.onResize('.kwcClass.responsiveFlipScroll', function(el) {
     var addArrow = function(el) {

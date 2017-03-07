@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-var $ = require('jQuery');
+var onReady = require('kwf/commonjs/on-ready');
+var $ = require('jquery');
 
     var switchDisplayCls = function(el, config) {
 

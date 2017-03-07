@@ -1,6 +1,6 @@
 'use strict';
 
-var $ = require('jQuery');
+var $ = require('jquery');
 
 function fetchSessionToken(cb, scope) {
     var dfd = $.Deferred();

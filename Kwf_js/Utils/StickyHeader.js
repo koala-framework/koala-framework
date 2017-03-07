@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 
 Kwf.Utils.StickyHeader = function(selector, minWidth)
 {

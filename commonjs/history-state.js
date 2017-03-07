@@ -1,6 +1,6 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var kwfExtend = require('kwf/extend');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var kwfExtend = require('kwf/commonjs/extend');
 
 var HistoryStateAbstract = function() {
     this.disabled = false; //functionality can be disabled, so it behaves like a browser that doesn't support history states

@@ -1,4 +1,4 @@
-var namespace = require('kwf/namespace');
+var namespace = require('kwf/commonjs/namespace');
 namespace('Kwf.Legacy');
-Kwf.Legacy.OnReady = require('kwf/on-ready');
-Kwf.Legacy.OnReadyExt2 = require('kwf/on-ready-ext2');
+Kwf.Legacy.OnReady = require('kwf/commonjs/on-ready');
+Kwf.Legacy.OnReadyExt2 = require('kwf/commonjs/on-ready-ext2');

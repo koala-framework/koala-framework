@@ -1,9 +1,9 @@
-var AbstractStyle = require('kwf/lightbox/style/abstract');
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var kwfExtend = require('kwf/extend');
-var oneTransitionEnd = require('kwf/element/one-transition-end');
-var lightboxHelper = require('kwf/lightbox/lightbox-helper');
+var AbstractStyle = require('kwf/commonjs/lightbox/style/abstract');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var kwfExtend = require('kwf/commonjs/extend');
+var oneTransitionEnd = require('kwf/commonjs/element/one-transition-end');
+var lightboxHelper = require('kwf/commonjs/lightbox/lightbox-helper');
 
 var CenterBoxStyle = kwfExtend(AbstractStyle, {
     init: function()

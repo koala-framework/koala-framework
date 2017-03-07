@@ -21,7 +21,7 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
 
     public function getContentsPacked()
     {
-        $ret = "require('kwf/responsive-el')('".$this->_selector."', ".json_encode($this->_breakpoints).");\n";
+        $ret = "require('kwf/commonjs/responsive-el')('".$this->_selector."', ".json_encode($this->_breakpoints).");\n";
         return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 

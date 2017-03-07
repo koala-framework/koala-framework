@@ -1,6 +1,6 @@
-var kwfNs = require('kwf/namespace');
-var kwfExtend = require('kwf/extend');
-var $ = require('jQuery');
+var kwfNs = require('kwf/commonjs/namespace');
+var kwfExtend = require('kwf/commonjs/extend');
+var $ = require('jquery');
 
 kwfNs("Kwf.EyeCandy.List");
 

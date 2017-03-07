@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 require('kwf-jquery-plugin/mediaelement');
 
 onReady.onRender('.kwcClass', function(el, config) {

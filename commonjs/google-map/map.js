@@ -1,6 +1,6 @@
-var $ = require('jQuery');
-var t = require('kwf/trl');
-var onReady = require('kwf/on-ready');
+var $ = require('jquery');
+var t = require('kwf/commonjs/trl');
+var onReady = require('kwf/commonjs/on-ready');
 
 /**
  * The Kwf GoogleMaps object

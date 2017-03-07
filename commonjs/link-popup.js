@@ -1,4 +1,4 @@
-var $ = require('jQuery');
+var $ = require('jquery');
 
 $(document).on('click', 'a.kwfUp-kwcPopup', function(event) {
     var lnk = event.currentTarget;

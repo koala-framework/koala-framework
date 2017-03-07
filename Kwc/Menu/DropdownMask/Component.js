@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-var $ = require('jQuery');
+var onReady = require('kwf/commonjs/on-ready');
+var $ = require('jquery');
 
 onReady.onRender('.kwcClass', function(target, config) {
     var mask = $('<div class="kwfUp-kwcMenuDropdownMaskMask"></div>');
