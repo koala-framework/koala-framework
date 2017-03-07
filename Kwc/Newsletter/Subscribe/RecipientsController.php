@@ -11,10 +11,11 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
     public function indexAction()
     {
         parent::indexAction();
-        $formControllerUrl = Kwc_Admin::getInstance($this->_getParam('class'))
-            ->getControllerUrl('Recipient');
+        $admin = Kwc_Admin::getInstance($this->_getParam('class'));
+        $formControllerUrl = $admin->getControllerUrl('Recipient');
 
         $this->view->formControllerUrl = $formControllerUrl;
+        $this->view->logsControllerUrl = $admin->getControllerUrl('Logs');
         $this->view->xtype = 'kwc.newsletter.subscribe.recipients';
         $this->view->model = get_class($this->_model);
         $this->view->baseParams = array(
