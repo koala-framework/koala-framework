@@ -23,7 +23,14 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
                 new Kwf_Model_Select_Expr_Equal('unsubscribed', 1),
                 new Kwf_Model_Select_Expr_Equal('activated', 1)
             )));
+
+            $log = array(
+                'source' => $row->getLogSource(),
+                'ip' => $row->getLogIp()
+            );
             $row = $this->getForm()->getModel()->getRow($s);
+            $row->setLogSource($log['source']);
+            $row->setLogIp($log['ip']);
 
             $s = $nl2cat->select()
                 ->whereEquals('subscriber_id', $row->id)
@@ -46,7 +53,10 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
             if ($deleteRow) {
                 $deleteRow->delete();
             }
+            $this->_allowWriteLog = false;
             $this->_beforeInsert($row);
+            $this->_allowWriteLog = true;
+            $this->_writeLog($row);
             $row->save();
         }
         $nl2CatRow = $nl2cat->createRow();

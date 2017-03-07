@@ -8,6 +8,8 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     const CONFIRM_MAIL_ONLY = 'confirm-mail-only';
     const DOUBLE_OPT_IN = 'double-opt-in';
 
+    protected $_allowWriteLog = true;
+
     public static function getSettings($param = null)
     {
         $ret = parent::getSettings($param);
@@ -61,7 +63,10 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             if ($deleteRow) {
                 $deleteRow->delete();
             }
+            $this->_allowWriteLog = false;
             $this->_beforeInsert($row);
+            $this->_allowWriteLog = true;
+            $this->_writeLog($row);
             $row->save();
             $this->_afterInsert($row);
             return true;
@@ -103,6 +108,11 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             $row->activated = 0;
         }
         $row->newsletter_component_id = $this->getSubscribeToNewsletterComponent()->dbId;
+
+        if ($this->_allowWriteLog) {
+            $row->setLogSource($this->getData()->getAbsoluteUrl());
+            $this->_writeLog($row);
+        }
     }
 
     protected function _afterInsert(Kwf_Model_Row_Interface $row)
@@ -141,5 +151,16 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         $this->_form = new $formClass(
             'form', $this->getData()->componentClass, $this->getData()->dbId
         );
+    }
+
+    protected function _writeLog(Kwf_Model_Row_Interface $row)
+    {
+        if ($this->_getSetting('subscribeType') == self::DOUBLE_OPT_IN) {
+            $logMessage = $this->getData()->trlKwf('Subscribed');
+        } else {
+            $logMessage = $this->getData()->trlKwf('Subscribed and activated');
+        }
+
+        $row->writeLog($logMessage);
     }
 }

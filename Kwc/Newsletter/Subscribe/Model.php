@@ -18,4 +18,9 @@ class Kwc_Newsletter_Subscribe_Model extends Kwf_Model_Db
         ),
     );
 
+    protected function _init()
+    {
+        $this->_dependentModels['Logs'] = 'Kwc_Newsletter_Subscribe_LogsModel';
+        parent::_init();
+    }
 }

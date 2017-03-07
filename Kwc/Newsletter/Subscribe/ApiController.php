@@ -50,6 +50,9 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
         $row->email = $this->_getParam('email');
         $row->subscribe_date = date('Y-m-d H:i:s');
 
+        $row->setLogSource(($url = $this->_getParam('url')) ? $url : $this->_subscribe->trlKwf('Subscribe API'));
+        $row->setLogIp($this->_getParam('ip'));
+
         $inserted = $this->_insertSubscription($row);
         if ($inserted) {
             $this->view->message = $this->_subscribe->trlKwf('The subscription has been saved successfully.');
