@@ -50,7 +50,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         $r = $this->_getRedirectRow();
 
         if (isset($r->type) && $r->type && $r->type != 'redirect') {
-            throw new Kwf_Exception('Invalid type');
+            throw new Kwf_Exception_NotFound('Invalid type');
         }
 
         return $r->value;
