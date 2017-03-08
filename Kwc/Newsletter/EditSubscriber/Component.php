@@ -14,6 +14,7 @@ class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
         $ret['flags']['noIndex'] = true;
         $ret['flags']['processInput'] = true;
         $ret['flags']['passMailRecipient'] = true;
+        unset($ret['plugins']['useViewCache']);
         return $ret;
     }
 
@@ -66,7 +67,10 @@ class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
             $logMessages[] = $this->getData()->trlKwf('{0}: "{1}" to "{2}"', array($columnName, $row->getCleanValue($column), $row->{$column}));
         }
 
-        if (count($logMessages) > 1) $row->writeLog(implode("\n", $logMessages));
+        if (count($logMessages) > 1) {
+            $row->setLogSource($this->getData()->getAbsoluteUrl());
+            $row->writeLog(implode("\n", $logMessages));
+        }
     }
 
 
