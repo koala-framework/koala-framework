@@ -98,7 +98,7 @@ ViewAjax.prototype = {
             $.extend(this.baseParams, this.searchForm.getValues());
 
             this.searchForm.on('fieldChange', function(ev, f) {
-                if (f.el.find('input[type=text]').length && f.getValue().length < this.minimumCharactersForFilter) return; //minimum length
+                if (f.el.find('input[type=text]').length && f.getValue().length < this.minimumCharactersForFilter && f.getValue() != '') return; //minimum length
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;

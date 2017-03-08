@@ -11,7 +11,7 @@ class Kwf_Assets_CommonJs_Underscore_TemplateProvider extends Kwf_Assets_Provide
                 'underscore'
             );
 
-            if (file_exists(substr($ret->getAbsoluteFileName(), 0, -15) . '.scss')) {
+            if (file_exists(substr($ret->getAbsoluteFileName(), 0, -15) . '.scss') && substr($ret->getFileNameWithType(), 0, 13) != 'web/commonjs/') {
                 $ret->addDependency(
                     Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES,
                     new Kwf_Assets_Dependency_File_Scss($this->_providerList, substr($dependencyName, 0, -15) . '.scss')

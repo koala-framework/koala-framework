@@ -8,34 +8,24 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class KwfUserProvider implements UserProviderInterface
 {
-    public function getUsernameForApiKey($apiKey)
-    {
-        // Look up the username based on the token in the database, via
-        // an API call, or do something entirely different
-        throw new \Kwf_Exception();
-        $username = '...';
+    protected $userModel;
 
-        return $username;
+    public function __construct(\Kwf_User_Model $userModel)
+    {
+        $this->userModel = $userModel;
     }
 
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($userId)
     {
-        throw new \Kwf_Exception();
-        return new User(
-            $username,
-            null,
-            // the roles for the user - you may choose to determine
-            // these dynamically somehow based on the user
-            array('ROLE_USER')
-        );
+        $userRow = $this->userModel->getRow($userId);
+        if (!$userRow) {
+            throw new UsernameNotFoundException($userId);
+        }
+        return new KwfUser($userRow);
     }
 
     public function refreshUser(UserInterface $user)
     {
-        // this is used for storing authentication in the session
-        // but in this example, the token is sent in each request,
-        // so authentication can be stateless. Throwing this exception
-        // is proper to make things stateless
         throw new UnsupportedUserException();
     }
 

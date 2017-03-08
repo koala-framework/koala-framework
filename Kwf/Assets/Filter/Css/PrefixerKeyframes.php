@@ -18,7 +18,7 @@ class Kwf_Assets_Filter_Css_PrefixerKeyframes extends Kwf_Assets_Filter_Css_Abst
         return 'postcss-prefixer-keyframes';
     }
 
-    public function getPluginOptions()
+    public function getPluginOptions(Kwf_Assets_Dependency_Abstract $dependency = null)
     {
         return array(
             'prefix' => $this->_prefix

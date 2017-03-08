@@ -71,27 +71,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         return $ret;
     }
 
-    private static function _canHaveFulltext($class)
-    {
-        static $cache = array();
-        if (isset($cache[$class])) return $cache[$class];
-        $cache[$class] = false;
-        if (Kwc_Abstract::getFlag($class, 'skipFulltext')) {
-            return $cache[$class]; //false
-        }
-        if (Kwc_Abstract::getFlag($class, 'hasFulltext')) {
-            $cache[$class] = true;
-            return $cache[$class];
-        }
-        foreach (Kwc_Abstract::getChildComponentClasses($class) as $c) {
-            if (self::_canHaveFulltext($c)) {
-                $cache[$class] = true;
-                return $cache[$class];
-            }
-        }
-        return $cache[$class]; //false
-    }
-
     public function deleteAllAction()
     {
         foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $sr) {

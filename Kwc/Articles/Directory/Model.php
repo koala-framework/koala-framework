@@ -26,7 +26,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
                 new Kwf_Model_Select_Expr_Equal('is_top_checked', 1),
                 new Kwf_Model_Select_Expr_Or(array(
                     new Kwf_Model_Select_Expr_IsNull('is_top_expire'),
-                    new Kwf_Model_Select_Expr_HigherEqual('is_top_expire', new Kwf_Date(mktime())),
+                    new Kwf_Model_Select_Expr_HigherEqual('is_top_expire', new Kwf_Date(time())),
                 )),
             )),
             new Kwf_Model_Select_Expr_String(1),

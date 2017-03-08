@@ -1,7 +1,7 @@
 <?php
 class Kwc_Editable_ComponentsController_EditComponentsData extends Kwf_Data_Abstract
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $admin = Kwc_Admin::getInstance($row->content_component_class);
         $ret = array();

@@ -57,7 +57,18 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         if (!isset($postData['recipient'])) {
             throw new Kwf_Exception_NotFound();
         }
-        $this->_recipient = Kwc_Mail_Redirect_Component::parseRecipientParam($postData['recipient']);
+        $recipientData = Kwc_Mail_Redirect_Component::parseRecipientParamData($postData['recipient']);
+        $this->_recipient = $recipientData['recipient'];
+        if ($this->_getSetting('trackViews')) {
+            $model = Kwf_Model_Abstract::getInstance('Kwc_Mail_Abstract_ViewsModel');
+            $model->createRow(array(
+                'mail_component_id' => $this->getData()->componentId,
+                'recipient_id' => $recipientData['recipientId'],
+                'recipient_model_shortcut' => $recipientData['recipientModelShortcut'],
+                'ip' => $_SERVER['REMOTE_ADDR'],
+                'date' => date('Y-m-d H:i:s')
+            ))->save();
+        }
     }
 
     //override for dynamic recipient sources

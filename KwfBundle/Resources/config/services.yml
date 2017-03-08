@@ -14,10 +14,17 @@ services:
 
     kwf_authenticator:
         class:  KwfBundle\Security\KwfUserAuthenticator
+        arguments: [@kwf.user.model]
         public: false
+
+    kwf.user.model:
+        class: Kwf_User_Model
+        factory: ['Kwf_Registry', get]
+        arguments: ['userModel']
 
     kwf_user_provider:
         class: KwfBundle\Security\KwfUserProvider
+        arguments: [@kwf.user.model]
 
     kwf.security.entrypoint.api:
         class: KwfBundle\Security\EntryPoint
@@ -34,3 +41,8 @@ services:
         tags:
             - { name: serializer.normalizer, priority: -10 }
         public: false
+
+    kwf.exception_handler:
+        class: KwfBundle\ExceptionHandler
+        tags:
+            - { name: kernel.event_subscriber }

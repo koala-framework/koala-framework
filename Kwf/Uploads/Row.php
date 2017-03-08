@@ -38,6 +38,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $this->save();
         $this->_putFileContents($contents);
         $this->_saveImageDimensions();
+        Kwf_Util_Upload::onFileWrite($this->getFileSource());
         return $this;
     }
 
@@ -90,6 +91,13 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $ret = $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2) . '/' . $this->id;
         if (isset($this->id_old) && $this->id_old && !is_file($ret) && is_file($this->getModel()->getUploadDir() . '/' . $this->id_old)) {
             $ret = $this->getModel()->getUploadDir() . '/' . $this->id_old;
+        }
+        if (Kwf_Config::getValue('uploadsFetchLazyFrom') && !is_file($ret)) {
+            $url = Kwf_Config::getValue('uploadsFetchLazyFrom').'/kwf/media/upload/download?uploadId='.$this->id.'&hashKey='.$this->getHashKey();
+            $uploadsDir = $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2);
+            if (!is_dir($uploadsDir)) mkdir($uploadsDir);
+            file_put_contents($ret, file_get_contents($url));
+            Kwf_Util_Upload::onFileWrite($ret);
         }
         return $ret;
     }

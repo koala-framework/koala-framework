@@ -14,76 +14,48 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 
 class KwfUserAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
+    protected $userModel;
+
+    public function __construct(\Kwf_User_Model $userModel)
+    {
+        $this->userModel = $userModel;
+    }
+
     public function createToken(Request $request, $providerKey)
     {
-        $user = \Kwf_Registry::get('userModel')->getAuthedUser();
-
-        if ($user) {
-            $token = new KwfUserToken(new KwfUser($user));
-            return $token;
-        } else {
-            return null;
-        }
-/*
-        // look for an apikey query parameter
-        $apiKey = $request->query->get('apikey');
-
-        // or if you want to use an "apikey" header, then do something like this:
-        // $apiKey = $request->headers->get('apikey');
-
-        if (!$apiKey) {
-            throw new BadCredentialsException('No API key found');
-            // or to just skip api key authentication
-            //return null;
-        }
+        $userRow = $this->userModel->getAuthedUser();
+        if (!$userRow) return null;
 
         return new PreAuthenticatedToken(
             'anon.',
-            $apiKey,
+            $userRow->id,
             $providerKey
         );
-*/
     }
 
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
-        return $token;
-
-/*
-        if (!$userProvider instanceof ApiKeyUserProvider) {
+        if (!$userProvider instanceof KwfUserProvider) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The user provider must be an instance of ApiKeyUserProvider (%s was given).',
+                    'The user provider must be an instance of KwfUserProvider (%s was given).',
                     get_class($userProvider)
                 )
             );
         }
-
-        $apiKey = $token->getCredentials();
-        $username = $userProvider->getUsernameForApiKey($apiKey);
-
-        if (!$username) {
-            // CAUTION: this message will be returned to the client
-            // (so don't put any un-trusted messages / error strings here)
-            throw new CustomUserMessageAuthenticationException(
-                sprintf('API Key "%s" does not exist.', $apiKey)
-            );
-        }
-
-        $user = $userProvider->loadUserByUsername($username);
-
+        $userId = $token->getCredentials();
+        $user = $userProvider->loadUserByUsername($userId);
         return new PreAuthenticatedToken(
             $user,
-            $apiKey,
+            $token->getCredentials(),
             $providerKey,
             $user->getRoles()
         );
-*/
     }
 
     public function supportsToken(TokenInterface $token, $providerKey)
     {
-        return $token instanceof KwfUserToken;
+        return $token instanceof PreAuthenticatedToken && $token->getProviderKey() === $providerKey;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)

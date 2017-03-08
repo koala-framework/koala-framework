@@ -95,10 +95,12 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         return $this->getData()->getChildComponent('-paging');
     }
 
-    public function getItemIds($count = null, $offset = null)
+    //override in List if needed
+    public final function getItemIds($count = null, $offset = null)
     {
         $select = $this->_getSelect();
         if (!$select) return array();
+
         if ($count) {
             if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
                 $ex = new Kwf_Exception("Can't use getItemIds with limit in select when \$count paramter is given. You probably should disable paging for {$this->getData()->componentClass}.");
@@ -106,37 +108,21 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
             }
             $select->limit($count, $offset);
         }
-        $itemDirectory = $this->getData()->parent->getComponent()->getItemDirectory();
-        if (is_string($itemDirectory)) {
-            $c = Kwc_Abstract::getComponentClassByParentClass($itemDirectory);
-            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
-            $items = $generator->getChildIds(null, $select);
-        } else {
-            $items = $itemDirectory->getChildIds($select);
-        }
-        return $items;
+
+        return $this->getData()->parent->getComponent()->getItemIds($select);
     }
 
-    protected function _getItems($select = null)
+    //override in List if needed
+    protected final function _getItems($select = null)
     {
         if (!$select) $select = $this->_getSelect();
         if (!$select) return array();
-        $itemDirectory = $this->getData()->parent->getComponent()->getItemDirectory();
-        if (is_string($itemDirectory)) {
-            $c = Kwc_Abstract::getComponentClassByParentClass($itemDirectory);
-            $generator = Kwf_Component_Generator_Abstract::getInstance($c, 'detail');
-            $items = $generator->getChildData(null, $select);
-        } else {
-            $select->whereGenerator('detail');
-            $items = $itemDirectory->getChildComponents($select);
-        }
-        foreach ($items as &$item) {
-            $item->parent->getComponent()->callModifyItemData($item);
-        }
-        return $items;
+
+        return $this->getData()->parent->getComponent()->getItems($select);
     }
 
-    public function getItems()
+    //override in List if needed
+    public final function getItems()
     {
         return $this->_getItems();
     }

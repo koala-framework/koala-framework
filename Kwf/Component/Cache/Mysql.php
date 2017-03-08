@@ -45,7 +45,6 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'domain_component_id' => $type == 'fullPage' ? $component->getDomainComponentId() : null,
         );
         $options = array(
-            'buffer' => true,
             'replace' => true,
             'skipModelObserver' => true
         );

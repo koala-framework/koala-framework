@@ -19,5 +19,5 @@ abstract class Kwc_Advanced_DynamicContent_Component extends Kwc_Abstract
         return $ret;
     }
 
-    abstract public static function getDynamicContent($componentId, $componentClass);
+    public static function getDynamicContent($componentId, $componentClass) {}
 }

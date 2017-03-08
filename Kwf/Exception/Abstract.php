@@ -70,7 +70,12 @@ abstract class Kwf_Exception_Abstract extends Exception
                 ->getComponentByClass($this->getComponentClass(), array('limit'=>1, 'subroot'=>$data));
 
             if ($notFound) {
-                return str_replace('{logId}', $this->_logId, $notFound->render(null, true));
+                $notFound->getComponent()->setException($exception);
+                $contentSender = Kwc_Abstract::getSetting($notFound->componentClass, 'contentSender');
+                $contentSender = new $contentSender($notFound);
+                $content = $contentSender->getContent(true);
+                $content = $content['content'];
+                return str_replace('{logId}', $this->_logId, $content);
             }
         }
 
@@ -183,7 +188,13 @@ abstract class Kwf_Exception_Abstract extends Exception
                 'message' => 'An Error occured. Please try again later',
             )
         );
-        if (Kwf_Exception::isDebug()) {
+        $debug = Kwf_Exception::isDebug();
+        try {
+            if (Kwf_Registry::get('userModel') && Kwf_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
+                $debug = true;
+            }
+        } catch (Exception $e) {}
+        if ($debug) {
             $data = array(
                 'error' => array(
                     'code' => $exception->code,

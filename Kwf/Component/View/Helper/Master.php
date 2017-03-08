@@ -3,7 +3,8 @@ class Kwf_Component_View_Helper_Master extends Kwf_Component_View_Renderer
 {
     public function master(Kwf_Component_Data $component)
     {
-        return $this->_getRenderPlaceholder($component->componentId);
+        $viewCacheSettings = $component->getComponent()->getViewCacheSettings();
+        return $this->_getRenderPlaceholder($component->componentId, array(), null, $viewCacheSettings['enabled']);
     }
 
     public function render($componentId, $config)
@@ -36,4 +37,14 @@ class Kwf_Component_View_Helper_Master extends Kwf_Component_View_Renderer
         }
         return $ret;
     }
+
+    public function getViewCacheSettings($componentId)
+    {
+        $component = $this->_getComponentById($componentId);
+        while ($component && !$component->getComponent()->hasMasterTemplate()) {
+            $component = $component->parent;
+        }
+        return $component->getComponent()->getMasterViewCacheSettings();
+    }
+
 }

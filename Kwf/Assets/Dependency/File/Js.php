@@ -14,6 +14,9 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
 
         $usesUniquePrefix = strpos($rawContents, 'kwfUp-') !== false;
+        if (strpos($rawContents, 'kwfLocal') !== false) {
+            $usesUniquePrefix = true;
+        }
 
         $pathType = $this->getType();
         if ($pathType == 'ext2' && strpos($rawContents, 'ext2-gen') !== false) {
@@ -70,6 +73,9 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                     if ($uniquePrefix) {
                         $map->stringReplace('ext2-gen', $uniquePrefix.'-ext2-gen');
                     }
+                }
+                if (strpos($rawContents, 'kwfLocal') !== false) {
+                    $replacements['kwfLocal'] = Kwf_Assets_Filter_Css_KwfLocal::getLocalClassForDependency($this);
                 }
                 if (strpos($rawContents, 'kwfUp-') !== false) {
                     if (Kwf_Config::getValue('application.uniquePrefix')) {

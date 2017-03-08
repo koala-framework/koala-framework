@@ -24,7 +24,7 @@ class Kwf_Form_Field_PageSelect extends Kwf_Form_Field_SimpleAbstract
             if ($cmp) {
                 $title = array();
                 do {
-                    if ($cmp->generator->getGeneratorFlag('showInPageTreeAdmin') && $cmp->name)  {
+                    if ($cmp->generator->getGeneratorFlag('showInLinkInternAdmin') && $cmp->name)  {
                         $title[] = $cmp->name;
                     }
                 } while (($cmp = $cmp->parent) && $cmp->componentId != 'root');

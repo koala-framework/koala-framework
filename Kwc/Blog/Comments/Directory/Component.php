@@ -6,7 +6,10 @@ class Kwc_Blog_Comments_Directory_Component extends Kwc_Posts_Directory_Componen
         $ret = parent::getSettings($param);
         $ret['generators']['detail']['component'] = 'Kwc_Blog_Comments_Detail_Component';
 
-        $ret['generators']['child']['component']['newCommentMail'] = 'Kwc_Blog_Comments_NewCommentMail_Component';
+        $ret['generators']['newCommentMail'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Blog_Comments_NewCommentMail_Component'
+        );
 
         unset($ret['generators']['write']);
 
@@ -28,7 +31,7 @@ class Kwc_Blog_Comments_Directory_Component extends Kwc_Posts_Directory_Componen
         if ($blogSettingsRow->new_comment_mail_recipient_user_id) {
             $userRow = Kwf_Registry::get('userModel')->getRow($blogSettingsRow->new_comment_mail_recipient_user_id);
             if ($userRow) {
-                $mailComponent = $this->getData()->getChildComponent('-newCommentMail');
+                $mailComponent = $this->getData()->getChildComponent('_newCommentMail');
 
                 $mailComponent->getComponent()->send(
                     $userRow,

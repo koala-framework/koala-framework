@@ -16,7 +16,7 @@ class Kwc_Advanced_IntegratorTemplate_Form extends Kwc_Abstract_Form
 
 class Kwc_Advanced_IntegratorTemplate_FormData extends Kwf_Data_Abstract
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         return Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($row->component_id, array('ignoreVisible' => true))

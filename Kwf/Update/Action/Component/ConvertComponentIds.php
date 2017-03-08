@@ -43,6 +43,12 @@ class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_
                 } else if ($field['Field'] == 'component_id') {
                     $column = 'component_id';
                     $hasComponentId = true;
+                } else if ($field['Field'] == 'mail_component_id') {
+                    $column = 'mail_component_id';
+                    $hasComponentId = true;
+                } else if ($field['Field'] == 'newsletter_component_id') {
+                    $column = 'newsletter_component_id';
+                    $hasComponentId = true;
                 }
 
                 if ($hasComponentId) {

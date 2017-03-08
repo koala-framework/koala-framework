@@ -3,20 +3,13 @@ var onReady = require('kwf/on-ready');
 var gmapLoader = require('kwf/google-map/loader');
 var gmapMap = require('kwf/google-map/map');
 
-
-
-var renderedMaps = [];
-
-var renderMap = function(map) {
-    if ($.inArray(map, renderedMaps) != -1) return;
-    renderedMaps.push(map);
-
-    var cfg = map.find(".options", true);
+var renderMap = function(el) {
+    var cfg = el.find(".options", true);
     if (!cfg.length) return;
     cfg = $.parseJSON(cfg.val());
 
-    var text = map.find("div.text");
-    cfg.mapContainer = map;
+    var text = el.find("div.kwcBem__text");
+    cfg.mapContainer = el;
     if (!cfg.markers) {
         cfg.markers = {
             longitude : cfg.longitude,
@@ -28,7 +21,6 @@ var renderMap = function(map) {
 
     var cls = eval(cfg.mapClass) || gmapMap;
     var myMap = new cls(cfg);
-    map.map = myMap;
 
     gmapLoader(function() {
         this.show();
@@ -37,10 +29,8 @@ var renderMap = function(map) {
     return myMap;
 };
 
-onReady.onRender('.kwcClass', function(map) {
-    if (!map.get('gmapObject') && !map.is(':hidden')) {
-        map.data('gmapObject', renderMap(map));
-    }
+onReady.onRender('.kwcClass', function(el) {
+    el.data('gmapObject', renderMap(el));
 }, { checkVisibility: true });
 
 onReady.onRender('.kwcClass', function (el) {
@@ -69,3 +59,13 @@ onReady.onRender('.kwcClass', function (el) {
         }
     });
 });
+
+onReady.onResize('.kwcClass', function (el) {
+    if (el.hasClass('optimizedMobileUI')) {
+        var map = el.data('gmapObject');
+        if (map && map.gmap) { // gmap will be set once it's rendered
+            var gestureHandling = el.hasClass('gt700') ? 'auto' : 'greedy';
+            map.gmap.set('gestureHandling', gestureHandling);
+        }
+    }
+}, { priority: 5 /* after responsive-el */});

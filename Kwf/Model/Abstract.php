@@ -669,6 +669,9 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 $row = $this->getRow($row[$this->getPrimaryKey()]);
             }
             $reference = $row->getModel()->getReference($expr->getParent());
+            if ($row->{$reference['column']} == null) {
+                return null;
+            }
             $parentModel = $row->getModel()->getReferencedModel($expr->getParent());
             $select = new Kwf_Model_Select();
             $select->whereId($row->{$reference['column']});
@@ -1257,14 +1260,20 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (isset($s['constraints'])) {
                 $constraints = $s['constraints'];
                 $s['constraints'] = array();
-                if (!is_array($constraints)) $constraints = array($constraints);
+                if (is_string($constraints) || (is_array($constraints) && isset($constraints['type']))) $constraints = array($constraints);
                 foreach ($constraints as $constraint) {
                     if (is_string($constraint)) {
-                        if (!class_exists($constraint)) {
-                            $constraint = "Symfony\\Component\\Validator\\Constraints\\".$constraint;
-                        }
-                        $constraint = new $constraint();
+                        $constraint = array(
+                            'type' => $constraint
+                        );
                     }
+                    $type = $constraint['type'];
+                    unset($constraint['type']);
+                    $options = $constraint;
+                    if (!class_exists($type)) {
+                        $type = "Symfony\\Component\\Validator\\Constraints\\".$type;
+                    }
+                    $constraint = new $type($options);
                     $s['constraints'][] = $constraint;
                 }
             }

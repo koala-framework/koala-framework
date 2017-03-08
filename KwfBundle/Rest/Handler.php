@@ -84,10 +84,10 @@ class Handler
         return $select;
     }
 
-    public function buildSubmitHandler(array $context = array())
+    public function buildSubmitHandler(array $context = array(), $serializationColumns = array('rest_write', 'rest'))
     {
         $fields = array();
-        $columns = $this->model->getSerializationColumns(array('rest_write', 'rest'));
+        $columns = $this->model->getSerializationColumns($serializationColumns);
         foreach ($columns as $column=>$settings) {
             if (isset($settings['type'])) {
                 $type = $settings['type'];
@@ -163,5 +163,10 @@ class Handler
     public function createRow()
     {
         return $this->model->createRow();
+    }
+
+    public function getModel()
+    {
+        return $this->model;
     }
 }

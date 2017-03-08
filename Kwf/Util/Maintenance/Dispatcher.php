@@ -80,6 +80,7 @@ class Kwf_Util_Maintenance_Dispatcher
                         $e->logOrThrow();
                     }
                 } else {
+                    $job->setDebug($debug);
                     try {
                         $job->execute($debug);
                     } catch (Exception $e) {

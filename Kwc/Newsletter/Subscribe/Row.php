@@ -2,6 +2,8 @@
 class Kwc_Newsletter_Subscribe_Row extends Kwf_Model_Db_Row
     implements Kwc_Mail_Recipient_TitleInterface, Kwc_Mail_Recipient_UnsubscribableInterface
 {
+    private $_logSource;
+    private $_logIp;
 
     public function getMailFirstname()
     {
@@ -44,5 +46,36 @@ class Kwc_Newsletter_Subscribe_Row extends Kwf_Model_Db_Row
     public function getMailUnsubscribe()
     {
         return ($this->unsubscribed ? true : false);
+    }
+
+    public function setLogSource($source)
+    {
+        $this->_logSource = $source;
+    }
+
+    public function getLogSource()
+    {
+        return $this->_logSource;
+    }
+
+    public function setLogIp($ip)
+    {
+        $this->_logIp = $ip;
+    }
+
+    public function getLogIp()
+    {
+        return ($this->_logIp) ? $this->_logIp : (array_key_exists('REMOTE_ADDR', $_SERVER)) ? $_SERVER['REMOTE_ADDR'] : null;
+    }
+
+    public function writeLog($message, $saveImmediatly = false)
+    {
+        $childRow = $this->createChildRow('Logs', array(
+            'date' => date('Y-m-d H:i:s'),
+            'ip' => $this->getLogIp(),
+            'message' => $message,
+            'source' => $this->getLogSource()
+        ));
+        if ($saveImmediatly) $childRow->save();
     }
 }

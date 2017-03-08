@@ -134,14 +134,14 @@ class Kwf_Assets_Package
                 }
                 foreach ($dep->getFilters() as $filter) {
                     if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Dependency_Filter_', '', get_class($filter)));
-                    $ret = $filter->filter($ret);
+                    $ret = $filter->filter($ret, $dep);
                 }
                 foreach ($this->getProviderList()->getFilters() as $filter) {
                     if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
                         && $filter->getMimeType() == $dep->getMimeType()
                     ) {
                         if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($filter)));
-                        $ret = $filter->filter($ret);
+                        $ret = $filter->filter($ret, $dep);
                     }
                 }
                 $this->_depContentsCache[$dep->getIdentifier()] = $ret;
@@ -156,14 +156,14 @@ class Kwf_Assets_Package
                         //remove @ie8 {}
                         $f = new Kwf_Assets_Filter_Css_Ie8Remove();
                         if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($f)));
-                        $ret = $f->filter($ret);
+                        $ret = $f->filter($ret, $dep);
                     }
                 } else if ($mimeType == 'text/css; ie8') {
                     if (strpos($ret->getFileContents(), '@ie8') !== false) {
                         //remove all but @ie8 {}
                         $f = new Kwf_Assets_Filter_Css_Ie8Only();
                         if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($f)));
-                        $ret = $f->filter($ret);
+                        $ret = $f->filter($ret, $dep);
                     } else {
                         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
                     }

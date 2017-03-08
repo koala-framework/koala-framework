@@ -173,8 +173,16 @@ class Kwf_Mail extends Zend_Mail
         }
 
         if (!$transport) {
-            if (Kwf_Config::getValue('email.smtp.host')) {
-                $transport = new Zend_Mail_Transport_Smtp(
+
+            static $smtpTransport;
+            if (isset($smtpTransport)) {
+                $transport = $smtpTransport; //reuse previously created transport to reuse connection
+            } else if (Kwf_Config::getValue('email.transport')) {
+                $transport = Kwf_Config::getValue('email.transport');
+                $transport = new $transport();
+                $smtpTransport = $transport;
+            } else if (Kwf_Config::getValue('email.smtp.host')) {
+                $smtpTransport = new Zend_Mail_Transport_Smtp(
                     Kwf_Config::getValue('email.smtp.host'),
                     array(
                         'auth' => Kwf_Config::getValue('email.smtp.auth'),
@@ -184,6 +192,7 @@ class Kwf_Mail extends Zend_Mail
                         'port' => Kwf_Config::getValue('email.smtp.port'),
                     )
                 );
+                $transport = $smtpTransport;
             } else {
                 if ($this->getReturnPath()) {
                     $transport = new Zend_Mail_Transport_Sendmail('-f ' . $this->getReturnPath());

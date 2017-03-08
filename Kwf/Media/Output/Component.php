@@ -56,12 +56,32 @@ class Kwf_Media_Output_Component
             $data['file'] = $file;
         }
 
+        $sourceSize = null;
+        if (isset($data['dimensions'])) {
+            $sourceSize = $data['dimensions'];
+        } else if (isset($data['image'])) {
+            $sourceSize = array(
+                'width' => $data['image']->getImageWidth(),
+                'height' => $data['image']->getImageHeight()
+            );
+        } else if (isset($data['file'])) {
+            if (!is_string($data['file'])) {
+                throw new Kwf_Exception("file must be a string (filename) or dimensions must be passed");
+            }
+            $s = @getimagesize($data['file']);
+            $sourceSize = array(
+                'width' => $s[0],
+                'height' => $s[1],
+            );
+            unset($s);
+        }
+
         // calculate output width/height on base of getImageDimensions and given width
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
         $width = substr($width, 0, strpos($width, '-'));
+
         if ($width) {
-            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
-                        Kwf_Media_Image::getResponsiveWidthSteps($dim, isset($data['image']) ? $data['image'] : $data['file']));
+            $width = Kwf_Media_Image::getResponsiveWidthStep($width, Kwf_Media_Image::getResponsiveWidthSteps($dim, $sourceSize));
             $dim['height'] = $width / $dim['width'] * $dim['height'];
             $dim['width'] = $width;
         }
@@ -71,14 +91,13 @@ class Kwf_Media_Output_Component
             $output = Kwf_Media_Image::scale($data['image'], $dim);
             $ret['contents'] = $output;
         } else {
-            $sourceSize = @getimagesize($data['file']);
             $scalingNeeded = true;
-            $resultingSize = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
+            $resultingSize = Kwf_Media_Image::calculateScaleDimensions($sourceSize, $dim);
             if ($sourceSize
                 && array($resultingSize['crop']['width'], $resultingSize['crop']['height'])
-                    == array($sourceSize[0], $sourceSize[1])
+                    == array($sourceSize['width'], $sourceSize['height'])
                 && array($resultingSize['width'], $resultingSize['height'])
-                    == array($sourceSize[0], $sourceSize[1])
+                    == array($sourceSize['width'], $sourceSize['height'])
             ) {
                 $scalingNeeded = false;
             }
@@ -86,7 +105,7 @@ class Kwf_Media_Output_Component
                 //NOTE: don't pass actual size of the resulting image, scale() will calculate that on it's own
                 //else size is calculated twice and we get rounding errors
                 $uploadId = isset($data['uploadId']) ? $data['uploadId'] : null;
-                $output = Kwf_Media_Image::scale($data['file'], $dim, $uploadId);
+                $output = Kwf_Media_Image::scale($data['file'], $dim, $uploadId, $sourceSize, $data['mimeType']);
                 $ret['contents'] = $output;
             } else {
                 $ret['file'] = $data['file'];
@@ -94,7 +113,12 @@ class Kwf_Media_Output_Component
         }
         $ret['mimeType'] = $data['mimeType'];
 
-        $ret['mtime'] = filemtime($data['file']);
+        if ($data['file'] instanceof Kwf_Uploads_Row) {
+            $file = $data['file']->getFileSource();
+        } else {
+            $file = $data['file'];
+        }
+        $ret['mtime'] = filemtime($file);
         return $ret;
     }
 

@@ -52,7 +52,7 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
         if (is_string($attributes)) { $class = $attributes; }
         if (is_string($image)) {
             if (file_exists(str_replace('/images/', '/images/dpr2/', $this->_getAssetPath($image)))) {
-                $class .= ' kwfReplaceImageDpr2';
+                $class .= ' kwfUp-kwfReplaceImageDpr2';
             }
         }
         $class = trim($class);

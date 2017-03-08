@@ -17,11 +17,11 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Component extends Kwc_Abstract_Com
         );
 
         $ret['generators']['mail'] = array(
-            'class' => 'Kwf_Component_Generator_Static',
+            'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component',
         );
         $ret['generators']['shippedMail'] = array(
-            'class' => 'Kwf_Component_Generator_Static',
+            'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Shop_Cart_Checkout_Payment_Abstract_ShippedMail_Component',
         );
 
@@ -54,7 +54,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Component extends Kwc_Abstract_Com
 
     public function sendConfirmMail(Kwc_Shop_Cart_Order $order)
     {
-        $mail = $this->getData()->getChildComponent('-mail')->getComponent();
+        $mail = $this->getData()->getChildComponent('_mail')->getComponent();
         $data = array(
             'order' => $order,
             'sumRows' => $this->getData()->parent->getComponent()->getSumRows($order)

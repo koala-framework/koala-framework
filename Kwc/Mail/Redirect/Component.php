@@ -19,6 +19,12 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
     public static function parseRecipientParam($recipient)
     {
+        $data = self::parseRecipientParamData($recipient);
+        return $data['recipient'];
+    }
+
+    public static function parseRecipientParamData($recipient)
+    {
         $parts = explode('.', $recipient);
         if (Kwf_Util_Hash::hash($parts[0].'.'.$parts[1].'.'.$parts[2]) != $parts[3]) {
             throw new Kwf_Exception_AccessDenied();
@@ -29,18 +35,22 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         $redirectComponent = Kwf_Component_Data_Root::getInstance()->getComponentById($redirectComponentId);
         if (!$redirectComponent) throw new Kwf_Exception_NotFound();
         $m = Kwf_Model_Abstract::getInstance($redirectComponent->getComponent()->_getRecipientModelClass($recipientModelShortcut));
-        $ret = $m->getRow($recipientId);
-        if (!$ret) throw new Kwf_Exception_NotFound();
-        return $ret;
+        $recipient = $m->getRow($recipientId);
+        if (!$recipient) throw new Kwf_Exception_NotFound();
+        return array(
+            'recipient' => $recipient,
+            'recipientId' => $recipientId,
+            'recipientModelShortcut' => $recipientModelShortcut,
+        );
     }
 
     //can be overridden to customize redirect url
     protected function _getRedirectUrl()
     {
-        $r = $this->getRedirectRow();
+        $r = $this->_getRedirectRow();
 
-        if (isset($r->type) && $r->type != 'redirect') {
-            throw new Kwf_Exception('Invalid type');
+        if (isset($r->type) && $r->type && $r->type != 'redirect') {
+            throw new Kwf_Exception_NotFound('Invalid type');
         }
 
         return $r->value;
@@ -115,7 +125,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         $this->_params = $params;
 
         // check the hash
-        if ($params['hash'] != $this->_getHash(array(
+        if ($params['hash'] != $this->_createRedirectHash(array(
             $params['redirectId'], $params['recipientId'], $params['recipientModelShortcut']
         ))) {
             throw new Kwf_Exception_Client("The submitted hash is incorrect.");
@@ -167,7 +177,9 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         return $mailText;
     }
 
-    protected function _createRedirectUrl($href, $recipient)
+    //should be protected but that doesn't allow calling it from closure
+    //TODO: when upgrading to php 5.4 change to protected (and change $that in closure to $this)
+    public function _createRedirectUrl($href, $recipient)
     {
         $recipientPrimary = $recipient->getModel()->getPrimaryKey();
         $recipientSource = $this->getRecipientModelShortcut(get_class($recipient->getModel()));

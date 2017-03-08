@@ -8,5 +8,5 @@ abstract class Kwf_Assets_Filter_Abstract
 
     abstract public function getMimeType();
 
-    abstract public function filter(Kwf_SourceMaps_SourceMap $sourcemap);
+    abstract public function filter(Kwf_SourceMaps_SourceMap $sourcemap, Kwf_Assets_Dependency_Abstract $dependency = null);
 }

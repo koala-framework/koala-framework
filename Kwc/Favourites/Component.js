@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready');
+var $ = require('jQuery');
 var componentEvent = require('kwf/component-event');
 var fetchSessionToken = require('kwf/user/fetch-session-token');
 

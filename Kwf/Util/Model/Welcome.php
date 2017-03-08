@@ -34,7 +34,7 @@ class Kwf_Util_Model_Welcome extends Kwf_Model_Db
         }
         $uploadRow = $row->getParentRow($type);
         return array(
-            'contents'=>Kwf_Media_Image::scale($uploadRow, $dim, $uploadRow->id),
+            'contents'=>Kwf_Media_Image::scale($uploadRow, $dim),
             'mimeType' => $row->getParentRow($type)->mime_type
         );
     }

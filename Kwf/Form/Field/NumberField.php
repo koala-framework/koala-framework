@@ -67,8 +67,10 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     protected function _getValueToSaveFromPostData($postData)
     {
         $ret = parent::_getValueToSaveFromPostData($postData);
-        $l = $this->_floatValidator->getLocale();
-        $ret = Zend_Locale_Format::getNumber($ret, array('locale' => $l));
+        if ($this->getAllowDecimals()) {
+            $l = $this->_floatValidator->getLocale();
+            $ret = Zend_Locale_Format::getNumber($ret, array('locale' => $l));
+        }
         return $ret;
     }
 

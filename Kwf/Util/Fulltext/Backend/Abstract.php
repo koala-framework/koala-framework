@@ -52,8 +52,8 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
             while ($checkCmp->inherits == false) {
                 if (isset($checkCmp->generator)) {
                     $generator = $checkCmp->generator;
-                    if (isset($generator->inherit) && $generator->inherit
-                        && isset($generator->unique) && $generator->unique
+                    if ($generator->hasSetting('inherit') && $generator->getSetting('inherit')
+                        && $generator->hasSetting('unique') && $generator->getSetting('unique')
                     ) {
                         $needsToBeIndexed = false;
                         break;

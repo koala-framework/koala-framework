@@ -675,6 +675,19 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
+     * Returns the master view cache settings of this component
+     *
+     * @return array
+     */
+    public function getMasterViewCacheSettings()
+    {
+        return array(
+            'enabled' => true,
+            'lifetime' => null
+        );
+    }
+
+    /**
      * Returns the view plugins that should be used for this component instance
      *
      * Must only return plugins defined in 'plugins' setting.
