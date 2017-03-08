@@ -1,5 +1,6 @@
 <div class="{{ rootElementClass }}" data-width="100%">
     <input type="hidden" name="config" value="{{ config|json_encode()|escape }}" />
+    {% spaceless %}
     {% block content %}
         {% if searchForm is defined %}
             {% block searchForm %}
@@ -26,5 +27,6 @@
             {% endblock %}
         {% endif %}
     {% endblock %}
+    {% endspaceless %}
 </div>
 
