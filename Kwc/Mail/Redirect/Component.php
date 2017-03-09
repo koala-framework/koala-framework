@@ -189,14 +189,30 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if (substr($href, 0, 1) == '#') return $href;
 
         $hrefParts = parse_url($href);
+
         if (!isset($hrefParts['path'])) {
             $hrefParts['path'] = '';
         }
         $query = isset($hrefParts['query']) ? $hrefParts['query'] : null;
-        if (!isset($hrefParts['host']) || $hrefParts['host'] == $this->getData()->getDomain()) {
-            $link = $hrefParts['path'];
+
+        $useAbsoluteUrl = true;
+        if (isset($hrefParts['scheme'])) {
+            if (($hrefParts['scheme'] == 'http' || $hrefParts['scheme'] == 'https') && isset($hrefParts['host'])) {
+                if ($hrefParts['host'] == $this->getData()->getDomain()) {
+                    $useAbsoluteUrl = false;
+                }
+            }
+        } else if (!isset($hrefParts['scheme']) && !isset($hrefParts['host'])) {
+            $useAbsoluteUrl = false;
+        }
+        if ($useAbsoluteUrl) {
+            $link = (isset($hrefParts['scheme']) ? "{$hrefParts['scheme']}:" : '') .
+                (isset($hrefParts['host']) ? '//' : '') .
+                (isset($hrefParts['host']) ? "{$hrefParts['host']}" : '') .
+                (isset($hrefParts['port']) ? ":{$hrefParts['port']}" : '') .
+                (isset($hrefParts['path']) ? "{$hrefParts['path']}" : '');
         } else {
-            $link = $hrefParts['scheme'] . '://'.$hrefParts['host'] . (isset($hrefParts['port']) ? $hrefParts['port'] : '') . $hrefParts['path'];
+            $link = $hrefParts['path'];
         }
 
         if (!isset($this->_redirectRowsCache[$link])) {
