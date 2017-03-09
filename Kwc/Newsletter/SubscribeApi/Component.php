@@ -12,8 +12,8 @@ class Kwc_Newsletter_SubscribeApi_Component extends Kwc_Form_Component
     public static function validateSettings($settings, $componentClass)
     {
         parent::validateSettings($settings, $componentClass);
-        if (!Kwf_Config::getValue('newsletter.subscribeApiDomain')) {
-            throw new Kwf_Exception("newsletter.subscribeApiDomain config setting is required for '$componentClass'");
+        if (!Kwf_Config::getValue('newsletter.subscribeApiUrl') && !Kwf_Config::getValue('newsletter.subscribeApiDomain')) {
+            throw new Kwf_Exception("newsletter.subscribeApiUrl or newsletter.subscribeApiDomain config setting is required for '$componentClass'");
         }
     }
 
@@ -49,8 +49,11 @@ class Kwc_Newsletter_SubscribeApi_Component extends Kwc_Form_Component
 
     protected function _getSubscribeApiUrl()
     {
-        $domain = Kwf_Config::getValue('newsletter.subscribeApiDomain');
-        return "http://$domain/admin/component/edit/Newsletter_Subscribe_Component/Api/json-insert";
+        $baseUrl = Kwf_Config::getValue('newsletter.subscribeApiUrl');
+        if (!$baseUrl) {
+            $baseUrl = 'http://' . Kwf_Config::getValue('newsletter.subscribeApiDomain');
+        }
+        return $baseUrl . '/admin/component/edit/Newsletter_Subscribe_Component/Api/json-insert';
     }
 
     protected function _initForm()
