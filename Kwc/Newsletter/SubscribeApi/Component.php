@@ -28,10 +28,11 @@ class Kwc_Newsletter_SubscribeApi_Component extends Kwc_Form_Component
         $c->setConfig(array(
             'timeout' => 30
         ));
-        $params = $this->_processParams(array_merge($params, array(
-            'url' => $this->getData()->getAbsoluteUrl(),
-            'ip' => $_SERVER['REMOTE_ADDR']
-        )));
+        if (!isset($params['url'])) {
+            $params['url'] = $this->getData()->getAbsoluteUrl();
+        }
+        $params['ip'] = $_SERVER['REMOTE_ADDR'];
+        $params = $this->_processParams($params);
         $c->setParameterPost($params);
         $response = $c->request(Zend_Http_Client::POST);
         if (!$response->isSuccessful()) {
