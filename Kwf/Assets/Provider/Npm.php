@@ -52,6 +52,7 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
                 }
 
                 if (isset($package['main'])) {
+                    preg_replace('/^\.\//', '', $package['main']);
                     if (file_exists($dir . "/" . $package['main'])) {
                         $ret = $this->_path.'/'. $this->_replaceMainWithBrowserFile($package['main']);
                     } else {
