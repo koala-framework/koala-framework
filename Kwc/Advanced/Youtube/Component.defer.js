@@ -1,6 +1,7 @@
 var onReady = require('kwf/on-ready');
 var youtubeLoader = require('kwf/youtube/loader');
 var $ = require('jQuery');
+var statistics = require('kwf/statistics');
 
 onReady.onHide('.kwcClass .kwcBem__youtubePlayer', function(el) {
     var kwcAdvancedYoutube = el.closest('.kwcClass');
@@ -32,7 +33,14 @@ onReady.onRender('.kwcClass .kwcBem__youtubePlayer', function(el) {
                 height: config.height,
                 width: config.width,
                 videoId: config.videoId,
-                playerVars: config.playerVars
+                playerVars: config.playerVars,
+                events: {
+                    'onStateChange': function(event, target) {
+                        if (event.data == -1) {
+                            statistics.trackEvent('Play Video', location.pathname, event.target.getVideoData().title);
+                        }
+                    }
+                }
             });
             kwcAdvancedYoutube.data('player', player);
             if (config.size == 'custom') {
