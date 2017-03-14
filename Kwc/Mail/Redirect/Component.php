@@ -85,8 +85,16 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $get['recipient'] .= '.'.Kwf_Util_Hash::hash($get['recipient']);
         }
         $get = http_build_query($get);
+        $urlParts = parse_url($ret);
+        $ret = (isset($urlParts['scheme']) ? "{$urlParts['scheme']}:" : '') .
+            (isset($urlParts['host']) ? '//' : '') .
+            (isset($urlParts['host']) ? "{$urlParts['host']}" : '') .
+            (isset($urlParts['port']) ? ":{$urlParts['port']}" : '') .
+            (isset($urlParts['path']) ? "{$urlParts['path']}" : '') .
+            ($get ? "?$get" : '') .
+            (isset($urlParts['fragment']) ? "#{$urlParts['fragment']}" : '');
 
-        return $ret.($get ? '?'.$get : '');
+        return $ret;
     }
 
     protected final function _getRedirectRow()
@@ -210,7 +218,8 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                 (isset($hrefParts['host']) ? '//' : '') .
                 (isset($hrefParts['host']) ? "{$hrefParts['host']}" : '') .
                 (isset($hrefParts['port']) ? ":{$hrefParts['port']}" : '') .
-                (isset($hrefParts['path']) ? "{$hrefParts['path']}" : '');
+                (isset($hrefParts['path']) ? "{$hrefParts['path']}" : '') .
+                (isset($hrefParts['fragment']) ? "#{$hrefParts['fragment']}" : '');
         } else {
             $link = $hrefParts['path'];
         }
