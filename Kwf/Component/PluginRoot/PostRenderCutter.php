@@ -26,7 +26,7 @@ abstract class Kwf_Component_PluginRoot_PostRenderCutter implements
         return self::MASK_TYPE_NOMASK;
     }
 
-    public final function getMask(Kwf_Component_Data $page)
+    public function getMask(Kwf_Component_Data $page)
     {
         $maskParams = null;
         $mask = $this->_getMask($page);
@@ -51,7 +51,7 @@ abstract class Kwf_Component_PluginRoot_PostRenderCutter implements
         }
     }
 
-    public final function getMaskCode(Kwf_Component_Data $page)
+    public function getMaskCode(Kwf_Component_Data $page)
     {
         $mask = $this->getMask($page);
         $maskType = $mask['type'];
