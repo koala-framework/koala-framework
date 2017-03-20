@@ -106,6 +106,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             'text/css; ie8',
         );
 
+        $helper = new Kwf_View_Helper_FileSize();
         foreach ($packages as $p) {
             foreach ($mimeTypes as $mimeType) {
                 $sizes = array();
@@ -117,7 +118,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
                 $sumSize = array_sum($sizes);
                 $topSizes = array_slice($sizes, 0, 10);
                 foreach ($topSizes as $name=>$size) {
-                    echo "".str_pad(number_format(round(($size/$sumSize)*100, 1), 1).'%', 5).' '.str_pad(Kwf_View_Helper_FileSize::fileSize($size), 10)." $name\n";
+                    echo "".str_pad(number_format(round(($size/$sumSize)*100, 1), 1).'%', 5).' '.str_pad($helper->fileSize($size), 10)." $name\n";
                 }
             }
         }
