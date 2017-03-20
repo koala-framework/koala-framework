@@ -1,7 +1,7 @@
 <?php
 class Kwf_View_Helper_FileSize
 {
-    public static function fileSize($filesize)
+    public function fileSize($filesize)
     {
         if (!is_int($filesize) && file_exists($filesize)) {
             $filesize = filesize($filesize);
