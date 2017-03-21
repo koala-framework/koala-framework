@@ -261,7 +261,7 @@ Map.prototype = {
     _reloadMarkers: function(params)
     {
         if (!this.gmapLoader) {
-            $(this.mapContainer).append('<div id="gmapLoader">'+ t.trlKwf('Loading...')+'</div>')
+            $(this.mapContainer).append('<div id="gmapLoader">'+ __trlKwf('Loading...')+'</div>')
             this.gmapLoader = this.mapContainer.find('#gmapLoader');
         }
         this.gmapLoader.show();
@@ -395,7 +395,7 @@ Map.prototype = {
                 onReady.callOnContentReady(this.directionsDisplay.getPanel(), { newRender: true});
             }).bind(this), 1);
         } else {
-            alert(t.trlKwf('Entered place could not been found!'));
+            alert(__trlKwf('Entered place could not been found!'));
         }
     }
 };

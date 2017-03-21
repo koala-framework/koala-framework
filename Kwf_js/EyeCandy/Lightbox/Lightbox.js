@@ -293,7 +293,7 @@ Lightbox.prototype = {
             '<div class="kwfUp-kwfLightboxContent"></div>'
         );
         this.closeButtonEl = $(
-            '<a href="#" class="kwfUp-closeButton"><span class="kwfUp-innerCloseButton">'+t.trlKwf("Close")+'</span></a>'
+            '<a href="#" class="kwfUp-closeButton"><span class="kwfUp-innerCloseButton">'+__trlKwf("Close")+'</span></a>'
         );
         var self = this;
         var appendContent = function() {
