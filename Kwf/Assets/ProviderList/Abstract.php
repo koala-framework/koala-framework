@@ -211,7 +211,7 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
             }
         }
 
-        foreach ($this->_providers as $p) {
+        foreach (array_reverse($this->_providers) as $p) {
             $ret = array_merge($ret, $p->getPathTypes());
         }
 
