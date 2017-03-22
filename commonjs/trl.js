@@ -1,6 +1,7 @@
 function getTrlData(i)
 {
     var ret = null;
+    if (!window.kwfTrlData) return ret;
     window.kwfTrlData.forEach(function(d) {
         if (d[i]) {
             ret = d[i];
@@ -54,9 +55,9 @@ var exports = {
         return replaceValues(ret, values);
     }
 };
-exports.trlKwf = trl;
-exports.trlcKwf = trlc;
-exports.trlpKwf = trlp;
-exports.trlcpKwf = trlcp;
+exports.trlKwf = exports.trl;
+exports.trlcKwf = exports.trlc;
+exports.trlpKwf = exports.trlp;
+exports.trlcpKwf = exports.trlcp;
 
 module.exports = exports;
