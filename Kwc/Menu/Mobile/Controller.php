@@ -148,7 +148,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                     $mask = $plugin->getMask($page);
                     if ($mask != Kwf_Component_PluginRoot_Interface_MaskComponent::MASK_TYPE_NOMASK) {
                         $ret[$i]['mask'] = $mask;
-                        if ($ret[$i]['mask'] == Kwf_Component_PluginRoot_Interface_MaskComponent::MASK_TYPE_HIDE) {
+                        if ($ret[$i]['mask']['type'] == Kwf_Component_PluginRoot_Interface_MaskComponent::MASK_TYPE_HIDE) {
                             $ret[$i]['hidden'] = true;
                         }
                     }
