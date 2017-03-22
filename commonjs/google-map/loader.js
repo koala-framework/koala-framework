@@ -1,4 +1,4 @@
-var apiKeys = require('DynamicGoogleMapsApiKeys');
+var apiKeys = require('kwf-webpack/loader/google-maps-api-key!');
 var t = require('kwf/commonjs/trl');
 var isLoaded = false;
 var isCallbackCalled = false;
