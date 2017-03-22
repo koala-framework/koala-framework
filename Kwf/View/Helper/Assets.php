@@ -12,7 +12,7 @@ class Kwf_View_Helper_Assets
         $indent = str_repeat(' ', 8);
         $ret = '';
 
-        $c = file_get_contents('build/assets/'.$assetsPackage.'.html');
+        $c = file_get_contents('build/assets/'.$assetsPackage.'.'.$language.'.html');
 
         $c = preg_replace('#</?head>#', '', $c);
         $c = str_replace('/assets/build/./', '/assets/build/', $c);
