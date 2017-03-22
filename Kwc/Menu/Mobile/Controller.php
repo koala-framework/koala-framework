@@ -62,6 +62,8 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_MaskComponent') as $plugin) {
                     if (!$plugin->showMasked($page['mask']['type'], $page['mask']['params'])) {
                         continue 2; //don't show this page
+                    } else {
+                        unset($page['hidden']);
                     }
                 }
             }
