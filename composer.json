@@ -71,7 +71,9 @@
             "gettext-parser": "^1.2.2",
             "glob": "^7.1.1",
             "webpack-config": "^7.0.0",
-            "bower-resolve-webpack-plugin": "^1.0.2"
+            "bower-resolve-webpack-plugin": "^1.0.2",
+            "uglifyjs-webpack-plugin": "^0.3.1",
+            "uglify-js": "^2.8.16"
         },
         "expose-npm-packages": true,
         "require-dev-bower": {
