@@ -158,31 +158,5 @@ class Kwf_Controller_Action_Cli_Web_ComponentIntrospectionController extends Kwf
         echo json_encode($ret);
         exit;
     }
-
-    public function getAllLanguagesAction()
-    {
-        $config = Zend_Registry::get('config');
-
-        $langs = array();
-        if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
-
-        if ($config->languages) {
-            foreach ($config->languages as $lang=>$name) {
-                $langs[] = $lang;
-            }
-        }
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            foreach (Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::getFlag($c, 'hasAvailableLanguages')) {
-                    foreach (call_user_func(array($c, 'getAvailableLanguages'), $c) as $i) {
-                        if (!in_array($i, $langs)) $langs[] = $i;
-                    }
-                }
-            }
-        }
-        $langs = array_unique($langs);
-        echo json_encode($langs);
-        exit;
-    }
 }
 
