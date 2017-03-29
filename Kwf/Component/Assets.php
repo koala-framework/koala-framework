@@ -1,14 +1,7 @@
 <?php
-class Kwf_Controller_Action_Cli_Web_ComponentIntrospectionController extends Kwf_Controller_Action
+class Kwf_Component_Assets
 {
-    public function getComponentClassesAction()
-    {
-        $ret = Kwc_Abstract::getComponentClasses();
-        echo json_encode($ret);
-        exit;
-    }
-
-    protected function _getKwcClass($class, $master)
+    protected static function _getKwcClass($class, $master)
     {
         $kwcClass = Kwf_Component_Abstract::formatRootElementClass($class, '');
         if ($master) $kwcClass .= 'Master';
@@ -20,16 +13,14 @@ class Kwf_Controller_Action_Cli_Web_ComponentIntrospectionController extends Kwf
         return $kwcClass;
     }
 
-    public function getComponentAssetsAction()
+    public static function build($rootComponentClass)
     {
-        $this->_rootComponentClass = Kwf_Component_Data_Root::getComponentClass();
-
         $componentCssFiles = array();
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             $componentCssFiles[$class] = array(
                 'files' => array(),
-                'kwcClass' => $this->_getKwcClass($class, false),
-                'kwcClassMaster' => $this->_getKwcClass($class, true),
+                'kwcClass' => self::_getKwcClass($class, false),
+                'kwcClassMaster' => self::_getKwcClass($class, true),
                 'assets' => Kwc_Abstract::getSetting($class, 'assets'),
                 'assetsDefer' => Kwc_Abstract::getSetting($class, 'assetsDefer'),
                 'assetsAdmin' => Kwc_Abstract::getSetting($class, 'assetsAdmin'),
@@ -41,28 +32,37 @@ class Kwf_Controller_Action_Cli_Web_ComponentIntrospectionController extends Kwf
         }
 
         $out = array();
-        foreach ($this->_getComponentClassesPackages() as $package=>$components) {
+        foreach (self::_getComponentClassesPackages($rootComponentClass) as $package=>$components) {
             $out[$package] = array();
             foreach ($components as $c) {
                 $out[$package][$c] = $componentCssFiles[$c];
             }
         }
-        echo json_encode($out);
-        exit;
+        file_put_contents('build/component/assets.json', json_encode($out));
+
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            $config = Kwc_Admin::getInstance($class)->getScssConfig();
+            $masterFiles = Kwc_Admin::getInstance($class)->getScssConfigMasterFiles();
+            if ($config || $masterFiles) {
+                file_put_contents('build/component/scss-config-'.$class.'.json', json_encode(array(
+                    'config' => $config,
+                    'masterFiles' => $masterFiles
+                )));
+            }
+        }
     }
 
-    private $_componentClassesPackagesCache;
-    private $_rootComponentClass;
+    private static $_componentClassesPackagesCache;
 
-    private function _getComponentClassesPackages()
+    private static function _getComponentClassesPackages($rootComponentClass)
     {
-        if (isset($this->_componentClassesPackagesCache)) {
-            return $this->_componentClassesPackagesCache;
+        if (isset(self::$_componentClassesPackagesCache)) {
+            return self::$_componentClassesPackagesCache;
         }
 
         $frontendPackageClasses = array();
         $componentClassesWithoutParam = array();
-        foreach ($this->_getRecursiveChildClasses($this->_rootComponentClass, '') as $c) {
+        foreach (self::_getRecursiveChildClasses($rootComponentClass, '') as $c) {
             $cWithoutParam = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
             if (!in_array($cWithoutParam, $componentClassesWithoutParam)) {
                 $componentClassesWithoutParam[] = $cWithoutParam; //only add one per component class without parameter
@@ -85,7 +85,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentIntrospectionController extends Kwf
                 if (!isset($otherPackageClassesWithoutParam[$packageName])) {
                     $otherPackageClassesWithoutParam[$packageName] = array();
                 }
-                foreach ($this->_getRecursiveChildClasses($c, $packageName) as $i) {
+                foreach (self::_getRecursiveChildClasses($c, $packageName) as $i) {
                     $iWithoutParam = strpos($i, '.') ? substr($i, 0, strpos($i, '.')) : $i;
                     if (!in_array($iWithoutParam, $componentClassesWithoutParam) && !in_array($iWithoutParam, $otherPackageClassesWithoutParam[$packageName])) {
                         $otherPackageClasses[$packageName][] = $i;
@@ -107,11 +107,11 @@ class Kwf_Controller_Action_Cli_Web_ComponentIntrospectionController extends Kwf
             unset($otherPackageClasses['Default']);
         }
 
-        $this->_componentClassesPackagesCache = $otherPackageClasses;
-        return $this->_componentClassesPackagesCache;
+        self::$_componentClassesPackagesCache = $otherPackageClasses;
+        return self::$_componentClassesPackagesCache;
     }
 
-    private function _getRecursiveChildClasses($class, $assetsPackage, &$processedComponents = array())
+    private static function _getRecursiveChildClasses($class, $assetsPackage, &$processedComponents = array())
     {
         $processedComponents[] = $class;
 
@@ -141,22 +141,11 @@ class Kwf_Controller_Action_Cli_Web_ComponentIntrospectionController extends Kwf
 
         foreach ($classes as $i) {
             if ($i && !in_array($i, $processedComponents)) {
-                $ret = array_merge($ret, $this->_getRecursiveChildClasses($i, $assetsPackage, $processedComponents));
+                $ret = array_merge($ret, self::_getRecursiveChildClasses($i, $assetsPackage, $processedComponents));
             }
         }
 
         return $ret;
-    }
-
-    public function getComponentScssConfigAction()
-    {
-        $class = $this->_getParam('class');
-        $ret = array(
-            'config' => Kwc_Admin::getInstance($class)->getScssConfig(),
-            'masterFiles' => Kwc_Admin::getInstance($class)->getScssConfigMasterFiles(),
-        );
-        echo json_encode($ret);
-        exit;
     }
 }
 

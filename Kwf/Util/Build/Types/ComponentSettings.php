@@ -10,10 +10,6 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
 
         Kwf_Component_Settings::resetSettingsCache();
 
-        foreach (glob('build/component/*') as $f) {
-            unlink($f);
-        }
-
         $fileName = 'build/component/settings';
 
         try {
@@ -37,6 +33,9 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
 
         echo "layouts...\n";
         Kwf_Component_Layout_Abstract::_buildAll($componentClasses);
+
+        echo "component-assets...\n";
+        Kwf_Component_Assets::build(Kwf_Component_Data_Root::getComponentClass());
     }
 
     private function _checkSettings($settingName, $settings)

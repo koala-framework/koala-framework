@@ -74,6 +74,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 */
     protected function _build($options)
     {
+        echo "\n";
         //check if node-sass is working correctly, if not try to npm rebuild
         //works around possible issues with binaries used by node-sass
         exec("./vendor/bin/node node_modules/.bin/node-sass --version", $output, $retVal);
