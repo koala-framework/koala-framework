@@ -104,7 +104,7 @@ Tabs.prototype = {
     },
 
     fireEvent: function(event) {
-        var args = [].shift.call(arguments);
+        var args = [].slice.call(arguments, 1);
         $(this.el).trigger('kwfUp-tabs-'+event, args);
     },
 
