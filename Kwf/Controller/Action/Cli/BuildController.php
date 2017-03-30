@@ -32,10 +32,25 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             'types' => $this->_getParam('type'),
             'output' => true,
             'refresh' => true,
+            'excludeTypes' => 'assets'
         );
         if (is_string($this->_getParam('exclude-type'))) {
-            $options['excludeTypes'] = $this->_getParam('exclude-type');
+            $options['excludeTypes'] .= ','.$this->_getParam('exclude-type');
         }
+        if (!Kwf_Util_Build::getInstance()->build($options)) {
+            exit(1);
+        } else {
+            exit;
+        }
+    }
+
+    public function assetsAction()
+    {
+        $options = array(
+            'types' => 'assets',
+            'output' => true,
+            'refresh' => true,
+        );
         if (!Kwf_Util_Build::getInstance()->build($options)) {
             exit(1);
         } else {
