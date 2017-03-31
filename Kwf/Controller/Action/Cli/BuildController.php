@@ -22,11 +22,28 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
         );
     }
 
+    private function _checkNodeBins()
+    {
+        echo "\n";
+        //check if node-sass is working correctly, if not try to npm rebuild
+        //works around possible issues with binaries used by node-sass
+        exec("./vendor/bin/node node_modules/.bin/node-sass --version 2>&1", $output, $retVal);
+        if ($retVal) {
+            //node-sass doesn't work
+            passthru("./vendor/bin/npm rebuild node-sass", $retVal);
+            if ($retVal) {
+                throw new Kwf_Exception("node-sass rebuild failed");
+            }
+        }
+    }
+
     public function indexAction()
     {
         if (file_exists(VENDOR_PATH.'/koala-framework/koala-framework/node_modules')) {
             throw new Kwf_Exception('Please delete node_modules folder from koala-framework/koala-framework. All node packages has moved into ./node_modules');
         }
+
+        $this->_checkNodeBins();
 
         $options = array(
             'types' => $this->_getParam('type'),
@@ -46,6 +63,8 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
 
     public function assetsAction()
     {
+        $this->_checkNodeBins();
+
         $options = array(
             'types' => 'assets',
             'output' => true,

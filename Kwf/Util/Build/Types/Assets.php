@@ -74,18 +74,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 */
     protected function _build($options)
     {
-        echo "\n";
-        //check if node-sass is working correctly, if not try to npm rebuild
-        //works around possible issues with binaries used by node-sass
-        exec("./vendor/bin/node node_modules/.bin/node-sass --version", $output, $retVal);
-        if ($retVal) {
-            //node-sass doesn't work
-            passthru("./vendor/bin/npm rebuild node-sass", $retVal);
-            if ($retVal) {
-                throw new Kwf_Exception("node-sass rebuild failed");
-            }
-        }
-
         passthru('NODE_PATH=vendor/koala-framework/koala-framework/node_modules_add ./vendor/bin/node  node_modules/.bin/webpack --progress --colors', $retVal);
         if ($retVal) {
             throw new Kwf_Exception("webpack failed");
