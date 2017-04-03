@@ -18,10 +18,10 @@ class Kwf_View_Helper_Assets
         $c = str_replace('/assets/build/./', '/assets/build/', $c);
 
         if (Kwf_Config::getValue('debug.webpackDevServer')) {
-            if (!file_exists('temp/webpack-dev-server-port')) {
+            if (!file_exists('cache/webpack-dev-server-port')) {
                 throw new Kwf_Exception("webpack-dev-server not running, please start clear-cache-watcher");
             }
-            $port = file_get_contents('temp/webpack-dev-server-port');
+            $port = file_get_contents('cache/webpack-dev-server-port');
             $host = trim(`hostname`);
             $c = str_replace('/assets/build/', "http://$host:$port/assets/build/", $c);
         }
