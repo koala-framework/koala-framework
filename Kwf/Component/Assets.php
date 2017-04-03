@@ -38,13 +38,13 @@ class Kwf_Component_Assets
                 $out[$package][$c] = $componentCssFiles[$c];
             }
         }
-        file_put_contents('build/component/assets.json', json_encode($out));
+        file_put_contents('temp/component-assets-build/assets.json', json_encode($out));
 
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             $config = Kwc_Admin::getInstance($class)->getScssConfig();
             $masterFiles = Kwc_Admin::getInstance($class)->getScssConfigMasterFiles();
             if ($config || $masterFiles) {
-                file_put_contents('build/component/scss-config-'.$class.'.json', json_encode(array(
+                file_put_contents('temp/component-assets-build/scss-config-'.$class.'.json', json_encode(array(
                     'config' => $config,
                     'masterFiles' => $masterFiles
                 )));

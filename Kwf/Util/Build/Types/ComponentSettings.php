@@ -8,7 +8,15 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
             mkdir('build/component');
         }
 
+        if (!file_exists('temp/component-assets-build')) {
+            mkdir('temp/component-assets-build');
+        }
+
         Kwf_Component_Settings::resetSettingsCache();
+
+        foreach (glob('build/component/*') as $f) {
+            unlink($f);
+        }
 
         $fileName = 'build/component/settings';
 
