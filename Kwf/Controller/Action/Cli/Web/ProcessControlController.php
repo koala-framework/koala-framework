@@ -89,15 +89,16 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
     {
         $allProcesses = Kwf_Util_Process::getRunningProcesses();
         $webProcesses = Kwf_Util_Process::getRunningWebProcesses();
+        $helper = new Kwf_View_Helper_FileSize();
         foreach ($this->_commands as $requiredCmd) {
             $found = false;
             foreach ($webProcesses as $p) {
                 if ($p['cmd'] == $requiredCmd['cmd']) {
                     $found = true;
-                    echo "[$p[pid]] ".Kwf_View_Helper_FileSize::fileSize($p['memory'])." $p[prettyTime] $p[cmd]\n";
+                    echo "[$p[pid]] ".$helper->fileSize($p['memory'])." $p[prettyTime] $p[cmd]\n";
                     foreach ($p['childPIds'] as $pid) {
                         $cp = $allProcesses[$pid];
-                        echo "  [$cp[pid]] ".Kwf_View_Helper_FileSize::fileSize($cp['memory'])." $cp[prettyTime] $cp[cmd]\n";
+                        echo "  [$cp[pid]] ".$helper->fileSize($cp['memory'])." $cp[prettyTime] $cp[cmd]\n";
                     }
                 }
             }

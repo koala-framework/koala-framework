@@ -85,8 +85,16 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $get['recipient'] .= '.'.Kwf_Util_Hash::hash($get['recipient']);
         }
         $get = http_build_query($get);
+        $urlParts = parse_url($ret);
+        $ret = (isset($urlParts['scheme']) ? "{$urlParts['scheme']}:" : '') .
+            (isset($urlParts['host']) ? '//' : '') .
+            (isset($urlParts['host']) ? "{$urlParts['host']}" : '') .
+            (isset($urlParts['port']) ? ":{$urlParts['port']}" : '') .
+            (isset($urlParts['path']) ? "{$urlParts['path']}" : '') .
+            ($get ? "?$get" : '') .
+            (isset($urlParts['fragment']) ? "#{$urlParts['fragment']}" : '');
 
-        return $ret.($get ? '?'.$get : '');
+        return $ret;
     }
 
     protected final function _getRedirectRow()
@@ -189,14 +197,31 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if (substr($href, 0, 1) == '#') return $href;
 
         $hrefParts = parse_url($href);
+
         if (!isset($hrefParts['path'])) {
             $hrefParts['path'] = '';
         }
         $query = isset($hrefParts['query']) ? $hrefParts['query'] : null;
-        if (!isset($hrefParts['host']) || $hrefParts['host'] == $this->getData()->getDomain()) {
-            $link = $hrefParts['path'];
+
+        $useAbsoluteUrl = true;
+        if (isset($hrefParts['scheme'])) {
+            if (($hrefParts['scheme'] == 'http' || $hrefParts['scheme'] == 'https') && isset($hrefParts['host'])) {
+                if ($hrefParts['host'] == $this->getData()->getDomain()) {
+                    $useAbsoluteUrl = false;
+                }
+            }
+        } else if (!isset($hrefParts['scheme']) && !isset($hrefParts['host'])) {
+            $useAbsoluteUrl = false;
+        }
+        if ($useAbsoluteUrl) {
+            $link = (isset($hrefParts['scheme']) ? "{$hrefParts['scheme']}:" : '') .
+                (isset($hrefParts['host']) ? '//' : '') .
+                (isset($hrefParts['host']) ? "{$hrefParts['host']}" : '') .
+                (isset($hrefParts['port']) ? ":{$hrefParts['port']}" : '') .
+                (isset($hrefParts['path']) ? "{$hrefParts['path']}" : '') .
+                (isset($hrefParts['fragment']) ? "#{$hrefParts['fragment']}" : '');
         } else {
-            $link = $hrefParts['scheme'] . '://'.$hrefParts['host'] . (isset($hrefParts['port']) ? $hrefParts['port'] : '') . $hrefParts['path'];
+            $link = $hrefParts['path'];
         }
 
         if (!isset($this->_redirectRowsCache[$link])) {

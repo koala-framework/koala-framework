@@ -41,11 +41,18 @@ class Kwf_Assets_Provider_Npm extends Kwf_Assets_Provider_Abstract
             $dir = 'node_modules/'.$this->_path;
             if (file_exists($dir.'/package.json')) {
                 $package = json_decode(file_get_contents($dir.'/package.json'), true);
+                if (isset($package['main'])) {
+                    $package['main'] = preg_replace('/^\.\//', '', $package['main']);
+                }
+
                 if (isset($package['browser'])) {
                     if (is_string($package['browser'])) {
+                        $package['browser'] = preg_replace('/^\.\//', '', $package['browser']);
                         $this->_alternativeBrowserFiles[$package['main']] = $package['browser'];
                     } else {
                         foreach ($package['browser'] as $key => $value) {
+                            $key = preg_replace('/^\.\//', '', $key);
+                            $value = preg_replace('/^\.\//', '', $value);
                             $this->_alternativeBrowserFiles[$key] = $value;
                         }
                     }

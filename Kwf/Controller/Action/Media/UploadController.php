@@ -87,7 +87,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
             $tempFile = tempnam('temp', 'upload');
             file_put_contents($tempFile, $fileData);
-            $imageSize = getimagesize($tempFile);
+            $imageSize = @getimagesize($tempFile);
             if (isset($imageSize[0]) && $imageSize[0] > 10000) {
                 throw new Kwf_Exception_Client(trlKwf("The uploaded image has too large pixel dimensions. Please upload an image with less than 10 000 pixels width."));
             }

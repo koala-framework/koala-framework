@@ -193,7 +193,7 @@ class Kwf_Util_Apc
                 }
             } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'user') {
                 if (extension_loaded('apcu')) {
-                    apc_clear_cache();
+                    apcu_clear_cache();
                 } else {
                     apc_clear_cache('user');
                 }
