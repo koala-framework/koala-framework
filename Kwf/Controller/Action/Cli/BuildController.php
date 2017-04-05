@@ -49,11 +49,15 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             'types' => $this->_getParam('type'),
             'output' => true,
             'refresh' => true,
-            'excludeTypes' => 'assets'
+            'excludeTypes' => ''
         );
+        if (Kwf_Config::getValue('debug.webpackDevServer')) {
+            $options['excludeTypes'] .= ',assets';
+        }
         if (is_string($this->_getParam('exclude-type'))) {
             $options['excludeTypes'] .= ','.$this->_getParam('exclude-type');
         }
+        $options['excludeTypes'] = trim($options['excludeTypes'], ',');
         if (!Kwf_Util_Build::getInstance()->build($options)) {
             exit(1);
         } else {

@@ -8,6 +8,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     public function indexAction()
     {
+        if (!Kwf_Config::getValue('debug.webpackDevServer')) {
+            throw new Kwf_Exception("webpackDevServer is not enabled");
+        }
         $port = null;
         if (file_exists('cache/webpack-dev-server-port')) {
             $port = file_get_contents('cache/webpack-dev-server-port');
