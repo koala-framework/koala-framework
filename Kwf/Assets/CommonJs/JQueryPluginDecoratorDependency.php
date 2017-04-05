@@ -3,7 +3,7 @@ class Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency extends Kwf_Assets_Dep
 {
     private function _getPrependCode()
     {
-        return "var jQuery = require('jQuery');\n";
+        return "var jQuery = require('jquery');\n";
     }
 
     public function getContentsPacked()

@@ -1,10 +1,10 @@
 //TODO: convert to jquery
 /*
-var onReady = require('kwf/on-ready-ext2');
-var getKwcRenderUrl = require('kwf/get-kwc-render-url');
-var historyState = require('kwf/history-state');
-var findForm = require('kwf/frontend-form/find-form');
-var kwfNs = require('kwf/namespace');
+var onReady = require('kwf/commonjs/on-ready-ext2');
+var getKwcRenderUrl = require('kwf/commonjs/get-kwc-render-url');
+var historyState = require('kwf/commonjs/history-state');
+var findForm = require('kwf/commonjs/frontend-form/find-form');
+var kwfNs = require('kwf/commonjs/namespace');
 
 var FulltextSearchBoxComponent = function(el, config) {
     this.el = el;

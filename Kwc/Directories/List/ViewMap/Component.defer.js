@@ -1,8 +1,8 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var formRegistry = require('kwf/frontend-form/form-registry');
-var gmapLoader = require('kwf/google-map/loader');
-var gmapMap = require('kwf/google-map/map');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var formRegistry = require('kwf/commonjs/frontend-form/form-registry');
+var gmapLoader = require('kwf/commonjs/google-map/loader');
+var gmapMap = require('kwf/commonjs/google-map/map');
 
 var renderedMaps = [];
 

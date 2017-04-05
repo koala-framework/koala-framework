@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-var cookieOpt = require('kwf/cookie-opt');
+var onReady = require('kwf/commonjs/on-ready');
+var cookieOpt = require('kwf/commonjs/cookie-opt');
 
 onReady.onRender('.kwcClass', function(el, config) {
     var checkbox = el.find('input[type="checkbox"]');

@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 
 onReady.onRender('.customClass', function(el) {
     Kwf.EyeCandy.Switch.Display(el, {container: '.customContent', link: '.customLink'});

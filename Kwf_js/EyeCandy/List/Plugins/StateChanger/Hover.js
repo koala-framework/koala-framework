@@ -1,4 +1,4 @@
-var kwfExtend = require('kwf/extend');
+var kwfExtend = require('kwf/commonjs/extend');
 
 Kwf.EyeCandy.List.Plugins.StateChanger.Hover = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     state: 'large',

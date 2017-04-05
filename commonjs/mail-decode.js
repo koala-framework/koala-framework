@@ -1,5 +1,5 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
 
 $(document).on('click', 'a', function(event) {
     var el = event.currentTarget;

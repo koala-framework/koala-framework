@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 
 onReady.onRender('.kwcClass', function(el, config) {
     var innerBackground = el.children('.innerBackground');

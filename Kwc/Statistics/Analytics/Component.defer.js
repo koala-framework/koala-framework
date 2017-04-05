@@ -1,6 +1,6 @@
-var onReady = require('kwf/on-ready');
-var cookieOpt = require('kwf/cookie-opt');
-var statistics = require('kwf/statistics');
+var onReady = require('kwf/commonjs/on-ready');
+var cookieOpt = require('kwf/commonjs/cookie-opt');
+var statistics = require('kwf/commonjs/statistics');
 
 onReady.onRender('.kwcClass', function(el) {
     if (!el.data('ignore-code') && !location.search.match(/[\?&]kwcPreview/)) {

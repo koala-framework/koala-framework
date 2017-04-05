@@ -1,7 +1,7 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var gmapLoader = require('kwf/google-map/loader');
-var gmapMap = require('kwf/google-map/map');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var gmapLoader = require('kwf/commonjs/google-map/loader');
+var gmapMap = require('kwf/commonjs/google-map/map');
 
 var renderMap = function(el) {
     var cfg = el.find(".options", true);

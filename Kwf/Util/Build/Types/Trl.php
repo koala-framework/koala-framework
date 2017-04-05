@@ -37,6 +37,9 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             throw $e;
         }
 
+        //used by webpack
+        file_put_contents('build/trl/languages.json', json_encode($langs));
+
         foreach ($langs as $l) {
             if ($l != $config->webCodeLanguage) {
                 $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l);

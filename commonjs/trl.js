@@ -1,54 +1,63 @@
-var prefix = 'kwfUp-';
-if (prefix) prefix = prefix.substr(0, prefix.length-1);
-var trlData = prefix ? window[prefix]._kwfTrlData : window._kwfTrlData;
-
-function _kwfTrl(key, text, values)
+function getTrlData(i)
 {
-    if (trlData[key]) text = trlData[key];
-
-    if (values == null) {
-        return text;
-    } else {
-        if (typeof(values) == 'string' || typeof(values) == 'number') {
-            var temp = values;
-            values = new Array();
-            values.push(temp);
+    var ret = null;
+    if (!window.kwfTrlData) return ret;
+    window.kwfTrlData.forEach(function(d) {
+        if (d[i]) {
+            ret = d[i];
+            return false;
         }
-        var cnt = 0;
-        values.forEach(function(value) {
-            text = text.replace(new RegExp('\\{('+cnt+')\\}', 'g'), value);
-            cnt++;
-        });
-        return text;
-    }
+    });
+    return ret;
 }
-
-function _kwfTrlp(key, text, plural, values)
+function replaceValues(text, values)
 {
-    if (trlData[key]) text = trlData[key];
-    if (trlData[key+'.plural']) plural = trlData[key+'.plural'];
-    if (values == null) {
-        return '';
-    } else {
-        if (typeof(values) == 'string' || typeof(values) == 'number') {
-            var temp = values;
-            values = new Array();
-            values.push(temp);
-        }
-
-        if (values[0] != 1) {
-            text = plural;
-        }
-        var cnt = 0;
-        values.forEach(function(value) {
-            text = text.replace(new RegExp('\\{('+cnt+')\\}', 'g'), value);
-            cnt++;
-        });
-        return text;
+    if (!values) return text;
+    if (typeof(values) == 'string' || typeof(values) == 'number') {
+        values = [values];
     }
+    var cnt = 0;
+    values.forEach(function(value) {
+        text = text.replace(new RegExp('\\{('+cnt+')\\}', 'g'), value);
+        cnt++;
+    });
+    return text;
 }
-
-module.exports = {
-    _kwfTrl: _kwfTrl,
-    _kwfTrlp: _kwfTrlp
+var exports = {
+    trl: function(i, values) {
+        var ret = getTrlData(i) || i;
+        return replaceValues(ret, values);
+    },
+    trlc: function(context, i, values) {
+        var ret = getTrlData(context+'__'+i) || i;
+        return replaceValues(ret, values);
+    },
+    trlp: function(sg, pl, values) {
+        var ret = getTrlData(sg + '--' + pl) || [sg, pl];
+        var cnt = values;
+        if (cnt instanceof Array) cnt = cnt[0]
+        if (cnt == 1) {
+            ret = ret[0];
+        } else {
+            ret = ret[1];
+        }
+        return replaceValues(ret, values);
+    },
+    trlcp: function(context, sg, pl, values) {
+        var ret = getTrlData(context + '__' + sg + '--' + pl) || [sg, pl];
+        var cnt = values;
+        if (cnt instanceof Array) cnt = cnt[0]
+        if (cnt == 1) {
+            ret = ret[0];
+        } else {
+            ret = ret[1];
+        }
+        return replaceValues(ret, values);
+    }
 };
+exports.trlKwf = exports.trl;
+exports.trlcKwf = exports.trlc;
+exports.trlpKwf = exports.trlp;
+exports.trlcpKwf = exports.trlcp;
+
+module.exports = exports;

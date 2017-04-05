@@ -1,5 +1,5 @@
-var $ = require('jQuery');
-var defaultAdapter = require('kwf/cookie-opt/adapter');
+var $ = require('jquery');
+var defaultAdapter = require('kwf/commonjs/cookie-opt/adapter');
 
 var promise = $.Deferred();
 var adapterPromise;

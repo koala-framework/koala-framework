@@ -1,8 +1,8 @@
-var $ = require('jQuery');
-var ErrorStyleAbove = require('kwf/frontend-form/error-style/above');
-var kwfExtend = require('kwf/extend');
-var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
-var TextAreaField = require('kwf/frontend-form/field/text-area');
+var $ = require('jquery');
+var ErrorStyleAbove = require('kwf/commonjs/frontend-form/error-style/above');
+var kwfExtend = require('kwf/commonjs/extend');
+var errorStyleRegistry = require('kwf/commonjs/frontend-form/error-style-registry');
+var TextAreaField = require('kwf/commonjs/frontend-form/field/text-area');
 
 var ErrorStyleBubble = kwfExtend(ErrorStyleAbove, {
     showErrors: function(r) {

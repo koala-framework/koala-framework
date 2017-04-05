@@ -1,5 +1,5 @@
-var kwfExtend = require('kwf/extend');
-var onReady = require('kwf/on-ready');
+var kwfExtend = require('kwf/commonjs/extend');
+var onReady = require('kwf/commonjs/on-ready');
 
 Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {

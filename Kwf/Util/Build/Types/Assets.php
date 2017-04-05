@@ -1,6 +1,7 @@
 <?php
 class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 {
+    /*
     private static $_mimeTypeByExtension = array(
         'js' => 'text/javascript',
         'defer.js' => 'text/javascript; defer',
@@ -70,9 +71,14 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             }
         }
     }
-
+*/
     protected function _build($options)
     {
+        passthru('NODE_PATH=vendor/koala-framework/koala-framework/node_modules_build ./vendor/bin/node  node_modules/.bin/webpack --progress --colors', $retVal);
+        if ($retVal) {
+            throw new Kwf_Exception("webpack failed");
+        }
+        /*
         if (!file_exists('build/assets')) {
             mkdir('build/assets');
         }
@@ -240,6 +246,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         Kwf_Assets_Cache::getInstance()->clean();
         Kwf_Assets_BuildCache::getInstance()->building = false;
+        */
 
     }
 

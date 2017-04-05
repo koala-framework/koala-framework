@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-var historyState = require('kwf/history-state');
+var onReady = require('kwf/commonjs/on-ready');
+var historyState = require('kwf/commonjs/history-state');
 
 onReady.onContentReady(function() {
     Ext2.get('testBtn1').on('click', function() {

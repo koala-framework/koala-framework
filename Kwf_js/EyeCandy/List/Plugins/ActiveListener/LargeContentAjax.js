@@ -1,7 +1,7 @@
-var kwfExtend = require('kwf/extend');
-var onReady = require('kwf/on-ready');
-var getKwcRenderUrl = require('kwf/get-kwc-render-url');
-var statistics = require('kwf/statistics');
+var kwfExtend = require('kwf/commonjs/extend');
+var onReady = require('kwf/commonjs/on-ready');
+var getKwcRenderUrl = require('kwf/commonjs/get-kwc-render-url');
+var statistics = require('kwf/commonjs/statistics');
 
 Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {

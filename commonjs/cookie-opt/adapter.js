@@ -1,5 +1,5 @@
-var $ = require('jQuery');
-var componentEvent = require('kwf/component-event');
+var $ = require('jquery');
+var componentEvent = require('kwf/commonjs/component-event');
 var cookies = require('js-cookie');
 
 var onOptChangedCb = [];

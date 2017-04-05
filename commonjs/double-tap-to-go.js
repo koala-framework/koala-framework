@@ -1,7 +1,7 @@
 // @require ModernizrTouchevents
 
-var onReady = require('kwf/on-ready');
-var $ = require('jQuery');
+var onReady = require('kwf/commonjs/on-ready');
+var $ = require('jquery');
 
 var isClicked = false;
 var lastClickedNode = null;

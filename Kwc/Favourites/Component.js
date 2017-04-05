@@ -1,7 +1,7 @@
-var onReady = require('kwf/on-ready');
-var $ = require('jQuery');
-var componentEvent = require('kwf/component-event');
-var fetchSessionToken = require('kwf/user/fetch-session-token');
+var onReady = require('kwf/commonjs/on-ready');
+var $ = require('jquery');
+var componentEvent = require('kwf/commonjs/component-event');
+var fetchSessionToken = require('kwf/commonjs/user/fetch-session-token');
 
 (function() {
 var kwcFavouritesComponentIds = [];

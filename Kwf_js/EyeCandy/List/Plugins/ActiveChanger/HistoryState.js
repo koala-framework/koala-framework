@@ -1,5 +1,5 @@
-var kwfExtend = require('kwf/extend');
-var historyState = require('kwf/history-state');
+var kwfExtend = require('kwf/commonjs/extend');
+var historyState = require('kwf/commonjs/history-state');
 
 Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {

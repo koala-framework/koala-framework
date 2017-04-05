@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 
 onReady.onShow('.kwcClass', function(el) {
     var url = el.find('input.redirectTo').val();

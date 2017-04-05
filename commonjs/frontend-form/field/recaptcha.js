@@ -1,8 +1,8 @@
-var fieldRegistry = require('kwf/frontend-form/field-registry');
-var Field = require('kwf/frontend-form/field/field');
-var kwfExtend = require('kwf/extend');
-var $ = require('jQuery');
-var recaptchaLoader = require('kwf/recaptcha-loader');
+var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
+var Field = require('kwf/commonjs/frontend-form/field/field');
+var kwfExtend = require('kwf/commonjs/extend');
+var $ = require('jquery');
+var recaptchaLoader = require('kwf/commonjs/recaptcha-loader');
 
 var Recaptcha = kwfExtend(Field, {
     initField: function() {

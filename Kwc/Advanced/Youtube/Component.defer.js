@@ -1,7 +1,8 @@
-var onReady = require('kwf/on-ready');
-var youtubeLoader = require('kwf/youtube/loader');
-var $ = require('jQuery');
-var statistics = require('kwf/statistics');
+
+var onReady = require('kwf/commonjs/on-ready');
+var youtubeLoader = require('kwf/commonjs/youtube/loader');
+var $ = require('jquery');
+var statistics = require('kwf/commonjs/statistics');
 
 onReady.onHide('.kwcClass .kwcBem__youtubePlayer', function(el) {
     var kwcAdvancedYoutube = el.closest('.kwcClass');
