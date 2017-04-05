@@ -49,13 +49,4 @@ class Kwf_Assets_Package_ComponentFrontend extends Kwf_Assets_Package_Default
 
         return $ret;
     }
-
-    public function getPackageUrls($mimeType, $language)
-    {
-        $ret = parent::getPackageUrls($mimeType, $language);
-        if ($mimeType == 'text/javascript; ie8') {
-            $ret[] = '/assets/es5-shim/es5-shim.js';
-        }
-        return $ret;
-    }
 }
