@@ -6,8 +6,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         'js' => 'text/javascript',
         'defer.js' => 'text/javascript; defer',
         'css' => 'text/css',
-        'ie8.css' => 'text/css; ie8',
-        'ie8.js' => 'text/javascript; ie8',
     );
 
     public function getAllPackages()
@@ -91,7 +89,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         $langs = $this->getAllLanguages();
         $packages = $this->getAllPackages();
-        $exts = array('js', 'defer.js', 'css', 'ie8.css', 'ie8.js');
+        $exts = array('js', 'defer.js', 'css');
 
         $providers = array();
         foreach ($packages as $p) {
@@ -153,9 +151,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 if ($dep->getMimeType()) {
                     $mimeType = $dep->getMimeType();
                     $p->warmupDependencyCaches($dep, $mimeType, $progress);
-                    if ($mimeType == 'text/css') {
-                        $p->warmupDependencyCaches($dep, 'text/css; ie8', $progress);
-                    }
                 }
             }
         }

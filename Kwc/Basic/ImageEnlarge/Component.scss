@@ -75,18 +75,6 @@
     display: block;
 }
 
-@ie8 {
-    .kwcClass a {
-        .outerHoverIcon {
-            display: none;
-        }
-
-        &:hover .outerHoverIcon {
-            display: block;
-        }
-    }
-}
-
 @media print {
 .kwcClass a .outerHoverIcon {
     width: 0px;

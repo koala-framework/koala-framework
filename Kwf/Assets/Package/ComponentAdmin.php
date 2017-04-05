@@ -49,10 +49,6 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
     {
         $ret = array();
 
-        if (($mimeType == 'text/css; ie8' || $mimeType == 'text/javascript; ie8') && !$this->_enableLegacySupport) {
-            return array();
-        }
-
         foreach ($this->_getFrontendPackages() as $package) {
             $ret = array_merge($ret, $package->_buildPackageUrls($mimeType, $language));
         }

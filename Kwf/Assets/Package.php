@@ -6,11 +6,6 @@ class Kwf_Assets_Package
     protected $_dependencyName;
     protected $_dependency;
 
-    //if enabled ie8+9 will be supported:
-    //* multiple css files will be generated to avoid the <=ie9 4096 selectors limit
-    //* text/css; ie8 file will be generated
-    protected $_enableLegacySupport = false;
-
     private $_cacheFilteredUniqueDependencies;
     private $_chunkedCssCache;
     private $_depContentsCache;
@@ -71,7 +66,6 @@ class Kwf_Assets_Package
 
     protected function _getFilteredUniqueDependencies($mimeType)
     {
-        if ($mimeType == 'text/css; ie8') $mimeType = 'text/css';
         if (!isset($this->_cacheFilteredUniqueDependencies[$mimeType])) {
             $this->_cacheFilteredUniqueDependencies[$mimeType] = $this->getDependency()->getFilteredUniqueDependencies($mimeType);
         }
@@ -86,7 +80,6 @@ class Kwf_Assets_Package
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
 
         $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($this, $ext, $language);
         $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
@@ -116,9 +109,6 @@ class Kwf_Assets_Package
         $cacheId = $dep->getCacheId();
         if ($cacheId) {
             $cacheId = 'filtered-'.$cacheId;
-            if ($mimeType == 'text/css; ie8') {
-                $cacheId .= '-ie8';
-            }
         }
 
         $ret = false;
@@ -149,26 +139,6 @@ class Kwf_Assets_Package
                 $ret = $this->_depContentsCache[$dep->getIdentifier()];
             }
 
-
-            if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
-                if ($mimeType == 'text/css') {
-                    if (strpos($ret->getFileContents(), '@ie8') !== false) {
-                        //remove @ie8 {}
-                        $f = new Kwf_Assets_Filter_Css_Ie8Remove();
-                        if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($f)));
-                        $ret = $f->filter($ret, $dep);
-                    }
-                } else if ($mimeType == 'text/css; ie8') {
-                    if (strpos($ret->getFileContents(), '@ie8') !== false) {
-                        //remove all but @ie8 {}
-                        $f = new Kwf_Assets_Filter_Css_Ie8Only();
-                        if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($f)));
-                        $ret = $f->filter($ret, $dep);
-                    } else {
-                        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
-                    }
-                }
-            }
 
             if ($cacheId) {
                 Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId);
@@ -245,7 +215,7 @@ class Kwf_Assets_Package
         }
 
         $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
-        if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
+        if ($mimeType == 'text/css') {
             $packageMap->setMimeType('text/css');
         } else {
             $packageMap->setMimeType('text/javascript');
@@ -283,7 +253,6 @@ class Kwf_Assets_Package
 
         // ***** non-commonjs, css
         $filterMimeType = $mimeType;
-        if ($filterMimeType == 'text/css; ie8') $filterMimeType = 'text/css';
         foreach ($this->_getFilteredUniqueDependencies($filterMimeType) as $dep) {
             if ($dep->getIncludeInPackage()) {
                 if (!(($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $dep->isCommonJsEntry())) {
@@ -416,7 +385,6 @@ class Kwf_Assets_Package
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
         else throw new Kwf_Exception("Invalid mimeType: '$mimeType'");
         $packageMap->setFile($this->getPackageUrl($ext, $language));
         return $packageMap;
@@ -424,33 +392,17 @@ class Kwf_Assets_Package
 
     private function _getChunkedContentsCount($mimeType, $language)
     {
-        if (!$this->_enableLegacySupport || $mimeType != 'text/css') {
-            return 1;
-        } else {
-            return count($this->_getChunkedContents($mimeType, $language));
-        }
+        return 1;
     }
 
     private function _getChunkedContents($mimeType, $language)
     {
-        if (!$this->_enableLegacySupport || $mimeType != 'text/css') {
-            throw new Kwf_Exception("no chunks enabled");
-        } else {
-
-            if (isset($this->_chunkedCssCache)) {
-                return $this->_chunkedCssCache;
-            }
-
-            $contents = $this->getPackageContents($mimeType, $language);
-            $filter = new Kwf_Assets_Filter_CssChunks();
-            $this->_chunkedCssCache = $filter->filter($contents);
-            return $this->_chunkedCssCache;
-        }
+        throw new Kwf_Exception("no chunks enabled");
     }
 
     public function toUrlParameter()
     {
-        return get_class($this->_providerList).':'.$this->_dependencyName.($this->_enableLegacySupport ? ':l' : '');
+        return get_class($this->_providerList).':'.$this->_dependencyName;
     }
 
     public static function fromUrlParameter($class, $parameter)
@@ -496,15 +448,9 @@ class Kwf_Assets_Package
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
         }
 
-        if (($mimeType == 'text/css; ie8' || $mimeType == 'text/javascript; ie8') && !$this->_enableLegacySupport) {
-            return array();
-        }
-
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
-        else if ($mimeType == 'text/javascript; ie8') $ext = 'ie8.js';
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();
@@ -514,10 +460,6 @@ class Kwf_Assets_Package
             if (!$i->getIncludeInPackage()) {
                 if (in_array($i, $includesDependencies, true)) {
                     //include dependency only once
-                    continue;
-                }
-                if ($i->getMimeType() != $mimeType) {
-                    //happens for 'text/css; ie8'
                     continue;
                 }
                 $includesDependencies[] = $i;
@@ -564,7 +506,6 @@ class Kwf_Assets_Package
             $sourceMap = true;
         }
         if ($extension == 'js') $mimeType = 'text/javascript';
-        else if ($extension == 'ie8.css') $mimeType = 'text/css; ie8';
         else if ($extension == 'defer.js') $mimeType = 'text/javascript; defer';
         else if (substr($extension, -3) == 'css') $mimeType = 'text/css';
         else throw new Kwf_Exception_NotFound();

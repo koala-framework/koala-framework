@@ -2,7 +2,6 @@
 class Kwf_Assets_Package_ComponentFrontend extends Kwf_Assets_Package_Default
 {
     static $_instance;
-    protected $_enableLegacySupport = false;
 
     public static function getInstance($dependencyName = null)
     {
