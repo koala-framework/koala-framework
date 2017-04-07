@@ -53,7 +53,7 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
             $fileSize = filesize($logFile);
             if (!isset($logFileSendPos[$logFile]) || $fileSize != $logFileSendPos[$logFile]) {
                 if ($this->_getParam('debug')) echo "$logFile: ".$fileSize." bytes\n";;
-                $prevFileSize = isset($logFileSendPos[$logFile]) ? isset($logFileSendPos[$logFile]) : 0;
+                $prevFileSize = isset($logFileSendPos[$logFile]) ? $logFileSendPos[$logFile] : 0;
                 if ($fileSize < $prevFileSize) $prevFileSize = 0; //log file was truncated or deleted
                 $fp = fopen($logFile, 'r');
                 $msg .= date('Y-m-d H:i:s')." $logFile:\n";
