@@ -43,7 +43,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
             if ($this->_getSetting('defineWidth')) $ret['style'] .= 'width:'.$ret['width'].'px;';
             if ($ret['width'] > 100) $ret['containerClass'] .= ' kwfUp-webResponsiveImgLoading';
         }
-        $ret['baseUrl'] = $this->_getBaseImageUrl();
+        $ret['baseUrl'] = $this->getBaseImageUrl();
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
         $ret['outputImgTag'] = $this->_getSetting('outputImgTag');
@@ -88,7 +88,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
 
     public function getImageUrl()
     {
-        $baseUrl = $this->_getBaseImageUrl();
+        $baseUrl = $this->getBaseImageUrl();
         if ($baseUrl) {
             $dimensions = $this->getImageDimensions();
             $imageData = $this->getImageData();
@@ -106,7 +106,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         return $type;
     }
 
-    private function _getBaseImageUrl()
+    public function getBaseImageUrl()
     {
         $data = $this->getImageData();
         if ($data) {
@@ -141,5 +141,41 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
     public final function getImageDataOrEmptyImageData()
     {
         return $this->_getImageComponent()->getImageDataOrEmptyImageData();
+    }
+
+    private function _getAbsoluteUrl($url)
+    {
+        if ($url && substr($url, 0, 1) == '/' && substr($url, 0, 2) != '//') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
+            $domain = $this->getData()->getDomain();
+            $protocol = Kwf_Util_Https::domainSupportsHttps($domain) ? 'https' : 'http';
+            $url = "$protocol://$domain$url";
+        }
+        return $url;
+    }
+
+    private function _getImageUrl($width)
+    {
+        return str_replace('{width}', $width, $this->getBaseImageUrl());
+    }
+
+    public function getMaxResolutionImageUrl()
+    {
+        $data = $imageData = $this->getImageData();
+        if ($data) {
+            $s = $this->getImageDimensions();
+            $widths = Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['dimensions']);
+            return $this->_getImageUrl(end($widths));
+        }
+        return null;
+    }
+
+    public function getMaxResolutionAbsoluteImageUrl()
+    {
+        return $this->_getAbsoluteUrl($this->getMaxResolutionImageUrl());
+    }
+
+    public function getAbsoluteImageUrl()
+    {
+        return $this->_getAbsoluteUrl($this->getImageUrl());
     }
 }
