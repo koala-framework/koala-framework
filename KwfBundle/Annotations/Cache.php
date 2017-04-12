@@ -10,7 +10,6 @@ class Cache extends CacheProvider
      */
     protected function doFetch($id)
     {
-//        p($id);
         return \Kwf_Cache_SimpleStatic::fetch($id);
     }
 
@@ -27,7 +26,6 @@ class Cache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
-//        p($id);
         return \Kwf_Cache_SimpleStatic::add($id, $data, $lifeTime);
     }
 
