@@ -184,7 +184,7 @@ abstract class Kwf_Exception_Abstract extends Exception
         $data = array(
             'error' => array(
                 'code' => $exception->code,
-                'errorId' => $exception->getLogId(),
+                'errorId' => $this->getLogId(),
                 'message' => 'An Error occured. Please try again later',
             )
         );
@@ -198,7 +198,7 @@ abstract class Kwf_Exception_Abstract extends Exception
             $data = array(
                 'error' => array(
                     'code' => $exception->code,
-                    'errorId' => $exception->getLogId(),
+                    'errorId' => $this->getLogId(),
                     'message' => $exception->message,
                     'exception' => array(array(
                         'message' => $exception->message,
