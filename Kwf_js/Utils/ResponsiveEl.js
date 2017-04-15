@@ -9,10 +9,23 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
 
     var initEl = function(el) {
         widths.each(function(w) {
-            if (el.getWidth() > w) {
-                el.addClass('gt'+w);
+            if (typeof w != 'object') {
+                w = {
+                    minWith: w,
+                    cls: 'gt'+w
+                };
+            }
+            var match = true;
+            if (w.minWidth && !(el.getWidth() > w.minWidth)) {
+                match = false;
+            }
+            if (match && w.maxWidth && !(el.getWidth() < w.maxWidth)) {
+                match = false;
+            }
+            if (match) {
+                el.addClass(w.cls);
             } else {
-                el.removeClass('gt'+w);
+                el.removeClass(w.cls);
             }
         }, this);
     };
