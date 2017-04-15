@@ -1,0 +1,31 @@
+.cssClass .day {
+    width: 78px;
+    height: 78px;
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+    text-align: center;
+    line-height: 80px;
+    border: 1px solid var(dark);
+    font-size: 20px;
+}
+.cssClass .day a {
+    color: var(light);
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 80px;
+}
+.cssClass .day.before,
+.cssClass .day.after {
+    color: var(gray);
+}
+.cssClass .day.hasEvent {
+    background: var(mainColor);
+}
+
+.cssClass .dayNumber {
+    height: 100%;
+    text-align: center;
+    font-size: 28px;
+}
