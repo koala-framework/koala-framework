@@ -1,0 +1,26 @@
+.cssClass .placeholder {
+    margin: 10px 0;
+    width: 100px;
+    border-top: 1px dotted var(typo);
+}
+
+.kwfLightbox.calendarDetail .kwfLightboxInner {
+    background: var(secColor);
+    height: auto;
+    min-height: 0;
+}
+.kwfLightbox.calendarDetail .kwfLightboxInner .kwfLightboxContent {
+    padding: 30px;
+    margin: 0;
+    background: var(lightGray);
+}
+.kwfLightbox.calendarDetail .kwfLightboxInner .kwfLightboxContent p {
+    margin: 0;
+}
+.kwfLightbox.calendarDetail .closeButton {
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    background: var(dark);
+}
