@@ -109,6 +109,7 @@ class Kwf_Assets_Package
 
     public function getPackageUrls($mimeType, $language)
     {
+        $baseUrl = Kwf_Registry::get('config')->server->baseUrl;
         if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
             $cacheId = 'depPckUrls_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType).'_'.$language;
             $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
@@ -121,7 +122,7 @@ class Kwf_Assets_Package
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();
-        $ret[] = '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
+        $ret[] = $baseUrl.'/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
             .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
         $includesDependencies = array();
         $maxMTime = 0;
@@ -138,7 +139,7 @@ class Kwf_Assets_Package
                     if (!$i instanceof Kwf_Assets_Interface_UrlResolvable) {
                         throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
                     }
-                    $ret[] = '/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
+                    $ret[] = $baseUrl.'/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
                 }
             }
             $mTime = $i->getMTime();
