@@ -422,7 +422,8 @@ class Kwf_Component_Data
             $childSelect->hasPart('wherePage') && !$childSelect->getPart('wherePage') ||
             $childSelect->hasPart('wherePseudoPage') && !$childSelect->getPart('wherePseudoPage');
         if ($noSubPages) {
-            $select->whereChildOf($this);
+            // Fügt eine abfrage hinzu die dann zu einem widerspruch führt
+//             $select->whereChildOf($this);
         } else {
             $select->whereSubroot($this);
         }
