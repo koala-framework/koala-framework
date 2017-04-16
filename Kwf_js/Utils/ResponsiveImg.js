@@ -115,6 +115,10 @@ function doesElementScroll(el) {
         if (overflow == 'auto' || overflow == 'scroll') {
             return true;
         }
+
+        if(!i.parentNode) {
+            return false; 
+        }
         i = i.parentNode;
     }
     return false;
