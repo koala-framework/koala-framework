@@ -8,7 +8,13 @@ class Kwc_Newsletter_Subscribe_MenuResource extends Kwf_Acl_Resource_ComponentCl
         parent::__construct($resourceId, $menuConfig, $menuUrl, $componentClass);
         $this->_component = $component;
     }
-    public function getComponent() {
+
+    public function getComponent()
+    {
+        if (is_string($this->_component)) {
+            $this->_component = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($this->_component, array('ignoreVisible'=>true));
+        }
         return $this->_component;
     }
 
@@ -17,7 +23,7 @@ class Kwc_Newsletter_Subscribe_MenuResource extends Kwf_Acl_Resource_ComponentCl
         $ret = array();
         foreach (get_object_vars($this) as $k=>$i) {
             if ($k == '_component') {
-                $i = $i->kwfSerialize();
+                $i = $i->componentId;
             }
             $ret[$k] = $i;
         }
@@ -27,9 +33,6 @@ class Kwc_Newsletter_Subscribe_MenuResource extends Kwf_Acl_Resource_ComponentCl
     public function unserialize($serialized)
     {
         foreach (unserialize($serialized) as $k=>$i) {
-            if ($k == '_component') {
-                $i = Kwf_Component_Data::kwfUnserialize($i);
-            }
             $this->$k = $i;
         }
     }

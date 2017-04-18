@@ -55,9 +55,9 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         if ($this->getRow()->own_image) {
             $imageData = $this->getImageData();
             if ($imageData) {
-                $steps = Kwf_Media_Image::getResponsiveWidthSteps($this->getImageDimensions(), $imageData['file']);
-                $ret['minWidth'] = $steps[0];
-                $ret['maxWidth'] = end($steps);
+                $ret = array_merge($ret,
+                    Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
+                );
             }
         }
 

@@ -10,7 +10,7 @@ class ExceptionHandler implements EventSubscriberInterface
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         if ($event->isPropagationStopped()) return;
-        if ($event->getException() instanceof \Kwf_Exception_Abstract) {
+        if ($event->getException() instanceof \Exception) {
             $event->stopPropagation();
             \Kwf_Debug::handleException($event->getException());
             exit;

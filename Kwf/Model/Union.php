@@ -525,7 +525,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
 
     public function getEventSubscribers()
     {
-        $ret = array();
+        $ret = parent::getEventSubscribers();
         foreach ($this->_models as $m) {
             $ret = array_merge($ret, $m->getEventSubscribers());
         }
