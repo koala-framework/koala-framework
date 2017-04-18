@@ -6,6 +6,10 @@ services:
         class: KwfBundle\HttpFoundation\Session\KwfSessionStorage
         public: false
 
+    kwf.annotations.cache:
+        class: KwfBundle\Annotations\Cache
+        public: false
+
     kwf.rest.apidoc.extractor:
         class: KwfBundle\Rest\ApiDocExtractor
         tags:
