@@ -10,7 +10,11 @@ var Cards = kwfExtend(Field, {
         combobox.el.find('input.submit').remove(); //remove non-js fallback
         combobox.el.on('change', (function() {
             this.el.find('.kwfUp-kwfFormContainerCard .kwfFormCard').addClass('inactive');
-            this.el.find('.kwfUp-kwfFormContainerCard.kwfUp-'+combobox.getValue()+' .kwfFormCard').removeClass('inactive');
+            this.el.find('.kwfUp-kwfFormContainerCard.kwfUp-'+combobox.getValue()+' .kwfFormCard').each(function(index, card) {
+                if ($(card).closest('.kwfUp-kwfFormContainerCards')[0] == this.el[0]) {
+                    $(card).removeClass('inactive');
+                }
+            }.bind(this));
         }).bind(this));
     },
     getFieldName: function() {
