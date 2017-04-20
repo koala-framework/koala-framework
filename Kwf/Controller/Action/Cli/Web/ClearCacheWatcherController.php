@@ -27,8 +27,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
             file_put_contents('cache/webpack-dev-server-port', $port);
         }
-        $host = trim(`hostname`);
-        $cmd = "NODE_PATH=vendor/koala-framework/koala-framework/node_modules_build vendor/bin/node node_modules/.bin/webpack-dev-server --progress --host=$host --port=$port --color";
+        $cmd = "NODE_PATH=vendor/koala-framework/koala-framework/node_modules_build vendor/bin/node node_modules/.bin/webpack-dev-server --progress --host=0.0.0.0 --port=$port --color";
         echo $cmd."\n";
         passthru($cmd);
     }
