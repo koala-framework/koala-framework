@@ -12,19 +12,36 @@ class Kwf_View_Helper_Assets
         $indent = str_repeat(' ', 8);
         $ret = '';
 
-        $c = file_get_contents('build/assets/'.$assetsPackage.'.'.$language.'.html');
+        $webpackDevServer = Kwf_Config::getValue('debug.webpackDevServer');
+        if ($webpackDevServer) {
+            $isRunning = true;
+            if (!file_exists('cache/webpack-dev-server-pid') || posix_getpgid(file_get_contents('cache/webpack-dev-server-pid')) === false) {
+                $isRunning = false;
+            }
+            if ($webpackDevServer === 'onDemand' && !$isRunning) {
+                $webpackDevServer = false;
+            }
+
+            if ($webpackDevServer) {
+                if (!$isRunning) {
+                    throw new Kwf_Exception("webpack-dev-server not running, please start clear-cache-watcher");
+                }
+                $port = file_get_contents('cache/webpack-dev-server-port');
+                $host = trim(`hostname`);
+            }
+        }
+
+        if ($webpackDevServer) {
+            //fetch from dev-server, local file might not be existing
+            $htmlFile = "http://$host:$port/assets/build/".$assetsPackage.'.'.$language.'.html';
+        } else {
+            $htmlFile = 'build/assets/'.$assetsPackage.'.'.$language.'.html';
+        }
+
+        $c = file_get_contents($htmlFile);
 
         $c = preg_replace('#</?head>#', '', $c);
         $c = str_replace('/assets/build/./', '/assets/build/', $c);
-
-        if (Kwf_Config::getValue('debug.webpackDevServer')) {
-            if (!file_exists('cache/webpack-dev-server-port')) {
-                throw new Kwf_Exception("webpack-dev-server not running, please start clear-cache-watcher");
-            }
-            $port = file_get_contents('cache/webpack-dev-server-port');
-            $host = trim(`hostname`);
-            $c = str_replace('/assets/build/', "http://$host:$port/assets/build/", $c);
-        }
 
         $ret .= $c;
         return $ret;
