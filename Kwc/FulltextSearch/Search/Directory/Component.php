@@ -16,6 +16,18 @@ class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item
         return $ret;
     }
 
+    public static function validateSettings($settings, $componentClass)
+    {
+        parent::validateSettings($settings, $componentClass);
+        if (!file_exists('solr/solr.xml')) throw new Kwf_Exception('solr.xml file missing. Please configure solr correctly!');
+        $solrXml = simplexml_load_file('solr/solr.xml');
+        foreach (Kwf_Config::getValue('kwc.domains') as $key => $value) {
+            if (!count($solrXml->xpath('/solr/cores/core[@name="'.$key.'"]'))) {
+                throw new Kwf_Exception("solr.xml core for $key missing. Please configure solr correctly!");
+            }
+        }
+    }
+
     public static function getMaintenanceJobs()
     {
         return array(
