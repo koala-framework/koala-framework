@@ -180,12 +180,17 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $ret;
     }
 
+    private function _addQuotes($v)
+    {
+        return "'" . $v . "'";
+    }
+
     protected function _fieldWithTableName($field, $tableNameAlias = null)
     {
         if ($tableNameAlias) {
-            return $tableNameAlias.'.'.$field;
+            return $this->_addQuotes($tableNameAlias.'.'.$field);
         } else {
-            return $this->getTableName().'.'.$field;
+            return $this->_addQuotes($this->getTableName().'.'.$field);
         }
     }
 
