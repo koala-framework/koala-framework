@@ -4,7 +4,7 @@ class Kwf_Assets_WebpackConfig
     public static function getDevServerPort()
     {
         if (!Kwf_Config::getValue('debug.webpackDevServer')) {
-            throw new Kwf_Exception("webpackDevServer is not enabled");
+            return null;
         }
         $port = null;
         if (file_exists('cache/webpack-dev-server-port')) {
