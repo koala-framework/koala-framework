@@ -6,6 +6,10 @@ class Kwf_Assets_WebpackConfig
         if (!Kwf_Config::getValue('debug.webpackDevServer')) {
             return null;
         }
+
+        if ($port = Kwf_Config::getValue('debug.webpackDevServerPort')) {
+            return $port;
+        }
         $port = null;
         if (file_exists('cache/webpack-dev-server-port')) {
             $port = file_get_contents('cache/webpack-dev-server-port');
