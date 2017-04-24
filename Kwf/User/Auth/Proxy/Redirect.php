@@ -11,6 +11,11 @@ class Kwf_User_Auth_Proxy_Redirect extends Kwf_User_Auth_Proxy_Abstract implemen
         return $this->_auth->showInBackend();
     }
 
+    public function showForActivation()
+    {
+        return $this->_auth->showForActivation();
+    }
+
     public function getLoginRedirectLabel()
     {
         return $this->_auth->getLoginRedirectLabel();
