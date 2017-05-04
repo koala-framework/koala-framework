@@ -374,6 +374,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     private static function _getInnerDbModel2($model)
     {
         if ($model instanceof Kwf_Model_Db) return $model;
+        if ($model instanceof Kwf_Model_Union) return $model;
         if ($model instanceof Kwf_Model_Proxy) {
             $ret = self::_getInnerDbModel2($model->getProxyModel());
             if ($ret) return $ret;
@@ -721,27 +722,42 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $dbDepOf = self::_getInnerDbModel($depOf);
             $ref = $depOf->getReference($expr->getParent());
             $refSelect = $dbRefM->select();
+            $refSelect->ignoreDeleted(true);
             if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
                 $ref = $dbDepOf->getReferenceByModelClass($depOf->getParentModel(), null);
             }
-
             $col1 = $dbDepOf->_formatField($ref['column'], $dbSelect, $tableNameAlias);
-            static $parentNum = 0;
-            $refTableNameAlias = $dbRefM->getTableName().'_parent'.($parentNum++);
-            $col2 = $dbRefM->_formatField($dbRefM->getPrimaryKey(), $dbSelect, $refTableNameAlias);
-
-            $refSelect->where("$col2=$col1");
-            $refSelect->ignoreDeleted(true);
-            $refDbSelect = $dbRefM->createDbSelect($refSelect, $refTableNameAlias);
-            $f = $expr->getField();
-            if (is_string($f)) {
-                $exprStr = new Zend_Db_Expr($dbRefM->_formatField($f, $refDbSelect, $refTableNameAlias));
+            if ($dbRefM instanceof Kwf_Model_Union) {
+                $ret = "CASE\n";
+                foreach ($dbRefM->getDbSelects($refSelect, array($expr->getField())) AS $modelKey=>$dbSelect) {
+                    $unionModels = $dbRefM->getUnionModels();
+                    $m = self::_getInnerDbModel($unionModels[$modelKey]);
+                    $idCol = $m->_formatField($m->getPrimaryKey(), $dbSelect);
+                    $dbSelect->where("$idCol=SUBSTR($col1, ".(strlen($modelKey)+1).")");
+                    $ret .= "  WHEN SUBSTR($col1, 1, ".strlen($modelKey).")='$modelKey' THEN ($dbSelect)\n";
+                }
+                $ret .= "END";
+                return "$ret";
             } else {
-                $exprStr = new Zend_Db_Expr($dbRefM->_createDbSelectExpression($f, $refDbSelect, $refM, $refTableNameAlias));
+
+                static $parentNum = 0;
+                $refTableNameAlias = $dbRefM->getTableName().'_parent'.($parentNum++);
+                $col2 = $dbRefM->_formatField($dbRefM->getPrimaryKey(), $dbSelect, $refTableNameAlias);
+
+                $refSelect->where("$col2=$col1");
+
+                $refDbSelect = $dbRefM->createDbSelect($refSelect, $refTableNameAlias);
+                $f = $expr->getField();
+                if (is_string($f)) {
+                    $exprStr = new Zend_Db_Expr($dbRefM->_formatField($f, $refDbSelect, $refTableNameAlias));
+                } else {
+                    $exprStr = new Zend_Db_Expr($dbRefM->_createDbSelectExpression($f, $refDbSelect, $refM, $refTableNameAlias));
+                }
+                $refDbSelect->reset(Zend_Db_Select::COLUMNS);
+                $refDbSelect->from(null, $exprStr);
+                return "($refDbSelect)";
             }
-            $refDbSelect->reset(Zend_Db_Select::COLUMNS);
-            $refDbSelect->from(null, $exprStr);
-            return "($refDbSelect)";
+
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             return $field;
