@@ -45,6 +45,7 @@ class KwfModelNormalizer extends AbstractNormalizer
                 if ($columnNormalizer instanceof CacheableInterface) {
                     $cacheId = $columnNormalizer->getCacheId($object, $column, $settings, $format, $context);
                     if ($cacheId) {
+                        $cacheId = 'norm__'.$object->getModel()->getUniqueIdentifier().'__'.$cacheId;
                         $data = Kwf_Cache_Simple::fetch($cacheId, $success);
                     }
                 }
