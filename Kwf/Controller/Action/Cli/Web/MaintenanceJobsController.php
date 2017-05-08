@@ -96,7 +96,9 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     {
         echo "List of available jobs:\n";
         foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
-            echo "  ".get_class($job)."\n";
+            echo "  ".get_class($job);
+            if ($job->getShortName()) echo ' (' . $job->getShortName() . ')';
+            echo "\n";
         }
         exit;
     }
@@ -104,20 +106,20 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     public function runJobAction()
     {
         $debug = $this->_getParam('debug');
-        $jobClassName = $this->_getParam('job');
-        if (!$jobClassName) {
+        $jobName = $this->_getParam('job');
+        if (!$jobName) {
             echo "Missing parameter job.\n";
             exit;
         }
-        $jobFound = false;
+        $jobClassName = null;
         foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
-            if (get_class($job) === $jobClassName) {
-                $jobFound = true;
+            if (get_class($job) === $jobName || $job->getShortName() == $jobName) {
+                $jobClassName = get_class($job);
                 break;
             }
         }
-        if (!$jobFound) {
-            echo "Job not found. Should be the classname.\n";
+        if (!$jobClassName) {
+            echo "Job not found. Should be the classname or the shortname.\n";
             exit;
         }
 

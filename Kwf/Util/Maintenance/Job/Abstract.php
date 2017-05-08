@@ -22,5 +22,10 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
         return $ret;
     }
 
+    public function getShortName()
+    {
+        return null;
+    }
+
     abstract public function execute($debug);
 }
