@@ -21,13 +21,17 @@ class Kwc_Columns_Abstract_Trl_Component extends Kwc_Abstract_List_Trl_Component
         $columns = $columnTypes[$type];
 
         $i = 1;
-        foreach($ret['listItems'] as $key => $value) {
+        foreach ($ret['listItems'] as $key => $value) {
             $cls = " span{$columns['colSpans'][$i-1]}";
-            if ($i == 1) $cls .= " lineFirst";
-            if ($i == count($columns['colSpans'])) $cls .= " lineLast";
+            if ($i == 1) $cls .= " ".$this->_getBemClass("listItem--lineFirst", "lineFirst");
+            if ($i == count($columns['colSpans'])) $cls .= " ".$this->_getBemClass("listItem--lineLast", "lineLast");
             $ret['listItems'][$key]['class'] .= $cls;
             ($i == count($columns['colSpans'])) ? $i = 1 : $i++;
+            if (!$ret['listItems'][$key]['data']->hasContent()) {
+                $ret['listItems'][$key]['class'] .= ' emptyContent';
+            }
         }
+
         return $ret;
     }
 }
