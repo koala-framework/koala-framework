@@ -8,7 +8,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
     implements Kwf_Media_Output_Interface
 {
     private $_mailData;
-    private $_recipient;
+    protected $_recipient;
 
     public static function getSettings($param = null)
     {
