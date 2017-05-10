@@ -28,7 +28,7 @@ class Kwc_Columns_Abstract_Trl_Component extends Kwc_Abstract_List_Trl_Component
             $ret['listItems'][$key]['class'] .= $cls;
             ($i == count($columns['colSpans'])) ? $i = 1 : $i++;
             if (!$ret['listItems'][$key]['data']->hasContent()) {
-                $ret['listItems'][$key]['class'] .= ' emptyContent';
+                $ret['listItems'][$key]['class'] .= " ".$this->_getBemClass("listItem--emptyContent", "emptyContent");
             }
         }
 
