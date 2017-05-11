@@ -70,6 +70,20 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
                 $lastHourlyRun = time();
                 file_put_contents('temp/maintenance-hourly-run', $lastHourlyRun);
                 Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_HOURLY, $debug);
+
+                //set to varnished if last_process_seen has not been updated for 60 seconds
+                $s = new Kwf_Model_Select();
+                $s->whereEquals('status', 'running');
+                $s->where(new Kwf_Model_Select_Expr_Lower('last_process_seen', new Kwf_DateTime(time()-60)));
+                foreach (Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel')->getRows($s) as $row) {
+                    $row->status = 'varnished';
+                    $row->save();
+                }
+
+                //delete runs older than a week
+                $s = new Kwf_Model_Select();
+                $s->where(new Kwf_Model_Select_Expr_Lower('start', new Kwf_DateTime(time()-7*24*60*60)));
+                Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel')->deleteRows($s);
             }
 
             Kwf_Component_Data_Root::getInstance()->freeMemory();

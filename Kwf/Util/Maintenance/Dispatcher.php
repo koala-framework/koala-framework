@@ -53,33 +53,60 @@ class Kwf_Util_Maintenance_Dispatcher
 
     public static function executeJob($job, $debug)
     {
+        $runsModel = Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel');
+        $runRow = $runsModel->createRow();
+        $runRow->job = get_class($job);
+
         $maxTime = $job->getMaxTime();
         $t = microtime(true);
         $cmd = "php bootstrap.php maintenance-jobs internal-run-job --job=".escapeshellarg(get_class($job));
         if ($debug) $cmd .= " --debug";
 
         $process = new Process($cmd);
-        $process->start(function ($type, $buffer) {
+        $process->start(function ($type, $buffer) use ($runsModel, $runRow) {
             if (Process::ERR === $type) {
                 echo $buffer;
             } else {
                 echo $buffer;
             }
+            Kwf_Registry::get('db')->query("UPDATE {$runsModel->getTableName()} SET log=CONCAT(log, ?) WHERE id=?", array($buffer, $runRow->id));
         });
+
+        $runRow->pid = $process->getPid();
+        $runRow->start = date('Y-m-d H:i:s');
+        $runRow->status = 'running';
+        $runRow->last_process_seen = date('Y-m-d H:i:s');
+        $runRow->progress = 0;
+        $runRow->save();
 
         while ($process->isRunning()) {
             if (microtime(true)-$t > $maxTime*2) {
                 //when jobs runs maxTime twice kill it
                 file_put_contents('php://stderr', "\nWARNING: Killing maintenance-jobs process (running > maxTime*2)...\n");
                 $process->stop();
+                $runRow->status = 'killed';
                 break;
             }
+            $runRow->runtime = microtime(true)-$t;
+            $runRow->last_process_seen = date('Y-m-d H:i:s');
+            $runRow->save();
             sleep(1);
         }
-        if ($process->getExitCode()) {
-            $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code ".$process->getExitCode());
-            $e->logOrThrow();
+        $runRow->runtime = microtime(true)-$t;
+        $runRow->progress = 100;
+
+        if ($runRow->status != 'killed') {
+            if ($process->getExitCode()) {
+                $runRow->status = 'failed';
+                $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code ".$process->getExitCode());
+                $e->log();
+            } else {
+                $runRow->status = 'success';
+            }
         }
+        $runRow->save();
+
+
         $t = microtime(true)-$t;
         if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
 
@@ -87,7 +114,7 @@ class Kwf_Util_Maintenance_Dispatcher
             $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
             file_put_contents('php://stderr', $msg."\n");
             $e = new Kwf_Exception($msg);
-            $e->logOrThrow();
+            $e->log();
         }
         if ($debug) echo "\n";
     }
