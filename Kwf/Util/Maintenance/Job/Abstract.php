@@ -35,4 +35,12 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
     }
 
     abstract public function execute($debug);
+
+    public function hasWorkload()
+    {
+        if ($this->getFrequency() == self::FREQUENCY_SECONDS || $this->getFrequency() == self::FREQUENCY_MINUTELY) {
+            throw new Kwf_Exception("hasWorkload has to be implemented for this frequency in job ".get_class($this));
+        }
+        return true;
+    }
 }

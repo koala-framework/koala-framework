@@ -123,11 +123,37 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
         $t = microtime(true);
         $job = new $jobClassName();
-        $job->setDebug($debug);
-        $job->execute($debug);
+        Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug);
         Kwf_Events_ModelObserver::getInstance()->process();
         $t = microtime(true)-$t;
         if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
+        exit;
+    }
+
+    public function internalRunJobAction()
+    {
+        $debug = $this->_getParam('debug');
+        $jobClassName = $this->_getParam('job');
+        if (!$jobClassName) {
+            echo "Missing parameter job.\n";
+            exit(1);
+        }
+        $jobFound = false;
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
+            if (get_class($job) === $jobClassName) {
+                $jobFound = true;
+                break;
+            }
+        }
+        if (!$jobFound) {
+            echo "Job not found. Should be the classname.\n";
+            exit(1);
+        }
+
+        $job = new $jobClassName();
+        $job->setDebug($debug);
+        $job->execute($debug);
+        Kwf_Events_ModelObserver::getInstance()->process();
         exit;
     }
 }

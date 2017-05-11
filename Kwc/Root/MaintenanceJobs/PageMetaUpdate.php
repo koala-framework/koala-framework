@@ -6,6 +6,11 @@ class Kwc_Root_MaintenanceJobs_PageMetaUpdate extends Kwf_Util_Maintenance_Job_A
         return self::FREQUENCY_MINUTELY;
     }
 
+    public function hasWorkload()
+    {
+        return true;
+    }
+
     public function execute($debug)
     {
         $cmd = "php bootstrap.php component-pages-meta update-changed-job";

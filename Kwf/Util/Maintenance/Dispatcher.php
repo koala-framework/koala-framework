@@ -1,4 +1,6 @@
 <?php
+use \Symfony\Component\Process\Process;
+
 class Kwf_Util_Maintenance_Dispatcher
 {
     public static function getAllMaintenanceJobs()
@@ -42,66 +44,51 @@ class Kwf_Util_Maintenance_Dispatcher
     {
         foreach (self::getAllMaintenanceJobs() as $job) {
             if ($job->getFrequency() == $jobFrequency) {
+                if (!$job->hasWorkload()) continue;
                 if ($debug) echo "executing ".get_class($job)."\n";
-                $maxTime = $job->getMaxTime();
-                $t = microtime(true);
-                if ($jobFrequency == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY || $jobFrequency == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_HOURLY) {
-                    $cmd = "php bootstrap.php maintenance-jobs run-job --job=".escapeshellarg(get_class($job));
-                    if ($debug) $cmd .= " --debug";
-
-                    $descriptorspec = array();
-                    $pipes = array();
-                    $process = proc_open($cmd, $descriptorspec, $pipes);
-
-                    if (!is_resource($process)) {
-                        $e = new Kwf_Exception("Couldn't start maintenance job ".get_class($job));
-                        $e->logOrThrow();
-                        continue;
-                    }
-                    $retVar = null;
-                    while (true) {
-                        $status = proc_get_status($process);
-                        if (!$status['running']) {
-                            $retVar = $status['exitcode'];
-                            break;
-                        }
-                        if (microtime(true)-$t > $maxTime*2) {
-                            //when jobs runs maxTime twice kill it
-                            file_put_contents('php://stderr', "\nWARNING: Killing maintenance-jobs process (running > maxTime*2)...\n");
-                            proc_terminate($process);
-                            break;
-                        }
-                        sleep(1);
-                    }
-                    proc_close($process);
-
-                    if ($retVar) {
-                        $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code $retVar");
-                        $e->logOrThrow();
-                    }
-                } else {
-                    $job->setDebug($debug);
-                    try {
-                        $job->execute($debug);
-                    } catch (Exception $e) {
-                        file_put_contents('php://stderr', $e->toString()."\n");
-                        if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
-                        $e->logOrThrow();
-                    }
-                    Kwf_Events_ModelObserver::getInstance()->process();
-                }
-                $t = microtime(true)-$t;
-                if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
-
-
-                if ($t > $maxTime) {
-                    $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
-                    file_put_contents('php://stderr', $msg."\n");
-                    $e = new Kwf_Exception($msg);
-                    $e->logOrThrow();
-                }
-                if ($debug) echo "\n";
+                self::executeJob($job, $debug);
             }
         }
+    }
+
+    public static function executeJob($job, $debug)
+    {
+        $maxTime = $job->getMaxTime();
+        $t = microtime(true);
+        $cmd = "php bootstrap.php maintenance-jobs internal-run-job --job=".escapeshellarg(get_class($job));
+        if ($debug) $cmd .= " --debug";
+
+        $process = new Process($cmd);
+        $process->start(function ($type, $buffer) {
+            if (Process::ERR === $type) {
+                echo $buffer;
+            } else {
+                echo $buffer;
+            }
+        });
+
+        while ($process->isRunning()) {
+            if (microtime(true)-$t > $maxTime*2) {
+                //when jobs runs maxTime twice kill it
+                file_put_contents('php://stderr', "\nWARNING: Killing maintenance-jobs process (running > maxTime*2)...\n");
+                $process->stop();
+                break;
+            }
+            sleep(1);
+        }
+        if ($process->getExitCode()) {
+            $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code ".$process->getExitCode());
+            $e->logOrThrow();
+        }
+        $t = microtime(true)-$t;
+        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
+
+        if ($t > $maxTime) {
+            $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
+            file_put_contents('php://stderr', $msg."\n");
+            $e = new Kwf_Exception($msg);
+            $e->logOrThrow();
+        }
+        if ($debug) echo "\n";
     }
 }

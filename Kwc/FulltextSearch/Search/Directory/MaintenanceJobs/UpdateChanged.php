@@ -6,6 +6,11 @@ class Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_UpdateChanged extends 
         return self::FREQUENCY_MINUTELY;
     }
 
+    public function hasWorkload()
+    {
+        return true;
+    }
+    
     public function getPriority()
     {
         return 10; //after page meta
