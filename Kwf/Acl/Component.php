@@ -50,6 +50,10 @@ class Kwf_Acl_Component extends Kwf_Acl
                     array('text'=>trlKwfStatic('Redirects'), 'icon'=>'page_white_go.png')), 'settings');
                 $this->add(new Zend_Acl_Resource('kwf_redirects_redirect'), 'kwf_redirects_redirects');
                     $this->add(new Zend_Acl_Resource('kwf_redirects_pages'), 'kwf_redirects_redirect');
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_maintenance-jobs_jobs',
+                array('text'=>'Maintenance Jobs', 'icon'=>'time_go.png')), 'settings');
+                $this->add(new Zend_Acl_Resource('kwf_maintenance-jobs_runs'), 'kwf_maintenance-jobs_jobs');
+                    $this->add(new Zend_Acl_Resource('kwf_maintenance-jobs_run'), 'kwf_maintenance-jobs_runs');
 
 
 

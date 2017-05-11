@@ -38,6 +38,8 @@ class Kwf_Controller_Front extends Zend_Controller_Front
                                         'kwf_controller_action_redirects');
         $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/Trl',
                                 'kwf_controller_action_trl');
+        $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/MaintenanceJobs',
+                                'kwf_controller_action_maintenance-jobs');
         if (file_exists('controllers/Cli')) {
             $this->addControllerDirectory('controllers/Cli', 'cli');
         }
