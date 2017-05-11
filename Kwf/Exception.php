@@ -26,8 +26,9 @@ class Kwf_Exception extends Kwf_Exception_NoLog
      */
     public function logOrThrow()
     {
-        if ($this->log()) {
-            if (php_sapi_name() == 'cli') {
+        $this->log();
+        if (!self::isDebug()) {
+            if (PHP_SAPI == 'cli') {
                 file_put_contents('php://stderr', $this->__toString()."\n");
             }
             return;
@@ -37,7 +38,7 @@ class Kwf_Exception extends Kwf_Exception_NoLog
 
     public function log()
     {
-        if (Kwf_Exception::isDebug()) {
+        if (!self::isLogEnabled()) {
             return false;
         }
         $body = $this->_getLogBody();
