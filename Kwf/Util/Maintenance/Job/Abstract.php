@@ -9,6 +9,7 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
     protected $_debug = false;
 
     protected $_progressBar;
+    protected $_jobRun;
 
     abstract public function getFrequency();
 
@@ -44,6 +45,11 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
     public function setProgressBar(Zend_ProgressBar $progressBar)
     {
         $this->_progressBar = $progressBar;
+    }
+
+    public function setJobRun(Kwf_Model_Row_Interface $jobRun)
+    {
+        $this->_jobRun = $jobRun;
     }
 
     abstract public function execute($debug);

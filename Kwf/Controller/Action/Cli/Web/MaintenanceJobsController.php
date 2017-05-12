@@ -152,6 +152,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
         $jobClassName = $runRow->job;
         $job = new $jobClassName();
         $job->setDebug($debug);
+        $job->setJobRun($runRow);
 
         $progressSteps = $job->getProgressSteps();
         $progressBar = null;
