@@ -19,6 +19,7 @@ class Kwc_Root_MaintenanceJobs_PageMetaUpdate extends Kwf_Util_Maintenance_Job_A
         $cmd = "php bootstrap.php component-pages-meta update-changed-job";
         if ($debug) $cmd .= " --debug";
         if ($debug) echo "$cmd\n";
-        passthru($cmd);
+        passthru($cmd, $retVal);
+        if ($retVal) throw new Kwf_Exception("Process failed");
     }
 }
