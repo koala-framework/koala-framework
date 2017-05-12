@@ -56,10 +56,14 @@ class Kwf_Util_Maintenance_Dispatcher
         $runsModel = Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel');
         $runRow = $runsModel->createRow();
         $runRow->job = get_class($job);
+        $runRow->start = date('Y-m-d H:i:s');
+        $runRow->last_process_seen = date('Y-m-d H:i:s');
+        $runRow->status = 'starting';
+        $runRow->save();
 
         $maxTime = $job->getMaxTime();
         $t = microtime(true);
-        $cmd = "php bootstrap.php maintenance-jobs internal-run-job --job=".escapeshellarg(get_class($job));
+        $cmd = "php bootstrap.php maintenance-jobs internal-run-job --runId=".escapeshellarg($runRow->id);
         if ($debug) $cmd .= " --debug";
 
         $process = new Process($cmd);
@@ -73,10 +77,8 @@ class Kwf_Util_Maintenance_Dispatcher
         });
 
         $runRow->pid = $process->getPid();
-        $runRow->start = date('Y-m-d H:i:s');
         $runRow->status = 'running';
-        $runRow->last_process_seen = date('Y-m-d H:i:s');
-        $runRow->progress = 0;
+
         $runRow->save();
 
         while ($process->isRunning()) {
@@ -93,7 +95,9 @@ class Kwf_Util_Maintenance_Dispatcher
             sleep(1);
         }
         $runRow->runtime = microtime(true)-$t;
-        $runRow->progress = 100;
+        if (!is_null($runRow->progress)) {
+            $runRow->progress = 100;
+        }
 
         if ($runRow->status != 'killed') {
             if ($process->getExitCode()) {

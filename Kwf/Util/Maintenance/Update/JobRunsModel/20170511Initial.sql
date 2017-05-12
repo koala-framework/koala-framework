@@ -7,7 +7,7 @@ CREATE TABLE `kwf_maintenance_job_runs` (
   `log` text NOT NULL,
   `last_process_seen` datetime NOT NULL,
   `pid` int(11) NOT NULL,
-  `progress` int(11) NOT NULL
+  `progress` int(11) NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 ALTER TABLE `kwf_maintenance_job_runs` ADD PRIMARY KEY (`id`);

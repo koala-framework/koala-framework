@@ -147,25 +147,27 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     public function internalRunJobAction()
     {
         $debug = $this->_getParam('debug');
-        $jobClassName = $this->_getParam('job');
-        if (!$jobClassName) {
-            echo "Missing parameter job.\n";
-            exit(1);
-        }
-        $jobFound = false;
-        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
-            if (get_class($job) === $jobClassName) {
-                $jobFound = true;
-                break;
-            }
-        }
-        if (!$jobFound) {
-            echo "Job not found. Should be the classname.\n";
-            exit(1);
-        }
-
+        $runId = $this->_getParam('runId');
+        $runRow = Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel')->getRow($runId);
+        $jobClassName = $runRow->job;
         $job = new $jobClassName();
         $job->setDebug($debug);
+
+        $progressSteps = $job->getProgressSteps();
+        $progressBar = null;
+        if ($progressSteps) {
+            $adapter = new Kwf_Util_Maintenance_ProgressBarAdapter($runRow);
+            if ($debug) {
+                $adapter = new Kwf_Util_ProgressBar_Adapter_Composite(array(
+                    $adapter,
+                    new Zend_ProgressBar_Adapter_Console()
+                ));
+            }
+            $progressBar = new Zend_ProgressBar($adapter, 0, $progressSteps);
+            $runRow->progress = 0;
+            $runRow->save();
+            $job->setProgressBar($progressBar);
+        }
         $job->execute($debug);
         Kwf_Events_ModelObserver::getInstance()->process();
         exit;

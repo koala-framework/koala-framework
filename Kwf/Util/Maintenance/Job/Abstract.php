@@ -8,6 +8,8 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
 
     protected $_debug = false;
 
+    protected $_progressBar;
+
     abstract public function getFrequency();
 
     public function getPriority()
@@ -32,6 +34,16 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
     protected function _log($msg)
     {
         if ($this->_debug) echo $msg . PHP_EOL;
+    }
+
+    public function getProgressSteps()
+    {
+        return null;
+    }
+
+    public function setProgressBar(Zend_ProgressBar $progressBar)
+    {
+        $this->_progressBar = $progressBar;
     }
 
     abstract public function execute($debug);
