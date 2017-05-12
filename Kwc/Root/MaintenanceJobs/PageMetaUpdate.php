@@ -8,7 +8,10 @@ class Kwc_Root_MaintenanceJobs_PageMetaUpdate extends Kwf_Util_Maintenance_Job_A
 
     public function hasWorkload()
     {
-        return true;
+        $m = Kwf_Component_PagesMetaModel::getInstance();
+        $s = $m->select();
+        $s->whereEquals('changed_recursive', true);
+        return $m->countRows($s) > 0;
     }
 
     public function execute($debug)
