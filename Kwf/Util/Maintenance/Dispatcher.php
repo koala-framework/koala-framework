@@ -109,6 +109,19 @@ class Kwf_Util_Maintenance_Dispatcher
             }
         }
         $runRow->save();
+        if ($runRow->status != 'success') {
+            $recipients = $job->getRecipientsForFailNotification();
+            if (is_null($recipients)) {
+                $recipients = Kwf_Config::getValue('maintenanceJobs.failNotificationRecipient');
+            }
+            if ($recipients) {
+                $mail = new Kwf_Mail();
+                $mail->addTo($recipients);
+                $mail->setSubject('['.Kwf_Config::getValue('application.name').'] maintenance-job '.$runRow->job.' '.$runRow->status);
+                $mail->setBodyText(Kwf_Registry::get('db')->fetchColumn("SELECT log FROM {$runsModel->getTableName()} WHERE id=?", array($runRow->id))->fetchColumn());
+                $mail->send();
+            }
+        }
 
 
         $t = microtime(true)-$t;

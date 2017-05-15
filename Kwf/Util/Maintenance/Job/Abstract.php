@@ -61,4 +61,9 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
         }
         return true;
     }
+
+    public function getRecipientsForFailNotification()
+    {
+        return null;
+    }
 }
