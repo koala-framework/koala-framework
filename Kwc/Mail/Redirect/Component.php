@@ -56,7 +56,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         return $r->value;
     }
 
-    public final function getRedirectUrl()
+    public function getRedirectUrl()
     {
         $ret = $this->_getRedirectUrl();
 
