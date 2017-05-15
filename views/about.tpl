@@ -9,6 +9,6 @@
 <?php } ?>
 </h1>
 <div class="footer">
-    <p>Copyright 2007-2014 <a href="http://www.vivid-planet.com/" onclick="window.open('http://www.vivid-planet.com/'); return false;">Vivid Planet Software GmbH</a></p>
+    <p>Copyright 2007-<?=date('Y')?> <a href="http://www.vivid-planet.com/" onclick="window.open('http://www.vivid-planet.com/'); return false;">Vivid Planet Software GmbH</a></p>
     <img id="enteWelcome" src="/assets/kwf/images/welcome/ente.jpg" alt="" height="30" width="54" />
 </div>
