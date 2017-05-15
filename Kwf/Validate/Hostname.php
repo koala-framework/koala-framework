@@ -1,7 +1,7 @@
 <?php
 class Kwf_Validate_Hostname extends Zend_Validate_Hostname
 {
-    public function __construct($allow = self::ALLOW_DNS, $validateIdn = true, $validateTld = true, Zend_Validate_Ip $ipValidator = null)
+    public function __construct($allow = self::ALLOW_DNS, $validateIdn = true, $validateTld = false, Zend_Validate_Ip $ipValidator = null)
     {
         $this->_messageTemplates[self::IP_ADDRESS_NOT_ALLOWED] = trlKwf("'%value%' appears to be an IP address, but IP addresses are not allowed");
         $this->_messageTemplates[self::UNKNOWN_TLD] = trlKwf("'%value%' appears to be a DNS hostname but cannot match TLD against known list");
