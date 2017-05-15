@@ -98,6 +98,14 @@
 <hu>Bejelentkezés</hu>
 <al>Logohu</al>
 <ba>Prijava</ba>
+<sq>Hyni</sq>
+<bg>Влизане</bg>
+<it>Log-in</it>
+<hr>Prijava</hr>
+<sr>Ulogovati</sr>
+<cs>Přihlášení</cs>
+<hu>Bejelentkezés</hu>
+<es>Iniciar Sesión</es>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -4679,6 +4687,15 @@
 <ru>Пароль</ru>
 <uk>Пароль</uk>
 <ua>Пароль</ua>
+<sq>Fjalekalimi</sq>
+<bg>Парола</bg>
+<it>Password</it>
+<hr>Lozinka</hr>
+<sr>Lozinka</sr>
+<sk>Heslo</sk>
+<cs>Heslo</cs>
+<hu>Jelszó</hu>
+<es>Contraseña</es>
 </text>
 <text>
 <en>Your old email address was {0}, the new one is {1}</en>

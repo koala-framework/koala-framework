@@ -941,6 +941,11 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         $dbSelect = $this->createDbSelect($select);
         if ($order = $select->getPart(Kwf_Model_Select::ORDER)) {
             foreach ($order as $o) {
+                if ($o['direction']) {
+                    if ($o['direction'] != 'ASC' && $o['direction'] != 'DESC') {
+                        throw new Kwf_Exception("Invalid direction");
+                    }
+                }
                 if ($o['field'] instanceof Zend_Db_Expr) {
                     $dbSelect->order($o['field']);
                 } else if ($o['field'] instanceof Kwf_Model_Select_Expr_Interface) {
@@ -948,11 +953,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                 } else if ($o['field'] == Kwf_Model_Select::ORDER_RAND) {
                     $dbSelect->order('RAND()');
                 } else {
-                    if (strpos($o['field'], '.') === false &&
-                        strpos($o['field'], '(') === false
-                    ) {
-                        $o['field'] = $this->_formatField($o['field'], $dbSelect);
-                    }
+                    $o['field'] = $this->_formatField($o['field'], $dbSelect);
                     $dbSelect->order($o['field'].' '.$o['direction']);
                 }
             }
