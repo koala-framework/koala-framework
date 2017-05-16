@@ -173,7 +173,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             return $this->_fieldWithTableName($f, $tableNameAlias);
         }
         $ret = $this->_formatFieldInternal($field, $select, $tableNameAlias);
-        if (!$ret) {
+        if ($ret === false) {
             throw new Kwf_Exception("Can't find field '$field' in model '".get_class($this)."' (Table '".$this->getTableName()."')");
         }
 
