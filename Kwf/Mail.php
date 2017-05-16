@@ -139,6 +139,7 @@ class Kwf_Mail extends Zend_Mail
         if (empty($email)) {
             throw new Kwf_Exception("Email address '$email' cannot be set as from part in a mail. Empty or invalid address.");
         }
+        parent::clearFrom();
         parent::setFrom($email, $name);
         return $this;
     }
