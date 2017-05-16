@@ -15,10 +15,15 @@ onReady.onRender('.kwcClass', function(el, config) {
         }
     });
     componentEvent.on('cookieOptChanged', function(value) {
+        var field = form.findField('form_opt');
         if (value == 'in') {
-            form.findField('form_opt').setValue(true);
-        } else if (value == 'out') {
-            form.findField('form_opt').setValue(false);
+            var fieldValue = true;
+            var labelText = trlKwf('Cookies are set when visiting this webpage. Click to deactivate cookies.');
+        } else {
+            var fieldValue = false;
+            var labelText = trlKwf('No cookies are set when visiting this webpage. Click to activate cookies.');
         }
+        field.setValue(fieldValue);
+        field.el.child('.boxLabel').update(labelText);
     });
 });
