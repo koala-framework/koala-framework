@@ -9,7 +9,7 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
 
         if (!$target && ($type == 'path' || $type == 'domainPath') && strpos($source, '?') !== false) {
             $queryParams = substr($source, strpos($source, '?')+1);
-            $source = substr($source, 0, strpos($source, '?')-1);
+            $source = substr($source, 0, strpos($source, '?'));
             $target = $this->_fetchRedirectUrl($type, $source, $host);
             if ($target) {
                 if (strpos($source, '?') !== false) {

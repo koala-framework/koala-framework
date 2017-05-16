@@ -11,6 +11,11 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
         return $this->_auth->showInBackend();
     }
 
+    public function showForActivation()
+    {
+        return $this->_auth->showForActivation();
+    }
+
     public function getLoginRedirectLabel()
     {
         return $this->_auth->getLoginRedirectLabel();

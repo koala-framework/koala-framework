@@ -97,14 +97,14 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
 
         $i = 1;
         $ret['rootElementClass'] .= " col{$type}";
-        foreach($ret['listItems'] as $key => $value) {
+        foreach ($ret['listItems'] as $key => $value) {
             $cls = " span{$columns['colSpans'][$i-1]}";
             if ($i == 1) $cls .= " ".$this->_getBemClass("listItem--lineFirst", "lineFirst");
             if ($i == count($columns['colSpans'])) $cls .= " ".$this->_getBemClass("listItem--lineLast", "lineLast");
             $ret['listItems'][$key]['class'] .= $cls;
             ($i == count($columns['colSpans'])) ? $i = 1 : $i++;
             if (!$ret['listItems'][$key]['data']->hasContent()) {
-                $ret['listItems'][$key]['class'] .= ' emptyContent';
+                $ret['listItems'][$key]['class'] .= " ".$this->_getBemClass("listItem--emptyContent", "emptyContent");
             }
         }
         return $ret;

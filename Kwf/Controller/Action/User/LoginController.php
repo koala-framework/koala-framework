@@ -192,7 +192,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             }
             $userId = $m[1];
             $code = $m[2];
-            $redirect = $state[4];
+            $redirect = str_replace('kwfdot', '.', $state[4]);
             $user = $users->getRow($userId);
             $this->getRequest()->setParam('user', $user);
             if (!$user) {
