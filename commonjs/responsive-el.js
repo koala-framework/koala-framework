@@ -1,6 +1,6 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var getCachedWidth = require('kwf/element/get-cached-width');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var getCachedWidth = require('kwf/commonjs/element/get-cached-width');
 
 /**
  * Helper function that dynamically adds eg. gt480 class to element if it's width is >480px

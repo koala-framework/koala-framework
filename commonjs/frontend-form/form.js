@@ -1,32 +1,32 @@
 // @require ModernizrNetworkXhr2
 // @require KwfLoading
 
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var fieldRegistry = require('kwf/frontend-form/field-registry');
-var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
-var formRegistry = require('kwf/frontend-form/form-registry');
-var statistics = require('kwf/statistics');
-var t = require('kwf/trl');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
+var errorStyleRegistry = require('kwf/commonjs/frontend-form/error-style-registry');
+var formRegistry = require('kwf/commonjs/frontend-form/form-registry');
+var statistics = require('kwf/commonjs/statistics');
+var t = require('kwf/commonjs/trl');
 
-require('kwf/frontend-form/error-style/above');
-require('kwf/frontend-form/error-style/below-field');
-require('kwf/frontend-form/error-style/bubble');
-require('kwf/frontend-form/error-style/icon-bubble');
+require('kwf/commonjs/frontend-form/error-style/above');
+require('kwf/commonjs/frontend-form/error-style/below-field');
+require('kwf/commonjs/frontend-form/error-style/bubble');
+require('kwf/commonjs/frontend-form/error-style/icon-bubble');
 
-require('kwf/frontend-form/field/field');
-require('kwf/frontend-form/field/cards');
-require('kwf/frontend-form/field/checkbox');
-require('kwf/frontend-form/field/date-select');
-require('kwf/frontend-form/field/field-set');
-require('kwf/frontend-form/field/file');
-require('kwf/frontend-form/field/multi-checkbox');
-require('kwf/frontend-form/field/radio');
-require('kwf/frontend-form/field/select');
-require('kwf/frontend-form/field/static');
-require('kwf/frontend-form/field/recaptcha');
-require('kwf/frontend-form/field/text-area');
-require('kwf/frontend-form/field/text-field');
+require('kwf/commonjs/frontend-form/field/field');
+require('kwf/commonjs/frontend-form/field/cards');
+require('kwf/commonjs/frontend-form/field/checkbox');
+require('kwf/commonjs/frontend-form/field/date-select');
+require('kwf/commonjs/frontend-form/field/field-set');
+require('kwf/commonjs/frontend-form/field/file');
+require('kwf/commonjs/frontend-form/field/multi-checkbox');
+require('kwf/commonjs/frontend-form/field/radio');
+require('kwf/commonjs/frontend-form/field/select');
+require('kwf/commonjs/frontend-form/field/static');
+require('kwf/commonjs/frontend-form/field/recaptcha');
+require('kwf/commonjs/frontend-form/field/text-area');
+require('kwf/commonjs/frontend-form/field/text-field');
 
 var FormComponent = function(form)
 {
@@ -238,7 +238,7 @@ FormComponent.prototype = {
 
                 // show success content
                 if (r.successContent) {
-                    statistics.trackEvent(t.trlKwf('Form Submission'), location.pathname, button.find('span').text());
+                    statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
                     var el = this.el.parent().append(r.successContent);
                     if (this.config.hideFormOnSuccess) {
                         this.el.hide();
@@ -250,7 +250,7 @@ FormComponent.prototype = {
                     }
                     onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
-                    statistics.trackEvent(t.trlKwf('Form Submission'), location.pathname, button.find('span').text());
+                    statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize

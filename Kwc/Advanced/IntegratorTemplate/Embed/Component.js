@@ -1,7 +1,7 @@
 'use strict';
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var BaseUrl = require('kwf/base-url');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var BaseUrl = require('kwf/commonjs/base-url');
 
 onReady.onRender('.kwcClassMaster', function(el) {
     //if embed template is used turn all xhr into cross domain xhr

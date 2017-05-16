@@ -33,6 +33,9 @@ class KwfExtension extends Extension implements PrependExtensionInterface
             ),
             'router' => array(
                 'strict_requirements' => null
+            ),
+            'annotations' => array(
+                'cache' => 'kwf.annotations.cache'
             )
         ));
 

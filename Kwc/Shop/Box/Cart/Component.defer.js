@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-var getKwcRenderUrl = require('kwf/get-kwc-render-url');
+var onReady = require('kwf/commonjs/on-ready');
+var getKwcRenderUrl = require('kwf/commonjs/get-kwc-render-url');
 
 onReady.onContentReady(function(readyEl, param) {
     if (!param.newRender) return false;

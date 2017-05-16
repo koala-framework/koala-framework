@@ -38,8 +38,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 
     public static function getMasterStyles()
     {
-        $ret = json_decode(file_get_contents('build/assets/rte-styles'), true);
-        return $ret;
+        return self::parseMasterStyles(file_get_contents('build/assets/Frontend.css'));
     }
 
     public function getStyles($ownStyles = false)

@@ -56,6 +56,44 @@ class Kwf_Cache_SimpleStatic
         }
     }
 
+    public static function fetchMultiple(array $cacheIds)
+    {
+        static $prefix;
+        static $extensionLoaded;
+        if (!isset($extensionLoaded)) $extensionLoaded = extension_loaded('apc');
+        if ($extensionLoaded && PHP_SAPI != 'cli') {
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::$uniquePrefix.'-';
+            $cacheIds = array_map(function($i) use ($prefix) { return $prefix.$i; }, $cacheIds);
+            return apc_fetch($cacheIds);
+        } else {
+            $ret = array();
+            foreach ($cacheIds as $id) {
+                $data = self::fetch($id, $success);
+                if ($success) {
+                    $ret[$id] = $data;
+                }
+            }
+            return $ret;
+        }
+    }
+
+    public static function exists($cacheId)
+    {
+        static $prefix;
+        static $extensionLoaded;
+        if (!isset($extensionLoaded)) $extensionLoaded = extension_loaded('apc');
+        if ($extensionLoaded && PHP_SAPI != 'cli') {
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::$uniquePrefix.'-';
+            return apc_exists($prefix.$cacheId);
+        } else {
+            if (self::$_fileCacheDisabled) {
+                return false;
+            }
+            $file = self::_getFileNameForCacheId($cacheId);
+            return file_exists($file);
+        }
+    }
+
     public static function add($cacheId, $data)
     {
         static $prefix;

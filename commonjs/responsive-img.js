@@ -1,7 +1,7 @@
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var isVisible = require('kwf/element/is-visible');
-var getCachedWidth = require('kwf/element/get-cached-width');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var isVisible = require('kwf/commonjs/element/is-visible');
+var getCachedWidth = require('kwf/commonjs/element/get-cached-width');
 var _ = require('underscore');
 
 var DONT_HASH_TYPE_PREFIX = 'dh-';

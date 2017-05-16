@@ -1,6 +1,7 @@
 var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var cookieOpt = require('kwf/cookie-opt');
+var onReady = require('kwf/commonjs/on-ready');
+var cookieOpt = require('kwf/commonjs/cookie-opt');
+var statistics = require('kwf/commonjs/statistics');
 
 onReady.onRender('.kwcClass', function (el, config) {
     cookieOpt.load(function(api) {
@@ -13,6 +14,7 @@ onReady.onRender('.kwcClass', function (el, config) {
             el.find('.kwcBem__accept').click(function(e) {
                 e.preventDefault();
                 api.setOpt('in');
+                statistics.trackEvent('Cookies', location.pathname, 'Click on Accept in Cookie Banner');
                 el.hide();
                 $('body').removeClass('kwfUp-showCookieBanner').addClass('kwfUp-cookieAccepted');
                 onReady.callOnContentReady($('body'), { action: 'widthChange' });

@@ -19,7 +19,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars($renderer);
         $ret['language'] = $this->getData()->getLanguage();
         $ret['subroot'] = $this->getData()->getSubroot();
-        $ret['assetsPackages'] = array(Kwf_Assets_Package_ComponentFrontend::getInstance());
+        $ret['assetsPackages'] = array('Frontend');
 
         $packageNames = array();
         $page = $this->getData()->getPage();
@@ -47,7 +47,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
         }
         foreach ($packageNames as $packageName) {
             if ($packageName != 'Default') {
-                $ret['assetsPackages'][] = Kwf_Assets_Package_ComponentPackage::getInstance($packageName);
+                $ret['assetsPackages'][] = 'ComponentPackage'.$packageName;
             }
         }
         return $ret;

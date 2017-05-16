@@ -1,9 +1,9 @@
 // @require ModernizrNetworkXhr2
-var $ = require('jQuery');
-var fieldRegistry = require('kwf/frontend-form/field-registry');
-var Field = require('kwf/frontend-form/field/field');
-var kwfExtend = require('kwf/extend');
-var t = require('kwf/trl');
+var $ = require('jquery');
+var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
+var Field = require('kwf/commonjs/frontend-form/field/field');
+var kwfExtend = require('kwf/commonjs/extend');
+var t = require('kwf/commonjs/trl');
 
 var File = kwfExtend(Field, {
     initField: function() {
@@ -44,14 +44,14 @@ var File = kwfExtend(Field, {
         var file = files[0];
 
         if (file.size > this.fileSizeLimit) {
-            return alert(t.trlKwf('Allowed upload size exceeded max. allowed upload size {0} MB', this.fileSizeLimit/1048576));
+            return alert(__trlKwf('Allowed upload size exceeded max. allowed upload size {0} MB', this.fileSizeLimit/1048576));
         }
 
         var progressbar = $(
             '<div class="kwfFormFieldUploadProgressBar">' +
                 '<div class="inner">' +
                     '<span class="progress"></span>' +
-                    '<span class="processing">'+t.trlKwf("Processing")+'...</span>' +
+                    '<span class="processing">'+__trlKwf("Processing")+'...</span>' +
                 '</div>' +
             '</div>');
 
@@ -98,7 +98,7 @@ var File = kwfExtend(Field, {
                 try {
                     response = JSON.parse(xhr.responseText);
                 } catch (e) {
-                    return alert(t.trlKwf('An error occured, please try again later'));
+                    return alert(__trlKwf('An error occured, please try again later'));
                 }
                 this.dropContainer.find('input.fileSelector').val('');
                 uploadIdField.val(response.value.uploadId+'_'+response.value.hashKey);
@@ -106,7 +106,7 @@ var File = kwfExtend(Field, {
 
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
                 this.form.enableSubmit();
-                return alert(t.trlKwf('An error occured, please try again later'));
+                return alert(__trlKwf('An error occured, please try again later'));
             }
         }).bind(this);
     },

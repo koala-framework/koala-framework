@@ -192,7 +192,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             }
             $userId = $m[1];
             $code = $m[2];
-            $redirect = $state[4];
+            $redirect = str_replace('kwfdot', '.', $state[4]);
             $user = $users->getRow($userId);
             $this->getRequest()->setParam('user', $user);
             if (!$user) {
@@ -337,7 +337,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
     {
         $this->getHelper('viewRenderer')->setNoController(true);
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
-        $this->view->dep = Kwf_Assets_Package_Default::getAdminMainInstance();
+        $this->view->dep = 'Admin';
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('login-error');
         $this->view->errorMessage = $this->_getParam('errorMessage');
         $redirect = $this->_getParam('redirect');

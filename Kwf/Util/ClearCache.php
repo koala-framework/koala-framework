@@ -165,7 +165,6 @@ class Kwf_Util_ClearCache
 
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
-        $types[] = new Kwf_Util_ClearCache_Types_Assets();
         if (file_exists('symfony/bin/console')) {
             $types[] = new Kwf_Util_ClearCache_Types_Symfony();
         }

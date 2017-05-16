@@ -1,16 +1,16 @@
 // @require ModernizrPrefixed
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var historyState = require('kwf/history-state');
-var getKwcRenderUrl = require('kwf/get-kwc-render-url');
-var t = require('kwf/trl');
-var injectAssets = require('kwf/inject-assets');
-var oneTransitionEnd = require('kwf/element/one-transition-end');
-var lightboxHelper = require('kwf/lightbox/lightbox-helper');
-var StylesRegistry = require('kwf/lightbox/styles-registry');
-StylesRegistry.register('CenterBox', require('kwf/lightbox/style/center-box'));
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var historyState = require('kwf/commonjs/history-state');
+var getKwcRenderUrl = require('kwf/commonjs/get-kwc-render-url');
+var t = require('kwf/commonjs/trl');
+var injectAssets = require('kwf/commonjs/inject-assets');
+var oneTransitionEnd = require('kwf/commonjs/element/one-transition-end');
+var lightboxHelper = require('kwf/commonjs/lightbox/lightbox-helper');
+var StylesRegistry = require('kwf/commonjs/lightbox/styles-registry');
+StylesRegistry.register('CenterBox', require('kwf/commonjs/lightbox/style/center-box'));
 
-var statistics = require('kwf/statistics');
+var statistics = require('kwf/commonjs/statistics');
 var escapeHandlerInstalled = false;
 var allByUrl = {};
 var onlyCloseOnPopstate;
@@ -293,7 +293,7 @@ Lightbox.prototype = {
             '<div class="kwfUp-kwfLightboxContent"></div>'
         );
         this.closeButtonEl = $(
-            '<a href="#" class="kwfUp-closeButton"><span class="kwfUp-innerCloseButton">'+t.trlKwf("Close")+'</span></a>'
+            '<a href="#" class="kwfUp-closeButton"><span class="kwfUp-innerCloseButton">'+__trlKwf("Close")+'</span></a>'
         );
         var self = this;
         var appendContent = function() {

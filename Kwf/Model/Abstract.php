@@ -1193,7 +1193,26 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getEventSubscribers()
     {
-        return array();
+        $ret = array();
+        foreach ($this->_serialization as $column=>$settings) {
+
+            if (is_string($settings)) $settings = array($settings);
+            if (isset($settings[0])) $settings = array('groups'=>$settings);
+
+            if (isset($settings['type'])) {
+                $type = $settings['type'];
+            } else {
+                $type = 'Column';
+            }
+            if ($type == 'Column' || $type == 'ParentRow' || $type == 'ChildRows' || !class_exists($type)) {
+                $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\'.$type;
+            }
+            $columnNormalizer = new $type;
+            if ($type instanceof \KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface) {
+                $ret += $columnNormalizer->getEventSubscribers($this, $column, $settings);
+            }
+        }
+        return $ret;
     }
 
     public function setFactoryConfig(array $factoryConfig)

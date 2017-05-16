@@ -88,6 +88,7 @@ class Kwf_Util_Maintenance_Dispatcher
                         if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
                         $e->logOrThrow();
                     }
+                    Kwf_Events_ModelObserver::getInstance()->process();
                 }
                 $t = microtime(true)-$t;
                 if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";

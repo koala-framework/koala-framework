@@ -1,7 +1,7 @@
-var onReady = require('kwf/on-ready');
-var statistics = require('kwf/statistics');
-var oneTransitionEnd = require('kwf/element/one-transition-end');
-var $ = require('jQuery');
+var onReady = require('kwf/commonjs/on-ready');
+var statistics = require('kwf/commonjs/statistics');
+var oneTransitionEnd = require('kwf/commonjs/element/one-transition-end');
+var $ = require('jquery');
 
 /***
  * Tabs class used to implement tab functionality on a Tabs_Component

@@ -1,4 +1,4 @@
-var $ = require('jQuery');
+var $ = require('jquery');
 
 var sendKeepAlive = function () {
     $.ajax({

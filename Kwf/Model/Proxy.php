@@ -264,7 +264,8 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
 
     public function getEventSubscribers()
     {
-        $ret = $this->getProxyModel()->getEventSubscribers();
+        $ret = parent::getEventSubscribers();
+        $ret += $this->getProxyModel()->getEventSubscribers();
         $fc = $this->getFactoryConfig();
         if (!$fc) {
             throw new Kwf_Exception("Didn't find factoryConfig for '".get_class($this)."'");

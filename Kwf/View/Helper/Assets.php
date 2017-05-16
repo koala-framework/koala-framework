@@ -1,33 +1,49 @@
 <?php
 class Kwf_View_Helper_Assets
 {
-    public function assets(Kwf_Assets_Package $assetsPackage, $language = null, $subroot = null)
+    public function assets($assetsPackage, $language = null, $subroot = null)
     {
         if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
 
-        $ev = new Kwf_Events_Event_CreateAssetsPackageUrls(get_class($assetsPackage), $assetsPackage, $subroot);
+        $ev = new Kwf_Events_Event_CreateAssetsPackageUrls(get_class($this), $assetsPackage, $subroot);
         Kwf_Events_Dispatcher::fireEvent($ev);
         $prefix = $ev->prefix;
 
         $indent = str_repeat(' ', 8);
         $ret = '';
 
-        foreach ($assetsPackage->getPackageUrls('text/css', $language) as $file) {
-            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($prefix.$file)."\" />\n";
+        $webpackDevServer = Kwf_Config::getValue('debug.webpackDevServer');
+        if ($webpackDevServer) {
+            $isRunning = true;
+            if (!file_exists('cache/webpack-dev-server-pid') || posix_getpgid(file_get_contents('cache/webpack-dev-server-pid')) === false) {
+                $isRunning = false;
+            }
+            if ($webpackDevServer === 'onDemand' && !$isRunning) {
+                $webpackDevServer = false;
+            }
+
+            if ($webpackDevServer) {
+                if (!$isRunning) {
+                    throw new Kwf_Exception("webpack-dev-server not running, please start clear-cache-watcher");
+                }
+                $port = file_get_contents('cache/webpack-dev-server-port');
+                $host = trim(`hostname`);
+            }
         }
-        foreach ($assetsPackage->getPackageUrls('text/css; ie8', $language) as $file) {
-            $ret .= "$indent<!--[if lte IE 8]><link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($prefix.$file)."\" /><![endif]-->\n";
+
+        if ($webpackDevServer) {
+            //fetch from dev-server, local file might not be existing
+            $htmlFile = "http://$host:$port/assets/build/".$assetsPackage.'.'.$language.'.html';
+        } else {
+            $htmlFile = 'build/assets/'.$assetsPackage.'.'.$language.'.html';
         }
-        foreach ($assetsPackage->getPackageUrls('text/javascript; ie8', $language) as $file) {
-            $ret .= "$indent<!--[if lte IE 8]><script type=\"text/javascript\" src=\"".htmlspecialchars($prefix.$file)."\"></script><![endif]-->\n";
-        }
-        foreach ($assetsPackage->getPackageUrls('text/javascript', $language) as $file) {
-            $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($prefix.$file)."\"></script>\n";
-        }
-        foreach ($assetsPackage->getPackageUrls('text/javascript; defer', $language) as $file) {
-            //single line to allow parsing
-            $ret .= "<script type=\"text/javascript\">var se=document.createElement('script');se.type='text/javascript';se.async=true;se.src='".$prefix.$file."';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(se,s);</script>\n";
-        }
+
+        $c = file_get_contents($htmlFile);
+
+        $c = preg_replace('#</?head>#', '', $c);
+        $c = str_replace('/assets/build/./', '/assets/build/', $c);
+
+        $ret .= $c;
         return $ret;
     }
 }

@@ -1,4 +1,4 @@
-var componentEvent = require('kwf/component-event');
+var componentEvent = require('kwf/commonjs/component-event');
 
 componentEvent.on('favouritesChanged', function(change) {
     $('.kwcFavouritesPageComponentFavouritesCount').each(function() {

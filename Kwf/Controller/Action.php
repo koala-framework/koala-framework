@@ -62,6 +62,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     public function preDispatch()
     {
+        /* TODO
         if ($this->_getParam('applicationAssetsVersion')
                 && $this->getHelper('ViewRenderer')->isJson()) {
             if (Kwf_Assets_Dispatcher::getInstance()->getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
@@ -70,6 +71,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                 return;
             }
         }
+        */
 
         $this->_validateSessionToken();
 

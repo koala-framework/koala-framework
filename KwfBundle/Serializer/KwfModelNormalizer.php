@@ -4,6 +4,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\SerializerAwareInterface;
+use KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface;
+use Kwf_Cache_Simple;
 
 
 class KwfModelNormalizer extends AbstractNormalizer
@@ -38,7 +40,22 @@ class KwfModelNormalizer extends AbstractNormalizer
                 if ($columnNormalizer instanceof SerializerAwareInterface) {
                     $columnNormalizer->setSerializer($this->serializer);
                 }
-                $ret[$column] = $columnNormalizer->normalize($object, $column, $settings, $format, $context);
+                $cacheId = false;
+                $success = false;
+                if ($columnNormalizer instanceof CacheableInterface) {
+                    $cacheId = $columnNormalizer->getCacheId($object, $column, $settings, $format, $context);
+                    if ($cacheId) {
+                        $data = Kwf_Cache_Simple::fetch($cacheId, $success);
+                    }
+                }
+                if (!$success) {
+                    $data = $columnNormalizer->normalize($object, $column, $settings, $format, $context);
+                    if ($cacheId) {
+                        Kwf_Cache_Simple::add($cacheId, $data);
+                    }
+                }
+
+                $ret[$column] = $data;
             }
             return $ret;
         } else {

@@ -1,7 +1,7 @@
-var $ = require('jQuery');
+var $ = require('jquery');
 var matchesSelector = require('matches-selector');
-var elementIsVisible = require('kwf/element/is-visible');
-var benchmarkBox = require('kwf/benchmark/box');
+var elementIsVisible = require('kwf/commonjs/element/is-visible');
+var benchmarkBox = require('kwf/commonjs/benchmark/box');
 
 var enableOnReadyConsoleProfile = false;
 

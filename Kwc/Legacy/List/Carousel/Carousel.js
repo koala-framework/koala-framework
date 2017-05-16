@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready-ext2');
+var onReady = require('kwf/commonjs/on-ready-ext2');
 
 Ext2.namespace("Kwc.Legacy.List.Carousel");
 Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {

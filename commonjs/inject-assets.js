@@ -1,4 +1,4 @@
-var $ = require('jQuery');
+var $ = require('jquery');
 
 function normalizeUrl(url) {
     //remove v (version) paramete before comparing url

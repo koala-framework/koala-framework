@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready-ext2');
+var onReady = require('kwf/commonjs/on-ready-ext2');
 
 onReady.onRender('.kwfResizeElement', function(element) {
     var resizer = new Kwf.Utils.Resizable(element.child('.resizeElement'), {

@@ -1,7 +1,7 @@
-var $ = require('jQuery');
-var fieldRegistry = require('kwf/frontend-form/field-registry');
-var Field = require('kwf/frontend-form/field/field');
-var kwfExtend = require('kwf/extend');
+var $ = require('jquery');
+var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
+var Field = require('kwf/commonjs/frontend-form/field/field');
+var kwfExtend = require('kwf/commonjs/extend');
 
 var Cards = kwfExtend(Field, {
     initField: function() {
@@ -10,7 +10,11 @@ var Cards = kwfExtend(Field, {
         combobox.el.find('input.submit').remove(); //remove non-js fallback
         combobox.el.on('change', (function() {
             this.el.find('.kwfUp-kwfFormContainerCard .kwfFormCard').addClass('inactive');
-            this.el.find('.kwfUp-kwfFormContainerCard.kwfUp-'+combobox.getValue()+' .kwfFormCard').removeClass('inactive');
+            this.el.find('.kwfUp-kwfFormContainerCard.kwfUp-'+combobox.getValue()+' .kwfFormCard').each(function(index, card) {
+                if ($(card).closest('.kwfUp-kwfFormContainerCards')[0] == this.el[0]) {
+                    $(card).removeClass('inactive');
+                }
+            }.bind(this));
         }).bind(this));
     },
     getFieldName: function() {

@@ -139,6 +139,7 @@ class Kwf_Mail extends Zend_Mail
         if (empty($email)) {
             throw new Kwf_Exception("Email address '$email' cannot be set as from part in a mail. Empty or invalid address.");
         }
+        parent::clearFrom();
         parent::setFrom($email, $name);
         return $this;
     }
@@ -157,12 +158,12 @@ class Kwf_Mail extends Zend_Mail
 
     public function send($transport = null)
     {
-        $mailSendAll = Kwf_Registry::get('config')->debug->sendAllMailsTo;
+        $mailSendAll = Kwf_Config::getValueArray('debug.sendAllMailsTo');
         if ($mailSendAll) {
             parent::addTo($mailSendAll);
         }
 
-        $mailSendAllBcc = Kwf_Registry::get('config')->debug->sendAllMailsBcc;
+        $mailSendAllBcc = Kwf_Config::getValueArray('debug.sendAllMailsBcc');
         if ($mailSendAllBcc) {
             parent::addBcc($mailSendAllBcc);
         }

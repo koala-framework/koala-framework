@@ -1,4 +1,4 @@
-var $ = require('jQuery');
+var $ = require('jquery');
 $(document).on('click', 'a.kwfUp-kwcLinkIntern', function(e) {
     var el = e.currentTarget;
     var href = $(el).attr('href');

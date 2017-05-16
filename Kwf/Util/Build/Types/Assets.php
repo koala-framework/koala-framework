@@ -1,12 +1,11 @@
 <?php
 class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 {
+    /*
     private static $_mimeTypeByExtension = array(
         'js' => 'text/javascript',
         'defer.js' => 'text/javascript; defer',
         'css' => 'text/css',
-        'ie8.css' => 'text/css; ie8',
-        'ie8.js' => 'text/javascript; ie8',
     );
 
     public function getAllPackages()
@@ -70,9 +69,14 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             }
         }
     }
-
+*/
     protected function _build($options)
     {
+        passthru('NODE_PATH=vendor/koala-framework/koala-framework/node_modules_build ./vendor/bin/node  node_modules/.bin/webpack --progress --colors', $retVal);
+        if ($retVal) {
+            throw new Kwf_Exception("webpack failed");
+        }
+        /*
         if (!file_exists('build/assets')) {
             mkdir('build/assets');
         }
@@ -85,7 +89,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         $langs = $this->getAllLanguages();
         $packages = $this->getAllPackages();
-        $exts = array('js', 'defer.js', 'css', 'ie8.css', 'ie8.js');
+        $exts = array('js', 'defer.js', 'css');
 
         $providers = array();
         foreach ($packages as $p) {
@@ -147,9 +151,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 if ($dep->getMimeType()) {
                     $mimeType = $dep->getMimeType();
                     $p->warmupDependencyCaches($dep, $mimeType, $progress);
-                    if ($mimeType == 'text/css') {
-                        $p->warmupDependencyCaches($dep, 'text/css; ie8', $progress);
-                    }
                 }
             }
         }
@@ -240,6 +241,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         Kwf_Assets_Cache::getInstance()->clean();
         Kwf_Assets_BuildCache::getInstance()->building = false;
+        */
 
     }
 

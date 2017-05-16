@@ -119,8 +119,6 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Sql) {
             return $expr;
-        } else if ($expr instanceof Kwf_Model_Select_Expr_Child_Contains) {
-            return $expr;
         } else {
             throw new Kwf_Exception_NotYetImplemented();
         }
@@ -338,6 +336,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 $options['columns'][] = $col;
             }
             while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
+
             $dbSelect = $m->_createDbSelectWithColumns($s, $options);
             $dbSelectColumns = array_values($dbSelect->getPart(Zend_Db_Select::COLUMNS));
             foreach ($columns as $kCol=>$col) {
@@ -372,7 +371,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             }
             $dbSelect->setPart(Zend_Db_Select::COLUMNS, $dbSelectColumns);
             $dbSelect->reset(Zend_Db_Select::ORDER);
-            $ret[] = $dbSelect;
+            $ret[$modelKey] = $dbSelect;
         }
         return $ret;
     }
@@ -525,7 +524,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
 
     public function getEventSubscribers()
     {
-        $ret = array();
+        $ret = parent::getEventSubscribers();
         foreach ($this->_models as $m) {
             $ret = array_merge($ret, $m->getEventSubscribers());
         }

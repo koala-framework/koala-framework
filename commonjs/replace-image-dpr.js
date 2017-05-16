@@ -1,4 +1,4 @@
-var onReady = require('kwf/on-ready');
+var onReady = require('kwf/commonjs/on-ready');
 
 if (window.devicePixelRatio && window.devicePixelRatio > 1) {
     onReady.onRender('.kwfUp-kwfReplaceImageDpr2', function(el) {

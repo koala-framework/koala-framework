@@ -1,7 +1,7 @@
-var fieldRegistry = require('kwf/frontend-form/field-registry');
-var Field = require('kwf/frontend-form/field/field');
-var kwfExtend = require('kwf/extend');
-var onReady = require('kwf/on-ready');
+var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
+var Field = require('kwf/commonjs/frontend-form/field/field');
+var kwfExtend = require('kwf/commonjs/extend');
+var onReady = require('kwf/commonjs/on-ready');
 
 onReady.onRender('div.kwfUp-kwfFormContainerFieldSet fieldset > legend > input', function fieldSet(c)
 {

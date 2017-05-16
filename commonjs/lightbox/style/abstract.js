@@ -1,8 +1,8 @@
 // @require ModernizrPrefixed
 
-var $ = require('jQuery');
-var onReady = require('kwf/on-ready');
-var oneTransitionEnd = require('kwf/element/one-transition-end');
+var $ = require('jquery');
+var onReady = require('kwf/commonjs/on-ready');
+var oneTransitionEnd = require('kwf/commonjs/element/one-transition-end');
 
 var AbstractStyle = function(lightbox) {
     this.lightbox = lightbox;

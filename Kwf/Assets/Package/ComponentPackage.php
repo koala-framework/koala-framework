@@ -4,7 +4,6 @@ class Kwf_Assets_Package_ComponentPackage extends Kwf_Assets_Package
     private $_packageName;
     private $_loadedPackage;
     static private $_instances = array();
-    protected $_enableLegacySupport = false;
 
     public static function getInstance($packageName)
     {

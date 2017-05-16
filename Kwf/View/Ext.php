@@ -38,7 +38,7 @@ class Kwf_View_Ext extends Kwf_View
             $ext['assetsPackage'] = $config->assetsPackage;
             unset($config->assetsPackage);
         } else {
-            $ext['assetsPackage'] = Kwf_Assets_Package_Default::getAdminMainInstance();
+            $ext['assetsPackage'] = 'Admin';
         }
         $ext['config'] = $config;
 

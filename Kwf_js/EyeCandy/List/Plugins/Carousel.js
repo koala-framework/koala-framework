@@ -1,6 +1,6 @@
-var kwfExtend = require('kwf/extend');
-var onReady = require('kwf/on-ready');
-var getCachedWidth = require('kwf/element/get-cached-width');
+var kwfExtend = require('kwf/commonjs/extend');
+var onReady = require('kwf/commonjs/on-ready');
+var getCachedWidth = require('kwf/commonjs/element/get-cached-width');
 
 Kwf.EyeCandy.List.Plugins.Carousel = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     //animationConfig: { duration: 0.25 },

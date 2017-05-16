@@ -6,6 +6,10 @@ services:
         class: KwfBundle\HttpFoundation\Session\KwfSessionStorage
         public: false
 
+    kwf.annotations.cache:
+        class: KwfBundle\Annotations\Cache
+        public: false
+
     kwf.rest.apidoc.extractor:
         class: KwfBundle\Rest\ApiDocExtractor
         tags:
@@ -46,3 +50,8 @@ services:
         class: KwfBundle\ExceptionHandler
         tags:
             - { name: kernel.event_subscriber }
+
+    kwf.modelobserver_listener:
+        class: KwfBundle\EventListener\ModelObserverProcess
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate }
