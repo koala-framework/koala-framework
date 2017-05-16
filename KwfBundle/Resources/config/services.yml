@@ -50,3 +50,8 @@ services:
         class: KwfBundle\ExceptionHandler
         tags:
             - { name: kernel.event_subscriber }
+
+    kwf.modelobserver_listener:
+        class: KwfBundle\EventListener\ModelObserverProcess
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate }

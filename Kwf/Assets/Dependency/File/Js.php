@@ -63,8 +63,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $replacements = array();
             if ($pathType == 'ext2') {
                 $replacements['../images/'] = '/assets/ext2/resources/images/';
-            } else if ($pathType == 'mediaelement') {
-                $replacements['url('] = 'url(/assets/mediaelement/build/';
             }
             if ($usesUniquePrefix) {
                 if ($pathType == 'ext2') {

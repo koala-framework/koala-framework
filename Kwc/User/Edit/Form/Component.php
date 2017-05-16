@@ -16,7 +16,12 @@ class Kwc_User_Edit_Form_Component extends Kwc_Form_Component
         parent::_initForm();
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
         if ($user) {
-            $this->_form->setId($user->id);
+            $editUser = Kwf_Registry::get('userModel')->getEditModel()->getRowByKwfUser($user);
+            if ($editUser) {
+                $this->_form->setId($editUser->id);
+            } else {
+                throw new Kwf_Exception_AccessDenied();
+            }
         }
 
         $this->_initUserForm();

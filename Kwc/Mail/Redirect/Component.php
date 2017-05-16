@@ -56,7 +56,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         return $r->value;
     }
 
-    public final function getRedirectUrl()
+    public function getRedirectUrl()
     {
         $ret = $this->_getRedirectUrl();
 
@@ -115,7 +115,6 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if (empty($inputData['d'])) {
             throw new Kwf_Exception_NotFound();
         }
-
         $params = explode('_', $inputData['d']);
         if (count($params) < 4) {
             throw new Kwf_Exception_Client("Too few parameters submitted");
@@ -222,6 +221,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                 (isset($hrefParts['fragment']) ? "#{$hrefParts['fragment']}" : '');
         } else {
             $link = $hrefParts['path'];
+            if (!$link) $link = '/';
         }
 
         if (!isset($this->_redirectRowsCache[$link])) {

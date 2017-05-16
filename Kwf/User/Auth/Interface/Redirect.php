@@ -15,6 +15,11 @@ interface Kwf_User_Auth_Interface_Redirect
     public function showInBackend();
 
     /**
+     * @return bool if this auth method should be shown for admin (Ext based) logins
+     */
+    public function showForActivation();
+
+    /**
      * Returns label used for this auth method.
      *
      * Following indizes can be used

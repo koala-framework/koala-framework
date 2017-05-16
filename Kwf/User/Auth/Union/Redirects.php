@@ -31,6 +31,14 @@ class Kwf_User_Auth_Union_Redirects extends Kwf_User_Auth_Abstract implements Kw
         return false;
     }
 
+    public function showForActivation()
+    {
+        foreach ($this->_auths as $auth) {
+            if ($auth->showForActivation()) return true;
+        }
+        return false;
+    }
+
     public function getLoginRedirectLabel()
     {
         foreach ($this->_auths as $auth) {
