@@ -40,18 +40,18 @@ class Kwf_Util_Maintenance_Dispatcher
         return ($a < $b) ? -1 : 1;
     }
 
-    public static function executeJobs($jobFrequency, $debug)
+    public static function executeJobs($jobFrequency, $debug, $output)
     {
         foreach (self::getAllMaintenanceJobs() as $job) {
             if ($job->getFrequency() == $jobFrequency) {
                 if (!$job->hasWorkload()) continue;
                 if ($debug) echo "executing ".get_class($job)."\n";
-                self::executeJob($job, $debug);
+                self::executeJob($job, $debug, $output);
             }
         }
     }
 
-    public static function executeJob($job, $debug)
+    public static function executeJob($job, $debug, $output)
     {
         $runsModel = Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel');
         $runRow = $runsModel->createRow();
@@ -67,11 +67,13 @@ class Kwf_Util_Maintenance_Dispatcher
         if ($debug) $cmd .= " --debug";
 
         $process = new Process($cmd);
-        $process->start(function ($type, $buffer) use ($runsModel, $runRow) {
-            if (Process::ERR === $type) {
-                echo $buffer;
-            } else {
-                echo $buffer;
+        $process->start(function ($type, $buffer) use ($runsModel, $runRow, $debug) {
+            if ($debug) {
+                if (Process::ERR === $type) {
+                    echo $buffer;
+                } else {
+                    echo $buffer;
+                }
             }
             Kwf_Registry::get('db')->query("UPDATE {$runsModel->getTableName()} SET log=CONCAT(log, ?) WHERE id=?", array($buffer, $runRow->id));
         });
