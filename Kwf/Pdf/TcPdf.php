@@ -157,7 +157,7 @@ class Kwf_Pdf_TcPdf extends TCPDF
         if (!$fontfile) {
             $fontfile = $this->_getFontFromVendor($family, $style);
         }
-        return parent::AddFont($family, $style, $fontfile, $subset='default');
+        return parent::AddFont($family, $style, $fontfile, $subset);
     }
 
     protected function _getFontFromVendor($family, $style)
