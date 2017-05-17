@@ -152,12 +152,12 @@ class Kwf_Pdf_TcPdf extends TCPDF
         $this->cell_height_ratio = $ratio;
     }
 
-    public function AddFont($family, $style='', $fontfile='')
+    public function AddFont($family, $style='', $fontfile='', $subset='default')
     {
         if (!$fontfile) {
             $fontfile = $this->_getFontFromVendor($family, $style);
         }
-        return parent::AddFont($family, $style, $fontfile);
+        return parent::AddFont($family, $style, $fontfile, $subset='default');
     }
 
     protected function _getFontFromVendor($family, $style)
