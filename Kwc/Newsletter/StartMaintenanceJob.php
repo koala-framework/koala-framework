@@ -8,6 +8,22 @@ class Kwc_Newsletter_StartMaintenanceJob extends Kwf_Util_Maintenance_Job_Abstra
         return self::FREQUENCY_SECONDS;
     }
 
+    public function hasWorkload()
+    {
+        $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model');
+
+        $select = $model->select()
+            ->where(new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Equal('status', 'start'),
+                new Kwf_Model_Select_Expr_And(array(
+                    new Kwf_Model_Select_Expr_Equal('status', 'startLater'),
+                    new Kwf_Model_Select_Expr_LowerEqual('start_date', new Kwf_DateTime(time())),
+                )),
+                new Kwf_Model_Select_Expr_Equal('status', 'sending')
+            )));
+        return $model->countRows($select) > 0;
+    }
+
     public function execute($debug)
     {
         $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model');

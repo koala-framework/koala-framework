@@ -19,6 +19,7 @@ class Kwf_Model_Provider_Default extends Kwf_Model_Provider_Abstract
         //hardcoded models that always exist
         self::_findAllInstancesProcessModel($ret, 'Kwf_Util_Model_Welcome');
         self::_findAllInstancesProcessModel($ret, 'Kwf_Util_Model_Redirects');
+        self::_findAllInstancesProcessModel($ret, 'Kwf_Util_Maintenance_JobRunsModel');
 
         return $ret;
     }
