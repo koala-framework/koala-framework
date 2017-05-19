@@ -41,6 +41,9 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
             $fs = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Change password')));
             $fs->setLabelWidth(130);
 
+            $fs->add(new Kwf_Form_Field_Password('current_password', trlKwf('Current password')))
+                ->setSave(false);
+
             $passwordField = $fs->add(new Kwf_Form_Field_Password('password1', trlKwf('Change password')));
             $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
             if ($validatorClass) {
@@ -61,5 +64,15 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
             return false;
         }
         return true;
+    }
+
+    protected function _beforeValidate(array $postData)
+    {
+        parent::_beforeValidate($postData);
+        if ($postData['password1']) {
+            if (!$this->_form->getRow()->validatePassword($postData['current_password'])) {
+                throw new Kwf_Exception_Client(trlKwf('Invalid current password specified.'));
+            }
+        }
     }
 }

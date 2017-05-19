@@ -334,4 +334,15 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         );
         $this->getModel()->getDependentModel('Messages')->createRow($data)->save();
     }
+
+    public function validatePassword($password)
+    {
+        foreach ($this->getModel()->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                $ret = $auth->validatePassword($this, $password);
+                if (!is_null($ret)) return $ret;
+            }
+        }
+        throw new Kwf_Exception();
+    }
 }

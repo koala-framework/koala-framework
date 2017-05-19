@@ -21,9 +21,9 @@
             <p><?= $this->application->name ?></p>
         <?php } ?>
         <?php if (Kwf_Config::getValue('application.kwf.name') == 'Koala Framework') { ?>
-            <h2><a href="http://www.koala-framework.org/" target="_blank"><?= $this->application->kwf->name . '</a> ' . trlKwf('Version') . ' ' . $this->application->kwf->version ?></h2>
+            <h2><a href="http://www.koala-framework.org/" target="_blank"><?= $this->application->kwf->name . '</a> ' . ($this->application->kwf->version ? trlKwf('Version') . ' ' . $this->application->kwf->version : '') ?></h2>
         <?php } else { ?>
-            <h2><?= $this->application->kwf->name . ' ' . trlKwf('Version') . ' ' . $this->application->kwf->version ?></h2>
+            <h2><?= $this->application->kwf->name . ' ' . ($this->application->kwf->version ? trlKwf('Version') . ' ' . $this->application->kwf->version : '') ?></h2>
         <?php } ?>
         <?=$this->image('/assets/kwf/images/welcome/ente.jpg', '', array('id'=>'enteWelcome'))?>
     </div>
