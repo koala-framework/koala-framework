@@ -44,6 +44,20 @@ class Kwc_Newsletter_Detail_Mail_Component extends Kwc_Mail_Component
         }
     }
 
+    public function getValidRecipientSelect($model, $select)
+    {
+        if ($model->hasColumnMappings('Kwc_Mail_Recipient_UnsubscribableMapping')) {
+            $unsubscribeColumn = $model->getColumnMapping(
+                'Kwc_Mail_Recipient_UnsubscribableMapping', 'unsubscribed'
+            );
+            $select->whereEquals($unsubscribeColumn, 0);
+        }
+        if ($model->hasColumn('activated')) {
+            $select->whereEquals('activated', 1);
+        }
+        return $select;
+    }
+
     public function isValidRecipient($recipient)
     {
         $ret = true;
