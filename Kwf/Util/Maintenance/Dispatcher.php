@@ -84,7 +84,7 @@ class Kwf_Util_Maintenance_Dispatcher
                     try {
                         $job->execute($debug);
                     } catch (Exception $e) {
-                        file_put_contents('php://stderr', $e->toString()."\n");
+                        file_put_contents('php://stderr', $e->__toString()."\n");
                         if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
                         $e->logOrThrow();
                     }
