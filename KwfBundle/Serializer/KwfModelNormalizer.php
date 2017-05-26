@@ -22,6 +22,7 @@ class KwfModelNormalizer extends AbstractNormalizer
     {
         $attributes = $this->getAllowedAttributes($object, $context, false);
         $groups = isset($context['groups']) ? $context['groups'] : null;
+        $context['serializer'] = $this->serializer;
         if ($groups) {
             $columns = $object->getModel()->getSerializationColumns($groups);
             $ret = array();

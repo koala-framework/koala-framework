@@ -711,7 +711,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         }
         $columnNormalizer = new $type;
         if ($columnNormalizer instanceof SerializerAwareInterface) {
-            $columnNormalizer->setSerializer($this->serializer);
+            $columnNormalizer->setSerializer($context['serializer']);
         }
         $cacheId = false;
         $success = false;
