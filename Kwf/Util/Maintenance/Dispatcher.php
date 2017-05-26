@@ -120,7 +120,7 @@ class Kwf_Util_Maintenance_Dispatcher
                 $mail = new Kwf_Mail();
                 $mail->addTo($recipients);
                 $mail->setSubject('['.Kwf_Config::getValue('application.name').'] maintenance-job '.$runRow->job.' '.$runRow->status);
-                $mail->setBodyText(Kwf_Registry::get('db')->fetchColumn("SELECT log FROM {$runsModel->getTableName()} WHERE id=?", array($runRow->id))->fetchColumn());
+                $mail->setBodyText(Kwf_Registry::get('db')->query("SELECT log FROM {$runsModel->getTableName()} WHERE id=?", array($runRow->id))->fetchColumn());
                 $mail->send();
             }
         }
