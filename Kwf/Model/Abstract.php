@@ -1306,6 +1306,10 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getSerializationColumnSettings($column)
     {
-        return $this->_serialization[$column];
+        $s = $this->_serialization[$column];
+        if (is_string($s)) $s = array($s);
+        if (isset($s[0])) $s = array('groups'=>$s);
+        if (is_string($s['groups'])) $s['groups'] = array($s['groups']);
+        return $s;
     }
 }
