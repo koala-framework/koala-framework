@@ -1303,4 +1303,9 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         }
         return $ret;
     }
+
+    public function getSerializationColumnSettings($column)
+    {
+        return $this->_serialization[$column];
+    }
 }
