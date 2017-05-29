@@ -110,6 +110,21 @@ class Kwf_Util_Maintenance_Dispatcher
                 $runRow->status = 'success';
             }
         }
+
+        $t = microtime(true)-$t;
+        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
+
+        if ($runRow->status == 'success' && $runRow->runtime > $maxTime) {
+            $runRow->status = 'timelimit';
+            $msg = "Warning: timelimit of $maxTime exceeded (but run successfully)\n";
+            Kwf_Registry::get('db')->query("UPDATE {$runsModel->getTableName()} SET log=CONCAT(log, ?) WHERE id=?", array($msg, $runRow->id));
+            if ($debug) {
+                $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
+                file_put_contents('php://stderr', $msg."\n");
+            }
+        }
+        if ($debug) echo "\n";
+
         $runRow->save();
         if ($runRow->status != 'success') {
             $recipients = $job->getRecipientsForFailNotification();
@@ -125,16 +140,5 @@ class Kwf_Util_Maintenance_Dispatcher
             }
         }
 
-
-        $t = microtime(true)-$t;
-        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
-
-        if ($t > $maxTime) {
-            $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
-            file_put_contents('php://stderr', $msg."\n");
-            $e = new Kwf_Exception($msg);
-            $e->log();
-        }
-        if ($debug) echo "\n";
     }
 }
