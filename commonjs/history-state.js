@@ -29,8 +29,8 @@ var HistoryStateHtml5 = function() {
     $(window).on('popstate', (function(event) {
         if (this.disabled) return;
         this.entries--;
-        if (event.originalEvent.state && event.originalEvent.state['kwfUp-']) {
-            this.currentState = event.originalEvent.state['kwfUp-'];
+        if (event.originalEvent.state && event.originalEvent.state['kwfUp-history']) {
+            this.currentState = event.originalEvent.state['kwfUp-history'];
         } else {
             this.currentState = {};
         }
@@ -42,7 +42,7 @@ var HistoryStateHtml5 = function() {
         }
     }).bind(this));
 
-    if (!window.history.state || !window.history.state['kwfUp-'] || !window.history.state['kwfUp-']['kwfHistoryState']) {
+    if (!window.history.state || !window.history.state['kwfUp-history'] || !window.history.state['kwfUp-history']['kwfHistoryState']) {
         this.updateState();
     }
 };
@@ -52,9 +52,9 @@ kwfExtend(HistoryStateHtml5, HistoryStateAbstract, {
         this.currentState['kwfHistoryState'] = true;
         var state = window.history.state;
         if (!state) state = {};
-        if (!state['kwfUp-']) state['kwfUp-'] = {};
+        if (!state['kwfUp-history']) state['kwfUp-history'] = {};
         for (var attr in this.currentState) {
-            state['kwfUp-'][attr] = this.currentState[attr];
+            state['kwfUp-history'][attr] = this.currentState[attr];
         }
         return state;
     },
