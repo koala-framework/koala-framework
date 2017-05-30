@@ -20,7 +20,7 @@ HistoryStateAbstract.prototype = {
 
     on: function(event, cb, scope) {
         if (typeof scope != 'undefined') cb = cb.bind(scope);
-        $(window).on('kwf-history-state-'+event, cb);
+        $(window).on('kwfUp-kwf-history-state-'+event, cb);
     }
 };
 
@@ -38,7 +38,7 @@ var HistoryStateHtml5 = function() {
         //only when state cromes from "us" react on it
         //works around safari bug which fires popstate on load
         if (this.currentState['kwfHistoryState']) {
-            $(window).trigger('kwf-history-state-popstate');
+            $(window).trigger('kwfUp-kwf-history-state-popstate');
         }
     }).bind(this));
 
