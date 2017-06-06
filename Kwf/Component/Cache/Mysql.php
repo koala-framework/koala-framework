@@ -140,18 +140,20 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
                     $ors = array();
                     foreach ($v as $value) {
-                        if (substr($value, -1) == '%') {
+                        if (substr($value, -1) == '%'                   //ends with %
+                            && strpos($value, '%') === strlen($value)-1 //ending % is the only %
+                            && in_array($k, array('component_id', 'db_id', 'expanded_component_id'))
+                        ) {
                             $value = substr($value, 0, -1);
                             $ors[] = new Kwf_Model_Select_Expr_Equal($k, $value);
                             $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'-%');
                             $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'_%');
                         } else if (strpos($value, '%') !== false) {
-                            $ors[] = new Kwf_Model_Select_Expr_Like($k, $value.'_%');
+                            $ors[] = new Kwf_Model_Select_Expr_Like($k, $value);
                         } else {
                             $ors[] = new Kwf_Model_Select_Expr_Equal($k, $value);
                         }
                     }
-
                     $and[] = new Kwf_Model_Select_Expr_Or($ors);
                 }
                 if ($and) {
