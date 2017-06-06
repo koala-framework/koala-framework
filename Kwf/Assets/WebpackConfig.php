@@ -28,5 +28,23 @@ class Kwf_Assets_WebpackConfig
         }
         return $port;
     }
+
+    public static function getDevServerPublic()
+    {
+        if ($ret = Kwf_Config::getValue('debug.webpackDevServerPublic')) {
+            return $ret;
+        } else {
+            return `hostname`.':'.self::getDevServerPort();
+        }
+    }
+
+    public static function getDevServerUrl()
+    {
+        if ($url = Kwf_Config::getValue('debug.webpackDevServerUrl')) {
+            return $url;
+        } else {
+            return 'http://'.self::getDevServerPublic();
+        }
+    }
 }
 
