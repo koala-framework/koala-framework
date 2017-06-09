@@ -1256,8 +1256,10 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         if ($this->_factoryConfig['type'] == 'ClassName') {
             $id = $this->_factoryConfig['id'];
-            if (strpos($id, '_') === false) {
+            if (strpos($id, '_') === false && strpos($id, '\\') === false) {
                 $classPrefix = 'Update_'.$id;
+            } else if (strpos($id, '\\') !== false) {
+                $classPrefix = substr($id, 0, strrpos($id, '\\')).'\\Update\\'.substr($id, strrpos($id, '\\')+1);
             } else {
                 $classPrefix = substr($id, 0, strrpos($id, '_')).'_Update_'.substr($id, strrpos($id, '_')+1);
             }

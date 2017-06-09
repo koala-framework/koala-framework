@@ -77,25 +77,31 @@ class Kwf_Util_Update_Helper
     {
         static $namespaces;
         if (!isset($namespaces)) {
-            $namespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
+            $composerNamespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
+            $psr4Namespaces = include VENDOR_PATH.'/composer/autoload_psr4.php';
+            $namespaces = Kwf_Loader::_prepareNamespaces($composerNamespaces, $psr4Namespaces);
         }
-        $pos = strpos($classPrefix, '_');
+
+        $pos = strpos($classPrefix, '\\') !== false ? strpos($classPrefix, '\\') : strpos($classPrefix, '_');
         $ns1 = substr($classPrefix, 0, $pos+1);
 
-        $pos = strpos($classPrefix, '_', $pos+1);
+        $pos = strpos($classPrefix, '\\') !== false ? strpos($classPrefix, '\\', $pos+1) : strpos($classPrefix, '_', $pos+1);
         if ($pos !== false) {
             $ns2 = substr($classPrefix, 0, $pos+1);
         } else {
             $ns2 = $classPrefix;
         }
-
         if (isset($namespaces[$ns2])) {
             $dirs = $namespaces[$ns2];
+            $matchingNamespace = $ns2;
         } else if (isset($namespaces[$ns1])) {
             $dirs = $namespaces[$ns1];
+            $matchingNamespace = $ns1;
         } else {
             $dirs = array();
+            $matchingNamespace = null;
         }
+
 
         static $includePaths;
         if (!isset($includePaths)) {
@@ -108,9 +114,14 @@ class Kwf_Util_Update_Helper
             }
         }
 
+
+        if ($matchingNamespace) {
+            $classPrefix = substr($classPrefix, strlen($matchingNamespace));
+        }
+
         $ret = array();
         foreach ($dirs as $dir) {
-            $path =  $dir . '/' . str_replace('_', '/', $classPrefix);
+            $path =  $dir . '/' . str_replace(array('_', '\\'), '/', $classPrefix);
             if (is_dir($path)) {
                 foreach (new DirectoryIterator($path) as $i) {
                     if (!$i->isFile()) continue;
@@ -121,7 +132,7 @@ class Kwf_Util_Update_Helper
                     if (is_numeric($f)) {
                         throw new Kwf_Exception("Invalid update script name: ".$i->getPathname()." Please use the new syntax.");
                     }
-                    $className = $classPrefix.'_'.$f;
+                    $className = $matchingNamespace.$classPrefix.'_'.$f;
                     if ($className == 'Kwf_Update_Sql') continue;
                     $update = self::createUpdate($className, $i->getPathname());
 
