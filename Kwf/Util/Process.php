@@ -39,8 +39,9 @@ class Kwf_Util_Process
             $cmd = explode(' ', $cmd);
             if (substr(trim($cmd[0]), -3) != 'php') continue;
             unset($cmd[0]);
-            if (substr($cmd[1], -13) != 'bootstrap.php' && $cmd[1] != '/usr/local/bin/vps') continue;
-            unset($cmd[1]);
+            if (substr($cmd[1], -13) == 'bootstrap.php' || $cmd[1] == '/usr/local/bin/vps') {
+                unset($cmd[1]);
+            }
             $cwd = explode(' ', trim(`pwdx $pid 2>/dev/null`));
             if (count($cwd) != 2) continue;
             if ($cwd[1] != getcwd()) continue;

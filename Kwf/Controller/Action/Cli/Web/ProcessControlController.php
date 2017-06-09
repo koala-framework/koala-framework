@@ -43,9 +43,9 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
         }
 
         $logFiles = array();
-        foreach ($this->_commands as $requiredCmd) {
-            $logFiles[] = "log/$requiredCmd[cmd].log";
-            $logFiles[] = "log/$requiredCmd[cmd].err";
+        foreach ($this->_commands as $cmdKey=>$requiredCmd) {
+            $logFiles[] = "log/$cmdKey.log";
+            $logFiles[] = "log/$cmdKey.err";
         }
         $msg = '';
         foreach ($logFiles as $logFile) {
@@ -121,9 +121,9 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
 
     public function logclearAction()
     {
-        foreach ($this->_commands as $requiredCmd) {
-            file_put_contents("log/$requiredCmd[cmd].log", '');
-            file_put_contents("log/$requiredCmd[cmd].err", '');
+        foreach ($this->_commands as $cmdKey=>$requiredCmd) {
+            file_put_contents("log/$cmdKey.log", '');
+            file_put_contents("log/$cmdKey.err", '');
         }
         exit;
     }
@@ -131,17 +131,17 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
     private function _logcat($includeLogFiles)
     {
         $files = array();
-        foreach ($this->_commands as $requiredCmd) {
+        foreach ($this->_commands as $cmdKey=>$requiredCmd) {
             if ($includeLogFiles) {
                 $files[] = array(
-                    'prefix' => "[L/$requiredCmd[cmd]] ",
-                    'file' => "log/$requiredCmd[cmd].log",
+                    'prefix' => "[L/$cmdKey] ",
+                    'file' => "log/$cmdKey.log",
                     'initialRead' => 80
                 );
             }
             $files[] = array(
-                'prefix' => "[E/$requiredCmd[cmd]] ",
-                'file' => "log/$requiredCmd[cmd].err",
+                'prefix' => "[E/$cmdKey] ",
+                'file' => "log/$cmdKey.err",
                 'initialRead' => 1024
             );
         }
@@ -170,7 +170,7 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
     private function _start()
     {
         $processes = Kwf_Util_Process::getRunningWebProcesses();
-        foreach ($this->_commands as $requiredCmd) {
+        foreach ($this->_commands as $cmdKey=>$requiredCmd) {
             $runningCount = 0;
             foreach ($processes as $p) {
                 if ($p['cmd'] == $requiredCmd['cmd']) {
@@ -181,10 +181,15 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
             while ($runningCount < $requiredCmd['count']) {
 
                 if (!$this->_getParam('silent')) echo "Process $requiredCmd[cmd] isn't running. Starting...\n";
-                $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php $requiredCmd[cmd] ";
-                if ($this->_getParam('debug')) $cmd .= "--debug ";
-                $cmd .= " 2>>".escapeshellarg("log/$requiredCmd[cmd].err");
-                $cmd .= " 1>>".escapeshellarg("log/$requiredCmd[cmd].log");
+                if (substr($requiredCmd['cmd'], 0, 2) == './') {
+                    $cmd = "$requiredCmd[cmd]";
+                } else {
+                    $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php $requiredCmd[cmd] ";
+                    if ($this->_getParam('debug')) $cmd .= "--debug ";
+                }
+
+                $cmd .= " 2>>".escapeshellarg("log/$cmdKey.err");
+                $cmd .= " 1>>".escapeshellarg("log/$cmdKey.log");
                 $cmd .= " &";
                 //if (!$this->_getParam('silent')) echo $cmd."\n";
                 passthru($cmd);
