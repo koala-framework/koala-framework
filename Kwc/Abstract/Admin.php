@@ -126,4 +126,14 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
     {
         return null;
     }
+
+    public function exportContent(Kwf_Component_Data $data)
+    {
+        return array();
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+
+    }
 }

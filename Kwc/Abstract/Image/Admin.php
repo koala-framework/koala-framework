@@ -20,4 +20,42 @@ class Kwc_Abstract_Image_Admin extends Kwc_Abstract_Composite_Admin
         }
         return $ret;
     }
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        $ret = parent::exportContent($cmp);
+        $ownRow = $cmp->getComponent()->getRow();
+        if (Kwc_Abstract::getSetting($this->_class, 'altText')) {
+            $ret['alt_text'] = $ownRow->alt_text;
+        }
+        if (Kwc_Abstract::getSetting($this->_class, 'titleText')) {
+            $ret['title_text'] = $ownRow->title_text;
+        }
+        if (Kwc_Abstract::getSetting($this->_class, 'imageCaption')) {
+            $ret['image_caption'] = $ownRow->image_caption;
+        }
+        return $ret;
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+        parent::importContent($cmp, $data);
+        $ownRow = $cmp->getComponent()->getRow();
+        if (Kwc_Abstract::getSetting($this->_class, 'altText')) {
+            if (isset($data['alt_text'])) {
+                $ownRow->alt_text = $data['alt_text'];
+            }
+        }
+        if (Kwc_Abstract::getSetting($this->_class, 'titleText')) {
+            if (isset($data['title_text'])) {
+                $ownRow->title_text = $data['title_text'];
+            }
+        }
+        if (Kwc_Abstract::getSetting($this->_class, 'imageCaption')) {
+            if (isset($data['image_caption'])) {
+                $ownRow->image_caption = $data['image_caption'];
+            }
+        }
+        $ownRow->save();
+    }
 }
