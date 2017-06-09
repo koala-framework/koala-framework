@@ -967,4 +967,13 @@ abstract class Kwf_Component_Generator_Abstract
     {
         throw new Kwf_Exception("Changing visible not possible for this generator");
     }
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        return array();
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+    }
 }
