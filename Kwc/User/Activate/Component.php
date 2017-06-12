@@ -40,7 +40,7 @@ class Kwc_User_Activate_Component extends Kwc_Abstract_Composite_Component
 
             $redirectBackUrl = Kwf_Setup::getBaseUrl().'/';
             $f = new Kwf_Filter_StrongRandom();
-            $state = 'activate-'.$postData['redirectAuth'].'-'.$f->filter(null).'-'.$postData['code'].'-'.$redirectBackUrl;
+            $state = 'activate.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.$postData['code'].'.'.$redirectBackUrl;
 
             //save state in namespace to validate it later
             $ns = new Kwf_Session_Namespace('kwf-login-redirect');
@@ -72,7 +72,7 @@ class Kwc_User_Activate_Component extends Kwc_Abstract_Composite_Component
             foreach ($users->getAuthMethods() as $auth) {
                 if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
                     $user = $this->getData()->getChildComponent('-form')->getComponent()->getUserRow();
-                    if (!$auth->allowPasswordForUser($user)) {
+                    if ($user && !$auth->allowPasswordForUser($user)) {
                         $showPassword = false;
                     }
                 }
@@ -86,7 +86,7 @@ class Kwc_User_Activate_Component extends Kwc_Abstract_Composite_Component
                 $label = $auth->getLoginRedirectLabel();
                 $ret['redirects'][] = array(
                     'url' => $this->getData()->url,
-                    'code' => $_GET['code'],
+                    'code' => isset($_GET['code']) ? $_GET['code'] : '',
                     'authMethod' => $authKey,
                     'name' => $this->getData()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,

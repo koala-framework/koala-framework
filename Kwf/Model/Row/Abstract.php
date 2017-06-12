@@ -1,4 +1,7 @@
 <?php
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface;
+
 /**
  * @package Model
  * @internal
@@ -693,5 +696,39 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     {
         $c = $this->getModel()->getColumnMapping($mapping, $column);
         return $this->$c;
+    }
+
+    public function normalizeColumn($column, $format = null, array $context = array())
+    {
+        $settings = $this->getModel()->getSerializationColumnSettings($column);
+        if (isset($settings['type'])) {
+            $type = $settings['type'];
+        } else {
+            $type = 'Column';
+        }
+        if ($type == 'Column' || $type == 'ParentRow' || $type == 'ChildRows' || !class_exists($type)) {
+            $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\'.$type;
+        }
+        $columnNormalizer = new $type;
+        if ($columnNormalizer instanceof SerializerAwareInterface) {
+            $columnNormalizer->setSerializer($context['serializer']);
+        }
+        $cacheId = false;
+        $success = false;
+        if ($columnNormalizer instanceof CacheableInterface) {
+            $cacheId = $columnNormalizer->getCacheId($this, $column, $settings, $format, $context);
+            if ($cacheId) {
+                $data = Kwf_Cache_Simple::fetch($cacheId, $success);
+            }
+        }
+
+        if (!$success) {
+            $data = $columnNormalizer->normalize($this, $column, $settings, $format, $context);
+            if ($cacheId) {
+                Kwf_Cache_Simple::add($cacheId, $data);
+            }
+        }
+
+        return $data;
     }
 }

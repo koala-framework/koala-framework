@@ -1,0 +1,24 @@
+@mixin inject-modifier($htmlClass) {
+    $selectors: selector_parse(&);
+    $newSelectors: ();
+    @each $selector in $selectors {
+        $newSelector: ();
+        $replacedHtml: false;
+        @each $part in $selector {
+            @if str-index($part, "html")==1{
+                $part: "#{$part} #{$htmlClass}";
+                $replacedHtml: true;
+            }
+            $newSelector: append($newSelector, $part);
+        }
+        @if not($replacedHtml) {
+            $newSelector: join(("#{$htmlClass}"), $newSelector);
+        }
+        $newSelectors: append($newSelectors, $newSelector, comma);
+    }
+    @at-root {
+        #{$newSelectors} {
+            @content;
+        }
+    }
+}

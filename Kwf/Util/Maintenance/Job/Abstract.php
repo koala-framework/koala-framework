@@ -8,6 +8,9 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
 
     protected $_debug = false;
 
+    protected $_progressBar;
+    protected $_jobRun;
+
     abstract public function getFrequency();
 
     public function getPriority()
@@ -34,5 +37,33 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
         if ($this->_debug) echo $msg . PHP_EOL;
     }
 
+    public function getProgressSteps()
+    {
+        return null;
+    }
+
+    public function setProgressBar(Zend_ProgressBar $progressBar)
+    {
+        $this->_progressBar = $progressBar;
+    }
+
+    public function setJobRun(Kwf_Model_Row_Interface $jobRun)
+    {
+        $this->_jobRun = $jobRun;
+    }
+
     abstract public function execute($debug);
+
+    public function hasWorkload()
+    {
+        if ($this->getFrequency() == self::FREQUENCY_SECONDS || $this->getFrequency() == self::FREQUENCY_MINUTELY) {
+            throw new Kwf_Exception("hasWorkload has to be implemented for this frequency in job ".get_class($this));
+        }
+        return true;
+    }
+
+    public function getRecipientsForFailNotification()
+    {
+        return null;
+    }
 }

@@ -80,15 +80,8 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
             throw new Kwf_Exception('Model "' . get_class($model) . '" has to implement column mapping "Kwc_Mail_Recipient_Mapping"');
         }
 
-        if ($model->hasColumnMappings('Kwc_Mail_Recipient_UnsubscribableMapping')) {
-            $unsubscribeColumn = $model->getColumnMapping(
-                'Kwc_Mail_Recipient_UnsubscribableMapping', 'unsubscribed'
-            );
-            $select->whereEquals($unsubscribeColumn, 0);
-        }
-        if ($model->hasColumn('activated')) {
-            $select->whereEquals('activated', 1);
-        }
+        $select = $this->getData()->getChildComponent('_mail')->getComponent()->getValidRecipientSelect($model, $select);
+
         $mapping = $model->getColumnMappings('Kwc_Mail_Recipient_Mapping');
         $import = array();
         $emails = array();

@@ -20,7 +20,7 @@ HistoryStateAbstract.prototype = {
 
     on: function(event, cb, scope) {
         if (typeof scope != 'undefined') cb = cb.bind(scope);
-        $(window).on('kwf-history-state-'+event, cb);
+        $(window).on('kwfUp-kwf-history-state-'+event, cb);
     }
 };
 
@@ -29,39 +29,53 @@ var HistoryStateHtml5 = function() {
     $(window).on('popstate', (function(event) {
         if (this.disabled) return;
         this.entries--;
-        if (event.originalEvent.state) {
-            this.currentState = event.originalEvent.state;
+        if (event.originalEvent.state && event.originalEvent.state['kwfUp-history']) {
+            this.currentState = event.originalEvent.state['kwfUp-history'];
         } else {
             this.currentState = {};
         }
 
         //only when state cromes from "us" react on it
         //works around safari bug which fires popstate on load
-        if (this.currentState['kwfUp-kwfHistoryState']) {
-            $(window).trigger('kwf-history-state-popstate');
+        if (this.currentState['kwfHistoryState']) {
+            $(window).trigger('kwfUp-kwf-history-state-popstate');
         }
     }).bind(this));
 
-    if (!window.history.state) {
+    if (!window.history.state || !window.history.state['kwfUp-history'] || !window.history.state['kwfUp-history']['kwfHistoryState']) {
         this.updateState();
     }
 };
 kwfExtend(HistoryStateHtml5, HistoryStateAbstract, {
-    pushState: function(title, href) {
+    _getCurrentState: function() {
         if (this.disabled) return;
-        this.currentState['kwfUp-kwfHistoryState'] = true;
-        window.history.pushState(this.currentState, title, href);
-        this.entries++;
+        this.currentState['kwfHistoryState'] = true;
+        var state = window.history.state;
+        if (!state) state = {};
+        if (!state['kwfUp-history']) state['kwfUp-history'] = {};
+        for (var attr in this.currentState) {
+            state['kwfUp-history'][attr] = this.currentState[attr];
+        }
+        return state;
+    },
+    pushState: function(title, href) {
+        var state = this._getCurrentState();
+        if (state) {
+            window.history.pushState(state, title, href);
+            this.entries++;
+        }
     },
     updateState: function() {
-        if (this.disabled) return;
-        this.currentState['kwfUp-kwfHistoryState'] = true;
-        window.history.replaceState(this.currentState, document.title, window.location.href);
+        var state = this._getCurrentState();
+        if (state) {
+            window.history.replaceState(state, document.title, window.location.href);
+        }
     },
     replaceState: function(title, href) {
-        if (this.disabled) return;
-        this.currentState['kwfUp-kwfHistoryState'] = true;
-        window.history.replaceState(this.currentState, title, href);
+        var state = this._getCurrentState();
+        if (state) {
+            window.history.replaceState(state, title, href);
+        }
     }
 });
 
