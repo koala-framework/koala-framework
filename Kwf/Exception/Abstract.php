@@ -20,8 +20,21 @@ abstract class Kwf_Exception_Abstract extends Exception
     public static function isDebug()
     {
         try {
+            $isDebug = Kwf_Config::getValue('debug.error.display');
+            if (is_null($isDebug)) {
+                $isDebug = !self::isLogEnabled();
+            }
+            return $isDebug;
+        } catch (Exception $e) {
+            return true;
+        }
+    }
+
+    public static function isLogEnabled()
+    {
+        try {
             if (isset(self::$logErrors)) return !self::$logErrors;
-            return !Kwf_Config::getValue('debug.error.log');
+            return Kwf_Config::getValue('debug.error.log');
         } catch (Exception $e) {
             return true;
         }
