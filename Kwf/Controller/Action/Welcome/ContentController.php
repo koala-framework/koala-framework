@@ -24,6 +24,9 @@ class Kwf_Controller_Action_Welcome_ContentController extends Kwf_Controller_Act
         }
 
         $this->view->application = Zend_Registry::get('config')->application;
+        if (Kwf_Registry::get('userModel')->getAuthedUserRole() != 'admin') {
+            $this->view->application->kwf->version = null;
+        }
 
         $this->_helper->viewRenderer->setRender('Welcome');
     }

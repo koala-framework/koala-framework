@@ -138,7 +138,7 @@ Ext2.util.Format.time = function(value) {
     return Ext2.util.Format.date(value, 'H:i');
 }
 Ext2.util.Format.secondsToTime = function(v, format) {
-    format.css += 'secondsToTimeRight';
+    if (format) format.css += 'secondsToTimeRight';
 
     if(!v){
         return '0:00';

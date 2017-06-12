@@ -27,6 +27,7 @@ class Kwc_NewsletterCategory_Subscribe_SubscriberToCategoryRow extends Kwf_Model
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
         $subscriber = $this->getParentRow('Subscriber');
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($subscriber->newsletter_component_id, array('ignoreVisible' => true));
+        $subscriber->setLogSource($c->trlKwf('Backend'));
         if ($user) {
             $logMessage = $c->trlKwf('Added to category {0} by {1}', array(
                 $this->getParentRow('Category')->category,

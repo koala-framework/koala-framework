@@ -23,7 +23,7 @@ class Kwf_Exception_AccessDenied extends Kwf_Exception_Abstract
 
     public function log()
     {
-        if (Kwf_Exception::isDebug()) {
+        if (!self::isLogEnabled()) {
             return false;
         }
 
