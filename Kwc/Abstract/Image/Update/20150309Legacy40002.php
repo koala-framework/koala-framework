@@ -10,7 +10,7 @@ class Kwc_Abstract_Image_Update_20150309Legacy40002 extends Kwf_Update
             new Kwf_Model_Select_Expr_Equals('dimension', 'customcrop'),
             new Kwf_Model_Select_Expr_Equals('dimension', 'custombestfit')
         )));
-        $select->order('dimension', 'asc');
+        $select->order('dimension', 'ASC');
         $rows = Kwf_Model_Abstract::getInstance('Kwc_Abstract_Image_Model')->getRows($select);
         foreach ($rows as $row) {
             if ($row->dimension == 'customcrop') {
