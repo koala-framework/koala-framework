@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "365a1a61e94a973afd38c1bf5b85872c",
-    "content-hash": "eab87a7f1847e04f0dcaa035adb3d734",
+    "content-hash": "cd003f2ef6a2391fb9d6de72071560c7",
     "packages": [
         {
             "name": "jbroadway/urlify",
@@ -59,24 +58,24 @@
                 "url",
                 "urlify"
             ],
-            "time": "2015-05-29 13:53:37"
+            "time": "2015-05-29T13:53:37+00:00"
         },
         {
             "name": "koala-framework/composer-extra-assets",
-            "version": "v1.1.0",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/composer-extra-assets.git",
-                "reference": "4860eb4c7041824559962a0fc1a3b139fc501444"
+                "reference": "d6c7eb619319b7a288129e8cdff7ca2f444f822f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/composer-extra-assets/zipball/4860eb4c7041824559962a0fc1a3b139fc501444",
-                "reference": "4860eb4c7041824559962a0fc1a3b139fc501444",
+                "url": "https://api.github.com/repos/koala-framework/composer-extra-assets/zipball/d6c7eb619319b7a288129e8cdff7ca2f444f822f",
+                "reference": "d6c7eb619319b7a288129e8cdff7ca2f444f822f",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "1.0.0",
+                "composer-plugin-api": "^1.0",
                 "mouf/nodejs-installer": "~1.0"
             },
             "type": "composer-plugin",
@@ -102,7 +101,7 @@
             ],
             "description": "Composer Plugin for installing Assets using native npm/bower",
             "homepage": "https://github.com/koala-framework/composer-extra-assets",
-            "time": "2015-03-19 16:07:24"
+            "time": "2016-05-13T06:18:08+00:00"
         },
         {
             "name": "koala-framework/extjs2",
@@ -125,7 +124,7 @@
             ],
             "description": "ExtJS JavaScript Library",
             "homepage": "http://www.sencha.com/products/extjs/",
-            "time": "2015-08-31 12:09:36"
+            "time": "2015-08-31T12:09:36+00:00"
         },
         {
             "name": "koala-framework/file-watcher",
@@ -168,16 +167,16 @@
         },
         {
             "name": "koala-framework/kwf-trl-jsparser",
-            "version": "dev-master",
+            "version": "1.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/kwf-trl-jsparser.git",
-                "reference": "7571b0c366682d4d5ba565afb2719fc5fe00723c"
+                "reference": "ec7c498fa5244be62a456f6d977abe18379c634a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/kwf-trl-jsparser/zipball/7571b0c366682d4d5ba565afb2719fc5fe00723c",
-                "reference": "7571b0c366682d4d5ba565afb2719fc5fe00723c",
+                "url": "https://api.github.com/repos/koala-framework/kwf-trl-jsparser/zipball/ec7c498fa5244be62a456f6d977abe18379c634a",
+                "reference": "ec7c498fa5244be62a456f6d977abe18379c634a",
                 "shasum": ""
             },
             "require": {
@@ -200,7 +199,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Parses js code for trl-calls and returns list",
-            "time": "2015-12-07 05:22:17"
+            "time": "2016-06-01 09:02:35"
         },
         {
             "name": "koala-framework/library-css3pie",
@@ -223,7 +222,7 @@
             ],
             "description": "CCSS3 PIE JavaScript Library",
             "homepage": "http://css3pie.com/",
-            "time": "2014-06-03 18:55:48"
+            "time": "2014-06-03T18:55:48+00:00"
         },
         {
             "name": "koala-framework/library-htmlawed",
@@ -246,7 +245,7 @@
             ],
             "description": "Htmlawed library",
             "homepage": "http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/",
-            "time": "2014-06-02 06:11:36"
+            "time": "2014-06-02T06:11:36+00:00"
         },
         {
             "name": "koala-framework/library-silkicons",
@@ -280,7 +279,7 @@
                 "icons",
                 "silk"
             ],
-            "time": "2014-05-23 13:40:04"
+            "time": "2014-05-23T13:40:04+00:00"
         },
         {
             "name": "koala-framework/sourcemaps",
@@ -316,7 +315,7 @@
             ],
             "description": "Sourcemaps Utities",
             "homepage": "http://www.koala-framework.org/",
-            "time": "2015-08-10 16:14:47"
+            "time": "2015-08-10T16:14:47+00:00"
         },
         {
             "name": "koala-framework/zendframework1",
@@ -363,7 +362,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-05-20 16:47:04"
+            "time": "2015-05-20T16:47:04+00:00"
         },
         {
             "name": "mouf/nodejs-installer",
@@ -419,7 +418,7 @@
                 "nodejs",
                 "npm"
             ],
-            "time": "2015-11-18 14:34:13"
+            "time": "2015-11-18T14:34:13+00:00"
         },
         {
             "name": "psr/log",
@@ -457,7 +456,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2012-12-21T11:40:51+00:00"
         },
         {
             "name": "sepia/po-parser",
@@ -505,7 +504,7 @@
                 "i18n",
                 "po"
             ],
-            "time": "2015-06-09 08:01:21"
+            "time": "2015-06-09T08:01:21+00:00"
         },
         {
             "name": "symfony/console",
@@ -565,7 +564,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:35:10"
+            "time": "2015-11-30T12:35:10+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -625,7 +624,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-30 20:15:42"
+            "time": "2015-10-30T20:15:42+00:00"
         },
         {
             "name": "symfony/finder",
@@ -674,7 +673,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-30 20:15:42"
+            "time": "2015-10-30T20:15:42+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -730,7 +729,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2015-11-04 20:28:58"
+            "time": "2015-11-04T20:28:58+00:00"
         },
         {
             "name": "symfony/process",
@@ -779,7 +778,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:35:10"
+            "time": "2015-11-30T12:35:10+00:00"
         },
         {
             "name": "twig/twig",
@@ -836,7 +835,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-10-10 14:09:53"
+            "time": "2014-10-10T14:09:53+00:00"
         }
     ],
     "packages-dev": [
@@ -888,7 +887,8 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2012-08-31 22:21:38"
+            "abandoned": "aws/aws-sdk-php",
+            "time": "2012-08-31T22:21:38+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -949,7 +949,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-09-02 10:13:14"
+            "time": "2014-09-02T10:13:14+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -996,7 +996,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2015-06-21 13:08:43"
+            "time": "2015-06-21T13:08:43+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -1037,7 +1037,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21 13:50:34"
+            "time": "2015-06-21T13:50:34+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -1078,7 +1078,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2015-06-21 08:01:12"
+            "time": "2015-06-21T08:01:12+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -1128,7 +1128,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2014-03-03 05:10:30"
+            "time": "2014-03-03T05:10:30+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -1201,7 +1201,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-10-17 09:04:17"
+            "time": "2014-10-17T09:04:17+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1250,7 +1250,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2013-01-13 10:24:48"
+            "time": "2013-01-13T10:24:48+00:00"
         },
         {
             "name": "phpunit/phpunit-selenium",
@@ -1305,7 +1305,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-11-02 09:23:27"
+            "time": "2014-11-02T09:23:27+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -1369,7 +1369,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2015-07-26 15:48:44"
+            "time": "2015-07-26T15:48:44+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -1421,7 +1421,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2015-12-08 07:14:41"
+            "time": "2015-12-08T07:14:41+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -1487,7 +1487,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2015-06-21 07:55:53"
+            "time": "2015-06-21T07:55:53+00:00"
         },
         {
             "name": "sebastian/recursion-context",
@@ -1540,7 +1540,7 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
-            "time": "2015-11-11 19:50:13"
+            "time": "2015-11-11T19:50:13+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -1589,7 +1589,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:35:10"
+            "time": "2015-11-30T12:35:10+00:00"
         }
     ],
     "aliases": [],
