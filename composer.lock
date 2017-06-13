@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e230aff85460b1a75cafabc08e6d60f",
+    "content-hash": "3f3fc69b1aa1ca43991869ae27024dcb",
     "packages": [
         {
             "name": "jbroadway/urlify",
@@ -170,16 +170,16 @@
         },
         {
             "name": "koala-framework/kwf-trl-jsparser",
-            "version": "1.0.x-dev",
+            "version": "1.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/kwf-trl-jsparser.git",
-                "reference": "ec7c498fa5244be62a456f6d977abe18379c634a"
+                "reference": "a0e9596189042579519d3a2b7ff822b84fbea5d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/kwf-trl-jsparser/zipball/ec7c498fa5244be62a456f6d977abe18379c634a",
-                "reference": "ec7c498fa5244be62a456f6d977abe18379c634a",
+                "url": "https://api.github.com/repos/koala-framework/kwf-trl-jsparser/zipball/a0e9596189042579519d3a2b7ff822b84fbea5d7",
+                "reference": "a0e9596189042579519d3a2b7ff822b84fbea5d7",
                 "shasum": ""
             },
             "require": {
@@ -192,7 +192,8 @@
             "type": "library",
             "extra": {
                 "require-npm": {
-                    "esprima": "1.2.2"
+                    "esprima": "^4.0.0",
+                    "minimist": "^1.2.0"
                 }
             },
             "autoload": {
@@ -202,7 +203,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Parses js code for trl-calls and returns list",
-            "time": "2016-06-01 09:02:35"
+            "time": "2017-06-13 09:21:36"
         },
         {
             "name": "koala-framework/library-css3pie",
