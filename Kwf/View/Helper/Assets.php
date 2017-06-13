@@ -26,14 +26,13 @@ class Kwf_View_Helper_Assets
                 if (!$isRunning) {
                     throw new Kwf_Exception("webpack-dev-server not running, please start clear-cache-watcher");
                 }
-                $port = file_get_contents('cache/webpack-dev-server-port');
-                $host = trim(`hostname`);
+                $webpackUrl = 'http://localhost:'.Kwf_Assets_WebpackConfig::getDevServerPort();
             }
         }
 
         if ($webpackDevServer) {
             //fetch from dev-server, local file might not be existing
-            $htmlFile = "http://$host:$port/assets/build/".$assetsPackage.'.'.$language.'.html';
+            $htmlFile = "$webpackUrl/assets/build/".$assetsPackage.'.'.$language.'.html';
         } else {
             $htmlFile = 'build/assets/'.$assetsPackage.'.'.$language.'.html';
         }

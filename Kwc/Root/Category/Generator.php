@@ -620,4 +620,22 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         return Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
     }
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        $ret = parent::exportContent($cmp);
+        $row = $cmp->row;
+        $ret['name'] = $row->name;
+        return $ret;
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+        parent::importContent($cmp, $data);
+        if (isset($data['name'])) {
+            $row = $cmp->row;
+            $row->name = $data['name'];
+            $row->save();
+        }
+    }
 }
