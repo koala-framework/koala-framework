@@ -37,9 +37,20 @@ class Kwf_Assets_WebpackConfig
             return trim(`hostname`).':'.self::getDevServerPort();
         }
     }
+    public static function getDevServerProxy()
+    {
+        $proxy = Kwf_Config::getValue('debug.webpackDevServerProxy');
+        if (!$proxy) {
+            $proxy = (Kwf_Config::getValue('server.https') ? 'https' : 'http') .  '://'.Kwf_Config::getValue('server.domain');
+        }
+        return $proxy;
+    }
 
     public static function getDevServerUrl()
     {
+        if (!Kwf_Config::getValue('debug.webpackDevServer')) {
+            return null;
+        }
         if ($url = Kwf_Config::getValue('debug.webpackDevServerUrl')) {
             return $url;
         } else {
