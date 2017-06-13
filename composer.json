@@ -32,7 +32,6 @@
             "uglify-js": "2.4.13",
             "node-sass": "3.4.2",
             "amdlc": "0.1.5",
-            "esprima": "1.2.2",
             "browser-pack": "5.0.1",
             "module-deps": "3.8.0",
             "JSONStream": "1.0.4",
