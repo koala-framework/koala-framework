@@ -27,7 +27,7 @@ var api = {
         cookies.set('cookieOpt', value, { expires: 3*365 });
         if (opt != value) {
             for (var i=0; i< onOptChangedCb.length; i++) {
-                onOptChangedCb[i].call(this, opt);
+                onOptChangedCb[i].call(this, value);
             }
         }
     },
