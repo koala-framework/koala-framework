@@ -25,7 +25,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 fwrite(STDOUT, $buffer);
             }
         });
-        file_put_contents('cache/webpack-dev-server-pid', $process->getPid());
+        file_put_contents('temp/webpack-dev-server-pid', $process->getPid());
+
         $ret = $process->wait();
         exit($ret);
     }
