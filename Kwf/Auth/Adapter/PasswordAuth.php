@@ -53,6 +53,18 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
             );
         }
 
+        $failedLoginsForIdentityCacheId = 'failed-logins-for-identity-'.preg_replace('/[^0-9a-z_]/', '_', $this->_identity);
+        $failedLoginsForIdentity = Kwf_Cache_Simple::fetch($failedLoginsForIdentityCacheId);
+
+        if ($failedLoginsForIdentity && $failedLoginsForIdentity >= 5) {
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_identity,
+                array(
+                    trlKwfStatic('There were too many wrong logins for this user. Please try again in 5 minutes.')
+                )
+            );
+        }
+
         $ret = null;
         $row = null;
         $users = Zend_Registry::get('userModel');
@@ -111,10 +123,14 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
             $failedLoginsFromThisIp++;
             Kwf_Cache_Simple::add($failedLoginsFromThisIpCacheId, $failedLoginsFromThisIp, 280);
 
-            $this->_sendWrongLoginMail(array('Identity' => $this->_identity));
-            if ($failedLoginsFromThisIp > 3) sleep(3);
-        }
+            if (!$failedLoginsForIdentity) $failedLoginsForIdentity = 0;
+            $failedLoginsForIdentity++;
+            Kwf_Cache_Simple::add($failedLoginsForIdentityCacheId, $failedLoginsForIdentity, 280);
 
+            if ($failedLoginsFromThisIp > 3 || $failedLoginsForIdentity > 3) sleep(3);
+
+            $this->_sendWrongLoginMail(array('Identity' => $this->_identity));
+        }
         return $ret;
     }
 
