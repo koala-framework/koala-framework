@@ -146,7 +146,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
             $errors = $this->getRequest()->getParam('formErrors');
             foreach ($result->getMessages() as $msg) {
                 $errors[] = array(
-                    'message' => $msg
+                    'message' =>  Kwf_Trl::getInstance()->trlStaticExecute($msg)
                 );
             }
             $this->getRequest()->setParam('formErrors', $errors);

@@ -58,7 +58,13 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
             }
             $this->_afterLogin($authedUser);
         } else {
-            $this->_errors[] = array('message' => $this->getData()->trlKwf('Invalid E-Mail or password, please try again.'));
+            if ($result->getMessages()) {
+                foreach ($result->getMessages() as $message) {
+                    $this->_errors[] = array('message' => $this->getData()->trlStaticExecute($message));
+                }
+            } else {
+                $this->_errors[] = array('message' => $this->getData()->trlKwf('Invalid E-Mail or password, please try again.'));
+            }
         }
     }
 
