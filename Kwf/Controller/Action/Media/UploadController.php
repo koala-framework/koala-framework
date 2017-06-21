@@ -13,6 +13,26 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
     {
     }
 
+    private function _isUploadAllowed($mimeType, $filename, $filesize)
+    {
+        $acl = Kwf_Acl::getInstance();
+
+        foreach ($acl->getAllResources() as $resource) {
+            if ($resource instanceof Kwf_Acl_Resource_MediaUpload && $acl->isAllowed(Kwf_Registry::get('userModel')->getAuthedUserRole(), $resource)) {
+                if ($resource->getMimeTypePattern() && !preg_match('#'.$resource->getMimeTypePattern().'#', $mimeType)) {
+                    return false;
+                }
+                if ($resource->getFilenamePattern() && !preg_match('#'.$resource->getFilenamePattern().'#', $filename)) {
+                    return false;
+                }
+                if ($resource->getMaxFilesize() && $filesize > $resource->getMaxFilesize()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public function jsonUploadAction()
     {
         Kwf_Util_MemoryLimit::set(1024);
@@ -55,6 +75,9 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             $extension = substr(strrchr($file['name'], '.'), 1);
             $uploadedFile['filename'] = $filename;
             $uploadedFile['extension'] = $extension;
+            if (!$this->_isUploadAllowed($file['type'], $file['name'], $file['size'])) {
+                throw new Kwf_Exception_Client(trlKwf("Invalid file"));
+            }
             if ($maxResolution > 0) {
                 $fileData = Kwf_Media_Image::scale($file['tmp_name'], array('width' => $maxResolution, 'height' => $maxResolution, 'cover' => false));
                 Kwf_Uploads_Model::verifyUpload($file);
@@ -83,6 +106,9 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             $mimeType = null;
             if (isset($_SERVER['HTTP_X_UPLOAD_TYPE'])) {
                 $mimeType = $_SERVER['HTTP_X_UPLOAD_TYPE'];
+            }
+            if (!$this->_isUploadAllowed($mimeType, $name, strlen($fileData))) {
+                throw new Kwf_Exception_Client(trlKwf("Invalid file"));
             }
 
             $tempFile = tempnam('temp', 'upload');
