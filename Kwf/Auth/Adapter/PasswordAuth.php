@@ -29,32 +29,31 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
                 array(
-                    trlKwf('Please specify a user name.'),
+                    trlKwfStatic('Please specify a user name.'),
                 )
             );
         } else if ($this->_credential === null) {
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
                 array(
-                    trlKwf('Please specify a password.'),
+                    trlKwfStatic('Please specify a password.'),
                 )
             );
         }
 
         $failedLoginsFromThisIpCacheId = 'failed-logins-from-ip-'.preg_replace('/[^0-9a-z_]/', '_', $_SERVER['REMOTE_ADDR']);
         $failedLoginsFromThisIp = Kwf_Cache_Simple::fetch($failedLoginsFromThisIpCacheId);
+
         if ($failedLoginsFromThisIp && $failedLoginsFromThisIp >= 15) {
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_identity,
                 array(
-                    trlKwf('Too many wrong logins.'),
-                    trlKwf('There were too many wrong logins from your connection. Please try again in 5 minutes.')
+                    trlKwfStatic('There were too many wrong logins from your connection. Please try again in 5 minutes.')
                 )
             );
         }
 
         $ret = null;
-        $validLogin = false;
         $row = null;
         $users = Zend_Registry::get('userModel');
         foreach ($users->getAuthMethods() as $auth) {
@@ -64,11 +63,11 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
                     if ($row) {
                         if ($auth->validateAutoLoginToken($row, $this->_credential)) {
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwf('Authentication successful'))
+                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwfStatic('Authentication successful'))
                             );
                         } else {
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwf('Supplied password is invalid'))
+                                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwfStatic('Invalid E-Mail or password, please try again.'))
                             );
                         }
                         break;
@@ -80,16 +79,16 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
                     if ($row) {
                         if ($this->_credential == 'test' && Kwf_Config::getValue('debug.testPasswordAllowed')) {
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwf('Authentication successful'))
+                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwfStatic('Authentication successful'))
                             );
                         } else if ($auth->validatePassword($row, $this->_credential)) {
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwf('Authentication successful'))
+                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwfStatic('Authentication successful'))
                             );
                         } else {
                             $row->writeLog('wrong_login_password');
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwf('Supplied password is invalid'))
+                                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwfStatic('Invalid E-Mail or password, please try again.'))
                             );
                         }
                         break;
@@ -99,7 +98,7 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
         }
         if (!$row) {
             $ret = new Zend_Auth_Result(
-                Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity, array(trlKwf('User not existent in this web'))
+                Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity, array(trlKwfStatic('Invalid E-Mail or password, please try again.'))
             );
         } else {
             if ($ret->isValid()) {

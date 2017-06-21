@@ -17,7 +17,6 @@
     <?php } else { ?>
         <h1><?php echo $this->applicationName; ?> Login</h1>
     <?php } ?>
-
     <?=$this->errorsHtml?>
     <form action="<?= htmlspecialchars($this->action) ?>" method="<?=$this->method?>">
         <?php $this->formField($this->form) ?>
