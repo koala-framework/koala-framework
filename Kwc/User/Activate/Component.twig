@@ -1,0 +1,37 @@
+<div class="{{ rootElementClass }}">
+    {% block header %}
+        <h1>{{ data.trlKwf('Activate Useraccount') }}</h1>
+        {% if showPassword %}
+            <h2>{{ data.trlKwf('Set password') }}</h2>
+            <p>
+                {{ data.trlKwf("Plese enter in both fields the password which you want to use for your useraccount") }}.<br />
+                {{ data.trlKwf("After the activation you are automatically logged in and you could use your account.") }}
+            </p>
+            {{ renderer.component(form) }}
+        {% endif %}
+    {% endblock %}
+
+    {% block redirects %}
+        {% if redirects %}
+            <h2>{{ data.trlKwf('Activate with') }}</h2>
+            <ul class="redirects">
+                {% for r in redirects %}
+                    <li>
+                        <form method="GET" action="{{ r.url|escape }}">
+                            <input type="hidden" name="redirectAuth" value="{{ r.authMethod|escape }}" />
+                            <input type="hidden" name="code" value="{{ r.code|escape }}" />
+                            {{ r.formOptions }}
+                            <button>
+                                {% if r.icon %}
+                                    <img src="{{ r.icon|escape }}" />
+                                {% else %}
+                                    {{ r.name|escape }}
+                                {% endif %}
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endblock %}
+</div>
