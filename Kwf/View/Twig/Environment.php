@@ -70,31 +70,13 @@ class Kwf_View_Twig_Environment extends Twig_Environment
 
     public static function money($context, $amount)
     {
-        $data = null;
-
+        $helper = new Kwf_View_Helper_Money();
         if (isset($context['data']) && $context['data'] instanceof Kwf_Component_Data) {
-            $data = $context['data'];
+            $helper->setData($context['data']);
         } else if (isset($context['item']) && $context['item'] instanceof Kwf_Component_Data) {
-            $data = $context['item'];
+            $helper->setData($context['item']);
         }
-
-        if ($data) {
-            $format = $data->getBaseProperty('money.format');
-            $decimals = $data->getBaseProperty('money.decimals');
-            $decimalSeparator = $data->getBaseProperty('money.decimalSeparator');
-            $thousandSeparator = $data->getBaseProperty('money.thousandSeparator');
-
-            if (is_null($decimalSeparator)) $decimalSeparator = $data->trlcKwf('decimal separator', ".");
-            if (is_null($thousandSeparator)) $thousandSeparator = $data->trlcKwf('thousands separator', ",");
-        } else {
-            $format = Kwf_Config::getValue('money.format');
-            $decimals = Kwf_Config::getValue('money.decimals');
-            $decimalSeparator = trlcKwf('decimal separator', ".");
-            $thousandSeparator = trlcKwf('thousands separator', ",");
-        }
-
-        $number = number_format($amount, $decimals, $decimalSeparator, $thousandSeparator);
-        return new Twig_Markup(str_replace('{0}', '<span class="kwfUp-amount">'.$number.'</span>', $format), 'utf-8');
+        return new Twig_Markup($helper->money($amount), 'utf-8');
     }
 
     public static function mailEncodeText($text)

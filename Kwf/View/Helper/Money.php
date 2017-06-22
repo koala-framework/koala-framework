@@ -1,20 +1,22 @@
 <?php
 class Kwf_View_Helper_Money
 {
-    protected $_view = null;
+    protected $_data = null;
     public function setView($view)
     {
-        $this->_view = $view;
+        if ($view && $view->data && $view->data instanceof Kwf_Component_Data) {
+            $this->setData($view->data);
+        }
+    }
+
+    public function setData(Kwf_Component_Data $data)
+    {
+        $this->_data = $data;
     }
 
     public function money($amount)
     {
-        $component = null;
-        if (isset($this->_view) && $this->_view && $this->_view->data &&
-            $this->_view->data instanceof Kwf_Component_Data
-        ) {
-            $component = $this->_view->data;
-        }
+        $component = $this->_data;
         if ($component) {
             $format = $component->getBaseProperty('money.format');
             $decimals = $component->getBaseProperty('money.decimals');
