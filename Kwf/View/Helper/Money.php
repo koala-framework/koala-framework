@@ -22,6 +22,7 @@ class Kwf_View_Helper_Money
             $decimals = $component->getBaseProperty('money.decimals');
             $decimalSeparator = $component->getBaseProperty('money.decimalSeparator');
             $thousandSeparator = $component->getBaseProperty('money.thousandSeparator');
+            $amountFormat = $component->getBaseProperty('money.amountFormat');
 
             if (is_null($decimalSeparator)) $decimalSeparator = $component->trlcKwf('decimal separator', ".");
             if (is_null($thousandSeparator)) $thousandSeparator = $component->trlcKwf('thousands separator', ",");
@@ -30,9 +31,13 @@ class Kwf_View_Helper_Money
             $decimals = Kwf_Config::getValue('money.decimals');
             $decimalSeparator = trlcKwf('decimal separator', ".");
             $thousandSeparator = trlcKwf('thousands separator', ",");
+            $amountFormat = Kwf_Config::getValue('money.amountFormat');
         }
 
         $number = number_format($amount, $decimals, $decimalSeparator, $thousandSeparator);
+        if ($amountFormat) {
+            $number = str_replace('{0}', $amount, $amountFormat);
+        }
         return str_replace('{0}', '<span class="kwfUp-amount">'.$number.'</span>', $format);
     }
 }
