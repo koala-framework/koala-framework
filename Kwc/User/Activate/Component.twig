@@ -21,7 +21,7 @@
                 <h2>{{ data.trlKwf('Activate with') }}</h2>
             {% endblock %}
             {% block redirectsOuter %}
-            <ul class="redirects">
+            <ul class="{{ 'redirects'|bemClass }}">
                 {% block redirectsInner %}
                 {% for r in redirects %}
                     <li>
