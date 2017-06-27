@@ -33,10 +33,9 @@ class Kwf_View_Helper_Money
             $thousandSeparator = trlcKwf('thousands separator', ",");
             $amountFormat = Kwf_Config::getValue('money.amountFormat');
         }
-
         $number = number_format($amount, $decimals, $decimalSeparator, $thousandSeparator);
         if ($amountFormat) {
-            $number = str_replace('{0}', $amount, $amountFormat);
+            $number = str_replace('{0}', $number, $amountFormat);
         }
         return str_replace('{0}', '<span class="kwfUp-amount">'.$number.'</span>', $format);
     }
