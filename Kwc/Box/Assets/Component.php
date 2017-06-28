@@ -50,6 +50,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
                 $ret['assetsPackages'][] = Kwf_Assets_Package_ComponentPackage::getInstance($packageName);
             }
         }
+        $ret['kwfUp'] = Kwf_Config::getValue('application.uniquePrefix') ? Kwf_Config::getValue('application.uniquePrefix').'-' : '';
         return $ret;
     }
 
@@ -62,8 +63,9 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
 
     public function injectIntoRenderedHtml($html)
     {
-        $startPos = strpos($html, '<!-- assets -->');
-        $endPos = strpos($html, '<!-- /assets -->')+16;
+        $kwfUp = Kwf_Config::getValue('application.uniquePrefix') ? Kwf_Config::getValue('application.uniquePrefix').'-' : null;
+        $startPos = strpos($html, '<!-- '.$kwfUp.'assets -->');
+        $endPos = strpos($html, '<!-- /'.$kwfUp.'assets -->')+16+strlen($kwfUp);
         $html = substr($html, 0, $startPos)
                 .$this->getData()->render()
                 .substr($html, $endPos);
