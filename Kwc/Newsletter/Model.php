@@ -18,7 +18,7 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
                 new Kwf_Model_Select_Expr_Equal('status', 'start'),
                 new Kwf_Model_Select_Expr_Equal('status', 'sending')
             )))
-            ->order('RAND()');
+            ->order(Kwf_Model_Select::ORDER_RAND);
         $nlRow = null;
         $id = 0;
         foreach ($this->getRows($select) as $r) {
