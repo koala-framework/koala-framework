@@ -78,7 +78,7 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
 
         Vps_Auth::getInstance()->clearIdentity();
 
-        if ($this->_user && $this->isSaved()) {
+        if (!$this->_errors && $this->_user && $this->isSaved()) {
             $this->_user->setPassword($this->_form->getRow()->password);
             if (!$this->_user->logins) {
                 $this->_user->logins = 0;
