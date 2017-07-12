@@ -203,7 +203,7 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         $disableCacheParams[] = $this->_getParamName();
         $c = $this->getData()->parent->getComponent();
         if ($c instanceof Kwc_Directories_List_View_Component && $c->hasSearchForm()) {
-            $disableCacheParams[] = $c->getData()->componentId.'-post';
+            $disableCacheParams[] = $c->getSearchForm()->componentId.'-post';
         }
 
         return array(
