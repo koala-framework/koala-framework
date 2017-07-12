@@ -81,6 +81,7 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getTemplateVars($renderer);
         $ret['metaTags'] = $this->_getMetaTags();
         $ret['canonicalUrl'] = $this->getData()->getAbsoluteUrl();
+        $ret['kwfUp'] = Kwf_Config::getValue('application.uniquePrefix') ? Kwf_Config::getValue('application.uniquePrefix').'-' : '';
         return $ret;
     }
 
@@ -92,8 +93,9 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
     //public for trl
     public static function injectMeta($html, $title)
     {
-        $startPos = strpos($html, '<!-- metaTags -->');
-        $endPos = strpos($html, '<!-- /metaTags -->')+18;
+        $kwfUp = Kwf_Config::getValue('application.uniquePrefix') ? Kwf_Config::getValue('application.uniquePrefix').'-' : '';
+        $startPos = strpos($html, '<!-- '.$kwfUp.'metaTags -->');
+        $endPos = strpos($html, '<!-- /'.$kwfUp.'metaTags -->')+18+strlen($kwfUp);
         $html = substr($html, 0, $startPos)
                 .$title
                 .substr($html, $endPos);

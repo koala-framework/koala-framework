@@ -55,6 +55,13 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
     public function processInput($postData)
     {
         if (!isset($postData['recipient'])) {
+            if (Kwf_Exception::isDebug()) {
+                if (!$this->getData()->isPage) {
+                    throw new Kwf_Exception('Component '.$this->getData()->toDebug().' must be a page');
+                } else {
+                    throw new Kwf_Exception('Component '.$this->getData()->toDebug().' is missing recipient parameter');
+                }
+            }
             throw new Kwf_Exception_NotFound();
         }
         $recipientData = Kwc_Mail_Redirect_Component::parseRecipientParamData($postData['recipient']);
