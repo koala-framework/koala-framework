@@ -29,32 +29,43 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
                 array(
-                    trlKwf('Please specify a user name.'),
+                    trlKwfStatic('Please specify a user name.'),
                 )
             );
         } else if ($this->_credential === null) {
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
                 array(
-                    trlKwf('Please specify a password.'),
+                    trlKwfStatic('Please specify a password.'),
                 )
             );
         }
 
-        $cache = $this->_getCache();
-        $failedLoginsFromThisIp = $cache->load($this->_getCacheId());
+        $failedLoginsFromThisIpCacheId = 'failed-logins-from-ip-'.preg_replace('/[^0-9a-z_]/', '_', $_SERVER['REMOTE_ADDR']);
+        $failedLoginsFromThisIp = Kwf_Cache_Simple::fetch($failedLoginsFromThisIpCacheId);
+
         if ($failedLoginsFromThisIp && $failedLoginsFromThisIp >= 15) {
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_identity,
                 array(
-                    trlKwf('Too many wrong logins.'),
-                    trlKwf('There were too many wrong logins from your connection. Please try again in 5 minutes.')
+                    trlKwfStatic('There were too many wrong logins from your connection. Please try again in 5 minutes.')
+                )
+            );
+        }
+
+        $failedLoginsForIdentityCacheId = 'failed-logins-for-identity-'.preg_replace('/[^0-9a-z_]/', '_', $this->_identity);
+        $failedLoginsForIdentity = Kwf_Cache_Simple::fetch($failedLoginsForIdentityCacheId);
+
+        if ($failedLoginsForIdentity && $failedLoginsForIdentity >= 5) {
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_identity,
+                array(
+                    trlKwfStatic('There were too many wrong logins for this user. Please try again in 5 minutes.')
                 )
             );
         }
 
         $ret = null;
-        $validLogin = false;
         $row = null;
         $users = Zend_Registry::get('userModel');
         foreach ($users->getAuthMethods() as $auth) {
@@ -64,11 +75,11 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
                     if ($row) {
                         if ($auth->validateAutoLoginToken($row, $this->_credential)) {
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwf('Authentication successful'))
+                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwfStatic('Authentication successful'))
                             );
                         } else {
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwf('Supplied password is invalid'))
+                                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwfStatic('Invalid E-Mail or password, please try again.'))
                             );
                         }
                         break;
@@ -80,16 +91,16 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
                     if ($row) {
                         if ($this->_credential == 'test' && Kwf_Config::getValue('debug.testPasswordAllowed')) {
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwf('Authentication successful'))
+                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwfStatic('Authentication successful'))
                             );
                         } else if ($auth->validatePassword($row, $this->_credential)) {
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwf('Authentication successful'))
+                                Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwfStatic('Authentication successful'))
                             );
                         } else {
                             $row->writeLog('wrong_login_password');
                             $ret = new Zend_Auth_Result(
-                                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwf('Supplied password is invalid'))
+                                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwfStatic('Invalid E-Mail or password, please try again.'))
                             );
                         }
                         break;
@@ -99,7 +110,7 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
         }
         if (!$row) {
             $ret = new Zend_Auth_Result(
-                Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity, array(trlKwf('User not existent in this web'))
+                Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity, array(trlKwfStatic('Invalid E-Mail or password, please try again.'))
             );
         } else {
             if ($ret->isValid()) {
@@ -108,16 +119,18 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
         }
 
         if (!$ret->isValid()) {
-            $cache = $this->_getCache();
-            $failedLoginsFromThisIp = $cache->load($this->_getCacheId());
             if (!$failedLoginsFromThisIp) $failedLoginsFromThisIp = 0;
             $failedLoginsFromThisIp++;
+            Kwf_Cache_Simple::add($failedLoginsFromThisIpCacheId, $failedLoginsFromThisIp, 280);
 
-            $cache->save($failedLoginsFromThisIp, $this->_getCacheId());
+            if (!$failedLoginsForIdentity) $failedLoginsForIdentity = 0;
+            $failedLoginsForIdentity++;
+            Kwf_Cache_Simple::add($failedLoginsForIdentityCacheId, $failedLoginsForIdentity, 280);
+
+            if ($failedLoginsFromThisIp > 3 || $failedLoginsForIdentity > 3) sleep(3);
+
             $this->_sendWrongLoginMail(array('Identity' => $this->_identity));
-            if ($failedLoginsFromThisIp > 3) sleep(3);
         }
-
         return $ret;
     }
 
@@ -164,24 +177,4 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
         $mail->send();
 
     }
-
-    private function _getCacheId()
-    {
-        return preg_replace('/[^0-9a-z_]/', '_', $_SERVER['REMOTE_ADDR']);
-    }
-
-    private function _getCache()
-    {
-        return Kwf_Cache::factory('Core', 'File',
-            array(
-                'lifetime' => 280,
-                'automatic_serialization'=>true
-            ),
-            array(
-                'cache_dir' => 'cache/config',
-                'file_name_prefix' => 'login_brute_force_'
-            )
-        );
-    }
-
 }

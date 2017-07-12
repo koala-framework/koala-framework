@@ -1,20 +1,28 @@
 <div class="{{ rootElementClass }}">
     {% block header %}
         <h1>{{ data.trlKwf('Activate Useraccount') }}</h1>
+    {% endblock %}
+    {% block password %}
         {% if showPassword %}
             <h2>{{ data.trlKwf('Set password') }}</h2>
             <p>
                 {{ data.trlKwf("Plese enter in both fields the password which you want to use for your useraccount") }}.<br />
                 {{ data.trlKwf("After the activation you are automatically logged in and you could use your account.") }}
             </p>
-            {{ renderer.component(form) }}
+            {% block passwordForm %}
+                {{ renderer.component(form) }}
+            {% endblock %}
         {% endif %}
     {% endblock %}
 
     {% block redirects %}
         {% if redirects %}
-            <h2>{{ data.trlKwf('Activate with') }}</h2>
-            <ul class="redirects">
+            {% block redirectsHeader %}
+                <h2>{{ data.trlKwf('Activate with') }}</h2>
+            {% endblock %}
+            {% block redirectsOuter %}
+            <ul class="{{ 'redirects'|bemClass }}">
+                {% block redirectsInner %}
                 {% for r in redirects %}
                     <li>
                         <form method="GET" action="{{ r.url|escape }}">
@@ -31,7 +39,9 @@
                         </form>
                     </li>
                 {% endfor %}
+                {% endblock %}
             </ul>
+            {% endblock %}
         {% endif %}
     {% endblock %}
 </div>
