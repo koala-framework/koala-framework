@@ -77,7 +77,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
             }
         }
 
-        if ($this->_user && $this->isSaved()) {
+        if (!$this->errors && $this->_user && $this->isSaved()) {
             $userModel->setPassword($this->_user, $this->_form->getRow()->password);
             $this->_afterLogin(Kwf_Registry::get('userModel')->getAuthedUser());
         }
