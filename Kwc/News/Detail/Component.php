@@ -5,7 +5,6 @@ class Kwc_News_Detail_Component extends Kwc_News_Detail_Abstract_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['image'] = 'Kwc_News_Detail_PreviewImage_Component';
-        $ret['generators']['child']['component']['customMetaTags'] = 'Kwc_Box_MetaTagsContent_Component';
         return $ret;
     }
 
