@@ -14,6 +14,7 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['flags']['hasHeaderIncludeCode'] = true;
+        $ret['assets']['dep'][] = 'KwfStatistics';
         return $ret;
     }
 
