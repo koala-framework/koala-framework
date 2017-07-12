@@ -633,7 +633,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         parent::importContent($cmp, $data);
         if (isset($data['name'])) {
-            $row = $cmp->row;
+            $row = $this->_getModel()->getRow($cmp->row->id);
             $row->name = $data['name'];
             $row->save();
         }
