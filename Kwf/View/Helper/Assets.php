@@ -13,11 +13,13 @@ class Kwf_View_Helper_Assets
         $ret = '';
 
         $webpackDevServer = Kwf_Config::getValue('debug.webpackDevServer');
+
         if ($webpackDevServer) {
             $isRunning = true;
-            if (!file_exists('cache/webpack-dev-server-pid') || posix_getpgid(file_get_contents('cache/webpack-dev-server-pid')) === false) {
+            if (!file_exists('temp/webpack-dev-server-pid') || posix_getpgid(file_get_contents('temp/webpack-dev-server-pid')) === false) {
                 $isRunning = false;
             }
+
             if ($webpackDevServer === 'onDemand' && !$isRunning) {
                 $webpackDevServer = false;
             }

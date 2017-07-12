@@ -150,6 +150,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             $d = null;
             if ($depBrowserAlternatives) {
                 $path = substr(Kwf_Assets_Dependency_File::calculateAbsolutePath($dep), 1);
+                if (!$path) continue;
                 if (array_key_exists($path, $depBrowserAlternatives)) {
                     if (!$depBrowserAlternatives[$path]) {
                         $d = new Kwf_Assets_Dependency_EmptyJs($dep, $this->_providerList);

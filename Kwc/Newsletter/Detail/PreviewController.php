@@ -6,7 +6,7 @@ class Kwc_Newsletter_Detail_PreviewController extends Kwc_Mail_PreviewController
         $rs = $this->_getMailComponent()->getRecipientSources();
         $recipientId = $this->_getParam('recipientId');
         if (!$recipientId) {
-            $component = Kwf_Component_Data_Root::getInstance()->getComponentById(
+            $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
                 $this->_getParam('componentId'),
                 array('ignoreVisible' => true)
             );

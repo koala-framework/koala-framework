@@ -25,7 +25,11 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 fwrite(STDOUT, $buffer);
             }
         });
-        file_put_contents('cache/webpack-dev-server-pid', $process->getPid());
+        file_put_contents('temp/webpack-dev-server-pid', $process->getPid());
+
+        $cmd = "php bootstrap.php clear-view-cache --class=Kwc_Box_Assets_Component --force";
+        system($cmd);
+
         $ret = $process->wait();
         exit($ret);
     }

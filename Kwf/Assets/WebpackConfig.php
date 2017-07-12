@@ -54,7 +54,7 @@ class Kwf_Assets_WebpackConfig
         if ($url = Kwf_Config::getValue('debug.webpackDevServerUrl')) {
             return $url;
         } else {
-            return 'http://'.self::getDevServerPublic();
+            return 'http://'.self::getDevServerPublic().'/';
         }
     }
 }

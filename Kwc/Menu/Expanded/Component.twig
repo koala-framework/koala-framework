@@ -9,13 +9,9 @@
             {% for m in menu %}
                 {{ m.preHtml|raw }}
                 <li class="{{ m.class }}">
-                    {% if m.isFirstChildPage %}
-                        <p>{{ m.data.name|replace('{name}', m.data.name) }}</p>
-                    {% else %}
-                        {% block menuLink %}
-                        {{ renderer.componentLink(m.data) }}
-                        {% endblock %}
-                    {% endif %}
+                    {% block menuLink %}
+                    {{ renderer.componentLink(m.data) }}
+                    {% endblock %}
                     {% if m.submenu|length %}
                         {% block subMenu %}
                         <ul class="subMenu">

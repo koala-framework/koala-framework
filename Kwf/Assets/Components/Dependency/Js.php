@@ -40,7 +40,7 @@ class Kwf_Assets_Components_Dependency_Js extends Kwf_Assets_Components_Dependen
                 $c->stringReplace('kwcBem--', '');
                 $c->stringReplace('kwcBem__', '');
             }
-            $c->stringReplace('.kwcClass', '.'.$this->_getKwcClass());
+            $c->stringReplace('kwcClass', $this->_getKwcClass());
 
             $ret->concat($c);
 
