@@ -116,25 +116,56 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         }
         $mail->setBodyText($this->getText($recipient));
         $mail->setSubject($this->getSubject($recipient));
-        if ($this->_getSetting('fromEmail')) {
-            $mail->setFrom($this->_getSetting('fromEmail'), $this->_getSetting('fromName'));
-        }
-        if ($this->_getSetting('replyEmail')) {
-            $mail->setReplyTo($this->_getSetting('replyEmail'));
-        }
-        if ($this->_getSetting('returnPath')) {
-            $mail->setReturnPath($this->_getSetting('returnPath'));
-        }
-
-        $bccs = $this->_getSetting('bcc');
-        if ($bccs) {
-            if (!is_array($bccs)) $bccs = array($bccs);
-            foreach ($bccs as $bcc) {
-                $mail->addBcc($bcc);
-            }
+        $mail->setFrom($this->_getFromEmail(), $this->_getFromName());
+        $replyTo = $this->_getReplyTo();
+        if ($replyTo) $mail->setReplyTo($replyTo);
+        $returnPath = $this->_getReturnPath();
+        if ($returnPath) $mail->setReturnPath($returnPath);
+        foreach ($this->_getBccs() as $bcc) {
+            $mail->addBcc($bcc);
         }
 
         return $mail;
+    }
+
+    protected function _getFromEmail()
+    {
+        $ret = $this->_getSetting('fromEmail');
+        if (!$ret) $ret = $this->getData()->getBaseProperty('email.from.address');
+        $ret = Kwf_Mail::replaceHost($ret);
+        return $ret;
+    }
+
+    protected function _getFromName()
+    {
+        $ret = $this->_getSetting('fromName');
+        if (!$ret) $ret = $this->getData()->getBaseProperty('email.from.name');
+        $ret = Kwf_Mail::replaceHost($ret);
+        return $ret;
+    }
+
+    protected function _getReplyTo()
+    {
+        $ret = $this->_getSetting('replyEmail');
+        if (!$ret) $ret = $this->getData()->getBaseProperty('email.replyAddress');
+        $ret = Kwf_Mail::replaceHost($ret);
+        return $ret;
+    }
+
+    protected function _getReturnPath()
+    {
+        $ret = $this->_getSetting('returnPath');
+        if (!$ret) $ret = $this->getData()->getBaseProperty('email.returnPath');
+        $ret = Kwf_Mail::replaceHost($ret);
+        return $ret;
+    }
+
+    protected function _getBccs()
+    {
+        $ret = $this->_getSetting('bcc');
+        if ($ret && !is_array($ret)) $ret = array($ret);
+        if (!is_array($ret)) $ret = array();
+        return $ret;
     }
 
     /**
