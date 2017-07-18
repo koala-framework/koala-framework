@@ -121,9 +121,8 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         if ($replyTo) $mail->setReplyTo($replyTo);
         $returnPath = $this->_getReturnPath();
         if ($returnPath) $mail->setReturnPath($returnPath);
-        foreach ($this->_getBccs() as $bcc) {
-            $mail->addBcc($bcc);
-        }
+        $bcc = $this->_getBcc();
+        $mail->addBcc($bcc);
 
         return $mail;
     }
@@ -160,12 +159,9 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    protected function _getBccs()
+    protected function _getBcc()
     {
-        $ret = $this->_getSetting('bcc');
-        if ($ret && !is_array($ret)) $ret = array($ret);
-        if (!is_array($ret)) $ret = array();
-        return $ret;
+        return $this->_getSetting('bcc');
     }
 
     /**
