@@ -158,10 +158,12 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
     {
         $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
         $datas = $gen->getChildData(null, array('id' => $event->itemId));
-        if (isset($datas[0])) {
-            $data = $datas[0];
-            $subroot = $data->getSubroot();
+        $directories = array();
+        foreach ($datas as $data) {
             $directory = $data->parent;
+            if (!in_array($directory, $directories)) $directories[] = $directory;
+        }
+        foreach ($directories as $directory) {
             $this->_fireTagEvent('ContentChanged', $directory);
             $this->_fireTagEvent('PartialsChanged', $directory);
             if ($this->_usesPartialId()) {
