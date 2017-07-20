@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?>">
     <h3>Name</h3>
-    <?=$this->row->title . ' ' . $this->row->firstname . ' ' . $this->row->lastname?>
+    <?=htmlspecialchars($this->row->title . ' ' . $this->row->firstname . ' ' . $this->row->lastname)?>
 
     <h3><?=$this->data->trlKwf('Member since')?></h3>
     <?=$this->date($this->row->created)?>

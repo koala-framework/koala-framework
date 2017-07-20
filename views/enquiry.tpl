@@ -1,6 +1,6 @@
 <div class="enquiryReview">
     <div class="headers">
-        <div class="subject"><?= $this->subject; ?></div>
+        <div class="subject"><?= htmlspecialchars($this->subject); ?></div>
         <div class="detail">
             <?php if (!empty($this->from['name']) || !empty($this->from['email'])) { ?>
                 <div>
@@ -44,5 +44,5 @@
     </div>
 
 
-    <div class="message"><?= $this->mailContent; ?></div>
+    <div class="message"><?= htmlspecialchars($this->mailContent); ?></div>
 </div>
