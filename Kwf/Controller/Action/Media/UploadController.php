@@ -19,18 +19,22 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
         foreach ($acl->getAllResources() as $resource) {
             if ($resource instanceof Kwf_Acl_Resource_MediaUpload && $acl->isAllowed(Kwf_Registry::get('userModel')->getAuthedUserRole(), $resource)) {
+                $allowed = true;
                 if ($resource->getMimeTypePattern() && !preg_match('#'.$resource->getMimeTypePattern().'#', $mimeType)) {
-                    return false;
+                    $allowed = false;
                 }
                 if ($resource->getFilenamePattern() && !preg_match('#'.$resource->getFilenamePattern().'#', $filename)) {
-                    return false;
+                    $allowed = false;
                 }
                 if ($resource->getMaxFilesize() && $filesize > $resource->getMaxFilesize()) {
-                    return false;
+                    $allowed = false;
+                }
+                if ($allowed) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public function jsonUploadAction()
