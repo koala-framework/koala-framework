@@ -24,6 +24,11 @@ class Kwc_Newsletter_StartMaintenanceJob extends Kwf_Util_Maintenance_Job_Abstra
         return $model->countRows($select) > 0;
     }
 
+    public function getMaxTime()
+    {
+        return 60*60*12;
+    }
+
     public function execute($debug)
     {
         $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model');
