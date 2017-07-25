@@ -60,7 +60,7 @@ class Kwc_Newsletter_StartMaintenanceJob extends Kwf_Util_Maintenance_Job_Abstra
             //remove stopped processes (might stop because of memory limit or simply crash for some reason)
             foreach ($this->_procs[$newsletterRow->id] as $k=>$p) {
                 if (!$p->isRunning()) {
-                    if ($debug) echo "process ".$p->getPid()." stopped...\n";
+                    echo "process ".$p->getPid()." stopped...\n";
                     unset($this->_procs[$newsletterRow->id][$k]);
                 }
             }
@@ -71,7 +71,7 @@ class Kwc_Newsletter_StartMaintenanceJob extends Kwf_Util_Maintenance_Job_Abstra
             if (!$newsletterRow->getModel()->getDependentModel('Queue')->countRows($s)) {
                 $newsletterRow->status = 'finished';
                 $newsletterRow->save();
-                if ($debug) echo "Newsletter finished.\n";
+                echo "Newsletter finished.\n";
 
                 //give send processes time to finish
                 sleep(5);
@@ -115,10 +115,9 @@ class Kwc_Newsletter_StartMaintenanceJob extends Kwf_Util_Maintenance_Job_Abstra
                 );
                 $p = new Kwf_Util_Proc($cmd, $descriptorspec);
                 $this->_procs[$newsletterRow->id][] = $p;
-                if ($debug) {
-                    echo "\n*** started new process with PID ".$p->getPid()."\n";
-                    echo $cmd."\n";
-                }
+                echo "started new process with PID ".$p->getPid().' on '.gethostname()."\n";
+                echo $cmd."\n";
+
                 sleep(3); //don't start all processes at the same time
             }
 
