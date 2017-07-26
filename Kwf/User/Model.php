@@ -78,6 +78,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     
     public function loginUserRow($row, $logLogin)
     {
+        $session = Kwf_Auth::getInstance()->getStorage()->read();
+        if (isset($session['userId']) && $session['userId'] == $row->id) return;
+
         Kwf_Session::regenerateId();
         Kwf_Auth::getInstance()->getStorage()->write(array(
             'userId' => $row->id
