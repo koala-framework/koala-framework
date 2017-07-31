@@ -1,16 +1,16 @@
 @import "kwf/mobile-breakpoint";
 
 .kwfUp-webStandard.kwcClass {
-    > .kwcBem__item--onlyShowOnMobile {
+    .kwcBem__item--onlyShowOnMobile {
         display: none;
     }
 
     @include mobile-breakpoint {
-        > .kwcBem__item--onlyShowOnMobile {
+        .kwcBem__item--onlyShowOnMobile {
             display: block;
         }
 
-        > .kwcBem__item--hideOnMobile {
+        .kwcBem__item--hideOnMobile {
             display: none;
         }
     }
