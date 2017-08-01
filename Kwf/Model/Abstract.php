@@ -1297,6 +1297,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                     $constraint = new $type($options);
                     $s['constraints'][] = $constraint;
                 }
+            } else {
+                $s['constraints'] = array();
+            }
+
+            if (!isset($s['allowTags']) || !$s['allowTags']) {
+                $s['constraints'][] = new KwfBundle\Validator\Constraints\NoTags();
             }
 
             if (array_intersect($groups, $s['groups'])) {

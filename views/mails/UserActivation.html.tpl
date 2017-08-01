@@ -1,4 +1,4 @@
-<?= trlKwf('Hello {0}!', $this->fullname); ?><br /><br />
+<?= trlKwf('Hello {0}!', htmlspecialchars($this->fullname)); ?><br /><br />
 
 <?= trlKwf('Your account at {0} has just been created.', $this->applicationName); ?><br />
 1. <?= trlKwf('Please use the following link to choose yourself a password'); ?>:<br /><br />

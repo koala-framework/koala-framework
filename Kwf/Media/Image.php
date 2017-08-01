@@ -261,7 +261,7 @@ class Kwf_Media_Image
 
         if ($outputWidth == 0 && $outputHeight == 0) {
             if ($crop) {
-                return array(
+                $ret = array(
                     'width' => $crop['width'],
                     'height' => $crop['height'],
                     'rotate' => 0,
@@ -270,8 +270,13 @@ class Kwf_Media_Image
                         'y' => $crop['y'],
                         'width' => $crop['width'],
                         'height' => $crop['height']
-                    ),
+                    )
                 );
+                if (isset($targetSize['imageCompressionQuality'])) {
+                    $ret['imageCompressionQuality'] = $targetSize['imageCompressionQuality'];
+                }
+
+                return $ret;
             } else {
                 // Handle keep original
                 return array(
@@ -393,6 +398,9 @@ class Kwf_Media_Image
             'rotate' => $sourceSize['rotation'],
             'crop' => $crop
         );
+        if (isset($targetSize['imageCompressionQuality'])) {
+            $ret['imageCompressionQuality'] = $targetSize['imageCompressionQuality'];
+        }
 
         //Set values to match original-parameters when original won't change
         if ($ret['crop']['x'] == 0

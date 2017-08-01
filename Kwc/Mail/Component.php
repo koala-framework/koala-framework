@@ -12,9 +12,6 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
             'component' => 'Kwc_Paragraphs_Component'
         );
 
-        $sender = Kwf_Mail::getSenderFromConfig();
-        $ret['fromEmail'] = $sender['address'];
-        $ret['fromName'] = $sender['name'];
         $ret['editFrom'] = true;
         $ret['editReplyTo'] = true;
         $ret['editReturnPath'] = false;
@@ -72,33 +69,64 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
         return $ret;
     }
 
-    public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null, $addViewTracker = true)
-    {
-        $mail = parent::createMail($recipient, $data, $toAddress, $format, $addViewTracker);
-        if ($this->_getSetting('editFrom')) {
-            if ($this->getRow()->from_email) {
-                $mail->clearFrom();
-                $fromName = $this->getRow()->from_name;
-                if (!$fromName) $fromName = $this->_getSetting('fromName');
-                $mail->setFrom($this->getRow()->from_email, $fromName);
-            } else if ($this->getRow()->from_name) {
-                $mail->clearFrom();
-                $mail->setFrom($fromName = $this->_getSetting('fromEmail'), $this->getRow()->from_name);
-            }
-        }
-        if ($this->getRow()->reply_email && $this->_getSetting('editReplyTo')) {
-            $mail->clearReplyTo();
-            $mail->setReplyTo($this->getRow()->reply_email);
-        }
-        if ($this->getRow()->return_path && $this->_getSetting('editReturnPath')) {
-            $mail->clearReturnPath();
-            $mail->setReturnPath($this->getRow()->return_path);
-        }
-        return $mail;
-    }
-
     protected function _getSubject()
     {
         return $this->getRow()->subject;
+    }
+
+    protected function _getFromEmail()
+    {
+        $ret = parent::_getFromEmail();
+        if ($this->_getSetting('editFrom') && $this->getRow()->from_email) {
+            $ret = $this->getRow()->from_email;
+        }
+        return $ret;
+    }
+
+    protected function _getFromName()
+    {
+        $ret = parent::_getFromName();
+        if ($this->_getSetting('editFrom') && $this->getRow()->from_name) {
+            $ret = $this->getRow()->from_name;
+        }
+        return $ret;
+    }
+
+    protected function _getReplyTo()
+    {
+        $ret = parent::_getReplyTo();
+        if ($this->_getSetting('editReplyTo') && $this->getRow()->reply_email) {
+            $ret = $this->getRow()->reply_email;
+        }
+        return $ret;
+    }
+
+    protected function _getReturnPath()
+    {
+        $ret = parent::_getReturnPath();
+        if ($this->_getSetting('editReturnPath') && $this->getRow()->return_path) {
+            $ret = $this->getRow()->return_path;
+        }
+        return $ret;
+    }
+
+    public function getDefaultFromEmail()
+    {
+        return parent::_getFromEmail();
+    }
+
+    public function getDefaultFromName()
+    {
+        return parent::_getFromName();
+    }
+
+    public function getDefaultReplyTo()
+    {
+        return parent::_getReplyTo();
+    }
+
+    public function getDefaultReturnPath()
+    {
+        return parent::_getReturnPath();
     }
 }
