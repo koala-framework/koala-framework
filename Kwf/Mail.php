@@ -28,12 +28,8 @@ class Kwf_Mail extends Zend_Mail
 
     public function addCc($email, $name='')
     {
-        if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
-            if ($name) {
-                $this->addHeader('X-Real-Cc', $name ." <".$email.">");
-            } else {
-                $this->addHeader('X-Real-Cc', $email);
-            }
+        if (true || Kwf_Registry::get('config')->debug->sendAllMailsTo) {
+            $this->_addDebugAddressHeader('X-Real-Cc', $email, $name);
         } else {
             parent::addCc($email, $name);
         }
@@ -43,7 +39,7 @@ class Kwf_Mail extends Zend_Mail
     public function addBcc($email)
     {
         if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
-            $this->addHeader('X-Real-Bcc', $email);
+            $this->_addDebugAddressHeader('X-Real-Bcc', $email);
         } else {
             parent::addBcc($email);
         }
@@ -52,19 +48,29 @@ class Kwf_Mail extends Zend_Mail
 
     public function addTo($email, $name='')
     {
-        if (is_array($email)) $email = implode(';', $email);
-        $this->_ownTo[] = trim("$name <$email>");
         if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
-            if ($name) {
-                $this->addHeader('X-Real-Recipient', $name ." <".$email.">");
-            } else {
-                $this->addHeader('X-Real-Recipient', $email);
-            }
+            $this->_addDebugAddressHeader('X-Real-Recipient', $email);
         } else {
-            if (strpos($email, ';') !== false) $email = explode(';', $email);
             parent::addTo($email, $name);
         }
         return $this;
+    }
+
+    private function _addDebugAddressHeader($headerName, $email, $name = '')
+    {
+        if (!is_array($email)) {
+            $email = array($name => $email);
+        }
+        foreach ($email as $n => $recipient) {
+            if ($recipient) {
+                if ($n && !is_int($n)) {
+                    $header = $n ." <".$recipient.">";
+                } else {
+                    $header = $recipient;
+                }
+                $this->addHeader($headerName, $header);
+            }
+        }
     }
 
     public function setAttachImages($attachImages)
@@ -208,15 +214,20 @@ class Kwf_Mail extends Zend_Mail
 
     public static function getSenderFromConfig()
     {
+        return array(
+            'address' => self::replaceHost(Kwf_Registry::get('config')->email->from->address),
+            'name' => self::replaceHost(Kwf_Registry::get('config')->email->from->name)
+        );
+    }
+
+    public static function replaceHost($string)
+    {
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
         $hostNonWww = preg_replace('#^www\\.#', '', $host);
-        return array(
-            'address' => str_replace('%host%', $hostNonWww, Kwf_Registry::get('config')->email->from->address),
-            'name' => str_replace('%host%', $hostNonWww, Kwf_Registry::get('config')->email->from->name)
-        );
+        return str_replace('%host%', $hostNonWww, $string);
     }
 }

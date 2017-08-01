@@ -1,4 +1,4 @@
-<?= trlKwf('Hello {0}!', $this->fullname); ?><br /><br />
+<?= trlKwf('Hello {0}!', htmlspecialchars($this->fullname)); ?><br /><br />
 
 <?= trlKwf('Your account at {0} has been deleted.', '<a href="'.$this->webUrl.'">'.$this->webUrl.'</a>'); ?><br /><br />
 

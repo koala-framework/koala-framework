@@ -1,4 +1,4 @@
-<?= trlKwf('Hello {0}!', $this->fullname); ?><br /><br />
+<?= trlKwf('Hello {0}!', htmlspecialchars($this->fullname)); ?><br /><br />
 
 <?= trlKwf('This email has been generated using the lost password function at {0}', '<a href="'.$this->webUrl.'">'.$this->webUrl.'</a>'); ?><br />
 <?= trlKwf('Please use the following link to choose yourself a new password.'); ?><br />

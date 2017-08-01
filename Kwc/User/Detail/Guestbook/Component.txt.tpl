@@ -1,4 +1,4 @@
-<?= $this->data->trlKwf('Hello {0}!', $this->name); ?>
+<?= $this->data->trlKwf('Hello {0}!', htmlspecialchars($this->name)); ?>
 
 
 <?= $this->data->trlKwf('A new entry has been written in your guestbook.'); ?>
@@ -10,4 +10,4 @@
 
 <?= $this->data->trlKwf('This is the text that was saved in your guestbook:'); ?>
 
-<?= $this->text; ?>
+<?= htmlspecialchars($this->text); ?>
