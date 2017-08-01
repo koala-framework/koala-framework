@@ -122,7 +122,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $returnPath = $this->_getReturnPath();
         if ($returnPath) $mail->setReturnPath($returnPath);
         $bcc = $this->_getBcc();
-        $mail->addBcc($bcc);
+        if ($bcc) $mail->addBcc($bcc);
 
         return $mail;
     }
