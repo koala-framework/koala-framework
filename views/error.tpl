@@ -7,15 +7,15 @@
 
         <?php if ($this->debug) { ?>
             Errortype:<br />
-            <pre><?= $this->type ?></pre>
+            <pre><?= htmlspecialchars($this->type) ?></pre>
 
             <br />
 
             Message:<br />
-            <pre><?= $this->exception ?></pre>
+            <pre><?= htmlspecialchars($this->exception) ?></pre>
             <?php if(isset($this->query)) { ?>
             <p>Last DB-Query:</p>
-            <pre><?= $this->query ?></pre>
+            <pre><?= htmlspecialchars($this->query) ?></pre>
             <?php } ?>
         <?php } else { ?>
             <p>An Error ocurred. Please try again later.</p>
@@ -23,7 +23,7 @@
         <?php } ?>
         <?php if ($this->debug || isset($_COOKIE['unitTest'])) { ?>
         <?php try {
-            echo '<p id="exception" style="display:none">'.base64_encode(serialize($this->exception)).'</p>';
+            echo '<p id="exception" style="display:none">'.htmlspecialchars(base64_encode(serialize($this->exception))).'</p>';
         } catch (Exception $e) {} ?>
         <?php } ?>
     </body>

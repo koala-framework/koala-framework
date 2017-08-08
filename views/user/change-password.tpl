@@ -12,7 +12,7 @@
         <?=trlKwf('for future logins.')?>
     </p>
     <p>
-        <?=trlKwf('Your email address:')?> <strong><?=$this->email?></strong>
+        <?=trlKwf('Your email address:')?> <strong><?=htmlspecialchars($this->email)?></strong>
     </p>
 
     <?=$this->errorsHtml?>

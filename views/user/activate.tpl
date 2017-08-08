@@ -7,7 +7,7 @@
         <?php } ?>
     </h1>
     <p>
-        <?=trlKwf('Your email address:')?> <strong><?=$this->email?></strong>
+        <?=trlKwf('Your email address:')?> <strong><?=htmlspecialchars($this->email)?></strong>
     </p>
 
     <?=$this->errorsHtml?>
@@ -16,7 +16,7 @@
     <ul>
         <?php if ($this->showPassword) { ?>
             <li>
-                <a href="<?=$this->passwordUrl?>"><?=trlKwf('Password')?></a>
+                <a href="<?=htmlspecialchars($this->passwordUrl)?>"><?=trlKwf('Password')?></a>
             </li>
         <?php } ?>
         <?php foreach ($this->redirects as $r) { ?>
