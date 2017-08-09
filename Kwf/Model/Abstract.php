@@ -1209,7 +1209,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
             $columnNormalizer = new $type;
             if ($columnNormalizer instanceof \KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface) {
-                $ret += $columnNormalizer->getEventSubscribers($this, $column, $settings);
+                $ret = array_merge($ret, $columnNormalizer->getEventSubscribers($this, $column, $settings));
             }
         }
         return $ret;
