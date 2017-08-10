@@ -121,8 +121,8 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
             tpl: new Ext2.XTemplate(
                 '<tpl for=".">',
                     '<div class="x2-combo-list-item changeuser-list-item">',
-                        '<h3>{lastname}&nbsp;{firstname}</h3>',
-                        '{email}',
+                        '<h3>{lastname:htmlEncode}&nbsp;{firstname:htmlEncode}</h3>',
+                        '{email:htmlEncode}',
                     '</div>',
                 '</tpl>'
             ),
