@@ -1,10 +1,6 @@
 <?php
 class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
 {
-    protected function _validateSessionToken()
-    {
-    }
-
     public function jsonIndexAction()
     {
         if ($this->_getParam('subrootComponentId')) {

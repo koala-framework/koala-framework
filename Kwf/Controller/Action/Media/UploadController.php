@@ -9,7 +9,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         return parent::_isAllowedResource();
     }
 
-    protected function _validateSessionToken()
+    protected function _validateCsrf()
     {
     }
 

@@ -11,7 +11,7 @@ Kwf.User.Grid.Grid = Ext2.extend(Kwf.Auto.GridPanel,
                 var r = grid.getStore().getAt(rowIndex);
                 var win = new Kwf.User.Grid.SendMailWindow({
                     controllerUrl: this.controllerUrl,
-                    baseParams: {user_id: r.data.id, kwfSessionToken: Kwf.sessionToken}
+                    baseParams: {user_id: r.data.id}
                 });
                 win.show();
             },
