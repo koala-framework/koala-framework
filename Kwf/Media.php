@@ -238,7 +238,10 @@ class Kwf_Media
             $classFolder = $cacheFolder.'/'.$mediaClass;
             $groups = array_slice(scandir($classFolder), 2);
             foreach ($groups as $group) {
-                $groupFolder = $classFolder.'/'.$group;
+                // only check randomly one out of ten to improve performance
+                if (rand(0, 9) !== 0) continue;
+
+                $groupFolder = $classFolder . '/' . $group;
                 $ids = array_slice(scandir($groupFolder), 2);
                 foreach ($ids as $id) {
                     $idFolder = $groupFolder . '/' . $id;
