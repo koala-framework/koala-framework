@@ -4,7 +4,7 @@ Kwf.Form.ShowField = Ext2.extend(Ext2.form.Field,
     /**
      * {value} wenn kein objekt übergeben, sonst index aus objekt
      */
-    tpl: '{value}',
+    tpl: '{value:htmlEncode}',
 
     initValue : function(){
         if(this.value !== undefined){

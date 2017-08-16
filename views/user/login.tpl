@@ -15,7 +15,7 @@
             <img src="<?= $this->image ?>" width="<?= $this->imageSize['width'] ?>" height="<?= $this->imageSize['height'] ?>" />
         </div>
     <?php } else { ?>
-        <h1><?php echo $this->applicationName; ?> Login</h1>
+        <h1><?php echo htmlspecialchars($this->applicationName); ?> Login</h1>
     <?php } ?>
     <?=$this->errorsHtml?>
     <form action="<?= htmlspecialchars($this->action) ?>" method="<?=$this->method?>">
@@ -23,7 +23,7 @@
         <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?=trlKwf('Login')?></button>
     </form>
     <p>
-        <a class="kwfUp-lostPassword" href="<?=$this->lostPasswordLink?>"><?=trlKwf('Lost password?')?></a>
+        <a class="kwfUp-lostPassword" href="<?=htmlspecialchars($this->lostPasswordLink)?>"><?=trlKwf('Lost password?')?></a>
     </p>
     <?php if ($this->redirects) { ?>
         <div class="externalAuthButtons">
