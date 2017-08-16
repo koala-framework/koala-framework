@@ -18,7 +18,7 @@ class RendererEvents extends \Kwf_Events_Subscriber
         $model = \Kwf_Model_Factory_Abstract::getModelInstance($this->_config['modelFactoryConfig']);
 
         $row = null;
-        $data = $ev->data;
+        $data = $ev->component;
         while ($data) {
             if (isset($data->row) && $data->row->getModel() == $model) {
                 $row = $data->row;
