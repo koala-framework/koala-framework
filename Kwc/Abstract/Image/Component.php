@@ -461,7 +461,6 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
     public static function canCacheBeDeleted($id)
     {
-        $cmp = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
-        return !$cmp;
+        return !Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
     }
 }
