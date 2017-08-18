@@ -55,8 +55,8 @@ Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext2.extend(Ext2.Action, {
         config = Ext2.apply({
         icon    : '/assets/silkicons/database_delete.png',
         cls     : 'x2-btn-text-icon',
-        text    : trlKwf('Remove Recipients'),
-        tooltip : trlKwf('Removes the currently shown recipients to the newsletter'),
+        text    : trlKwf('Remove recipients from the queue'),
+        tooltip : trlKwf('Removes the currently shown recipients from the newsletter'),
         scope   : this,
         handler : function(a, b, c) {
             if (Ext2.grid.CheckboxSelectionModel && this.getGrid().getSelectionModel() instanceof Ext2.grid.CheckboxSelectionModel) {
