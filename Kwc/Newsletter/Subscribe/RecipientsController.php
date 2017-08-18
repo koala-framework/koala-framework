@@ -96,7 +96,7 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
             $user = Kwf_Registry::get('userModel')->getAuthedUser();
 
             $row->setLogSource($c->trlKwf('Backend'));
-            $row->writeLog($c->trlKwf('Unsubscribed from {0}', array($user->name)));
+            $row->writeLog($c->trlKwf('Unsubscribed from {0}', array($user->name)), 'unsubscribed');
 
             $row->save();
         }

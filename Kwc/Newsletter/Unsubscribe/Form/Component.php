@@ -27,7 +27,7 @@ class Kwc_Newsletter_Unsubscribe_Form_Component extends Kwc_Form_Component
         parent::_beforeSave($row);
 
         $row->setLogSource($this->getData()->getAbsoluteUrl());
-        $row->writeLog($this->getData()->trlKwf('Unsubscribed'));
+        $row->writeLog($this->getData()->trlKwf('Unsubscribed'), 'unsubscribed');
     }
 
     protected function _afterSave(Kwf_Model_Row_Interface $row)
