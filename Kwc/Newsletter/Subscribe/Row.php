@@ -68,11 +68,12 @@ class Kwc_Newsletter_Subscribe_Row extends Kwf_Model_Db_Row
         return ($this->_logIp) ? $this->_logIp : (array_key_exists('REMOTE_ADDR', $_SERVER)) ? $_SERVER['REMOTE_ADDR'] : null;
     }
 
-    public function writeLog($message, $saveImmediatly = false)
+    public function writeLog($message, $state = null, $saveImmediatly = false)
     {
         $childRow = $this->createChildRow('Logs', array(
             'date' => date('Y-m-d H:i:s'),
             'ip' => $this->getLogIp(),
+            'state' => $state,
             'message' => $message,
             'source' => $this->getLogSource()
         ));
