@@ -5,7 +5,7 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext2.extend(Ext2.Action, {
         config = Ext2.apply({
         icon    : '/assets/silkicons/database_add.png',
         cls     : 'x2-btn-text-icon',
-        text    : trlKwf('Add Recipients'),
+        text    : trlKwf('Add recipients to the queue'),
         tooltip : trlKwf('Adds the currently shown recipients to the newsletter'),
         scope   : this,
         handler : function(a, b, c) {
