@@ -60,6 +60,12 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             'count' => $count,
             'percent' => number_format(($count / $total)*100, 2) . '%'
         );
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $bounces = $plugin->getNewsletterStatisticRows($total, $pos);
+            foreach ($bounces as $bounceValue) {
+                $ret[] = $bounceValue;
+            }
+        }
         $ret[] = array(
             'pos' => $pos++,
             'link' => ' ',

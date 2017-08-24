@@ -12,6 +12,9 @@ class Kwc_NewsletterCategory_Detail_RecipientsController extends Kwc_NewsletterC
     {
         $ret = parent::_getSelect();
         $ret->whereEquals('unsubscribed', false);
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyRecipientsSelect($ret);
+        }
         return $ret;
     }
 }
