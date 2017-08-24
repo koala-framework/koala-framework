@@ -73,10 +73,6 @@ class Kwc_Directories_List_ViewMap_MarkersController extends Kwf_Controller_Acti
         $this->view->markers = $markers;
     }
 
-    protected function _validateSessionToken()
-    {
-    }
-
     protected function _isAllowedComponent()
     {
         return true;

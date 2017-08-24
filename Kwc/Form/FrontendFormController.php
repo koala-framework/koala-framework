@@ -1,10 +1,6 @@
 <?php
 class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
 {
-    protected function _validateSessionToken()
-    {
-    }
-
     public function jsonSaveAction()
     {
         $postData = $this->getRequest()->getParams();

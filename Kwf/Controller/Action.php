@@ -46,16 +46,18 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         $this->_helper->notifyPostDispatch();
     }
 
-    protected function _validateSessionToken()
+    protected function _validateCsrf()
     {
-        if ($this->_helper->getHelper('viewRenderer')->isJson() && Kwf_Util_SessionToken::getSessionToken()) {
-            if (!$this->_getParam('kwfSessionToken') && !$this->getRequest()->getHeader('X-Kwf-Session-Token')) {
-                throw new Kwf_Exception("Missing sessionToken parameter or X-Kwf-Session-Token header");
+        if ($this->_helper->getHelper('viewRenderer')->isJson()) {
+            if ($this->getRequest()->getHeader('X-Requested-With') != 'XMLHttpRequest') {
+                throw new Kwf_Exception("Missing X-Requested-With header (json urls must be called using XHR only to prevent CSRF)");
             }
-            if (($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken())
-                &&  ($this->getRequest()->getHeader('X-Kwf-Session-Token') != Kwf_Util_SessionToken::getSessionToken())
-            ) {
-                throw new Kwf_Exception("Invalid kwfSessionToken");
+            if (!$this->getRequest()->getHeader('Referer')) {
+                throw new Kwf_Exception("Missing Referer header");
+            }
+            $requiredReferer = (isset($_SERVER['HTTPS']) ? 'https' : 'http').'://'.$this->getRequest()->getHeader('Host').'/';
+            if (substr($this->getRequest()->getHeader('Referer'), 0, strlen($requiredReferer)) != $requiredReferer) {
+                throw new Kwf_Exception("Invalid Referer");
             }
         }
     }
@@ -71,7 +73,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
             }
         }
 
-        $this->_validateSessionToken();
+        $this->_validateCsrf();
 
         $t = microtime(true);
         $allowed = $this->_isAllowedResource();
