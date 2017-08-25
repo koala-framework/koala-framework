@@ -52,7 +52,6 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
                 );
             }
         }
-
         $count = $newsletterComponent->getComponent()->getTotalClicks();
         $ret[] = array(
             'pos' => $pos++,
@@ -61,9 +60,14 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             'percent' => number_format(($count / $total)*100, 2) . '%'
         );
         foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
-            $bounces = $plugin->getNewsletterStatisticRows($total, $pos);
-            foreach ($bounces as $bounceValue) {
-                $ret[] = $bounceValue;
+            $statisticRows = $plugin->getNewsletterStatisticRows($total);
+            foreach ($statisticRows as $row) {
+                $ret[] = array(
+                    'pos' => $pos++,
+                    'link' => $row['name'],
+                    'count' => $row['count'],
+                    'percent' => $row['percent']
+                );
             }
         }
         $ret[] = array(
