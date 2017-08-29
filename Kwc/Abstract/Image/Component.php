@@ -1,6 +1,6 @@
 <?php
 class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
-    implements Kwf_Media_Output_IsValidInterface
+    implements Kwf_Media_Output_IsValidInterface, Kwf_Media_Output_ClearCacheInterface
 {
     const USER_SELECT = Kwf_Form_Field_Image_UploadField::USER_SELECT;
     const CONTENT_WIDTH = Kwf_Form_Field_Image_UploadField::CONTENT_WIDTH;
@@ -457,5 +457,10 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['normalContent'] = $text;
         }
         return $ret;
+    }
+
+    public static function canCacheBeDeleted($id)
+    {
+        return !Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
     }
 }
