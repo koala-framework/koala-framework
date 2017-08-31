@@ -39,6 +39,9 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
                 $ret->merge($rs[$key]['select']);
             }
         }
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyRecipientsSelect($ret);
+        }
         return $ret;
     }
 
