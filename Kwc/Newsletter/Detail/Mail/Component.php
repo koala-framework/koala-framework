@@ -11,6 +11,9 @@ class Kwc_Newsletter_Detail_Mail_Component extends Kwc_Mail_Component
         $select = new Kwf_Model_Select();
         $select->whereEquals('unsubscribed', false);
         $select->whereEquals('activated', true);
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyRecipientsSelect($select);
+        }
         $select->order('id', 'ASC');
         $ret['recipientSources'] = array(
             'n' => array(
