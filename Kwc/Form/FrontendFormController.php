@@ -3,6 +3,9 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
 {
     protected function _validateSessionToken()
     {
+        if (Kwc_Abstract::getSetting($this->_getParam('class'), 'validateSessionToken')) {
+            parent::_validateSessionToken();
+        }
     }
 
     public function jsonSaveAction()
