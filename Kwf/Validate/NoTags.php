@@ -10,16 +10,17 @@ class Kwf_Validate_NoTags extends Zend_Validate_Abstract
 
     public function isValid($value)
     {
-        if (!$value) return true;
+        $ret = true;
         if (!is_array($value)) {
-            $value = array($value);
-        }
-        foreach ($value as $key => $val) {
-            if (strip_tags($val) != $val || stripos($val, 'Content-Type:') !== false) {
+            if (strip_tags($value) != $value || stripos($value, 'Content-Type:') !== false) {
                 $this->_error(self::INVALID_TAGS);
-                return false;
+                $ret = false;
+            }
+        } else {
+            foreach ($value as $val) {
+                $ret = $ret && $this->isValid($val);
             }
         }
-        return true;
+        return $ret;
     }
 }
