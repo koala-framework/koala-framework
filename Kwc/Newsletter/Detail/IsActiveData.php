@@ -11,6 +11,9 @@ class Kwc_Newsletter_Detail_IsActiveData extends Kwf_Data_Abstract
             } else if (!$row->getMailUnsubscribe() && $row->activated) {
                 return trlKwf('active');
             }
+            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+                $plugin->modifyRecipientsSelect($select);
+            }
         }
     }
 }

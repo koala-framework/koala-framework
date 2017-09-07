@@ -15,7 +15,7 @@ class Kwc_Newsletter_Subscribe_LogsController extends Kwf_Controller_Action_Auto
 
         $columns = $this->_columns;
         $columns->add(new Kwf_Grid_Column_Datetime('date', trlKwf('Date')));
-        $columns->add(new Kwf_Grid_Column('message', trlKwf('Message'), 300))
+        $columns->add(new Kwf_Grid_Column('message', trlKwf('Message'), 400))
             ->setRenderer('nl2br');
         $columns->add(new Kwf_Grid_Column('source', trlKwf('Source'), 300));
     }
