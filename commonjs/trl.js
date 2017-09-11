@@ -1,8 +1,8 @@
 function getTrlData(source, i)
 {
     var ret = null;
-    if (!window.kwfTrlData) return ret;
-    window.kwfTrlData.forEach(function(d) {
+    if (!window['kwfUp-kwfTrlData']) return ret;
+    window['kwfUp-kwfTrlData'].forEach(function(d) {
         if (d.source == source && d.data[i]) {
             ret = d.data[i];
             return false;
