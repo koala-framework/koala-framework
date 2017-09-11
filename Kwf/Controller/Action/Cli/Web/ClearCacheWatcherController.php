@@ -10,7 +10,11 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     public function indexAction()
     {
         $port = Kwf_Assets_WebpackConfig::getDevServerPort();
-        $cmd = "NODE_PATH=vendor/koala-framework/koala-framework/node_modules_build vendor/bin/node node_modules/.bin/webpack-dev-server --progress --host=0.0.0.0 --port=$port --color";
+
+        $devBuild = getenv('KWF_BUILD_DEV');
+        if ($devBuild == '') $devBuild = '1'; //in clear-cache-watcher enable dev build by default
+
+        $cmd = "NODE_PATH=vendor/koala-framework/koala-framework/node_modules_build KWF_BUILD_DEV=$devBuild vendor/bin/node node_modules/.bin/webpack-dev-server --progress --host=0.0.0.0 --port=$port --color";
         if (Kwf_Assets_WebpackConfig::getDevServerPublic()) {
             $cmd .= " --public=".Kwf_Assets_WebpackConfig::getDevServerPublic();
         }
