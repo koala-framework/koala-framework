@@ -10,7 +10,7 @@ class Kwc_Tags_Form extends Kwc_Abstract_Form
         $this->add(new Kwf_Form_Field_SuperBoxSelect('ComponentToTag', 'Tag', trlKwf('Tags')))
             ->setWidth(300)
             ->setListWidth(300)
-            ->setTpl('<tpl for="."><div class="x2-combo-list-item">{name} <span style="font-size: 10px; color: gray;">({count_used} '. trlKwf('uses') .')</span></div></tpl>')
+            ->setTpl('<tpl for="."><div class="x2-combo-list-item">{name:htmlEncode} <span style="font-size: 10px; color: gray;">({count_used:htmlEncode} '. trlKwf('uses') .')</span></div></tpl>')
             ->setAllowAddNewData(true)
             ->setTriggerAction('all')
             ->setMinChars(1)

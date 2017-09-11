@@ -2,36 +2,31 @@ Kwf.Form.FileUploadWindow = Ext2.extend(Ext2.Window, {
     title: trlKwf('File upload'),
     closeAction: 'close',
     modal: true,
-    width: 350,
-    height: 120,
+    width: 330,
+    height: 140,
     initComponent: function() {
         this.addEvents(['uploaded']);
-        if (!this.maxResolution) {
-            this.maxResolution = 0;
-        }
         this.form = new Ext2.FormPanel({
             baseCls: 'x2-plain',
             style: 'padding: 10px;',
-            url: '/kwf/media/upload/json-upload'+'?maxResolution='+this.maxResolution,
-            fileUpload: true,
             items: [{
                 name: 'Filedata',
-                xtype: 'textfield',
-                inputType: 'file',
+                xtype: 'kwf.file',
                 hideLabel: true
             }]
         });
+        this.form.findByType('kwf.file')[0].on('change', function(el, value, oldValue) {
+            this.uploadValue = value;
+        }, this);
+
         this.items = this.form;
         this.buttons = [{
             text: trlKwf('OK'),
             handler: function() {
-                this.form.getForm().submit({
-                    success: function(form, action) {
-                        this.fireEvent('uploaded', this, action.result);
-                        this.close();
-                    },
-                    scope: this
-                });
+                if (this.uploadValue) {
+                    this.fireEvent('uploaded', this, { value: this.uploadValue, success: true });
+                }
+                this.close();
             },
             scope: this
         },{

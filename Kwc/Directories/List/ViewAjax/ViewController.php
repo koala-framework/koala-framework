@@ -96,10 +96,6 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
         return true;
     }
 
-    protected function _validateSessionToken()
-    {
-    }
-
     public function jsonDataAction()
     {
         parent::jsonDataAction();

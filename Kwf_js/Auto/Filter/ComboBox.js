@@ -41,7 +41,7 @@ Kwf.Auto.Filter.ComboBox = function(config)
             listWidth: config.listWidth,
             tpl: new Ext2.XTemplate(
                 '<tpl for=".">',
-                    '<div class="x2-combo-list-item">{name}</div>',
+                    '<div class="x2-combo-list-item">{name:htmlEncode}</div>',
                 '</tpl>'
             )
         });

@@ -17,7 +17,7 @@ class Kwc_NewsletterCategory_Subscribe_SubscriberToCategoryRow extends Kwf_Model
             $logMessage = $c->trlKwf('Removed from category {0}', array($this->getParentRow('Category')->category));
         }
 
-        $subscriber->writeLog($logMessage, true);
+        $subscriber->writeLog($logMessage, null, true);
     }
 
     protected function _beforeInsert()
@@ -36,7 +36,7 @@ class Kwc_NewsletterCategory_Subscribe_SubscriberToCategoryRow extends Kwf_Model
             $logMessage = $c->trlKwf('Added to category {0}', array($this->getParentRow('Category')->category));
         }
 
-        $subscriber->writeLog($logMessage, true);
+        $subscriber->writeLog($logMessage, null, true);
     }
 }
 

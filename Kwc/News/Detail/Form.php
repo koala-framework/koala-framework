@@ -10,6 +10,6 @@ class Kwc_News_Detail_Form extends Kwc_News_Detail_Abstract_Form
         $fs->setName('customMetaTagsFieldSet');
         $fs->setCollapsible(true);
         $fs->setCollapsed(true);
-        $fs->add($this->_createChildComponentForm('-customMetaTags'));
+        $fs->add($this->_createChildComponentForm('-metaTags'));
     }
 }

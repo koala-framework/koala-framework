@@ -1204,12 +1204,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             } else {
                 $type = 'Column';
             }
-            if ($type == 'Column' || $type == 'ParentRow' || $type == 'ChildRows' || !class_exists($type)) {
+            if (in_array($type, array('Column','ParentRow','ChildRows','Component\\Render','Component\\Url')) || !class_exists($type)) {
                 $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\'.$type;
             }
             $columnNormalizer = new $type;
-            if ($type instanceof \KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface) {
-                $ret += $columnNormalizer->getEventSubscribers($this, $column, $settings);
+            if ($columnNormalizer instanceof \KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface) {
+                $ret = array_merge($ret, $columnNormalizer->getEventSubscribers($this, $column, $settings));
             }
         }
         return $ret;
@@ -1297,6 +1297,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                     $constraint = new $type($options);
                     $s['constraints'][] = $constraint;
                 }
+            } else {
+                $s['constraints'] = array();
+            }
+
+            if (!isset($s['allowTags']) || !$s['allowTags']) {
+                $s['constraints'][] = new KwfBundle\Validator\Constraints\NoTags();
             }
 
             if (array_intersect($groups, $s['groups'])) {

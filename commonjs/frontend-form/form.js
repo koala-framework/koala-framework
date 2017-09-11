@@ -239,14 +239,14 @@ FormComponent.prototype = {
                 // show success content
                 if (r.successContent) {
                     statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
-                    var el = this.el.parent().append(r.successContent);
+                    var el = $(r.successContent).appendTo(this.el.parent());
                     if (this.config.hideFormOnSuccess) {
                         this.el.hide();
                     } else {
-                        (function(el) {
+                        setTimeout(function(el) {
                             el.remove();
                             onReady.callOnContentReady(this.el, {newRender: false});
-                        }).defer(5000, this, [el]);
+                        }.bind(this), 5000, el);
                     }
                     onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {

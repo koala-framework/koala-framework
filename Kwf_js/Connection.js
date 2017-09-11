@@ -58,7 +58,6 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
         }
         if (!options.params) options.params = {};
         options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
-        if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
             //wird benötigt wenn fkt über mozrepl aufgerufen wird
@@ -214,9 +213,6 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
         Kwf.Connection.runningRequests++;
         delete options.kwfIsSuccess;
         delete options.kwfLogin;
-
-        //session token might have changed if user had to login -> update it
-        if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
 
         Kwf.Connection.superclass.request.call(this, options);
         if (options.progress) {

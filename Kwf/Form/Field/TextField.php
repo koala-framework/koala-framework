@@ -96,6 +96,9 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         if ($this->getAutofocus()) {
             $ret['autofocus'] = 'autofocus';
         }
+        if ($this->getDisabled()) {
+            $ret['disabled'] = 'disabled';
+        }
         return $ret;
     }
 
@@ -167,5 +170,16 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
     public function setAutofocus($value)
     {
         return $this->setProperty('autofocus', $value);
+    }
+
+    /**
+     * Disables this field.
+     *
+     * @param bool
+     * @return $this
+     */
+    public function setDisabled($value)
+    {
+        return $this->setProperty('disabled', $value);
     }
 }

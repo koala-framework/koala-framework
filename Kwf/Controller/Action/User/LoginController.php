@@ -1,17 +1,6 @@
 <?php
 class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 {
-    protected function _validateSessionToken()
-    {
-        if ($this->getRequest()->getActionName() != 'json-logout-user'
-            && $this->getRequest()->getActionName() != 'json-login-user'
-            && $this->getRequest()->getActionName() != 'json-get-session-token'
-            && $this->getRequest()->getActionName() != 'json-keep-alive'
-        ) {
-            parent::_validateSessionToken();
-        }
-    }
-
     protected function _isAllowedResource()
     {
         return true;
@@ -98,7 +87,6 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             if ($result->isValid()) {
                 $this->view->text  = trlKwf('Login successful');
                 $this->view->text .= '<!--successful-->';
-                $this->view->text .= '<!--sessionToken:'.Kwf_Util_SessionToken::getSessionToken().':-->';
                 $this->view->cssClass = 'kwfLoginResultSuccess';
             } else {
                 if ($result->getCode() == Zend_Auth_Result::FAILURE_UNCATEGORIZED) {
@@ -216,7 +204,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             $users->loginUserRow($user, true);
             if ($redirect == 'jsCallback') {
                 echo "<script type=\"text/javascript\">\n";
-                echo "window.opener.ssoCallback('".Kwf_Util_SessionToken::getSessionToken()."');\n";
+                echo "window.opener.ssoCallback();\n";
                 echo "window.close();\n";
                 echo "</script>\n";
                 exit;
@@ -283,7 +271,6 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         if (!$result->isValid()) {
             $this->view->error = implode("<br />", $result->getMessages());
         }
-        $this->view->sessionToken = Kwf_Util_SessionToken::getSessionToken();
     }
 
     public function jsonLogoutUserAction()
@@ -326,11 +313,6 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
     public function jsonKeepAliveAction()
     {
         //do nothing
-    }
-
-    public function jsonGetSessionTokenAction()
-    {
-        $this->view->sessionToken = Kwf_Util_SessionToken::getSessionToken();
     }
 
     public function errorAction()

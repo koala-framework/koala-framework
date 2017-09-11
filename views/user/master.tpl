@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title><?php echo $this->applicationName; ?></title>
+    <title><?php echo htmlspecialchars($this->applicationName); ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <?php if ($this->favicon) { ?>

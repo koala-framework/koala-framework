@@ -71,7 +71,6 @@ Kwf.Utils.Upload = {
             }
         }
         var url = '/kwf/media/upload/json-upload';
-        if (Kwf.sessionToken) url += '?kwfSessionToken='+Kwf.sessionToken;
         xhr.open('POST', url);
         xhr.setRequestHeader('X-Upload-Name', encodeURIComponent(file.name));
         xhr.setRequestHeader('X-Upload-Size', file.size);

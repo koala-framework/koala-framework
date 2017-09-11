@@ -39,7 +39,7 @@ class Kwf_Form_FileUpload_TestController extends Kwf_Controller_Action_Auto_Form
             ->setShowDeleteButton(false)
             ->setShowPreview(false)
             ->setInfoPosition('west')
-            ->setInfoTpl('<a href="{href}" target="_blank">{filename}.{extension}</a> ({fileSize:fileSize})');
+            ->setInfoTpl('<a href="{href:htmlEncode}" target="_blank">{filename:htmlEncode}.{extension:htmlEncode}</a> ({fileSize:fileSize})');
 
     }
 }
