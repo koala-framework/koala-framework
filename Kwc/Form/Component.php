@@ -31,7 +31,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         $ret['useAjaxRequest'] = true;
-        $ret['validateSessionToken'] = false;
         $ret['hideFormOnSuccess'] = true; // works only when useAjaxRequest==true
 
         $ret['flags']['processInput'] = true;

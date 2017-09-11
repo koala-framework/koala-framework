@@ -8,7 +8,6 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         $ret['generators']['child']['component']['success'] = 'Kwc_User_ChangePassword_Form_Success_Component';
         $ret['plugins'] = array('Kwf_Component_Plugin_Login_Component');
         $ret['viewCache'] = false;
-        $ret['validateSessionToken'] = true;
         return $ret;
     }
 
