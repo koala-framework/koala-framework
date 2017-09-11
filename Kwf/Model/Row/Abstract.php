@@ -706,7 +706,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
         } else {
             $type = 'Column';
         }
-        if ($type == 'Column' || $type == 'ParentRow' || $type == 'ChildRows' || !class_exists($type)) {
+        if (in_array($type, array('Column','ParentRow','ChildRows','Component\\Render','Component\\Url')) || !class_exists($type)) {
             $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\'.$type;
         }
         $columnNormalizer = new $type;
