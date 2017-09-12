@@ -15,6 +15,21 @@ abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf
         return $select;
     }
 
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
+        $ret = $this->_addPluginSelect($ret);
+        return $ret;
+    }
+
+    protected function _addPluginSelect($select)
+    {
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyRecipientsSelect($select, Kwc_Newsletter_PluginInterface::RECIPIENTS_GRID_TYPE_EDIT_SUBSCRIBERS);
+        }
+        return $select;
+    }
+
     public function jsonRemoveRecipientsAction()
     {
         set_time_limit(60*10);
