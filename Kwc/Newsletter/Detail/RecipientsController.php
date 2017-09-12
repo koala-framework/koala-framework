@@ -24,7 +24,6 @@ class Kwc_Newsletter_Detail_RecipientsController extends Kwc_Newsletter_Subscrib
                 $ret->merge($rs[$key]['select']);
             }
         }
-        $ret->whereEquals('unsubscribed', false);
         return $ret;
     }
 
