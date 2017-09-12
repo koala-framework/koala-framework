@@ -102,7 +102,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
         this.recipientComboBox = new Kwf.Form.ComboBox({
             fieldLabel: trlKwf('Subscriber'),
             store: {
-                url: this.subscribersControllerUrl + '/json-data'
+                url: this.recipientsControllerUrl + '/json-data'
             },
             disabled: this.disableComboBox,
             baseParams: this.baseParams,
