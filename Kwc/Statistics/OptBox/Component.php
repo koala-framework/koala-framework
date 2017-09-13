@@ -39,7 +39,7 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
                 $exception = new Kwf_Exception('To disable optbox please change config.');
                 $exception->logOrThrow();
             }
-            $html = '<div class="' . self::getCssClass($this) . '"><div class="inner">' . $html . '<div></div>';
+            $html = '<div class="' . self::getCssClass($this) . '"><div class="inner">' . $html . '</div></div>';
             $html = str_replace("'", "\'", $html);
         }
 
