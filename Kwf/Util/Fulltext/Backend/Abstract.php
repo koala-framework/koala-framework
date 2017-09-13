@@ -23,12 +23,12 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
 
     public function getAllDocumentIds(Kwf_Component_Data $subroot)
     {
-        return array_keys($this->getAllDocuments());
+        return array_keys($this->getAllDocuments($subroot));
     }
 
     public function deleteAll(Kwf_Component_Data $subroot)
     {
-        foreach ($this->getAllDocumentIds() as $id) {
+        foreach ($this->getAllDocumentIds($subroot) as $id) {
             $this->deleteDocument($subroot, $id);
         }
     }
