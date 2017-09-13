@@ -67,6 +67,10 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
             ->setData(new Kwc_Newsletter_Detail_IsActiveData())
             ->setRenderer('newsletterState')
             ->setType('string');
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyRecipientsGridColumns($this->_columns, Kwc_Newsletter_PluginInterface::RECIPIENTS_GRID_TYPE_EDIT_SUBSCRIBERS);
+        }
     }
 
     protected function _getSelect()

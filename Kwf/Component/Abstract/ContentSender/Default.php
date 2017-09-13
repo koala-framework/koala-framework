@@ -129,7 +129,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         header('X-Content-Type-Options: nosniff');
         header('X-Frame-Options: DENY');
         header('X-XSS-Protection: 1; mode=block');
-        header('Referrer-Policy: strict-origin-when-cross-origin');
+        header('Referrer-Policy: origin-when-cross-origin');
 
         Kwf_Media_Output::outputWithoutShutdown($content);
         exit;
