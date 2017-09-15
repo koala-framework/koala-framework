@@ -15,11 +15,11 @@ $colorIcon: null;
 
 @font-face {
     font-family: "frontendIcon";
-    src:url("/assets/kwf/views/user/icon/frontendIcon.eot");
-    src:url("/assets/kwf/views/user/icon/frontendIcon.eot?#iefix") format("embedded-opentype"),
-    url("/assets/kwf/views/user/icon/frontendIcon.woff") format("woff"),
-    url("/assets/kwf/views/user/icon/frontendIcon.ttf") format("truetype"),
-    url("/assets/kwf/views/user/icon/frontendIcon.svg#frontendIcon") format("svg");
+    src:url("~kwf/views/user/icon/frontendIcon.eot");
+    src:url("~kwf/views/user/icon/frontendIcon.eot?#iefix") format("embedded-opentype"),
+    url("~kwf/views/user/icon/frontendIcon.woff") format("woff"),
+    url("~kwf/views/user/icon/frontendIcon.ttf") format("truetype"),
+    url("~kwf/views/user/icon/frontendIcon.svg#frontendIcon") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -304,23 +304,23 @@ body.kwfUp-backendUser {
             display: inline-block;
 
             &.kwfUp-vividPlanet {
-                @include background-image-dpr2('/assets/kwf/views/user/images', 'logo.png', 120px, 26px, no-repeat left center transparent);
+                @include background-image-dpr2('~kwf/views/user/images', 'logo.png', 120px, 26px, no-repeat left center transparent);
                 margin-right: 15px;
                 width: 120px;
                 height: 26px;
 
                 &:hover {
-                    @include background-image-dpr2('/assets/kwf/views/user/images', 'logoColored.png', 120px, 26px, no-repeat left center transparent);
+                    @include background-image-dpr2('~kwf/views/user/images', 'logoColored.png', 120px, 26px, no-repeat left center transparent);
                 }
             }
 
             &.kwfUp-koala {
-                @include background-image-dpr2('/assets/kwf/views/user/images', 'kwfLogo.png', 112px, 26px, no-repeat left center transparent);
+                @include background-image-dpr2('~kwf/views/user/images', 'kwfLogo.png', 112px, 26px, no-repeat left center transparent);
                 width: 120px;
                 height: 26px;
 
                 &:hover {
-                    @include background-image-dpr2('/assets/kwf/views/user/images', 'kwfLogoColored.png', 112px, 26px, no-repeat left center transparent);
+                    @include background-image-dpr2('~kwf/views/user/images', 'kwfLogoColored.png', 112px, 26px, no-repeat left center transparent);
                 }
             }
         }

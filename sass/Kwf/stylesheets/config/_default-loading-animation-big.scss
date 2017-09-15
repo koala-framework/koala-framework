@@ -1,5 +1,5 @@
 @import "kwf/loading-animation";
 
 @mixin default-loading-animation-big() {
-    @include loading-animation(kwfLoadingSpin, '/assets/kwf/images/loading', 'loadingbig', 50px, 50px, no-repeat scroll center center transparent);
+    @include loading-animation(kwfLoadingSpin, '~kwf/images/loading', 'loadingbig', 50px, 50px, no-repeat scroll center center transparent);
 }

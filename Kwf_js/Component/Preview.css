@@ -40,7 +40,7 @@
 .kwfComponentPreview.smartphonePortrait .device {
     width: 352px;
     height: 677px;
-    background: url("/assets/kwf/images/devices/iPhonePortrait.jpg") no-repeat left top;
+    background: url("~kwf/images/devices/iPhonePortrait.jpg") no-repeat left top;
     padding: 121px 0px 0px 31px;
 }
 
@@ -52,7 +52,7 @@
 .kwfComponentPreview.smartphoneLandscape .device {
     width: 676px;
     height: 351px;
-    background: url("/assets/kwf/images/devices/iPhoneLandscape.jpg") no-repeat left top;
+    background: url("~kwf/images/devices/iPhoneLandscape.jpg") no-repeat left top;
     padding: 30px 0px 0px 122px;
 }
 
@@ -64,7 +64,7 @@
 .kwfComponentPreview.tabletPortrait .device {
     width: 1025px;
     height: 1312px;
-    background: url("/assets/kwf/images/devices/iPadPortrait.jpg") no-repeat left top;
+    background: url("~kwf/images/devices/iPadPortrait.jpg") no-repeat left top;
     padding: 136px 0px 0px 118px;
 }
 
@@ -76,7 +76,7 @@
 .kwfComponentPreview.tabletLandscape .device {
     width: 1313px;
     height: 1026px;
-    background: url("/assets/kwf/images/devices/iPadLandscape.jpg") no-repeat left top;
+    background: url("~kwf/images/devices/iPadLandscape.jpg") no-repeat left top;
     padding: 123px 0px 0px 135px;
 }
 

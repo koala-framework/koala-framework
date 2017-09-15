@@ -48,11 +48,11 @@
 
 @font-face {
     font-family: 'social-icons';
-    src: url('/assets/kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.eot');
-    src: url('/assets/kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.eot?#iefix') format('embedded-opentype'),
-    url('/assets/kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.woff') format('woff'),
-    url('/assets/kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.ttf') format('truetype'),
-    url('/assets/kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.svg#Social') format('svg');
+    src: url('~kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.eot');
+    src: url('~kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.eot?#iefix') format('embedded-opentype'),
+    url('~kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.woff') format('woff'),
+    url('~kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.ttf') format('truetype'),
+    url('~kwf/Kwc/Advanced/SocialBookmarks/Icons/Flat/social.svg#Social') format('svg');
     font-weight: normal;
     font-style: normal;
 }

@@ -2,7 +2,7 @@
     z-index:9000;
 }
 .comboboxtext .x2-form-field-wrap .x2-form-trigger {
-   background-image:url(/assets/kwf/images/gray/form/combo-box-text.gif);
+   background-image:url(~kwf/images/gray/form/combo-box-text.gif);
 }
 
 /* Damit das Flash nicht neustartet wenn eine Mask darüber liegt */

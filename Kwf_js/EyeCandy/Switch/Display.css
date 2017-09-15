@@ -1,5 +1,5 @@
 div.kwfUp-kwfSwitchDisplay a.kwfUp-switchLink {
-    background: url(/assets/kwf/images/bullet_arrow_right.png) 0px 0px no-repeat;
+    background: url(~kwf/images/bullet_arrow_right.png) 0px 0px no-repeat;
     padding-left: 18px;
 }
 div.kwfUp-kwfSwitchDisplay a.kwfUp-switchLink.kwfUp-switchLinkOpened {

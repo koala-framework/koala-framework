@@ -15,6 +15,6 @@
     background-image:none;
 }
 .kwf-check-rtr-col-on {
-    background-image:url(/assets/kwf/images/rtr.png);
+    background-image:url(~kwf/images/rtr.png);
 }
 .secondsToTimeRight { text-align: right; }

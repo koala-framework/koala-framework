@@ -11,7 +11,7 @@
 
 .kwcClass .kwfUp-linkToTop {
     display: none;
-    background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left top;
+    background: url(~kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left top;
     width: 58px;
     height: 58px;
     position: fixed;
@@ -22,7 +22,7 @@
 
 .kwcClass .kwfUp-linkToTop:hover {
     cursor: pointer;
-    background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left bottom;
+    background: url(~kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left bottom;
 }
 
 .kwcClass.kwfUp-scrolledDown .kwfUp-linkToTop {

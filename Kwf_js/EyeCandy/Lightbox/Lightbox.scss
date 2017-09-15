@@ -232,7 +232,7 @@ body {
 .kwfUp-Lightbox .kwfUp-lightboxHeader { position: relative; z-index: 102; }
 
 .kwfUp-kwfLightbox .kwfUp-closeButton {
-    background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
+    background: url('~kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
     position: absolute;
     display: block;
     height: 42px;
@@ -273,7 +273,7 @@ body {
     top: 0px;
     width: 40%;
     height: 100%;
-    background: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/transparentPixel.gif); /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
+    background: url(~kwf/Kwf_js/EyeCandy/Lightbox/transparentPixel.gif); /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
     background-repeat: repeat;
     background-position: top left;
 }
@@ -282,14 +282,14 @@ body {
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn a,
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn a { width: 100%; }
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn a:hover {
-    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/next.png);
+    background-image: url(~kwf/Kwf_js/EyeCandy/Lightbox/next.png);
     background-repeat: no-repeat;
     background-position: right 50%;
 }
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
 
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn a:hover {
-    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/previous.png);
+    background-image: url(~kwf/Kwf_js/EyeCandy/Lightbox/previous.png);
     background-repeat: no-repeat;
     background-position: left 50%;
 }

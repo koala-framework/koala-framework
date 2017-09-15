@@ -1,7 +1,7 @@
 .kwcClass input { width: auto; }
 
 .kwcClass .process {
-    background-image: url(/assets/kwf/Kwc/Form/saving.gif);
+    background-image: url(~kwf/Kwc/Form/saving.gif);
     width: 30px;
     height: 16px;
     visibility: hidden;
