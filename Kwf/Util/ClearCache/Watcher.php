@@ -15,24 +15,6 @@ class Kwf_Util_ClearCache_Watcher
         return false;
     }
 
-    private static function _informDuckcast($cacheType)
-    {
-        if (Kwf_Config::getValue('debug.duckcast.host')) {
-            echo "Inform Duckcast ...";
-
-            try {
-                file_get_contents(
-                    'http://'.Kwf_Config::getValue('debug.duckcast.host')
-                        .':'.Kwf_Config::getValue('debug.duckcast.port').'/watcher?cacheType='.$cacheType
-                );
-            } catch (Exception $e) {
-                echo " [".$e->getMessage()."]\n";
-                return;
-            }
-            echo " [ok]\n";
-        }
-    }
-
     public static function watch()
     {
         if (Kwf_Config::getValue('whileUpdatingShowMaintenancePage')) {
@@ -569,8 +551,6 @@ class Kwf_Util_ClearCache_Watcher
 
         $a = new Kwf_Util_Build_Types_Assets();
         $a->flagAllPackagesOutdated($fileType);
-
-        self::_informDuckcast($fileType);
 
         if ($fileType == 'css') {
             self::_clearAssetsAll('0.css');
