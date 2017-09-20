@@ -178,4 +178,15 @@ class Kwf_Media_OutputCache
         }
     }
 
+    public function clear($class)
+    {
+        foreach ($this->_getSecondLevelCache()->getIds() as $id) {
+            if (strpos($id, $class) === false) continue;
+            $data = $this->_getSecondLevelCache()->load($id);
+            if (isset($data['file']) && $data['file']) {
+                unlink(realpath($data['file']));
+            }
+            $this->remove($id);
+        }
+    }
 }
