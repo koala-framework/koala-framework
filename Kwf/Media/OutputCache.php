@@ -180,13 +180,25 @@ class Kwf_Media_OutputCache
 
     public function clear($class)
     {
-        foreach ($this->_getSecondLevelCache()->getIds() as $id) {
-            if (strpos($id, $class) === false) continue;
-            $data = $this->_getSecondLevelCache()->load($id);
-            if (isset($data['file']) && $data['file']) {
-                unlink(realpath($data['file']));
+        $cacheFolder = Kwf_Config::getValue('mediametaCacheDir');
+        // get all folders, except . and .. (array_slice)
+        $firstLevelFolders = array_slice(scandir($cacheFolder), 2);
+        foreach ($firstLevelFolders as $firstLevelFolder) {
+            if (is_file($cacheFolder.'/'.$firstLevelFolder)) continue;
+            $secondLevelFolders = array_slice(scandir($cacheFolder.'/'.$firstLevelFolder), 2);
+            foreach ($secondLevelFolders as $secondLevelFolder) {
+                $ids = array_slice(scandir($cacheFolder.'/'.$firstLevelFolder.'/'.$secondLevelFolder), 2);
+                foreach ($ids as $id) {
+                    if (strpos($id, 'internal-metadatas') !== false) continue;
+                    if (strpos($id, $class) === false) continue;
+                    $id = substr($id, 13);
+                    $data = $this->_getSecondLevelCache()->load($id);
+                    if (isset($data['file']) && $data['file']) {
+                        unlink(realpath($data['file']));
+                    }
+                    $this->remove($id);
+                }
             }
-            $this->remove($id);
         }
     }
 }
