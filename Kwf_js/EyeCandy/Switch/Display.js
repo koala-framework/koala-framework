@@ -16,8 +16,8 @@
         $.extend(this.config, config);
 
         this.el = $(el);
-        this.switchLink = this.el.find(this.config.link || '.switchLink');
-        this.switchContainer = this.el.find(this.config.container || '.switchContent');
+        this.switchLink = this.el.find(this.config.link || '.switchLink:first');
+        this.switchContainer = this.el.find(this.config.container || '.switchContent:first');
         this.boundEvent = this.config.hover ? 'hover' : 'click';
         this.activeTimeout = null;
 
@@ -29,7 +29,7 @@
             this.switchContainer
                 .css('display', 'none')
 
-            if(this.config.fade) {
+            if (this.config.fade) {
                 this.switchContainer.fadeIn(this.config);
             } else {
                 this.switchContainer.slideDown(this.config);
@@ -43,7 +43,7 @@
             this.switchContainer
                 .css('display', 'block')
 
-            if(this.config.fade) {
+            if (this.config.fade) {
                 this.switchContainer.fadeOut(this.config);
             } else {
                 this.switchContainer.slideUp(this.config);
@@ -69,7 +69,7 @@
                 }
             } else {
                 if (this.config.fade) {
-                    if(this.activeTimeout && event.type === 'mouseenter') {
+                    if (this.activeTimeout && event.type === 'mouseenter') {
                         clearTimeout(this.activeTimeout);
                         this.activeTimeout = null;
                         return;
@@ -97,19 +97,19 @@
                 Kwf.EyeCandy.Switch.Display(el, config);
             }, { defer: true });
             Kwf.onJElementReady(elOrSelector, function(el, config) {
-                if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
-                    el.find(config.container || 'div.switchContent').hide();
+                if (!el.find(config.container || 'div.switchContent:first').hasClass('active')) {
+                    el.find(config.container || 'div.switchContent:first').hide();
                 }
             });
         } else {
             config = config || {};
             el = elOrSelector;
-            if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
-                el.find(config.container || 'div.switchContent').hide();
+            if (!el.find(config.container || 'div.switchContent:first').hasClass('active')) {
+                el.find(config.container || 'div.switchContent:first').hide();
             }
             el = elOrSelector.get(0);
 
-            if(!el.switchDisplayObject) {
+            if (!el.switchDisplayObject) {
                 el.switchDisplayObject = new switchDisplayCls(el, config);
             }
         };
