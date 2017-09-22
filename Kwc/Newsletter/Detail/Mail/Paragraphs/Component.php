@@ -17,6 +17,7 @@ class Kwc_Newsletter_Detail_Mail_Paragraphs_Component extends Kwc_Paragraphs_Com
             );
         }
 
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/Mail/Paragraphs/Panel.js';
         return $ret;
     }
 }
