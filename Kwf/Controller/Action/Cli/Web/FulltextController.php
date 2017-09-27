@@ -137,7 +137,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             $countIndexed++;
             if ($this->_getParam('debug')) echo "changed: $row->page_id\n";
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
-            if (!$page) {
+
+            $newDoc = false;
+            if ($page) $newDoc = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getFulltextContentForPage($page);
+
+            if (!$newDoc) {
                 if ($this->_getParam('debug')) echo "deleting $row->page_id\n";
                 $sr = Kwf_Component_Data_Root::getInstance()->getComponentById($row->subroot_component_id, array('ignoreVisible' => true));
                 if ($sr) {
