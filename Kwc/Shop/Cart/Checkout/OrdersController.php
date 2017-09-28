@@ -6,7 +6,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController_Payment extends Kwf_Data_Abstract
     {
         $this->_payments = $payments;
     }
-    public function load($row)
+    public function load($row, array $info = array())
     {
         if (!isset($this->_payments[$row->payment])) return $row->payment;
         return $this->_payments[$row->payment];
@@ -14,7 +14,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController_Payment extends Kwf_Data_Abstract
 }
 class Kwc_Shop_Cart_Checkout_OrdersController_SumAmount extends Kwf_Data_Abstract
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $ret = 0;
         foreach ($row->getChildRows('Products') as $p) {
@@ -26,7 +26,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController_SumAmount extends Kwf_Data_Abstrac
 }
 class Kwc_Shop_Cart_Checkout_OrdersController_SumPrice extends Kwf_Data_Abstract
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         return $row->getTotal();
     }
