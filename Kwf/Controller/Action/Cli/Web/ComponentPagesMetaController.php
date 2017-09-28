@@ -136,9 +136,10 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         }
 
         if ($this->_getParam('debug')) {
+            $secondsAsDurationHelper = new Kwf_View_Helper_SecondsAsDuration();
             $stats = unserialize(file_get_contents($statsFile));
             echo "fulltext reindex finished.\n";
-            echo "duration: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
+            echo "duration: ".$secondsAsDurationHelper->secondsAsDuration(microtime(true)-$startTime)."s\n";
             echo "used child processes: $numProcesses\n";
             echo "processed pages: $stats[pages]\n";
             echo "indexed pages: $stats[addedPages]\n";
