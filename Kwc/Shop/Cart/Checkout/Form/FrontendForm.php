@@ -81,7 +81,7 @@ class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
     }
 
 
-    public function validate($parentRow, array $postData = array())
+    public function validate($parentRow, $postData = array())
     {
         $ret = parent::validate($parentRow, $postData);
         if ($this->getAllowEmptyCart() !== true) {

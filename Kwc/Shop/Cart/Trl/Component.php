@@ -8,7 +8,7 @@ class Kwc_Shop_Cart_Trl_Component extends Kwc_Directories_Item_Directory_Trl_Com
         return $ret;
     }
 
-    public function preProcessInput()
+    public function preProcessInput($postData)
     {
         // to remove deleted products from the cart
         Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->chained->componentClass, 'childModel'))
