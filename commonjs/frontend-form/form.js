@@ -1,4 +1,3 @@
-// @require ModernizrNetworkXhr2
 // @require KwfLoading
 
 var $ = require('jQuery');
@@ -42,14 +41,6 @@ var FormComponent = function(form)
     this._submitDisabled = 0;
 
     formRegistry.formsByComponentId[this.config.componentId] = this;
-
-
-    if (this.el.find('form').get(0).enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
-        if (Modernizr.xhr2) {
-            this.el.find('form').get(0).enctype = 'application/x-www-form-urlencoded';
-        }
-        this.config.useAjaxRequest = Modernizr.xhr2;
-    }
 
     this.fields = [];
     var fieldEls = form.find('.kwfUp-kwfField');

@@ -318,16 +318,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $ret['method'] = $this->_getSetting('method');
         }
 
-        $ret['isUpload'] = false;
-        foreach (new RecursiveIteratorIterator(
-                new Kwf_Collection_Iterator_RecursiveFormFields($this->getForm()->fields))
-                as $f) {
-            if ($f instanceof Kwf_Form_Field_File) {
-                $ret['isUpload'] = true;
-                break;
-            }
-        }
-
         $ret['message'] = null;
 
         $ret['rootElementClass'] .= ' kwfUp-webForm kwfUp-kwcForm';

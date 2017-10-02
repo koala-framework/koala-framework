@@ -21,7 +21,7 @@
     {% if header %}{{ renderer.component(header) }}{% endif %}
     {% endblock %}
     {% if form %}
-        <form action="{{ action }}" method="{{ method }}"{% if isUpload %} enctype="multipart/form-data"{% endif %}>
+        <form action="{{ action }}" method="{{ method }}">
 
             {% block content %}
                 {{ renderer.formField(form) }}
