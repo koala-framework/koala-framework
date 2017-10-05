@@ -115,6 +115,11 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         }
 
         $url = $authMethods[$authMethod]->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
+        if (!$url) {
+            $html = $authMethods[$authMethod]->getLoginRedirectHtml($this->_getRedirectBackUrl(), $state, $formValues);
+            echo $html;
+            exit;
+        }
         $this->redirect($url);
     }
 

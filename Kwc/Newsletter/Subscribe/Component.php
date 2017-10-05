@@ -157,10 +157,12 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
     {
         if ($this->_getSetting('subscribeType') == self::DOUBLE_OPT_IN) {
             $logMessage = $this->getData()->trlKwf('Subscribed');
+            $state = 'subscribed';
         } else {
             $logMessage = $this->getData()->trlKwf('Subscribed and activated');
+            $state = 'activated';
         }
 
-        $row->writeLog($logMessage);
+        $row->writeLog($logMessage, $state);
     }
 }

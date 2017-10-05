@@ -30,7 +30,7 @@
             "js-cookie": "^2.1.1"
         },
         "require-npm": {
-            "uglify-js": "~2.4.13",
+            "uglify-js": "~2.8.27",
             "node-sass": "~3.7.0",
             "amdlc": "~0.1.5",
             "browser-pack": "~5.0.1",

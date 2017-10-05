@@ -7,7 +7,7 @@ class Kwc_User_Login_Plugin extends Kwf_Component_Plugin_Abstract
     {
         if (strpos($output, '%redirect%') !== false) {
             $r = isset($_GET['redirect']) ? $_GET['redirect'] : '';
-            $output = str_replace('%redirect%', $r, $output);
+            $output = str_replace('%redirect%', htmlspecialchars($r), $output);
         }
         return $output;
     }

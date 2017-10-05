@@ -1,6 +1,6 @@
 <?php
 class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Component
-    implements Kwf_Media_Output_IsValidInterface
+    implements Kwf_Media_Output_IsValidInterface, Kwf_Media_Output_ClearCacheInterface
 {
     public static function getSettings($param = null)
     {
@@ -84,5 +84,10 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
             'mimeType' => $mimeType,
             'downloadFilename' => $filename
         );
+    }
+
+    public static function canCacheBeDeleted($id)
+    {
+        return !Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
     }
 }

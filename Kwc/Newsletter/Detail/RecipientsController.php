@@ -27,6 +27,14 @@ class Kwc_Newsletter_Detail_RecipientsController extends Kwc_Newsletter_Subscrib
         return $ret;
     }
 
+    protected function _addPluginSelect($select)
+    {
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyRecipientsSelect($select, Kwc_Newsletter_PluginInterface::RECIPIENTS_GRID_TYPE_ADD_TO_QUEUE);
+        }
+        return $select;
+    }
+
     protected function _getMailComponent()
     {
         $mailComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(

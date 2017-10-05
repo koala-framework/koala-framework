@@ -67,6 +67,10 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
             ->setData(new Kwc_Newsletter_Detail_IsActiveData())
             ->setRenderer('newsletterState')
             ->setType('string');
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyRecipientsGridColumns($this->_columns, Kwc_Newsletter_PluginInterface::RECIPIENTS_GRID_TYPE_EDIT_SUBSCRIBERS);
+        }
     }
 
     protected function _getSelect()
@@ -96,7 +100,7 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
             $user = Kwf_Registry::get('userModel')->getAuthedUser();
 
             $row->setLogSource($c->trlKwf('Backend'));
-            $row->writeLog($c->trlKwf('Unsubscribed from {0}', array($user->name)));
+            $row->writeLog($c->trlKwf('Unsubscribed from {0}', array($user->name)), 'unsubscribed');
 
             $row->save();
         }

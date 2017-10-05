@@ -1,21 +1,6 @@
 <?php
 abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf_Controller_Action_Auto_Grid
 {
-    protected function _getSelect()
-    {
-        $select = parent::_getSelect();
-        if (is_null($select)) return null;
-        $order = $this->_defaultOrder;
-        if ($this->getRequest()->getParam('sort')) {
-            $order['field'] = $this->getRequest()->getParam('sort');
-        }
-        if ($this->_getParam("direction") && $this->_getParam('direction') != 'undefined') {
-            $order['direction'] = $this->_getParam('direction');
-        }
-        $select->order($order);
-        return $select;
-    }
-
     private function _getRecipientsSelect()
     {
         $select = $this->_getSelect();
@@ -26,6 +11,21 @@ abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf
             } else {
                 throw new Kwf_Exception_Client(trlKwf('Please select recipients.'));
             }
+        }
+        return $select;
+    }
+
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
+        $ret = $this->_addPluginSelect($ret);
+        return $ret;
+    }
+
+    protected function _addPluginSelect($select)
+    {
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyRecipientsSelect($select, Kwc_Newsletter_PluginInterface::RECIPIENTS_GRID_TYPE_EDIT_SUBSCRIBERS);
         }
         return $select;
     }
