@@ -126,7 +126,7 @@ class Kwf_Util_Maintenance_Dispatcher
         if ($debug) echo "\n";
 
         $runRow->save();
-        if ($runRow->status != 'success') {
+        if ($runRow->status != 'success' && Kwf_Config::getValue('maintenanceJobs.sendFailNotification')) {
             $recipients = $job->getRecipientsForFailNotification();
             if (is_null($recipients)) {
                 $recipients = Kwf_Config::getValue('maintenanceJobs.failNotificationRecipient');
