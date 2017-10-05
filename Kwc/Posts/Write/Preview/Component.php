@@ -5,9 +5,6 @@ class Kwc_Posts_Write_Preview_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings($param);
 
-        $ret['assets']['dep'][] = 'ExtCore';
-        $ret['assets']['dep'][] = 'ExtDelayedTask';
-
         $ret['placeholder']['preview'] = trlKwfStatic('Preview').':';
         // es wird von der eigenen komponente aus so lange nach oben gesucht
         // bis bis ein parentNode in irgendeiner unterebene ein child hat,

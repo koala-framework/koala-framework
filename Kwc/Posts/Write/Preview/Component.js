@@ -1,3 +1,6 @@
+/*
+TODO port to jquery
+
 Ext2.namespace('Kwc.PostsWritePreview');
 
 Ext2.onReady(function()
@@ -102,3 +105,4 @@ Kwc.PostsWritePreview.replaceText = function(v)
     return v;
 };
 
+*/
