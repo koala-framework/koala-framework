@@ -10,9 +10,7 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
             ->getComponentById((string)$postData['componentId'], array('ignoreVisible' => true));
         if (!$component) throw new Kwf_Exception_Client('component not found');
         $component = $component->getComponent();
-        $postData['doNotRelocate'] = true;
-        $component->preProcessInput($postData);
-        $component->processInput($postData);
+        $component->processAjaxInput($postData);
 
         $errors = $component->getErrors();
         $this->view->errorPlaceholder = $component->getPlaceholder('error');

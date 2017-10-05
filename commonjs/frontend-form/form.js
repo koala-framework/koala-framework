@@ -163,20 +163,17 @@ FormComponent.prototype = {
     },
     onSubmit: function(e)
     {
+        e.preventDefault();
         if (this.isSubmitDisabled()) {
-            e.preventDefault();
             return;
         }
 
         //return false to cancel submit
         if (this.el.triggerHandler('kwfUp-form-beforeSubmit', this, e) === false) {
-            e.preventDefault();
             return;
         }
 
-        if (!this.config.useAjaxRequest || this.ajaxRequestSubmitted) return;
         this.submit();
-        e.preventDefault();
     },
 
     submit: function()
@@ -197,9 +194,13 @@ FormComponent.prototype = {
             data: data,
             dataType: 'json',
             error: (function() {
-                //on failure try a plain old post of the form
-                this.ajaxRequestSubmitted = true; //avoid endless recursion
-                button.find('.kwfUp-submit').get(0).click();
+                this.errorStyle.showErrors({
+                    errorFields: [],
+                    errorMessages: [t.trlKwf('The form was not submitted sucessfully')],
+                    errorPlaceholder: t.trlKwf('An error has occurred')
+                });
+                button.find('.kwfUp-saving').remove();
+                button.find('.kwfUp-submit').css('visibility', 'visible');
             }).bind(this),
             success: (function(r) {
 

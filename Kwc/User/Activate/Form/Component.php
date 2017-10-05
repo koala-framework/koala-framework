@@ -13,9 +13,8 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('Activate Account');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Activate_Form_Success_Component';
-        $ret['useAjaxRequest'] = true;
         $ret['viewCache'] = false;
-        unset($ret['plugins']['useViewCache']);
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
@@ -52,8 +51,6 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
 
     public function processInput(array $postData)
     {
-        parent::processInput($postData);
-
         if (isset($postData['code'])) {
             $code = $postData['code'];
             $this->getForm()->getRow()->code = $code;
