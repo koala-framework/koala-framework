@@ -14,7 +14,7 @@ class Kwf_View_Helper_MailLink extends Kwf_View_Helper_Abstract_MailLink
 
         $attr = $subjectBody = '';
         if (is_string($cssClass)) {
-            $attr = ' class="'.$cssClass.'"';
+            $attr = ' class="'.Kwf_Util_HtmlSpecialChars::filter($cssClass).'"';
         } else if (is_array($cssClass)) {
             foreach ($cssClass as $k=>$i) {
                 if ($k == 'subject') {
@@ -27,7 +27,7 @@ class Kwf_View_Helper_MailLink extends Kwf_View_Helper_Abstract_MailLink
                     }
                     $subjectBody .= "body=$i";
                 } else {
-                    $attr .= ' '.$k.'="'.$i.'"';
+                    $attr .= ' '.Kwf_Util_HtmlSpecialChars::filter($k).'="'.Kwf_Util_HtmlSpecialChars::filter($i).'"';
                 }
             }
         }

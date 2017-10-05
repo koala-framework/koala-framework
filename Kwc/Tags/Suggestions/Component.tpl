@@ -1,5 +1,5 @@
 <div class="<?=$this->rootElementClass?>">
-    <input type="hidden" class="config" value="<?=htmlspecialchars(json_encode($this->config))?>" />
+    <input type="hidden" class="config" value="<?=Kwf_Util_HtmlSpecialChars::filter(json_encode($this->config))?>" />
     <form>
         <div class="kwfUp-kwfField">
             <input value="<?=$this->data->trlKwf('Enter tag...')?>" class="kwfUp-kwfClearOnFocus tag" name="tag" />

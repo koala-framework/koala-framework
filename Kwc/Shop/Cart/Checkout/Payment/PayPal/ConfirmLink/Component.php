@@ -67,7 +67,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
         $paypalDomain = Kwf_Registry::get('config')->paypalDomain;
         $ret = "<form id=\"paypalButton\" action=\"https://$paypalDomain/cgi-bin/webscr\" method=\"post\">\n";
         foreach ($params as $k=>$i) {
-            $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".htmlspecialchars($i)."\">\n";
+            $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".Kwf_Util_HtmlSpecialChars::filter($i)."\">\n";
         }
 
         $ret .= "<input type=\"image\" src=\"https://www.paypal.com/de_DE/AT/i/btn/btn_buynowCC_LG.gif\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">\n";

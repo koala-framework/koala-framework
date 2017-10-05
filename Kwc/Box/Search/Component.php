@@ -43,8 +43,8 @@ abstract class Kwc_Box_Search_Component extends Kwc_Abstract_Composite_Component
     public function getSearchFormData()
     {
         $fc = $this->_getSearchForm();
-        if (!$fc->getComponent() instanceof Kwc_Form_Component) {
-            throw new Kwf_Exception("The Component returned by _getSearchForm needs to be a Kwc_Form_Component");
+        if (!$fc->getComponent() instanceof Kwc_Form_NonAjax_Component) {
+            throw new Kwf_Exception("The Component returned by _getSearchForm needs to be a Kwc_Form_NonAjax_Component");
         }
         $form = $fc->getComponent()->getForm();
         if (!isset($form->fields['query'])) {

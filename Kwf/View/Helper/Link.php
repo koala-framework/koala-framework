@@ -45,28 +45,28 @@ class Kwf_View_Helper_Link
         }
 
         if (!empty($config['anchor'])) $url .= "#".$config['anchor'];
-        $attrs = " href=\"".htmlspecialchars($url)."\"";
+        $attrs = " href=\"".Kwf_Util_HtmlSpecialChars::filter($url)."\"";
         if (!empty($config['cssClass'])) {
             $cssClass = $config['cssClass'];
             if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
-            $attrs .= " class=\"$cssClass\"";
+            $attrs .= " class=\"".Kwf_Util_HtmlSpecialChars::filter($cssClass)."\"";
         }
         if (!empty($config['style'])) {
-            $attrs .= " style=\"".htmlspecialchars($config['style'])."\"";
+            $attrs .= " style=\"".Kwf_Util_HtmlSpecialChars::filter($config['style'])."\"";
         }
         if (!empty($config['target'])) {
-            $attrs .= ' target="'.htmlspecialchars($config['target']).'"';
+            $attrs .= ' target="'.Kwf_Util_HtmlSpecialChars::filter($config['target']).'"';
         }
         if (!empty($config['title'])) {
-            $attrs .= ' title="'.htmlspecialchars($config['title']).'"';
+            $attrs .= ' title="'.Kwf_Util_HtmlSpecialChars::filter($config['title']).'"';
         }
         if (!empty($rel)) {
-            $attrs .= ' rel="'.htmlspecialchars($rel).'"';
+            $attrs .= ' rel="'.Kwf_Util_HtmlSpecialChars::filter($rel).'"';
         }
 
         if (!empty($config['dataAttributes'])) {
             foreach ($config['dataAttributes'] as $k=>$i) {
-                $attrs .= ' data-'.htmlspecialchars($k).'="' . htmlspecialchars($i) . '"';
+                $attrs .= ' data-'.Kwf_Util_HtmlSpecialChars::filter($k).'="' . Kwf_Util_HtmlSpecialChars::filter($i) . '"';
             }
         }
 

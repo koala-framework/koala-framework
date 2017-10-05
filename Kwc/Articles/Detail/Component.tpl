@@ -1,5 +1,5 @@
 <div class="<?=$this->rootElementClass?>">
-    <input type="hidden" name="config" value="<?=htmlspecialchars(json_encode($this->config))?>" />
+    <input type="hidden" name="config" value="<?=Kwf_Util_HtmlSpecialChars::filter(json_encode($this->config))?>" />
     <?=$this->componentLink($this->data->parent, trlKwf('Back'), 'back')?>
     <div class="date"><?=date('d.m.Y', strtotime($this->row->date))?></div>
     <h1><?=$this->title?></h1>

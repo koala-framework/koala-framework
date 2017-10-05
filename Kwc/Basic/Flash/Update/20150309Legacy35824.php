@@ -22,7 +22,7 @@ class Kwc_Basic_Flash_Update_20150309Legacy35824 extends Kwf_Update
                 $vars[] = urlencode($v['key']).'='.urlencode($v['value']);
             }
             if ($vars) $url .= "?".implode('&', $vars);
-            $code .= "  <param name=\"movie\" value=\"".htmlspecialchars($url)."\">\n";
+            $code .= "  <param name=\"movie\" value=\"".Kwf_Util_HtmlSpecialChars::filter($url)."\">\n";
             $code .= "  <param name=\"allow_fullscreen\" value=\"$row[allow_fullscreen]\">\n";
             $code .= "  <param name=\"menu\" value=\"$row[menu]\">\n";
             $code .= "</object>\n";

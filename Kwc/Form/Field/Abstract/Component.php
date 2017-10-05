@@ -23,13 +23,15 @@ class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
         //initialize form, sets formName on fields
         $form->getComponent()->getForm();
 
+        if (!($form->getComponent() instanceof Kwc_Form_Component)) {
+            if ($form->getComponent() instanceof Kwc_Form_NonAjax_Component) {
+                throw new Kwf_Exception("Form component must not be a Kwc_Form_NonAjax_Component");
+            }
+            throw new Kwf_Exception("Form component must be a Kwc_Form_Component");
+        }
+
         $postData = array();
         $errors = array();
-        if ($form->getComponent()->isProcessed()) {
-            //kann nicht processed sein wenn paragraphs der form im backend bearbeitet werden
-            $postData = $form->getComponent()->getPostData();
-            $errors = $this->_getForm()->getComponent()->getErrors();
-        }
         $fieldVars = $this->getFormField()->getTemplateVars($postData);
         $dec = Kwc_Abstract::getSetting($form->componentClass, 'decorator');
         if ($dec && is_string($dec)) {
