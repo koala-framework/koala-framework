@@ -49,7 +49,7 @@ class Kwf_View_Helper_Link
         if (!empty($config['cssClass'])) {
             $cssClass = $config['cssClass'];
             if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
-            $attrs .= " class=\"$cssClass\"";
+            $attrs .= " class=\"".Kwf_Util_HtmlSpecialChars::filter($cssClass)."\"";
         }
         if (!empty($config['style'])) {
             $attrs .= " style=\"".Kwf_Util_HtmlSpecialChars::filter($config['style'])."\"";
