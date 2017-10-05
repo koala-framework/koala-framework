@@ -15,7 +15,7 @@ class Kwf_Component_Sitemap
         );
         while ($row = $stmt->fetch()) {
             echo "<url>\n";
-            echo " <loc>".htmlspecialchars($row['url'])."</loc>\n";
+            echo " <loc>".Kwf_Util_HtmlSpecialChars::filter($row['url'])."</loc>\n";
             echo " <lastmod>".date('c', strtotime($row['changed_date']))."</lastmod>\n";
             echo " <changefreq>".$row['sitemap_changefreq']."</changefreq>\n";
             echo " <priority>".$row['sitemap_priority']."</priority>\n";

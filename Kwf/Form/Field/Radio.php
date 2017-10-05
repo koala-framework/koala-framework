@@ -66,13 +66,13 @@ class Kwf_Form_Field_Radio extends Kwf_Form_Field_Select
         $ret['html'] = '<div class="kwfFormFieldRadio kwfFormFieldRadio'.ucfirst($this->getOutputType()).'">';
         $k = 0;
         foreach ($store['data'] as $i) {
-            $ret['html'] .= '<span class="value'.htmlspecialchars(ucfirst($i[0])).'">';
+            $ret['html'] .= '<span class="value'.Kwf_Util_HtmlSpecialChars::filter(ucfirst($i[0])).'">';
             $ret['html'] .= '<input type="radio" class="radio" id="'.$ret['id'].++$k.'" '
-                .'name="'.$name.$fieldNamePostfix.'" value="'.htmlspecialchars($i[0]).'"';
+                .'name="'.$name.$fieldNamePostfix.'" value="'.Kwf_Util_HtmlSpecialChars::filter($i[0]).'"';
             if ($value === $i[0] || (!is_null($value) && $i[0] == $value)) {
                 $ret['html'] .= ' checked="checked"';
             }
-            $ret['html'] .= ' /> <label for="'.$ret['id'].$k.'">'.htmlspecialchars($i[1]).'</label>';
+            $ret['html'] .= ' /> <label for="'.$ret['id'].$k.'">'.Kwf_Util_HtmlSpecialChars::filter($i[1]).'</label>';
             $ret['html'] .= '</span>';
         }
         $ret['html'] .= '</div>';

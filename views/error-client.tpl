@@ -4,6 +4,6 @@
     </head>
     <body>
         <h1><?= trlKwf('Error') ?></h1>
-        <p><?= htmlspecialchars($this->message) ?></p>
+        <p><?= Kwf_Util_HtmlSpecialChars::filter($this->message) ?></p>
     </body>
 </html>

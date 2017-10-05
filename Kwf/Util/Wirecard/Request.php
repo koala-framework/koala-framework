@@ -42,7 +42,7 @@ class Kwf_Util_Wirecard_Request
         $exclude = array('cancelURL', 'failureURL', 'serviceURL', 'imageURL');
         foreach ($params as $key=>$value) {
             if ($key == 'secret') continue;
-            $ret .= "<input type=\"hidden\" name=\"$key\" value=\"".htmlspecialchars($value)."\" />\n";
+            $ret .= "<input type=\"hidden\" name=\"$key\" value=\"".Kwf_Util_HtmlSpecialChars::filter($value)."\" />\n";
         }
         $ret .= "<input type=\"submit\" value=\"Payment\" />\n";
         $ret .= "</form>\n";

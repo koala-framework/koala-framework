@@ -17,7 +17,7 @@ class Kwc_Tags_Suggestions_Controller extends Kwf_Controller_Action
         foreach ($newTags as $newTag) {
             // To remove possible xss security problem
             $newTag = trim($newTag);
-            $newTag = htmlspecialchars($newTag);
+            $newTag = Kwf_Util_HtmlSpecialChars::filter($newTag);
 
             $select = new Kwf_Model_Select();
             $select->whereEquals('name', $newTag);

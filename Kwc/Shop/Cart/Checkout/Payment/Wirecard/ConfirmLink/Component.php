@@ -67,7 +67,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
         $ret = "<form action=\"$initURL\" method=\"post\" name=\"form\">\n";
         foreach ($params as $k=>$i) {
         if ($k == 'secret') continue;
-            $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".htmlspecialchars($i)."\">\n";
+            $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".Kwf_Util_HtmlSpecialChars::filter($i)."\">\n";
         }
 
         $ret .= "<input type=\"button\" value=\"{$payment->trlKwf('Buy now')}\" class=\"submit\">\n";

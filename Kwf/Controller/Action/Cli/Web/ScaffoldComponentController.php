@@ -106,7 +106,7 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldComponentController extends Kwf_Cont
     {
         $content = '';
         if ($js) {
-            $content .= "    <input type=\"hidden\" value=\"<?=htmlspecialchars(json_encode(\$this->config))?>\" />\n";
+            $content .= "    <input type=\"hidden\" value=\"<?=Kwf_Util_HtmlSpecialChars::filter(json_encode(\$this->config))?>\" />\n";
         }
         $data = "<div class=\"<?=\$this->cssClass?>\">\n";
         $data .= $content;

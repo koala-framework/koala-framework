@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?>">
 
-    <div class="nickname"><h3><?=htmlspecialchars($this->row->nickname)?></h3></div>
+    <div class="nickname"><h3><?=Kwf_Util_HtmlSpecialChars::filter($this->row->nickname)?></h3></div>
     
     <?php
     if ($this->avatar) {
@@ -27,12 +27,12 @@
 
         <?php if ($this->row->location != '') { ?>
         <h3><?=$this->data->trlKwf('Place of living')?>:</h3>
-        <p><?=htmlspecialchars($this->row->location)?></p>
+        <p><?=Kwf_Util_HtmlSpecialChars::filter($this->row->location)?></p>
         <?php } ?>
     
         <?php if ($this->row->description_short != '') { ?>
         <h3><?=$this->data->trlKwf('Short description')?>:</h3>
-        <p><?=nl2br(htmlspecialchars($this->row->description_short))?></p>
+        <p><?=nl2br(Kwf_Util_HtmlSpecialChars::filter($this->row->description_short))?></p>
         <?php } ?>
     
         <h3><?=$this->data->trlKwf('Last Posts')?>:</h3>

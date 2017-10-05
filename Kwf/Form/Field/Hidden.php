@@ -16,8 +16,8 @@ class Kwf_Form_Field_Hidden extends Kwf_Form_Field_SimpleAbstract
 
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
-        $value = htmlspecialchars($value);
-        $name = htmlspecialchars($name);
+        $value = Kwf_Util_HtmlSpecialChars::filter($value);
+        $name = Kwf_Util_HtmlSpecialChars::filter($name);
         $ret['html'] = "<input type=\"hidden\" ".
                         "name=\"$name$fieldNamePostfix\" value=\"$value\" />";
         return $ret;

@@ -26,7 +26,7 @@
             </div>
         <?php } ?>
 
-        <input type="hidden" class="options" value="<?= htmlspecialchars(Zend_Json::encode($this->options)) ?>" />
+        <input type="hidden" class="options" value="<?= Kwf_Util_HtmlSpecialChars::filter(Zend_Json::encode($this->options)) ?>" />
 
         <?php /* height wird benötigt wenn gmap innerhalb von switchDisplay liegt*/ ?>
         <div class="container" style="height: <?= $this->height; ?>px;"></div>

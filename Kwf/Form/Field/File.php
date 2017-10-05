@@ -170,7 +170,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         $ret = parent::getTemplateVars($values, $namePostfix, $idPrefix);
         $fileSizeLimit = $this->getFileSizeLimit();
 
-        $name = htmlspecialchars($name);
+        $name = Kwf_Util_HtmlSpecialChars::filter($name);
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
         $ret['html']  = "<div class=\"kwfFormFieldFileInnerImg\">\n";
         if ($value) {

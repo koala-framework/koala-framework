@@ -13,16 +13,16 @@ class Kwf_View_Helper_Assets
         $ret = '';
 
         foreach ($assetsPackage->getPackageUrls('text/css', $language) as $file) {
-            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($prefix.$file)."\" />\n";
+            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".Kwf_Util_HtmlSpecialChars::filter($prefix.$file)."\" />\n";
         }
         foreach ($assetsPackage->getPackageUrls('text/css; ie8', $language) as $file) {
-            $ret .= "$indent<!--[if lte IE 8]><link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($prefix.$file)."\" /><![endif]-->\n";
+            $ret .= "$indent<!--[if lte IE 8]><link rel=\"stylesheet\" type=\"text/css\" href=\"".Kwf_Util_HtmlSpecialChars::filter($prefix.$file)."\" /><![endif]-->\n";
         }
         foreach ($assetsPackage->getPackageUrls('text/javascript; ie8', $language) as $file) {
-            $ret .= "$indent<!--[if lte IE 8]><script type=\"text/javascript\" src=\"".htmlspecialchars($prefix.$file)."\"></script><![endif]-->\n";
+            $ret .= "$indent<!--[if lte IE 8]><script type=\"text/javascript\" src=\"".Kwf_Util_HtmlSpecialChars::filter($prefix.$file)."\"></script><![endif]-->\n";
         }
         foreach ($assetsPackage->getPackageUrls('text/javascript', $language) as $file) {
-            $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($prefix.$file)."\"></script>\n";
+            $ret .= "$indent<script type=\"text/javascript\" src=\"".Kwf_Util_HtmlSpecialChars::filter($prefix.$file)."\"></script>\n";
         }
         foreach ($assetsPackage->getPackageUrls('text/javascript; defer', $language) as $file) {
             //single line to allow parsing

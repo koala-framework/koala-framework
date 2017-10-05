@@ -59,8 +59,8 @@ class Kwf_Form_Field_TimeField extends Kwf_Form_Field_SimpleAbstract
         if (!$value) $value = trlKwf('hh:mm');
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
-        $value = htmlspecialchars($value);
-        $name = htmlspecialchars($name);
+        $value = Kwf_Util_HtmlSpecialChars::filter($value);
+        $name = Kwf_Util_HtmlSpecialChars::filter($name);
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<input type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
