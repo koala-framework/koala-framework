@@ -139,7 +139,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                                 $style .= "$k: $v; ";
                             }
                         }
-                        $styleAttr = 'style="'.htmlspecialchars($style).'"';
+                        $styleAttr = 'style="'.Kwf_Util_HtmlSpecialChars::filter($style).'"';
                         $part = str_replace($matched, $prefix.$styleAttr.$postfix, $part);
                     }
                 }

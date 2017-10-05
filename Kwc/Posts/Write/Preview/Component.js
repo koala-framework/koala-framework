@@ -42,7 +42,7 @@ Kwc.PostsWritePreview.scrollToBottom = function(el, maxHeight) {
 
 Kwc.PostsWritePreview.replaceText = function(v)
 {
-    // htmlspecialchars
+    // Kwf_Util_HtmlSpecialChars::filter
     v = v.replace(/&/g, '&amp;');
     v = v.replace(/"/g, '&quot;');
     v = v.replace(/</g, '&lt;');

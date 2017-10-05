@@ -22,7 +22,7 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
             }
             $msgs = array();
             foreach ($error['messages'] as $msg) {
-                $msgs[] = htmlspecialchars($msg);
+                $msgs[] = Kwf_Util_HtmlSpecialChars::filter($msg);
             }
             if (isset($error['field'])) {
                 //if message is associated with a specific field show it there

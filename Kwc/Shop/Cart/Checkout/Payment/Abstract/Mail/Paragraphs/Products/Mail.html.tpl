@@ -14,11 +14,11 @@
     $c=0;
     foreach ($this->items as $item) { ?>
         <tr class="products<?=($c%2==0 ? ' row1' : ' row2');?>">
-            <td class="product"><?=htmlspecialchars($item->text);?></td>
+            <td class="product"><?=Kwf_Util_HtmlSpecialChars::filter($item->text);?></td>
             <?php foreach ($item->additionalOrderData as $d) { ?>
-                <td class="<?=$d['class']?>"><?=htmlspecialchars($this->data->trlStaticExecute($d['name']));?>: <?=htmlspecialchars($this->data->trlStaticExecute($d['value']));?></td>
+                <td class="<?=$d['class']?>"><?=Kwf_Util_HtmlSpecialChars::filter($this->data->trlStaticExecute($d['name']));?>: <?=Kwf_Util_HtmlSpecialChars::filter($this->data->trlStaticExecute($d['value']));?></td>
             <?php } ?>
-            <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>" align="right"><?=htmlspecialchars($this->money($item->price));?></td>
+            <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>" align="right"><?=Kwf_Util_HtmlSpecialChars::filter($this->money($item->price));?></td>
         </tr>
         <?php $c++;
     } ?>
@@ -30,22 +30,22 @@
             <td align="right">
                 <?php
                     if (isset($row['class']) && $row['class']=='valueOfGoods') {
-                        echo '<i>'.htmlspecialchars($this->data->trlStaticExecute($row['text'])).'</i>';
+                        echo '<i>'.Kwf_Util_HtmlSpecialChars::filter($this->data->trlStaticExecute($row['text'])).'</i>';
                     } else if (isset($row['class']) && $row['class']=='totalAmount') {
-                        echo '<b>'.htmlspecialchars($this->data->trlStaticExecute($row['text'])).'</b>';
+                        echo '<b>'.Kwf_Util_HtmlSpecialChars::filter($this->data->trlStaticExecute($row['text'])).'</b>';
                     } else {
-                        echo htmlspecialchars($this->data->trlStaticExecute($row['text']));
+                        echo Kwf_Util_HtmlSpecialChars::filter($this->data->trlStaticExecute($row['text']));
                     }
                 ?>
             </td>
             <td width="120" align="right">
                 <?php
                     if (isset($row['class']) && $row['class']=='valueOfGoods') {
-                        echo '<i>'.htmlspecialchars($this->money($row['amount'],'')).'</i>';
+                        echo '<i>'.Kwf_Util_HtmlSpecialChars::filter($this->money($row['amount'],'')).'</i>';
                     } else if (isset($row['class']) && $row['class']=='totalAmount') {
-                        echo '<b>'.htmlspecialchars($this->money($row['amount'],'')).'</b>';
+                        echo '<b>'.Kwf_Util_HtmlSpecialChars::filter($this->money($row['amount'],'')).'</b>';
                     } else {
-                        echo htmlspecialchars($this->money($row['amount'],''));
+                        echo Kwf_Util_HtmlSpecialChars::filter($this->money($row['amount'],''));
                     }
                 ?>
             </td>

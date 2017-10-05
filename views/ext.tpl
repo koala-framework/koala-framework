@@ -41,17 +41,17 @@
 
     <div id="<?=$this->uniquePrefix?>extconfig"
         <?php if (isset($this->ext['user'])) { ?>
-            data-user="<?= htmlspecialchars($this->ext['user']) ?>"
+            data-user="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['user']) ?>"
         <?php } ?>
-        data-user-role="<?= htmlspecialchars($this->ext['userRole']) ?>"
+        data-user-role="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['userRole']) ?>"
         <?php if (isset($this->sessionToken)) { ?>
-            data-session-token="<?= htmlspecialchars($this->sessionToken) ?>"
+            data-session-token="<?= Kwf_Util_HtmlSpecialChars::filter($this->sessionToken) ?>"
         <?php } ?>
         <?php if ($this->ext['class']) { ?>
-            data-ext-class="<?= htmlspecialchars($this->ext['class']) ?>"
+            data-ext-class="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['class']) ?>"
         <?php } ?>
-        data-ext-config="<?= htmlspecialchars(json_encode($this->ext['config'])) ?>"
-        data-ext-viewport="<?= htmlspecialchars($this->ext['viewport']) ?>"
+        data-ext-config="<?= Kwf_Util_HtmlSpecialChars::filter(json_encode($this->ext['config'])) ?>"
+        data-ext-viewport="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['viewport']) ?>"
     ></div>
 
     <script type="text/javascript">

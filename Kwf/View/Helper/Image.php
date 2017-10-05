@@ -66,8 +66,8 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
 
         $attr = '';
         foreach ($attributes as $k=>$i) {
-            $attr .= ' '.$k.'="'.$i.'"';
+            $attr .= ' '.Kwf_Util_HtmlSpecialChars::filter($k).'="'.Kwf_Util_HtmlSpecialChars::filter($i).'"';
         }
-        return "<img src=\"$url\"$attr alt=\"$alt\" />";
+        return "<img src=\"" .Kwf_Util_HtmlSpecialChars::filter($url) . "\"$attr alt=\"" .Kwf_Util_HtmlSpecialChars::filter($alt) . "\" />";
     }
 }
