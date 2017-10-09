@@ -35,10 +35,4 @@ class Kwc_User_Register_Form_Component extends Kwc_Form_Component
             $this->_form->add(new Kwc_User_Detail_General_Form('general', null));
         }
     }
-
-    protected function _processInput($postData)
-    {
-        $postData[$this->getData()->componentId.'-post'] = true; //force processInput to be called (required for createUserRow call)
-        parent::_processInput($postData);
-    }
 }
