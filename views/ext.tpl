@@ -44,9 +44,6 @@
             data-user="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['user']) ?>"
         <?php } ?>
         data-user-role="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['userRole']) ?>"
-        <?php if (isset($this->sessionToken)) { ?>
-            data-session-token="<?= Kwf_Util_HtmlSpecialChars::filter($this->sessionToken) ?>"
-        <?php } ?>
         <?php if ($this->ext['class']) { ?>
             data-ext-class="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['class']) ?>"
         <?php } ?>
