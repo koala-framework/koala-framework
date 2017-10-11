@@ -271,7 +271,7 @@ var callOnContentReady = function(renderedEl, options)
                 try {
                     var v = configEl.get(0).value;
                     if (v.substr(0, 1) == '{' || v.substr(0, 1) == '[') {
-                        config = $.parseJSON(v);
+                        config = JSON.parse(v);
                     }
                 } catch (err) {}
             }
