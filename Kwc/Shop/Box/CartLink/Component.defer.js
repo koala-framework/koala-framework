@@ -1,25 +1,29 @@
+var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 
 onReady.onContentReady(function(readyEl, param) {
     if (!param.newRender) return false;
-    Ext2.select('.kwfUp-kwcForm > form', true, readyEl).each(function(form) {
-        form = form.parent('.kwfUp-kwcForm', false);
-        if (form.dom.shopBoxCartInitDone) return;
-        form.dom.shopBoxCartInitDone = true;
-        form.kwcForm.on('submitSuccess', function(r) {
-            Ext2.select('.kwcShopBoxCartLink').each(function(el) {
-                Ext2.Ajax.request({
-                    params: { componentId: el.dom.id },
-                    url: getKwcRenderUrl(),
-                    success: function(response, options) {
-                        $(this.dom).html($(response.responseText).html());
-                        onReady.callOnContentReady(this.dom, {newRender: true});
-                    },
-                    scope: el
-                });
 
-            }, this);
-        }, this);
+    $('.kwfUp-kwcForm > .kwfUp-formContainer > form').each(function(index, form) {
+        form = $(form).parents('.kwfUp-kwcForm');
+        if (form.get(0).shopBoxCartInitDone) return;
+        form.get(0).shopBoxCartInitDone = true;
+
+        form.get(0).kwcForm.on('submitSuccess', function(r) {
+            $('.kwcShopBoxCartLink').each(function(i, el) {
+                $.ajax({
+                    url: getKwcRenderUrl(),
+                    data: {
+                        componentId: el.id
+                    },
+                    success: function (responseText) {
+                        $(el).html($(responseText).html());
+                        onReady.callOnContentReady(el, {newRender: true});
+                    }
+                })
+            });
+        });
+
     });
 }, { priority: 0 }); //call after Kwc.Form.Component
