@@ -267,6 +267,12 @@ class Kwf_User_Model extends Kwf_Model_RowCache
 
     public function getAuthedChangedUserRole()
     {
+        $user = $this->getAuthedChangedUser();
+        return $user ? $user->role : 'guest';
+    }
+
+    public function getAuthedChangedUser()
+    {
         $storage = Kwf_Auth::getInstance()->getStorage();
         $loginData = $storage->read();
         $userId = false;
@@ -276,11 +282,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache
             $userId = $loginData['userId'];
         }
         if ($userId && ($user = $this->getRow($userId))) {
-            $role = $user->role;
-        } else {
-            $role = 'guest';
+            return $user;
         }
-        return $role;
+        return null;
     }
 
     public function changeUser($user)
