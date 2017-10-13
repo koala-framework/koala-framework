@@ -75,7 +75,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                     if (substr($ip, -strlen($i)) == $i) $ignore = true;
                 }
             }
-            Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
+            if (!$ignore) Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
         }
 
         $benchmarkEnabled = Kwf_Benchmark::isEnabled();
