@@ -168,7 +168,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if ($mode == 'mailhtml' || $mode == 'html') {
             $that = $this;
             $mailText = preg_replace_callback('#(<a [^>]*href=")([^>"]+)()#', function($m) use ($that, $recipient) {
-                $link = Kwf_Util_HtmlSpecialChars::filter_decode($m[2]);
+                $link = Kwf_Util_HtmlSpecialChars::decode($m[2]);
                 $link = $that->_createRedirectUrl($link, $recipient);
                 return $m[1].Kwf_Util_HtmlSpecialChars::filter($link).$m[3];
             }, $mailText);
