@@ -55,7 +55,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
                 //discard connection to database to reconnect on next job run
                 //avoids problems with auto closed connections due to inactivity
-                if (function_exists('gc_collect_cycles()')) {
+                if (function_exists('gc_collect_cycles')) {
                     Kwf_Model_Abstract::clearAllRows();
                     Kwf_Model_Abstract::clearInstances();
                     gc_collect_cycles();
