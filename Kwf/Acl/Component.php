@@ -77,6 +77,7 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->allow('superuser', 'settings');
         $this->allow('superuser', 'kwf_enquiries_enquiries');
         $this->deny('superuser', 'kwf_component_clear-cache');
+        $this->deny('superuser', 'kwf_maintenance-jobs_jobs');
 
         $this->allow('admin', 'kwf_component_show-component');
         $this->allow('admin', 'kwf_component_pages');
