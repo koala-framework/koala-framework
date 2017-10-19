@@ -108,6 +108,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret['viewCache'] = true;
         $ret['contentSender'] = 'Kwf_Component_Abstract_ContentSender_Default';
         $ret['layoutClass'] = 'Kwf_Component_Layout_Default';
+        $ret['plugins'] = array();
         return $ret;
     }
 

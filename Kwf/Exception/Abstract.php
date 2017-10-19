@@ -8,14 +8,6 @@ abstract class Kwf_Exception_Abstract extends Exception
 
     public abstract function log();
 
-    public function __construct($message = '', $code = 0, Exception $previous = null)
-    {
-        parent::__construct(
-            Kwf_Util_HtmlSpecialChars::filter($message),
-            $code,
-            $previous);
-    }
-
     public function setLogId($logId)
     {
         $this->_logId = $logId;
