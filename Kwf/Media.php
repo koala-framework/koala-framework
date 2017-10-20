@@ -200,7 +200,7 @@ class Kwf_Media
                 if (isset($output['contents']) && strlen($output['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
                     $cacheFileName = self::_generateCacheFilePath($class, $id, $type);
-                    if (!is_dir(dirname($cacheFileName))) @mkdir(dirname($cacheFileName), 0777, true);
+                    if (!is_dir(dirname($cacheFileName))) mkdir(dirname($cacheFileName), 0777, true);
                     file_put_contents($cacheFileName, $output['contents']);
                     $output['file'] = $cacheFileName;
                     unset($output['contents']);
