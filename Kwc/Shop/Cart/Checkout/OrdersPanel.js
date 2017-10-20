@@ -34,9 +34,9 @@ Kwc.Shop.Cart.Checkout.OrdersPanel = Ext2.extend(Ext2.Panel, {
                     },
                     renderer: function(value, p, record, rowIndex, colIndex, store, column) {
                         p.css += 'kwf-cell-button';
-                        var icon = '/assets/silkicons/page_white.png';
+                        var icon = KWF_BASE_URL+'/assets/silkicons/page_white.png';
                         if (record.get('invoice_number')) {
-                            icon = '/assets/silkicons/page_white_star.png';
+                            icon = KWF_BASE_URL+'/assets/silkicons/page_white_star.png';
                         }
                         p.attr += 'style="background-image:url('+icon+');" ';
                     },

@@ -22,7 +22,7 @@ Ext2.ux.ErrorHandler.on('error', function(ex) {
     }
     Kwf.Debug.sentErrors.push(Ext2.encode(params));
     Ext2.Ajax.request({
-        url: '/kwf/error/error/json-mail',
+        url: KWF_BASE_URL+'/kwf/error/error/json-mail',
         ignoreErrors: true,
         params: params
     });
@@ -36,7 +36,7 @@ if (!Kwf.Debug.displayErrors) {
 Kwf.ErrorHandler.log = function(error)
 {
     Ext2.Ajax.request({
-        url: '/kwf/error/error/json-mail',
+        url: KWF_BASE_URL+'/kwf/error/error/json-mail',
         params: {
             url: error.url,
             message: error.message,

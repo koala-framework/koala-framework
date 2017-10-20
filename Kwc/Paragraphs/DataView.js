@@ -81,14 +81,14 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                 record.set('visible', !record.get('visible'));
                 this.fireEvent('recordModified', record);
             },
-            icon : '/assets/silkicons/'+(record.get('visible') ? 'tick' : 'cross') + '.png',
+            icon : KWF_BASE_URL+'/assets/silkicons/'+(record.get('visible') ? 'tick' : 'cross') + '.png',
             cls  : 'x2-btn-icon'
         });
         if (this.showDeviceVisible) {
             var deviceVisibleMenu = {
                 menu: [{
                     text: trlKwf('show on all devices'),
-                    icon: '/assets/kwf/images/devices/showAll.png',
+                    icon: KWF_BASE_URL+'/assets/kwf/images/devices/showAll.png',
                     scope: this,
                     record: record,
                     handler: function(menu) {
@@ -97,7 +97,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                     }
                 },{
                     text: trlKwf('hide on mobile devices'),
-                    icon: '/assets/kwf/images/devices/smartphoneHide.png',
+                    icon: KWF_BASE_URL+'/assets/kwf/images/devices/smartphoneHide.png',
                     scope: this,
                     record: record,
                     handler: function(menu) {
@@ -106,7 +106,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                     }
                 },{
                     text: trlKwf('only show on mobile devices'),
-                    icon: '/assets/kwf/images/devices/smartphone.png',
+                    icon: KWF_BASE_URL+'/assets/kwf/images/devices/smartphone.png',
                     scope: this,
                     record: record,
                     handler: function(menu) {
@@ -117,11 +117,11 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                 cls  : 'x2-btn-icon'
             };
             if (record.get('device_visible') == 'onlyShowOnMobile') {
-                deviceVisibleMenu.icon = '/assets/kwf/images/devices/smartphone.png';
+                deviceVisibleMenu.icon = KWF_BASE_URL+'/assets/kwf/images/devices/smartphone.png';
             } else if (record.get('device_visible') == 'hideOnMobile') {
-                deviceVisibleMenu.icon = '/assets/kwf/images/devices/smartphoneHide.png';
+                deviceVisibleMenu.icon = KWF_BASE_URL+'/assets/kwf/images/devices/smartphoneHide.png';
             } else if (record.get('device_visible') == 'all') {
-                deviceVisibleMenu.icon = '/assets/kwf/images/devices/showAll.png';
+                deviceVisibleMenu.icon = KWF_BASE_URL+'/assets/kwf/images/devices/showAll.png';
             }
             tb.add(deviceVisibleMenu);
         }
@@ -200,7 +200,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                 handler: function(btn) {
                     this.fireEvent('delete', btn.record);
                 },
-                icon : '/assets/silkicons/bin.png',
+                icon : KWF_BASE_URL+'/assets/silkicons/bin.png',
                 cls  : 'x2-btn-icon'
             });
         }
@@ -213,7 +213,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                 handler: function(btn) {
                     this.fireEvent('edit', btn.record, Kwf.clone(btn.record.get('edit_components')[0]));
                 },
-                icon : '/assets/silkicons/application_edit.png',
+                icon : KWF_BASE_URL+'/assets/silkicons/application_edit.png',
                 cls  : 'x2-btn-text-icon'
             });
         } else if (record.get('edit_components').length > 1) {
@@ -235,7 +235,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
             tb.add({
                 text: trlKwf('edit'),
                 menu: menu,
-                icon : '/assets/silkicons/application_edit.png',
+                icon : KWF_BASE_URL+'/assets/silkicons/application_edit.png',
                 cls  : 'x2-btn-text-icon'
             });
         }
@@ -263,7 +263,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                     text: trlKwf('copy/paste'),
                     menu: [{
                         text: trlKwf('Copy Paragraph'),
-                        icon: '/assets/silkicons/page_white_copy.png',
+                        icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
                         scope: this,
                         record: record,
                         handler: function(btn) {
@@ -271,13 +271,13 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                         }
                     },{
                         text: trlKwf('Paste Paragraph'),
-                        icon: '/assets/silkicons/page_white_copy.png',
+                        icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
                         scope: this,
                         handler: function() {
                             this.fireEvent('pasteParagraph');
                         }
                     }],
-                    icon: '/assets/silkicons/page_white_copy.png',
+                    icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
                     cls  : 'x2-btn-text-icon',
                     record: record,
                     listeners: {

@@ -17,7 +17,7 @@ Kwf.Auto.AssignGridPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
 
         this.actions.assign = new Ext2.Action({
             text    : trlKwf('Assign'),
-            icon    : '/assets/silkicons/table_relationship.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/table_relationship.png',
             cls     : 'x2-btn-text-icon',
             disabled: true,
             handler : this.onAssign,

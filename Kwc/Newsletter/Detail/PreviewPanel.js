@@ -12,7 +12,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
     initComponent : function()
     {
         this.button['html'] = new Ext2.Toolbar.Button ({
-            icon    : '/assets/silkicons/html.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/html.png',
             cls     : 'x2-btn-text-icon',
             text    : trlKwf('HTML'),
             enableToggle: true,
@@ -23,7 +23,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
             name : 'html'
         });
         this.button['text'] = new Ext2.Toolbar.Button ({
-            icon    : '/assets/silkicons/page_white_text.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/page_white_text.png',
             cls     : 'x2-btn-text-icon',
             text    : trlKwf('Text'),
             enableToggle: true,
@@ -35,7 +35,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
         });
 
         this.sendButton = new Ext2.Toolbar.Button ({
-            icon    : '/assets/silkicons/email_go.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/email_go.png',
             cls     : 'x2-btn-text-icon',
             text    : trlKwf('Send'),
             handler : function(a, b, c) {

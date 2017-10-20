@@ -2,8 +2,8 @@ Ext2.namespace('Kwf.Menu');
 
 Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
 {
-    controllerUrl: '/kwf/user/menu',
-    changeUserUrl: '/kwf/user/changeUser',
+    controllerUrl: KWF_BASE_URL+'/kwf/user/menu',
+    changeUserUrl: KWF_BASE_URL+'/kwf/user/changeUser',
     changeUserTpl: ['<tpl for=".">',
                         '<div class="x2-combo-list-item changeuser-list-item">',
                             '<h3>{lastname:htmlEncode}&nbsp;{firstname:htmlEncode}</h3>',
@@ -133,7 +133,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
             id: 'userMenu',
             tooltip: trlKwf('Show User Menu'),
             cls: 'x2-btn-icon',
-            icon: '/assets/silkicons/bullet_arrow_down.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/bullet_arrow_down.png',
             handler: function() {
                 if (!this.userToolbar.isVisible()) {
                     this.showUserMenu.btnEl.setStyle('background-image', 'url(/assets/silkicons/bullet_arrow_up.png)');
@@ -172,7 +172,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
                     url: this.changeUserUrl+'/json-change-user',
                     params: { userId: record.id },
                     success: function() {
-                        location.href = '/kwf/welcome';
+                        location.href = KWF_BASE_URL+'/kwf/welcome';
                     },
                     scope: this
                 });
@@ -193,7 +193,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
                 id: 'currentUser',
                 text: result.fullname,
                 cls: 'x2-btn-text-icon',
-                icon: '/assets/silkicons/user.png',
+                icon: KWF_BASE_URL+'/assets/silkicons/user.png',
                 disabled: !result.userId,
                 handler: function() {
                     var dlg = new Kwf.Auto.Form.Window({
@@ -213,14 +213,14 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
             this.userToolbar.add({
                 cls: 'x2-btn-icon',
                 tooltip: trlKwf('Logout'),
-                icon: '/assets/silkicons/door_out.png',
+                icon: KWF_BASE_URL+'/assets/silkicons/door_out.png',
                 handler: function() {
                     Ext2.Ajax.request({
-                        url : '/kwf/user/login/json-logout-user',
+                        url : KWF_BASE_URL+'/kwf/user/login/json-logout-user',
                         success : function(form, action) {
                             //nicht reload, weil user nach erneutem login vielleicht
                             //die aktuelle seite gar nicht mehr sehen darf
-                            location.href = '/kwf/welcome';
+                            location.href = KWF_BASE_URL+'/kwf/welcome';
                         },
                         scope: this
                     });
@@ -230,7 +230,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
         }
         this.userToolbar.add({
             cls: 'x2-btn-icon',
-            icon: '/assets/kwf/images/information.png',
+            icon: KWF_BASE_URL+'/assets/kwf/images/information.png',
             tooltip: trlKwf('Information'),
             handler: function() {
                 var about = new Kwf.About();
@@ -247,7 +247,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
             this.add({
                 tooltip: trlKwf('Open frontend in a new window'),
                 cls: 'x2-btn-icon',
-                icon: '/assets/silkicons/world.png',
+                icon: KWF_BASE_URL+'/assets/silkicons/world.png',
                 handler: function() {
                     window.open(result.frontendUrls[0].href);
                 },
@@ -260,7 +260,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
                 frontendItems.push({
                     text: url.text,
                     cls: 'x2-btn-text-icon',
-                    icon: '/assets/silkicons/world.png',
+                    icon: KWF_BASE_URL+'/assets/silkicons/world.png',
                     tooltip: trlKwf('Open frontend in a new window'),
                     handler: function(options) {
                         window.open(options.url.href);
@@ -272,7 +272,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
             this.add({
                 tooltip: trlKwf('Open frontend in a new window'),
                 cls: 'x2-btn-icon',
-                icon: '/assets/silkicons/world.png',
+                icon: KWF_BASE_URL+'/assets/silkicons/world.png',
                 menu: new Ext2.menu.Menu({
                     items: frontendItems
                 })

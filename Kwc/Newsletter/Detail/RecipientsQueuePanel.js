@@ -4,7 +4,7 @@ Kwc.Newsletter.Detail.RecipientsQueuePanel = Ext2.extend(Kwf.Auto.GridPanel, {
     initComponent: function() {
         this.actions.deleteAll = new Ext2.Action({
             text: trlKwf('Delete All'),
-            icon: '/assets/silkicons/bin_empty.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/bin_empty.png',
             cls: 'x2-btn-text-icon',
             handler: function(){
                 Ext2.Msg.confirm(

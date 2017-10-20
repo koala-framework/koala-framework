@@ -2,7 +2,7 @@ Kwf.Form.File = Ext2.extend(Ext2.form.Field, {
     allowOnlyImages: false,
     fileSizeLimit: 0,
     showPreview: true,
-    previewUrl: '/kwf/media/upload/preview?',
+    previewUrl: KWF_BASE_URL+'/kwf/media/upload/preview?',
     previewWidth: 40,
     previewHeight: 40,
     showDeleteButton: true,
@@ -99,7 +99,7 @@ Kwf.Form.File = Ext2.extend(Ext2.form.Field, {
             this.deleteButton = new Ext2.Button({
                 text: trlKwf('Delete File'),
                 cls: 'x2-btn-text-icon',
-                icon: '/assets/silkicons/delete.png',
+                icon: KWF_BASE_URL+'/assets/silkicons/delete.png',
                 renderTo: this.el.createChild({cls: 'deleteButton'}),
                 scope: this,
                 handler: function() {
@@ -131,7 +131,7 @@ Kwf.Form.File = Ext2.extend(Ext2.form.Field, {
         this.uploadButton = new Ext2.Button({
             text: trlKwf('Upload File'),
             cls: 'x2-btn-text-icon',
-            icon: '/assets/silkicons/add.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/add.png',
             renderTo: this.uploadButtonContainer,
             scope: this,
             handler: function() {
@@ -233,14 +233,14 @@ Kwf.Form.File = Ext2.extend(Ext2.form.Field, {
         if (v != this.value) {
             this.imageData = value;
             var icon = false;
-            var href = '/kwf/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
+            var href = KWF_BASE_URL+'/kwf/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
             if (value.mimeType) {
                 if (this.showPreview) {
                     if (value.mimeType.match(/(^image\/)/)) {
                         icon = this._generatePreviewUrl(this.previewUrl);
                     } else {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
-                        icon = '/assets/silkicons/' + icon + '.png';
+                        icon = KWF_BASE_URL+'/assets/silkicons/' + icon + '.png';
                     }
                     this.previewTpl.overwrite(this.previewImageBox, {
                         preview: icon,

@@ -31,7 +31,7 @@ Kwc.Newsletter.Subscribe.RecipientsPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
 
         this._subscribersGrid.actions.unsubscribe = new Ext2.Action({
             text: trlKwf('Unsubscribe'),
-            icon: '/assets/silkicons/table_delete.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/table_delete.png',
             cls: 'x2-btn-text-icon',
             needsSelection: true,
             handler : function() {

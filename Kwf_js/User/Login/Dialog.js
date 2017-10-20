@@ -15,7 +15,7 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
             region: 'center',
             border: false,
             height: 120,
-            html: '<iframe scrolling="no" src="/kwf/user/login/show-form" width="100%" '+
+            html: '<iframe scrolling="no" src=KWF_BASE_URL+"/kwf/user/login/show-form" width="100%" '+
                     'height="100%" style="border: 0px"></iframe>'
         });
         this.lostPasswordButton = new Ext2.Button({
@@ -47,7 +47,7 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
             cls: 'kwf-login-header',
             region: 'north',
             height: 80,
-            autoLoad: '/kwf/user/login/header',
+            autoLoad: KWF_BASE_URL+'/kwf/user/login/header',
             border: false
         },{
             region: 'center',
@@ -66,7 +66,7 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
         }, ];
 
         Ext2.Ajax.request({
-            url: '/kwf/user/login/json-get-auth-methods',
+            url: KWF_BASE_URL+'/kwf/user/login/json-get-auth-methods',
             success: function(response, options, r) {
                 if (r.showPassword) {
                     this.lostPasswordButton.show();
@@ -172,7 +172,7 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
     },
 
     lostPassword: function() {
-        location.href = '/kwf/user/login/lost-password';
+        location.href = KWF_BASE_URL+'/kwf/user/login/lost-password';
     },
 
     showLogin: function() {

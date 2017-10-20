@@ -41,7 +41,7 @@ Kwf.Auto.ImageGridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         }
 
         this.actions.reload = new Ext2.Action({
-            icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x2-btn-icon',
             tooltip : trlKwf('Reload'),
             handler : this.reload,
@@ -49,14 +49,14 @@ Kwf.Auto.ImageGridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         });
         this.actions.add = new Ext2.Action({
             text    : trlKwf('Add'),
-            icon    : '/assets/silkicons/table_add.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/table_add.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onAdd,
             scope: this
         });
         this.actions['delete'] = new Ext2.Action({
             text    : trlKwf('Delete'),
-            icon    : '/assets/silkicons/table_delete.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/table_delete.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onDelete,
             scope: this,
@@ -256,7 +256,7 @@ Kwf.Auto.ImageGridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         if (meta.helpText) {
             this.topToolBar.add('->');
             this.topToolBar.add(new Ext2.Action({
-                icon : '/assets/silkicons/information.png',
+                icon : KWF_BASE_URL+'/assets/silkicons/information.png',
                 cls : 'x2-btn-icon',
                 handler : function (a) {
                     var helpWindow = new Ext2.Window({

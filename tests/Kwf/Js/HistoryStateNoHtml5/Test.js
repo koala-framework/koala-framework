@@ -6,13 +6,13 @@ onReady.onContentReady(function() {
         historyState.currentState.result = 'sub';
         Ext2.get('result').update(historyState.currentState.result);
         //console.log('bnt1', historyState.currentState);
-        historyState.pushState('asdf', '/kwf/test/kwf_js_history-state-no-html5_test/sub');
+        historyState.pushState('asdf', KWF_BASE_URL+'/kwf/test/kwf_js_history-state-no-html5_test/sub');
     }, this);
     Ext2.get('testBtn2').on('click', function() {
         historyState.currentState.result = 'index';
         Ext2.get('result').update(historyState.currentState.result);
         //console.log('bnt2', historyState.currentState);
-        historyState.pushState('asdf', '/kwf/test/kwf_js_history-state-no-html5_test');
+        historyState.pushState('asdf', KWF_BASE_URL+'/kwf/test/kwf_js_history-state-no-html5_test');
     }, this);
 
     historyState.currentState.result = Ext2.get('result').dom.innerHTML;

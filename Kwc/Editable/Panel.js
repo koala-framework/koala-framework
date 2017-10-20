@@ -13,7 +13,7 @@ Kwc.Editable.Panel = Ext2.extend(Ext2.Panel, {
             componentConfigs: this.componentConfigs,
             autoLoad: false,
             mainComponentText: trlKwf('Content'),
-            mainComponentIcon: '/assets/silkicons/page_white_text.png'
+            mainComponentIcon: KWF_BASE_URL+'/assets/silkicons/page_white_text.png'
         });
 
         componentsGrid.on('selectionchange', function() {

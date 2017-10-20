@@ -20,7 +20,7 @@ Kwf.User.Grid.Grid = Ext2.extend(Kwf.Auto.GridPanel,
 
         this.actions.userdelete = new Ext2.Action({
             text    : trlKwf('Delete user'),
-            icon    : '/assets/silkicons/delete.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/delete.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onDelete,
             scope: this

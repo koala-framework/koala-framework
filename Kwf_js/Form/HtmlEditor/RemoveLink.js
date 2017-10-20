@@ -10,7 +10,7 @@ Kwf.Form.HtmlEditor.RemoveLink = Ext2.extend(Ext2.util.Observable, {
         var tb = this.cmp.getToolbar();
         this.action = new Ext2.Action({
             handler: this.onRemoveLink,
-            icon: '/assets/silkicons/link_break.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/link_break.png',
             scope: this,
             tooltip: {
                 cls: 'x2-html-editor-tip',

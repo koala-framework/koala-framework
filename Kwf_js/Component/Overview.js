@@ -18,7 +18,7 @@ Kwf.Component.Overview = Ext2.extend(Kwf.Auto.GridPanel, {
         if (type == 'createTpl') {
             this.actions[type] = new Ext2.Action({
                 text    : 'create tpl',
-                icon    : '/assets/silkicons/page_copy.png',
+                icon    : KWF_BASE_URL+'/assets/silkicons/page_copy.png',
                 cls     : 'x2-btn-text-icon',
                 disabled: true,
                 handler : this.onCreate.createDelegate(this,
@@ -28,7 +28,7 @@ Kwf.Component.Overview = Ext2.extend(Kwf.Auto.GridPanel, {
         } else if (type == 'createCss') {
             this.actions[type] = new Ext2.Action({
                 text    : 'create css',
-                icon    : '/assets/silkicons/page_copy.png',
+                icon    : KWF_BASE_URL+'/assets/silkicons/page_copy.png',
                 cls     : 'x2-btn-text-icon',
                 disabled: true,
                 handler : this.onCreate.createDelegate(this,
@@ -38,7 +38,7 @@ Kwf.Component.Overview = Ext2.extend(Kwf.Auto.GridPanel, {
         } else if (type == 'addComponent') {
             this.actions[type] = new Ext2.Action({
                 text    : 'add component',
-                icon    : '/assets/silkicons/brick_add.png',
+                icon    : KWF_BASE_URL+'/assets/silkicons/brick_add.png',
                 cls     : 'x2-btn-text-icon',
                 handler : this.onAddComponent,
                 scope: this

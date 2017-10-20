@@ -30,7 +30,7 @@ Kwc.Box.Dogear.init = function() {
     if (options.urlSmall && options.urlBig) {
 
         var s1 = new swfobject.embedSWF(
-            "/assets/kwf/Kwc/Box/DogearRandom/Dogear/dogear.swf",
+            KWF_BASE_URL+"/assets/kwf/Kwc/Box/DogearRandom/Dogear/dogear.swf",
             "dogearSmall",
             "180","180",
             "9",
@@ -55,7 +55,7 @@ Kwc.Box.Dogear.init = function() {
         tmp.src = options.urlBig;
 
         var s2 = new swfobject.embedSWF(
-            "/assets/kwf/Kwc/Box/DogearRandom/Dogear/dogear_large.swf",
+            KWF_BASE_URL+"/assets/kwf/Kwc/Box/DogearRandom/Dogear/dogear_large.swf",
             "dogearBig",
             "680","680",
             "9",

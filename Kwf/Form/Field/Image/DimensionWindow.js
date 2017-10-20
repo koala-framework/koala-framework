@@ -189,7 +189,7 @@ Kwf.Form.Field.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
                 },
                 cls:"x2-btn-text-icon",
                 hideLabel: true,
-                icon: '/assets/silkicons/arrow_out.png',
+                icon: KWF_BASE_URL+'/assets/silkicons/arrow_out.png',
                 tooltip: trlKwf('Reset to default (maximum)'),
                 scope: this
             },
@@ -261,7 +261,7 @@ Kwf.Form.Field.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
         var cropImageHeight = Math.round(this.imageData.imageHeight / this.imageData.imageHandyScaleFactor);
         this._cropImage = new Kwf.Form.Field.Image.CropImage({
             // call controller to create image with nice size to work with
-            src: '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey,
+            src: KWF_BASE_URL+'/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey,
             cls: 'kwf-form-field-image-dimension-window-crop-image',
             outWidth: outWidth,
             outHeight: outHeight,

@@ -72,7 +72,7 @@ Kwf.Component.Preview = Ext2.extend(Ext2.Panel, {
 
         var reloadButton = new Ext2.Button({
             cls: 'x2-btn-icon',
-            icon: '/assets/silkicons/arrow_rotate_clockwise.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/arrow_rotate_clockwise.png',
             handler: function() {
                 window.frames['kwfComponentPreviewIframe'].location.reload();
             },

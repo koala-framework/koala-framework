@@ -3,7 +3,7 @@ Ext2.ns('Kwc.Newsletter.Detail');
 Kwc.Newsletter.Detail.RecipientsAction = Ext2.extend(Ext2.Action, {
     constructor: function(config){
         config = Ext2.apply({
-        icon    : '/assets/silkicons/database_add.png',
+        icon    : KWF_BASE_URL+'/assets/silkicons/database_add.png',
         cls     : 'x2-btn-text-icon',
         text    : trlKwf('Add recipients to the queue'),
         tooltip : trlKwf('Adds the currently shown recipients to the newsletter'),
@@ -53,7 +53,7 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext2.extend(Ext2.Action, {
 Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext2.extend(Ext2.Action, {
     constructor: function(config){
         config = Ext2.apply({
-        icon    : '/assets/silkicons/database_delete.png',
+        icon    : KWF_BASE_URL+'/assets/silkicons/database_delete.png',
         cls     : 'x2-btn-text-icon',
         text    : trlKwf('Remove recipients from the queue'),
         tooltip : trlKwf('Removes the currently shown recipients from the newsletter'),

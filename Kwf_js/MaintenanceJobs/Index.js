@@ -2,17 +2,17 @@ Ext2.namespace("Kwf.MaintenanceJobs");
 Kwf.MaintenanceJobs.Index = Ext2.extend(Ext2.Panel, {
     initComponent: function() {
         var form = new Kwf.Auto.FormPanel({
-            controllerUrl: '/kwf/maintenance-jobs/run',
+            controllerUrl: KWF_BASE_URL+'/kwf/maintenance-jobs/run',
             region: 'center'
         });
         var runsGrid = new Kwf.Auto.GridPanel({
-            controllerUrl: '/kwf/maintenance-jobs/runs',
+            controllerUrl: KWF_BASE_URL+'/kwf/maintenance-jobs/runs',
             region: 'center',
             bindings: [form]
         });
 
         var jobsGrid = new Kwf.Auto.GridPanel({
-            controllerUrl: '/kwf/maintenance-jobs/jobs',
+            controllerUrl: KWF_BASE_URL+'/kwf/maintenance-jobs/jobs',
             region: 'north',
             split: true,
             height: 300,

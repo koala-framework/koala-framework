@@ -10,4 +10,7 @@ if (script.length) {
     if (m) {
         __webpack_public_path__ = m[1];
     }
+    __webpack_require__.KWF_BASE_URL = script.data('base-url');
+} else {
+    __webpack_require__.KWF_BASE_URL = '';
 }

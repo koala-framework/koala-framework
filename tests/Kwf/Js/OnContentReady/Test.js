@@ -2,7 +2,7 @@ var $ = require('jquery');
 var QUnit = require('qunit');
 
 function createIframe(url, loadCallback) {
-    var url = '/kwf/test/kwf_js_on-content-ready_test' + url;
+    var url = KWF_BASE_URL+'/kwf/test/kwf_js_on-content-ready_test' + url;
     $('#iframe-container').html(
         '<iframe src="'+url+'" />'
     );

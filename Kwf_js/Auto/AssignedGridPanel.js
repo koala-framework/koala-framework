@@ -3,7 +3,7 @@ Kwf.Auto.AssignedGridPanel = Ext2.extend(Kwf.Auto.GridPanel,
     initComponent: function() {
         this.actions.textAssign = new Ext2.Action({
             text    : trlKwf('Assign by text input'),
-            icon    : '/assets/silkicons/table_multiple.png',
+            icon    : KWF_BASE_URL+'/assets/silkicons/table_multiple.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onTextAssign,
             scope   : this

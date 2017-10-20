@@ -9,7 +9,7 @@ Kwc.Basic.Link.Trl.CopyButton = Ext2.extend(Ext2.form.Field, {
         this.button = new Ext2.Button({
             text: trlKwf('Adopt'),
             renderTo: this.el.parent(),
-            icon: '/assets/silkicons/page_white_copy.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
             cls: 'x2-btn-text-icon',
             scope: this,
             enabled: false,

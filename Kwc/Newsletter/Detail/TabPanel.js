@@ -6,7 +6,7 @@ Kwc.Newsletter.Detail.TabPanel = Ext2.extend(Kwf.Binding.TabPanel,
         this.border = false;
         this.backButton = new Ext2.Action({
             text: trlKwf('Back'),
-            icon: '/assets/silkicons/arrow_left.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/arrow_left.png',
             cls: 'x2-btn-text-icon',
             handler: this.onBack,
             disabled: true,
@@ -14,7 +14,7 @@ Kwc.Newsletter.Detail.TabPanel = Ext2.extend(Kwf.Binding.TabPanel,
         });
         this.nextButton = new Ext2.Action({
             text: trlKwf('Next'),
-            icon: '/assets/silkicons/arrow_right.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/arrow_right.png',
             cls: 'x2-btn-text-icon',
             handler: this.onNext,
             scope: this

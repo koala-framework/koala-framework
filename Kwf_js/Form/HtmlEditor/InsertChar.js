@@ -12,7 +12,7 @@ Kwf.Form.HtmlEditor.InsertChar = Ext2.extend(Ext2.util.Observable, {
     afterCreateToolbar: function() {
         var tb = this.cmp.getToolbar();
         tb.insert(9, {
-            icon: '/assets/silkicons/text_letter_omega.png',
+            icon: KWF_BASE_URL+'/assets/silkicons/text_letter_omega.png',
             handler: this.onInsertChar,
             scope: this,
             tooltip: {

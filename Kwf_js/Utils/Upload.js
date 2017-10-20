@@ -44,7 +44,7 @@ Kwf.Utils.Upload = {
                     }
                     var sendMail = !r || !r.exception;
                     Kwf.handleError({
-                        url: '/kwf/media/upload/json-upload',
+                        url: KWF_BASE_URL+'/kwf/media/upload/json-upload',
                         message: errorMsg,
                         title: trlKwf('Upload Error'),
                         mail: sendMail,
@@ -70,7 +70,7 @@ Kwf.Utils.Upload = {
                 }
             }
         }
-        var url = '/kwf/media/upload/json-upload';
+        var url = KWF_BASE_URL+'/kwf/media/upload/json-upload';
         xhr.open('POST', url);
         xhr.setRequestHeader('X-Upload-Name', encodeURIComponent(file.name));
         xhr.setRequestHeader('X-Upload-Size', file.size);
