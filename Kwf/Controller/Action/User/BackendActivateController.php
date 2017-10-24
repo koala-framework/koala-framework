@@ -49,7 +49,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
     {
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('activate');
         $this->view->email = $this->_getParam('user')->email;
-        $this->view->isActivate = $this->_getParam('user')->isActivated();
+        $this->view->isActivated = $this->_getParam('user')->isActivated();
 
         $users = Kwf_Registry::get('userModel');
 

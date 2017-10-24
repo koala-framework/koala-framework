@@ -52,7 +52,7 @@ class Kwf_User_Auth_ActivationFields extends Kwf_User_Auth_Abstract implements K
 
     public function isActivated(Kwf_Model_Row_Interface $row)
     {
-        return $row->activate_token != '';
+        return !$row->activate_token;
     }
 
     public function clearActivationToken(Kwf_Model_Row_Interface $row)
