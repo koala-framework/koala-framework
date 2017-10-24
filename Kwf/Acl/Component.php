@@ -90,7 +90,6 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->deny('guest', 'kwf_welcome_welcome');
         $this->deny('guest', 'kwf_component_pages');
         $this->deny('user', 'kwf_welcome_welcome');
-        $this->deny('user', 'kwf_component_pages');
 
         $this->allow('superuser', 'kwf_media_upload_any');
 
