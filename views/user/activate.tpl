@@ -1,9 +1,9 @@
 <div class="kwfUp-content">
     <h1>
-        <?php if ($this->isActivate) { ?>
-            <?=trlKwf('Activate Useraccount')?>
-        <?php } else { ?>
+        <?php if ($this->isActivated) { ?>
             <?=trlKwf('Reset Password')?>
+        <?php } else { ?>
+            <?=trlKwf('Activate Useraccount')?>
         <?php } ?>
     </h1>
     <p>
