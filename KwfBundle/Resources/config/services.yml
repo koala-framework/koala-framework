@@ -55,3 +55,8 @@ services:
         class: KwfBundle\EventListener\ModelObserverProcess
         tags:
             - { name: kernel.event_listener, event: kernel.terminate }
+
+    kwf.crsfprotection_listener:
+        class: KwfBundle\EventListener\CsrfProtection
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 12 }
