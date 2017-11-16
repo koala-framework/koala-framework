@@ -8,7 +8,6 @@ class Kwc_Basic_LinkTag_News_NewsController extends Kwf_Controller_Action_Auto_G
 
     protected function _initColumns()
     {
-        parent::_initColumns();
         $this->_columns->add(new Kwf_Grid_Column('title'));
         $this->_columns->add(new Kwf_Grid_Column('publish_date'));
     }
@@ -16,7 +15,9 @@ class Kwc_Basic_LinkTag_News_NewsController extends Kwf_Controller_Action_Auto_G
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        $ret->whereEquals('component_id', $this->_getParam('newsComponentId'));
+        if ($this->_getParam('directoryComponentId')) {
+            $ret->whereEquals('component_id', $this->_getParam('directoryComponentId'));
+        }
         return $ret;
     }
 
