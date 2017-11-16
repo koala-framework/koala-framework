@@ -69,11 +69,6 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
         return $ret;
     }
 
-    public function getVisibleCardForms($cardDbId)
-    {
-        return array_keys($this->getCardForms());
-    }
-
     public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
         parent::duplicate($source, $target, $progressBar);
