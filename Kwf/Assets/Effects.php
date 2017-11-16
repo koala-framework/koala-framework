@@ -77,6 +77,7 @@ class Kwf_Assets_Effects
 
     public static function adminIcon(Imagick $im)
     {
+        if (!method_exists($im, 'exportImagePixels')) return;
         while ($im->previousImage()) {
             $pixels = $im->exportImagePixels(0, 0,
                 $im->getImageWidth(), $im->getImageHeight(),
