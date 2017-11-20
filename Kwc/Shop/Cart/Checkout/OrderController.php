@@ -67,7 +67,7 @@ class Kwc_Shop_Cart_Checkout_OrderController extends Kwf_Controller_Action_Auto_
 
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             $g = Kwc_Abstract::getSetting($c, 'generators');
-            if (isset($g['checkout']) && $g['checkout']['component'] == $this->_getParam('class')) {
+            if (isset($g['checkout']) && $g['checkout']['component']['checkout'] == $this->_getParam('class')) {
                 foreach (Kwc_Abstract::getSetting($c, 'plugins') as $p) {
                     if (is_instance_of($p, 'Kwc_Shop_Cart_Plugins_Interface')) {
                         $p = new $p();
