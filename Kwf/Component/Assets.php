@@ -26,7 +26,8 @@ class Kwf_Component_Assets
                 'assetsAdmin' => Kwc_Abstract::getSetting($class, 'assetsAdmin'),
             );
             $files = Kwc_Abstract::getSetting($class, 'componentFiles');
-            foreach (array_merge($files['css'], $files['js']) as $f) {
+            // array_reverse because assets must be loaded in correct order
+            foreach (array_reverse(array_merge($files['css'], $files['js'])) as $f) {
                 $componentCssFiles[$class]['files'][] = $f;
             }
         }
