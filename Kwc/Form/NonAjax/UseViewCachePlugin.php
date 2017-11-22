@@ -1,5 +1,5 @@
 <?php
-class Kwc_Form_UseViewCachePlugin extends Kwf_Component_Plugin_Abstract
+class Kwc_Form_NonAjax_UseViewCachePlugin extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_UseViewCache, Kwf_Component_Plugin_Interface_SkipProcessInput
 {
     public function useViewCache($renderer)

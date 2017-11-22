@@ -60,7 +60,7 @@ class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
     static public function replaceCodes($content)
     {
         // html entfernen
-        $content = htmlspecialchars($content);
+        $content = Kwf_Util_HtmlSpecialChars::filter($content);
 
         // smileys
         $content = preg_replace('/:-?\)/', '<img src="/assets/silkicons/emoticon_smile.png" alt=":-)" />', $content);

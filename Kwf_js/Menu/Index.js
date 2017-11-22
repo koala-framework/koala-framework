@@ -191,7 +191,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
         if (result.fullname && result.userSelfControllerUrl) {
             this.userToolbar.add({
                 id: 'currentUser',
-                text: result.fullname,
+                text: Ext2.util.Format.htmlEncode(result.fullname),
                 cls: 'x2-btn-text-icon',
                 icon: KWF_BASE_URL+'/assets/silkicons/user.png',
                 disabled: !result.userId,

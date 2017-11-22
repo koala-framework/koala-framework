@@ -6,7 +6,7 @@ var gmapMap = require('kwf/commonjs/google-map/map');
 var renderMap = function(el) {
     var cfg = el.find(".options", true);
     if (!cfg.length) return;
-    cfg = $.parseJSON(cfg.val());
+    cfg = JSON.parse(cfg.val());
 
     var text = el.find("div.kwcBem__text");
     cfg.mapContainer = el;

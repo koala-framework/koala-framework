@@ -31,7 +31,8 @@ class Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plugin_Abstr
             $amount = -min($total, $row->amount - $row->used_amount);
             $remainingAmount = $row->amount - $row->used_amount + $amount;
             if ($remainingAmount > 0) {
-                $text .= ' ('.trlKwfStatic('Remaining Amount {0}', Kwf_View_Helper_Money::money($remainingAmount)).')';
+                $helper = new Kwf_View_Helper_Money();
+                $text .= ' ('.trlKwfStatic('Remaining Amount {0}', $helper->money($remainingAmount)).')';
             }
         }
 
@@ -81,9 +82,11 @@ class Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plugin_Abstr
 
     public function getPlaceholders(Kwc_Shop_Cart_Order $order)
     {
+        $helper = new Kwf_View_Helper_Money();
+
         $remainingAmount = (float)$order->voucher_remaining_amount;
         return array(
-            'voucherRemainingAmount' => Kwf_View_Helper_Money::money($remainingAmount)
+            'voucherRemainingAmount' => $helper->money($remainingAmount)
         );
     }
 }

@@ -22,11 +22,11 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Component extends Kwc_Mail_Ed
             . Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName'));
     }
 
-    public function getPlaceholders(Kwc_Shop_Cart_Order $o = null)
+    public function getPlaceholders(Kwc_Mail_Recipient_Interface $recipient = null)
     {
-        $ret = parent::getPlaceholders($o);
-        if ($o) {
-            $ret = array_merge($ret, $o->getPlaceholders());
+        $ret = parent::getPlaceholders($recipient);
+        if ($recipient) {
+            $ret = array_merge($ret, $recipient->getPlaceholders());
         }
         return $ret;
     }

@@ -200,7 +200,7 @@ class Kwf_Media
                 if (isset($output['contents']) && strlen($output['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
                     $cacheFileName = self::_generateCacheFilePath($class, $id, $type);
-                    if (!is_dir(dirname($cacheFileName))) @mkdir(dirname($cacheFileName), 0777, true);
+                    if (!is_dir(dirname($cacheFileName))) mkdir(dirname($cacheFileName), 0777, true);
                     file_put_contents($cacheFileName, $output['contents']);
                     $output['file'] = $cacheFileName;
                     unset($output['contents']);
@@ -225,6 +225,19 @@ class Kwf_Media
         return Kwf_Config::getValue('mediaCacheDir').'/'.$class.'/'.$groupingFolder.'/'.$id.'/'.$type;
     }
 
+    private static function _deleteFolder($path)
+    {
+        foreach (array_slice(scandir($path), 2) as $fileOrFolder) {
+            $fileOrFolderPath = $path.'/'.$fileOrFolder;
+            if (is_file($fileOrFolderPath)) {
+                unlink($fileOrFolderPath);
+            } else {
+                self::_deleteFolder($fileOrFolderPath);
+            }
+        }
+        rmdir($path);
+    }
+
     public static function collectGarbage($debug)
     {
         $cacheFolder = Kwf_Config::getValue('mediaCacheDir');
@@ -232,6 +245,11 @@ class Kwf_Media
         $mediaClasses = array_slice(scandir($cacheFolder), 2);
         foreach ($mediaClasses as $mediaClass) {
             if (is_file($cacheFolder.'/'.$mediaClass)) continue;
+
+            if (!class_exists($mediaClass)) {
+                self::_deleteFolder($cacheFolder.'/'.$mediaClass);
+                continue;
+            }
 
             if (!is_instance_of($mediaClass, 'Kwf_Media_Output_ClearCacheInterface')) continue;
 

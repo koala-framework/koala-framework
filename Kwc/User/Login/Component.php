@@ -32,13 +32,6 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             if (!$auth instanceof Kwf_User_Auth_Interface_Redirect) throw new Kwf_Exception_NotFound();
             $redirectBackUrl = $_GET['redirect'];
 
-            $formValues = array();
-            foreach ($auth->getLoginRedirectFormOptions() as $option) {
-                if ($option['type'] == 'select') {
-                    $formValues[$option['name']] = $postData[$option['name']];
-                }
-            }
-
             $f = new Kwf_Filter_StrongRandom();
             $state = 'login.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.str_replace('.', 'kwfdot', $redirectBackUrl);
 
@@ -46,12 +39,12 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $ns = new Kwf_Session_Namespace('kwf-login-redirect');
             $ns->state = $state;
 
-            $url = $auth->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
+            $url = $auth->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $postData);
             if ($url) {
                 header("Location: ".$url);
                 exit;
             } else {
-                echo $auth->getLoginRedirectHtml($this->_getRedirectBackUrl(), $state, $formValues);
+                echo $auth->getLoginRedirectHtml($this->_getRedirectBackUrl(), $state, $postData);
                 exit;
             }
         }

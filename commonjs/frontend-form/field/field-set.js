@@ -3,7 +3,7 @@ var Field = require('kwf/commonjs/frontend-form/field/field');
 var kwfExtend = require('kwf/commonjs/extend');
 var onReady = require('kwf/commonjs/on-ready');
 
-onReady.onRender('div.kwfUp-kwfFormContainerFieldSet fieldset > legend > input', function fieldSet(c)
+onReady.onRender('div.kwfUp-kwfFormContainerFieldSet fieldset > legend > input[type="checkbox"]', function fieldSet(c)
 {
     if (!c.get(0).checked) {
         c.closest('fieldset').addClass('kwfFormContainerFieldSetCollapsed');

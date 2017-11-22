@@ -55,6 +55,14 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
                 );
             }
             foreach (glob('node_modules/*') as $i) {
+                if (substr($i, strlen('node_modules/'), 1) === '@') continue;
+
+                $cachedProviders[] = array(
+                    'cls' => 'Kwf_Assets_Provider_Npm',
+                    'file' => $i
+                );
+            }
+            foreach (glob('node_modules/@*/*') as $i) {
                 $cachedProviders[] = array(
                     'cls' => 'Kwf_Assets_Provider_Npm',
                     'file' => $i

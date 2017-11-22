@@ -27,7 +27,7 @@ class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
             }
             $ret['html'] = $geshi->parse_code();
         } else {
-            $ret['html'] = '<code>'.htmlspecialchars($row->code).'</code>';
+            $ret['html'] = '<code>'.Kwf_Util_HtmlSpecialChars::filter($row->code).'</code>';
         }
         return $ret;
     }

@@ -1,7 +1,7 @@
-<?=htmlspecialchars(trim($this->order->title.' '.$this->order->firstname));?> <?=htmlspecialchars($this->order->lastname);?>
+<?=Kwf_Util_HtmlSpecialChars::filter(trim($this->order->title.' '.$this->order->firstname));?> <?=Kwf_Util_HtmlSpecialChars::filter($this->order->lastname);?>
 
-<?=htmlspecialchars($this->order->street);?>
+<?=Kwf_Util_HtmlSpecialChars::filter($this->order->street);?>
 
-<?=htmlspecialchars($this->order->zip);?> <?=htmlspecialchars($this->order->city);?>
+<?=Kwf_Util_HtmlSpecialChars::filter($this->order->zip);?> <?=Kwf_Util_HtmlSpecialChars::filter($this->order->city);?>
 
-<?=htmlspecialchars($this->order->country);?>
+<?=Kwf_Util_HtmlSpecialChars::filter($this->order->country);?>

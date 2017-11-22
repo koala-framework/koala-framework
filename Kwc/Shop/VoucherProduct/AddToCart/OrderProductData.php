@@ -15,10 +15,11 @@ class Kwc_Shop_VoucherProduct_AddToCart_OrderProductData extends Kwc_Shop_AddToC
     {
         $ret = parent::getAdditionalOrderData($orderProduct);
         /*
+        $helper = new Kwf_View_Helper_Money();
         $ret[] = array(
             'class' => 'amount',
             'name' => trlcKwf('Amount of Money', 'Amount'),
-            'value' => Kwf_View_Helper_Money::money($orderProduct->amount)
+            'value' => $helper->money($orderProduct->amount)
         );
         */
         return $ret;

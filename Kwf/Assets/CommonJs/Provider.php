@@ -54,7 +54,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
 
         $src = $dependency->getContentsSource();
         if ($src['type'] == 'file') {
-            $cacheId = str_replace(array('/', '.', '-', '$'), '_', $src['file']).'__'.md5_file($src['file']);
+            $cacheId = str_replace(array('/', '.', '-', '$', '@'), '_', $src['file']).'__'.md5_file($src['file']);
         } else if ($src['type'] == 'contents') {
             $cacheId = md5($src['contents']);
         } else {
@@ -94,7 +94,11 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             }
             if (file_exists("node_modules/" . (string)$dependency)) {
                 $dep = (string)$dependency;
-                $package = json_decode(file_get_contents("node_modules/" . substr($dep, 0, strpos($dep, "/")) . '/package.json'), true);
+
+                $pos = strpos($dep, "/");
+                $dir = "node_modules/" . substr($dep, 0, $pos);
+                if (substr($dep, 0, 1) === '@') $dir .= substr($dep, $pos, strpos($dep, "/", $pos));
+                $package = json_decode(file_get_contents($dir . '/package.json'), true);
                 if (isset($package['browser'])) {
                     if (is_string($package['browser'])) {
                         $depBrowserAlternatives[$package['main']] = $package['browser'];

@@ -1,7 +1,5 @@
-<div class="{{ rootElementClass }}{% if isPosted %} kwfUp-kwfImportant{% endif %}" data-width="100%" data-config="{{ config|json_encode() }}">
-{% if showSuccess %}
-    {{ renderer.component(success) }}
-{% elseif message %}
+<div class="{{ rootElementClass }}" data-width="100%" data-config="{{ config|json_encode() }}">
+{% if message %}
     <div class="kwfUp-webStandard">
         {{ message }}
     </div>
@@ -21,7 +19,7 @@
     {% if header %}{{ renderer.component(header) }}{% endif %}
     {% endblock %}
     {% if form %}
-        <form action="{{ action }}" method="{{ method }}"{% if isUpload %} enctype="multipart/form-data"{% endif %}>
+        <form>
 
             {% block content %}
                 {{ renderer.formField(form) }}
@@ -39,9 +37,6 @@
                 {# IE schickt bei enter-taste den submit-value nicht mit #}
                 <input type="hidden" name="{{ formName }}" value="submit" />
             {% endif %}
-
-            {# damit wir wissen ob gepostet wurde und ob wir laden sollen #}
-            <input type="hidden" name="{{ formName }}-post" value="post" />
 
             {% if formId %}
                 {# to pass id's even if we send by ajax #}

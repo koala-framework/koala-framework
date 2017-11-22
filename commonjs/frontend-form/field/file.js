@@ -1,4 +1,3 @@
-// @require ModernizrNetworkXhr2
 var $ = require('jquery');
 var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
 var Field = require('kwf/commonjs/frontend-form/field/field');
@@ -7,10 +6,6 @@ var t = require('kwf/commonjs/trl');
 
 var File = kwfExtend(Field, {
     initField: function() {
-        if (!Modernizr.xhr2) {
-            return;
-        }
-
         this.el.addClass('dropField');
         this.dropContainer = this.el;
         this.fileInput = this.el.find('input[type="file"]');

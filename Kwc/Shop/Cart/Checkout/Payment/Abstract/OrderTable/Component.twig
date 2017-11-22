@@ -28,7 +28,7 @@
                 <table class="tblCheckoutPrice" cellspacing="0" cellpadding="0">
                     {% for row in sumRows %}
                     <tr{% if (row.class is defined) %} class="{{ row.class }}"{% endif %}>
-                        <td>{{ data.trlStaticExecute(row.text) }}</td>
+                        <td>{{ data.trlStaticExecute(row.text)|raw }}</td>
                         <td class="price">{{ row.amount|money }}</td>
                     </tr>
                     {% endfor %}

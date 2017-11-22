@@ -4,6 +4,8 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 
 abstract class Kwf_SymfonyKernel extends Kernel
 {
+    private static $_instance;
+
     public function __construct()
     {
         $env = Kwf_Config::getValue('symfony.environment');
@@ -38,5 +40,16 @@ abstract class Kwf_SymfonyKernel extends Kernel
         }
     }
 
-
+    /**
+     * Don't use this method in Symfony context
+     */
+    public static function getInstance()
+    {
+        if (!isset(self::$_instance)) {
+            $cls = Kwf_Config::getValue('symfony.kernelClass');
+            self::$_instance = new $cls();
+            self::$_instance->boot(); //make sure it is booted (won't do it twice)
+        }
+        return self::$_instance;
+    }
 }

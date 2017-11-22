@@ -8,6 +8,7 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         $ret['generators']['child']['component']['success'] = 'Kwc_User_ChangePassword_Form_Success_Component';
         $ret['plugins'] = array('Kwf_Component_Plugin_Login_Component');
         $ret['viewCache'] = false;
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
@@ -17,9 +18,8 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         $this->_form->setModel(new Kwf_Model_FnF());
     }
 
-    protected function _processInput($postData)
+    public function processInput($postData)
     {
-
         $users = Kwf_Registry::get('userModel');
 
         $showPassword = false;
@@ -45,7 +45,6 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
                 }
             }
         }
-        parent::_processInput($postData);
     }
 
     protected function _afterSave(Kwf_Model_Row_Interface $row)

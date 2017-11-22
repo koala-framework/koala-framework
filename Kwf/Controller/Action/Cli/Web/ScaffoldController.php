@@ -157,7 +157,7 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
     {
         $content = '';
         if ($create['js']['config']) {
-            $content .= "    <input type=\"hidden\" value=\"<?=htmlspecialchars(json_encode(\$this->config))?>\" />\n";
+            $content .= "    <input type=\"hidden\" value=\"<?=Kwf_Util_HtmlSpecialChars::filter(json_encode(\$this->config))?>\" />\n";
         }
         $data = "<div class=\"<?=\$this->rootElementClass?>\">\n";
         $data .= $content;

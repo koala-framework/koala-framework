@@ -3,8 +3,11 @@ class Kwc_Shop_Products_Detail_RelatedProducts_Product_Admin extends Kwc_Abstrac
 {
     public function componentToString(Kwf_Component_Data $data)
     {
-        $model = Kwf_Model_Abstract::getInstance('Kwc_Shop_Products');
-        return $model->getRow($data->getComponent()->getRow()->product_id)->__toString();
+        $ret = '';
+        if ($productId = $data->getComponent()->getRow()->product_id) {
+            $ret = Kwf_Model_Abstract::getInstance('Kwc_Shop_Products')->getRow($productId)->__toString();
+        }
+        return $ret;
     }
 
     public function gridColumns()

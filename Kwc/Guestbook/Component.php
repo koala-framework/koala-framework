@@ -25,7 +25,10 @@ class Kwc_Guestbook_Component extends Kwc_Posts_Directory_Component
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Guestbook_ActivatePost_Component'
         );
-        $ret['generators']['child']['component']['deactivate'] = 'Kwc_Guestbook_DeactivatePost_Component';
+        $ret['generators']['deactivate'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Guestbook_DeactivatePost_Component'
+        );
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwc_Guestbook_ExtConfig';
         $ret['extConfigControllerIndex'] = 'Kwc_Guestbook_ExtConfigControllerIndex';

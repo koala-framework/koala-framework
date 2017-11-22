@@ -63,6 +63,9 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     {
         if ($this->_data->getBaseProperty('preLogin')) {
             $ignore = false;
+            foreach (Kwf_Config::getValueArray('preLoginIgnore') as $i) {
+                if (substr($_SERVER['REDIRECT_URL'], 0, strlen($i)) == $i) $ignore  = true;
+            }
             foreach (Kwf_Config::getValueArray('preLoginIgnoreIp') as $i) {
                 $ip = $_SERVER['REMOTE_ADDR'];
                 if ($ip == $i) $ignore = true;
@@ -75,7 +78,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                     if (substr($ip, -strlen($i)) == $i) $ignore = true;
                 }
             }
-            Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
+            if (!$ignore) Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
         }
 
         $benchmarkEnabled = Kwf_Benchmark::isEnabled();

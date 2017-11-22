@@ -146,7 +146,9 @@ var callOnContentReady = function(renderedEl, options)
             }
         }
 
-        if (useSelectorCache && elCacheBySelector[hndl.selector] && !elCacheBySelector[hndl.selector].dirty) {
+        if (useSelectorCache && elCacheBySelector[hndl.selector] != undefined
+            && elCacheBySelector[hndl.selector].length && !elCacheBySelector[hndl.selector].dirty
+        ) {
             benchmarkBox.count('queryCache');
             var els = [];
             for (var j=0; j<elCacheBySelector[hndl.selector].length; j++) {
@@ -271,7 +273,7 @@ var callOnContentReady = function(renderedEl, options)
                 try {
                     var v = configEl.get(0).value;
                     if (v.substr(0, 1) == '{' || v.substr(0, 1) == '[') {
-                        config = $.parseJSON(v);
+                        config = JSON.parse(v);
                     }
                 } catch (err) {}
             }
