@@ -97,7 +97,7 @@ class Kwf_Form_Field_ComboBoxFilter extends Kwf_Form_Field_Select
         return $postData;
     }
 
-    public function load($row, array $postData = array())
+    public function load($row, $postData = array())
     {
         $ret = parent::load($row, $postData);
         if (!$this->getFilteredCombo()) {
