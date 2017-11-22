@@ -14,8 +14,7 @@ class Kwc_Abstract_Cards_Form extends Kwc_Abstract_Form
         $cards->getCombobox()
             ->setWidth(250)
             ->setListWidth(250)
-            ->setXtype('kwc.abstract.cards.combobox')
-            ->setValues(Kwc_Admin::getInstance($this->getClass())->getControllerUrl('Components').'/json-data');
+            ->setXtype('kwc.abstract.cards.combobox');
         foreach ($classes as $name => $class) {
             if (!$class) continue;
             $forms = array();
