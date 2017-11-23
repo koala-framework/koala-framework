@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-var Tabs = require('kwf/tabs/tabs');
+var onReady = require('kwf/commonjs/on-ready');
+var Tabs = require('kwf/commonjs/tabs/tabs');
 
 onReady.onRender('.kwcClass', function tabs(el) {
     el.data('tabsObject', new Tabs(el, {
