@@ -5,6 +5,7 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
     const FREQUENCY_HOURLY = 'hourly';
     const FREQUENCY_MINUTELY = 'minutely';
     const FREQUENCY_SECONDS = 'seconds';
+    const FREQUENCY_CUSTOM = 'custom';
 
     protected $_debug = false;
 
@@ -65,5 +66,12 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
     public function getRecipientsForFailNotification()
     {
         return null;
+    }
+
+    public function getNextRuntime($lastRun = null)
+    {
+        if ($this->getFrequency() == self::FREQUENCY_CUSTOM) {
+            throw new Kwf_Exception("getNextRuntime has to be implemented for this frequency in job ".get_class($this));
+        }
     }
 }

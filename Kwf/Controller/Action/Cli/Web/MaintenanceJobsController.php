@@ -27,10 +27,16 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             if ($debug) echo "last hourly run: ".date('Y-m-d H:i:s', $lastHourlyRun)."\n";
         }
 
+        $lastCustomRun = array();
+        if (file_exists('temp/maintenance-custom-run')) {
+            $lastCustomRun = json_decode(file_get_contents('temp/maintenance-custom-run'), true);
+        }
+
         $dailyMaintenanceWindowStart = "01:00"; //don't set before 00:00
         $dailyMaintenanceWindowEnd = "05:00";
 
         $nextDailyRun = null;
+        $nextCustomRun = array();
         $lastMinutelyRun = null;
         while (true) {
             if (!$nextDailyRun) {
@@ -96,6 +102,28 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
                 $nextDailyRun = null;
                 Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug, $output);
             }
+
+            Kwf_Component_Data_Root::getInstance()->freeMemory();
+
+            foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
+                if ($job->getFrequency() == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_CUSTOM) {
+                    $jobClass = get_class($job);
+
+                    if (!array_key_exists($jobClass, $lastCustomRun)) $lastCustomRun[$jobClass] = null;
+                    if (!array_key_exists($jobClass, $nextCustomRun)) $nextCustomRun[$jobClass] = $job->getNextRuntime($lastCustomRun[$jobClass]);
+
+                    if (time() <= $nextCustomRun[$jobClass]) continue;
+
+                    $lastCustomRun[$jobClass] = time();
+                    file_put_contents('temp/maintenance-custom-run', json_encode($lastCustomRun));
+                    $nextCustomRun[$jobClass] = $job->getNextRuntime($lastCustomRun[$jobClass]);
+
+                    if (!$job->hasWorkload()) continue;
+                    if ($debug) echo "execute custom job {$jobClass}\n";
+                    Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug, $output);
+                }
+            }
+
             sleep(10);
         }
     }
