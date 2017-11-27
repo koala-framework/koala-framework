@@ -5,6 +5,9 @@
     </p>
     <p>
         <?=$this->data->trlKwf('You were logged in, automatically')?><br />
-        <a href="/"><?=$this->data->trlKwf('Click here')?></a>, <?=$this->data->trlKwf('to get back to the Startpage')?>.
+        <p>
+            <?=$this->data->trlKwf("If the needed page doesn't load automatically,")?>
+            <?=$this->link($this->config->redirectUrl, $this->data->trlKwf('please click here'))?>.
+        </p>
     </p>
 </div>

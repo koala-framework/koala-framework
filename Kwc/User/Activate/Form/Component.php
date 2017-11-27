@@ -18,6 +18,13 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
+    protected function _getBaseParams()
+    {
+        $ret = parent::_getBaseParams();
+        if (!empty($_GET['redirect'])) $ret['redirect'] = $_GET['redirect'];
+        return $ret;
+    }
+
     protected function _getErrorMessage($type)
     {
         if ($type == self::ERROR_DATA_NOT_COMPLETE) {

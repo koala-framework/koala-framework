@@ -18,6 +18,21 @@ class Kwc_User_Register_Form_Component extends Kwc_Form_Component
         $row->role = $this->_getSetting('standardRole');
     }
 
+    public function _getBaseParams()
+    {
+        $ret = parent::_getBaseParams();
+        if (!empty($_GET['redirect'])) $ret['redirect'] = $_GET['redirect'];
+        return $ret;
+    }
+
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
+    {
+        if (isset($_POST['redirect'])) {
+            $row->setRedirectUrl($_POST['redirect']);
+        }
+        parent::_beforeInsert($row);
+    }
+
     protected function _initForm()
     {
         parent::_initForm();
