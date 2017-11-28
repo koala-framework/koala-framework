@@ -13,8 +13,11 @@ onReady.onHide('.kwcClass .kwcBem__youtubePlayer', function(el) {
 onReady.onShow('.kwcClass .kwcBem__youtubePlayer', function(el) {
     var kwcAdvancedYoutube = el.closest('.kwcClass');
     var config = kwcAdvancedYoutube.data('config');
-    if (kwcAdvancedYoutube.data('player')) {
-        if (config.playerVars.autoplay) kwcAdvancedYoutube.data('player').playVideo();
+    var player = kwcAdvancedYoutube.data('player');
+    if (player && config.playerVars.autoplay) {
+        if (config.resumeOnShow || player.getPlayerState() != 2) {
+            player.playVideo();
+        }
     }
 }, {defer: true});
 
