@@ -72,7 +72,8 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
             'size' => $row->size,
             'width' => $width,
             'height' => null,
-            'ratio' => '16x9'
+            'ratio' => '16x9',
+            'resumeOnShow' => true //True is set because the behavior was like that before this option was added
         );
         if ($d = $row->dimensions) {
             if ($d == '16x9') {
