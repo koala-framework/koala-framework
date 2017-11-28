@@ -72,7 +72,12 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
 
                 $tableName = '';
                 if (is_instance_of($model, 'Kwf_Model_Proxy')) {
-                    $tableName = $model->getProxyModel()->getTableName();
+                    $proxyModel = $model->getProxyModel();
+                    if (is_instance_of($proxyModel, 'Kwf_Model_Proxy')) {
+                        $tableName = $proxyModel->getProxyModel()->getTableName();
+                    } else {
+                        $tableName = $proxyModel->getTableName();
+                    }
                 } else {
                     $tableName = $model->getTableName();
                 }
