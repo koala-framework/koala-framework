@@ -167,7 +167,8 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         $ret = $info;
         if ($partial instanceof Kwf_Component_Partial_Random) {
             $select = $this->_getSelect()->limit(1, $nr);
-            $ret['item'] = array_shift($this->_getItems($select));
+            $items = $this->_getItems($select); // array_shift needs variable-reference
+            $ret['item'] = array_shift($items);
         } else if ($partial instanceof Kwf_Component_Partial_Paging) {
             if ($partial instanceof Kwf_Component_Partial_Id) {
                 $select = new Kwf_Component_Select();
