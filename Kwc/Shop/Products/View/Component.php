@@ -23,7 +23,7 @@ class Kwc_Shop_Products_View_Component extends Kwc_Shop_Products_ViewWithoutAddT
         foreach ($this->getItems() as $i) {
             $addToCart = $this->getData()->parent->getComponent()
                 ->getItemDirectory()->getChildComponent('-'.$i->id);
-            $addToCart->getComponent()->processInput($postData);
+            $addToCart->getComponent()->processAjaxInput($postData);
         }
     }
 }

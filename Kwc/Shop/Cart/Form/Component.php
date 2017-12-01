@@ -14,7 +14,7 @@ class Kwc_Shop_Cart_Form_Component extends Kwc_Form_Component
     {
         parent::processInput($postData);
         foreach ($this->getData()->parent->getComponent()->getFormComponents() as $form) {
-            $form->processInput($postData);
+            $form->processAjaxInput($postData);
         }
     }
 
