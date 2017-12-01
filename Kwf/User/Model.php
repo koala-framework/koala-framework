@@ -108,7 +108,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         return true;
     }
 
-    public function getUserActivationUrl($row)
+    public function getUserActivationUrl($row, $redirectUrl = false)
     {
         $root = Kwf_Component_Data_Root::getInstance();
         $activateComponent = null;
@@ -128,7 +128,13 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         }
         $activateUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
         if ($activateComponent) $activateUrl = $activateComponent->getAbsoluteUrl();
-        return $activateUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
+        $params = array(
+            'code' => $row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE)
+        );
+        if ($redirectUrl) {
+            $params['redirect'] = $redirectUrl;
+        }
+        return $activateUrl.'?'.http_build_query($params);
     }
 
     public function getUserLostPasswordUrl($row)
