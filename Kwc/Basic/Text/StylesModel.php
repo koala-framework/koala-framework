@@ -38,7 +38,12 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 
     public static function getMasterStyles()
     {
-        return self::parseMasterStyles(file_get_contents('build/assets/Frontend.css'));
+        if (Kwf_Assets_WebpackConfig::getDevServerUrl()) {
+            $filename = Kwf_Assets_WebpackConfig::getDevServerUrl() . 'assets/build/Frontend.css';
+        } else {
+            $filename = 'build/assets/Frontend.css';
+        }
+        return self::parseMasterStyles(file_get_contents($filename));
     }
 
     public function getStyles($ownStyles = false)
