@@ -4,22 +4,15 @@ class Kwc_Newsletter_Subscribe_Update_20170819SubscriberLogState extends Kwf_Upd
     public function postUpdate()
     {
         parent::postUpdate();
-
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass('Kwc_Newsletter_Component') as $c) {
-            $s = new Kwf_Model_Select();
-            $s->whereEquals('newsletter_component_id', $c->dbId);
-            $select = new Kwf_Model_Select();
-            $select->where(new Kwf_Model_Select_Expr_Parent_Contains('Subscriber', $s));
-            foreach (Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Subscribe_LogsModel')->getRows($select) as $row) {
-                if (stripos($row->message, $c->trlKwf('Activated')) !== false) {
-                    $row->state = 'activated';
-                } else if (stripos($row->message, $c->trlKwf('Unsubscribed')) !== false) {
-                    $row->state = 'unsubscribed';
-                } else if (stripos($row->message, $c->trlKwf('Subscribed')) !== false) {
-                    $row->state = 'subscribed';
-                }
-
-                if ($row->isDirty('state')) $row->save();
+            $keywords = array(
+                'subscribed' => $c->trlKwf('Subscribed'),
+                'activated' => $c->trlKwf('Activated'),
+                'unsubscribed' => $c->trlKwf('Unsubscribed'),
+            );
+            foreach ($keywords as $state => $keyword) {
+                $query = "UPDATE kwc_newsletter_subscriber_logs l, kwc_newsletter_subscribers s set l.state='{$state}' WHERE l.subscriber_id=s.id AND s.newsletter_component_id='{$c->dbId}' AND LOCATE(LOWER('$keyword'), LOWER(message)) > 0";
+                Kwf_Registry::get('db')->query($query);
             }
         }
     }
