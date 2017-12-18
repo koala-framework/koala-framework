@@ -15,7 +15,7 @@ class Kwc_Basic_LinkTag_BlogPost_DirectoriesController extends Kwf_Controller_Ac
         } else {
             throw new Kwf_Exception("componentId, id or parent_id required");
         }
-        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($subRootComponentId);
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($subRootComponentId, array('ignoreVisible' => true));
 
         $data = array();
         $blogs = Kwf_Component_Data_Root::getInstance()
