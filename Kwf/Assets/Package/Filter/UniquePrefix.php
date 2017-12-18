@@ -8,7 +8,7 @@ class Kwf_Assets_Package_Filter_UniquePrefix
             if (!window.'.$uniquePrefix.') window.'.$uniquePrefix.' = {};
             var kwfUp = window.'.$uniquePrefix.';
 
-            var kwfNamespaces = ["Kwf", "Kwc", "Ext2", "Ext", "$", "jQuery", "Modernizr", "require", "define", "_kwfTrl", "_kwfTrlp"];
+            var kwfNamespaces = ["Kwf", "Kwc", "Ext2", "Ext", "$", "jQuery", "require", "define", "_kwfTrl", "_kwfTrlp"];
 
             var kwfOrigExports = {};
             for (var i=0; i<kwfNamespaces.length; i++) {

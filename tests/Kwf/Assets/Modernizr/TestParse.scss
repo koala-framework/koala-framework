@@ -1,7 +1,0 @@
-@import "kwf/modernizr";
-
-.foo {
-    @include modernizr-no(csscalc) {
-        color: red;
-    }
-}

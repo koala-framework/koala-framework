@@ -151,8 +151,6 @@ QUnit.asyncTest("Simulate touch-device and click-trough Levels : 2", function( a
 
     $('#main').html($(templates.one));
 
-    Modernizr.touchevents = true;
-
     Kwf.Utils.DoubleTapToGo($('ul.menu > li'), {targetToOpen: '> div.dropdown'});
     Kwf.Utils.DoubleTapToGo($('ul.menu > li > div > ul > li'), {targetToOpen: '> div.dropdown'});
 
@@ -188,8 +186,6 @@ QUnit.asyncTest("Simulate touch-device and click-trough  Levels : 3", function( 
     expect( 7 );
 
     $('#main').html($(templates.two));
-
-    Modernizr.touchevents = true;
 
     Kwf.Utils.DoubleTapToGo($('ul.menu > li'), {targetToOpen: '> div.dropdown'});
     Kwf.Utils.DoubleTapToGo($('ul.menu > li > div > ul > li'), {targetToOpen: '> div.dropdown'});
@@ -237,8 +233,6 @@ QUnit.asyncTest('Simulate touch-device and click through between menu links', fu
     expect( 7 );
 
     $('#main').html($(templates.three));
-
-    Modernizr.touchevents = true;
 
     Kwf.Utils.DoubleTapToGo($('ul.menu > li'), {targetToOpen: '> div.dropdown'});
     Kwf.Utils.DoubleTapToGo($('ul.menu > li > div > ul > li'), {targetToOpen: '> div.dropdown'});

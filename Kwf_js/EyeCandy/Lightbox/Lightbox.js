@@ -1,4 +1,3 @@
-// @require ModernizrPrefixed
 var $ = require('jquery');
 var onReady = require('kwf/commonjs/on-ready');
 var historyState = require('kwf/commonjs/history-state');
@@ -72,12 +71,11 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
 
     //Remove the kwfUp-kwfLightboxOpen class and get the transform matrix data
     //We need that info, for future open animations
-    var transformName = Modernizr.prefixed('transform') || '';
     l.lightboxEl.hide();
     l.lightboxEl.removeClass('kwfUp-kwfLightboxOpen');
     l.lightboxEl.width(); //trigger layout
     l.lightboxEl.show();
-    var matrix = l.innerLightboxEl.css(transformName);
+    var matrix = l.innerLightboxEl.css('transform');
     l.lightboxEl.hide();
     l.lightboxEl.addClass('kwfUp-kwfLightboxOpen');
     l.lightboxEl.width(); //trigger layout
@@ -217,8 +215,7 @@ Lightbox.prototype = {
         this.innerLightboxEl = lightbox.find('.kwfUp-kwfLightboxInner');
         var el = this.innerLightboxEl;
 
-        var transformName = Modernizr.prefixed('transform') || '';
-        var matrix = el.css(transformName);
+        var matrix = el.css('transform');
         var values = null;
         if (matrix) values = matrix.match(/-?[\d\.]+/g);
         if (values != null && values[4] && values[4] == el.outerWidth()) {
@@ -227,7 +224,7 @@ Lightbox.prototype = {
             this.innerLightboxEl.magicTransformX = true;
             values[4] = ($(window).width()-el.outerWidth())/2 + el.outerWidth();
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
-            this.innerLightboxEl.css(transformName, newMatrix);
+            this.innerLightboxEl.css('transform', newMatrix);
         }
         if (values != null && values[5] && values[5] == el.outerWidth()) {
             //translateY
@@ -235,7 +232,7 @@ Lightbox.prototype = {
             this.innerLightboxEl.magicTransformY = true;
             values[5] = ($(window).height()-el.outerHeight())/2 + el.outerHeight();
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
-            this.innerLightboxEl.css(transformName, newMatrix);
+            this.innerLightboxEl.css('transform', newMatrix);
         }
         //Thanks to the css-transforms specification we need to use this 0.001px fix
         //This is, because if the transform matrix is (0, 0, 0, 0, 0, 0) it is a non-invertible matrix
@@ -251,7 +248,7 @@ Lightbox.prototype = {
                 values[3] = 0.001;
             }
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
-            this.innerLightboxEl.css(transformName, newMatrix);
+            this.innerLightboxEl.css('transform', newMatrix);
         }
 
         if (this.options.width) {
@@ -370,18 +367,16 @@ Lightbox.prototype = {
         if (!this.lightboxEl.is(':visible')) {
             this.lightboxEl.show();
             if (this.innerLightboxEl.magicTransform) {
-                var transformName = Modernizr.prefixed('transform') || '';
-                var matrix = this.innerLightboxEl.css(transformName);
+                var matrix = this.innerLightboxEl.css('transform');
                 var values = matrix.match(/-?[\d\.]+/g);
                 if (this.innerLightboxEl.magicScale) {
                     values[0] = 1;
                     values[3] = 1;
                 }
                 var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+',0,0)';
-                this.innerLightboxEl.css(transformName, newMatrix);
+                this.innerLightboxEl.css('transform', newMatrix);
             }
-            var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
-            var duration = this.innerLightboxEl.css(transitionDurationName);
+            var duration = this.innerLightboxEl.css('transitionDuration');
             if (parseFloat(duration)>0) {
                 $('body').addClass('kwfUp-kwfLightboxAnimate');
                 oneTransitionEnd(this.innerLightboxEl, function() {
@@ -408,8 +403,7 @@ Lightbox.prototype = {
         this.lightboxEl.removeClass('kwfUp-kwfLightboxOpen');
 
         if (this.innerLightboxEl.magicTransform) {
-            var transformName = Modernizr.prefixed('transform') || '';
-            var matrix = this.innerLightboxEl.css(transformName);
+            var matrix = this.innerLightboxEl.css('transform');
             var values = matrix.match(/-?[\d\.]+/g);
             if (this.innerLightboxEl.magicTransformX) {
                 values[4] = ($(window).width()-this.innerLightboxEl.outerWidth())/2 + this.innerLightboxEl.outerWidth();
@@ -422,7 +416,7 @@ Lightbox.prototype = {
                 values[3] = 0.001;
             }
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
-            this.innerLightboxEl.css(transformName, newMatrix);
+            this.innerLightboxEl.css('transform', newMatrix);
         }
     },
     closeAndPushState: function() {

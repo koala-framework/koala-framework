@@ -193,8 +193,7 @@ var CenterBoxStyle = kwfExtend(AbstractStyle, {
         }
     },
     onClose: function(options) {
-        var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
-        var duration = this.lightbox.innerLightboxEl.css(transitionDurationName);
+        var duration = this.lightbox.innerLightboxEl.css('transitionDuration');
         if (parseFloat(duration)>0) {
             $('body').addClass('kwfUp-kwfLightboxAnimate');
             oneTransitionEnd(this.lightbox.innerLightboxEl, function() {
