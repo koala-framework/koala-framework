@@ -15,7 +15,7 @@ class Kwc_Basic_LinkTag_News_DirectoriesController extends Kwf_Controller_Action
         } else {
             throw new Kwf_Exception("componentId, id or parent_id required");
         }
-        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($subRootComponentId, array('ignoreVisible' => true));
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($subRootComponentId, array('ignoreVisible' => true));
 
         $data = array();
         $classes = Kwc_Admin::getInstance($this->_getParam('class'))->getDirectoryComponentClasses();
