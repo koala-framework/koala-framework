@@ -34,7 +34,6 @@
             "module-deps": "~3.8.0",
             "JSONStream": "~1.0.4",
             "postcss": "~5.0.13",
-            "es6-promise": "^4.1.1",
             "css-selectors-count": "~1.0.1",
             "postcss-chunk": "git://github.com/koala-framework/postcss-chunk.git#1b5a343cd4017d5608ece9f5f7a702f4db821171",
             "autoprefixer": "~6.1.0",
