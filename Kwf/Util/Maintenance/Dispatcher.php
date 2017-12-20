@@ -104,7 +104,7 @@ class Kwf_Util_Maintenance_Dispatcher
         if ($runRow->status != 'killed') {
             if ($process->getExitCode()) {
                 $runRow->status = 'failed';
-                $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code ".$process->getExitCode());
+                $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code ".$process->getExitCode()." and ErrorMessage: ".$process->getErrorOutput());
                 $e->log();
             } else {
                 $runRow->status = 'success';
