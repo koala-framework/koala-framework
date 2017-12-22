@@ -251,10 +251,10 @@ FormComponent.prototype = {
 
                 var scrollTo = null;
 
-                if (!hasErrors) {
+                if (!hasErrors && this.config.scrollTopOnSuccess) {
                     // Scroll to top of form
                     scrollTo = this.el.parent().offset().top;
-                } else {
+                } else if (hasErrors) {
                     // Scroll to first error. If there are form-errors those are first
                     if (!r.errorMessages.length) { // there are no form-errors
                         // Get position of first error field
