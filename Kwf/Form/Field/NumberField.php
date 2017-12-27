@@ -19,7 +19,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         $this->setDecimalPrecision(2);
        $this->setInputType('number');
 
-        $this->_floatValidator = new Zend_Validate_Float();
+        $this->_floatValidator = new Kwf_Validate_Float();
     }
 
     public function getMetaData($model)
