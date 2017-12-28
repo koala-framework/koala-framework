@@ -117,6 +117,7 @@ Tabs.prototype = {
                 complete: function() {
                     oldContentEl.css('position', 'static');
                     oldContentEl.removeClass('kwfUp-kwfTabsContentActive');
+                    onReady.callOnContentReady(oldContentEl, {action: 'hide'});
                     newContentEl.css('position', 'static');
                     newContentEl.show();
                     newContentEl.css('height', 'auto');
