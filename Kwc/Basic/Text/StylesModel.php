@@ -21,14 +21,16 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
     public static function parseMasterStyles($masterContent)
     {
         $styles = array();
-        if (strpos($masterContent, '.kwfUp-webStandard')===false) return $styles;
-        preg_match_all('#^ *.kwfUp-webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{([^}]*)} */\\* +(.*?) +\\*/#m', $masterContent, $m);
+        $up = Kwf_Config::getValue('application.uniquePrefix');
+        if ($up) $up .= '-';
+        if (strpos($masterContent, ".{$up}webStandard")===false) return $styles;
+        $up = str_replace('-', '\-', $up);
+        preg_match_all("#\.{$up}webStandard\s+(span|p|h[1-6])(\.(.+))?\s+{([^}]+)}\s*/\*(.*)\*/#mU", $masterContent, $m);
         foreach (array_keys($m[1]) as $i) {
-            $tagName = $m[2][$i];
             $styles[] = array(
                 'id' => 'master'.$i,
-                'name' => $m[5][$i],
-                'tagName' => $tagName,
+                'name' => trim($m[5][$i]),
+                'tagName' => $m[1][$i],
                 'className' => $m[3][$i],
                 'styles' => $m[4][$i],
             );
