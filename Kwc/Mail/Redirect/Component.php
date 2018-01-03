@@ -222,6 +222,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         } else {
             $link = $hrefParts['path'];
             if (!$link) $link = '/';
+            if (isset($hrefParts['fragment'])) $link .= '#' . $hrefParts['fragment'];
         }
 
         if (!isset($this->_redirectRowsCache[$link])) {
