@@ -7,7 +7,6 @@ class Kwc_Advanced_IntegratorTemplate_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('Integrator Template');
         $ret['dataClass'] = 'Kwc_Advanced_IntegratorTemplate_Data';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['extConfig'] = 'Kwc_Advanced_IntegratorTemplate_ExtConfig';
         $ret['generators']['embed'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Advanced_IntegratorTemplate_Embed_Component',
