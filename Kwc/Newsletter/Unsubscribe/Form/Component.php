@@ -10,6 +10,7 @@ class Kwc_Newsletter_Unsubscribe_Form_Component extends Kwc_Form_Component
             'Kwc_Newsletter_Unsubscribe_Form_Success_Component';
         $ret['placeholder']['submitButton'] = trlKwfStatic('Unsubscribe newsletter');
         $ret['viewCache'] = false;
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
@@ -72,8 +73,6 @@ class Kwc_Newsletter_Unsubscribe_Form_Component extends Kwc_Form_Component
                 }
             }
         }
-
-        parent::processInput($postData);
     }
 
     private function _getHash(array $hashData)
