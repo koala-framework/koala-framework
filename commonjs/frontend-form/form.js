@@ -250,9 +250,10 @@ FormComponent.prototype = {
                 }
 
                 var scrollTo = null;
+
                 if (!hasErrors) {
                     // Scroll to top of form
-                    scrollTo = this.el.offset().top;
+                    scrollTo = this.el.parent().offset().top;
                 } else {
                     // Scroll to first error. If there are form-errors those are first
                     if (!r.errorMessages.length) { // there are no form-errors
@@ -269,7 +270,7 @@ FormComponent.prototype = {
                     }
                     if (scrollTo == null) { // no field errors found or only form errors
                         // form-errors are shown at the top of the form
-                        scrollTo = this.el.offset().top;
+                        scrollTo = this.el.parent().offset().top;
                     }
                 }
                 if (scrollTo != null) {

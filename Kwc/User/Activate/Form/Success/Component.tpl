@@ -7,7 +7,7 @@
         <?=$this->data->trlKwf('You were logged in, automatically')?><br />
         <p>
             <?=$this->data->trlKwf("If the needed page doesn't load automatically,")?>
-            <?=$this->link($this->config->redirectUrl, $this->data->trlKwf('please click here'))?>.
+            <?=$this->link($this->config['redirectUrl'], $this->data->trlKwf('please click here'))?>.
         </p>
     </p>
 </div>

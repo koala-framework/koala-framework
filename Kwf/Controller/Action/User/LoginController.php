@@ -163,11 +163,11 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $user = null;
         if ($action == 'login') {
             if (count($state) != 4) throw new Kwf_Exception_NotFound();
-            $redirect = str_replace('kwfdot', '.', $state[3]);
+            $redirect = urldecode(str_replace('kwfdot', '.', $state[3]));
             try {
                 $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
             } catch (Kwf_Exception_Client $e) {
-                $this->getRequest()->setParam('redirect', $redirect);
+                $this->getRequest()->setParam('redirect', urlencode($redirect));
                 $this->getRequest()->setParam('errorMessage', $e->getMessage());
                 $this->forward('error');
                 return;
@@ -180,7 +180,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             }
             $userId = $m[1];
             $code = $m[2];
-            $redirect = str_replace('kwfdot', '.', $state[4]);
+            $redirect = urldecode(str_replace('kwfdot', '.', $state[4]));
             $user = $users->getRow($userId);
             $this->getRequest()->setParam('user', $user);
             if (!$user) {
@@ -213,7 +213,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             }
         } else {
             $label = $authMethods[$authMethod]->getLoginRedirectLabel();
-            $this->getRequest()->setParam('redirect', $redirect);
+            $this->getRequest()->setParam('redirect', urlencode($redirect));
             $this->getRequest()->setParam('errorMessage',
                 trlKwf("Can't login user, {0} account is not associated with {1}.",
                     array(
