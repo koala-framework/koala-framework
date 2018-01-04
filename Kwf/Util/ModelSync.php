@@ -23,6 +23,7 @@ class Kwf_Util_ModelSync
         );
         if (!$select) $select = new Kwf_Model_Select();
         $existingRows = array();
+        $i = 1;
         foreach ($this->_model->getRows($select) as $row) {
             $keyValues = array();
             foreach ($this->_compareColumns as $column) {
@@ -34,7 +35,12 @@ class Kwf_Util_ModelSync
             } else {
                 $row->delete();
             }
+
+            if ($i % 100 == 0) $this->_model->freeMemory();
+            $i++;
         }
+        $this->_model->freeMemory();
+
         $this->_lastSyncStat['check'] = count($existingRows);
         foreach ($data as $id => $d) {
             $keyValues = array();
