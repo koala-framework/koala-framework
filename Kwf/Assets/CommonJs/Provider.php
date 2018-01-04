@@ -97,7 +97,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
 
                 $pos = strpos($dep, "/");
                 $dir = "node_modules/" . substr($dep, 0, $pos);
-                if (substr($dep, 0, 1) === '@') $dir .= substr($dep, $pos, strpos($dep, "/", $pos));
+                if (substr($dep, 0, 1) === '@') $dir .= substr($dep, $pos, strpos($dep, "/", $pos+1)-$pos);
                 $package = json_decode(file_get_contents($dir . '/package.json'), true);
                 if (isset($package['browser'])) {
                     if (is_string($package['browser'])) {
