@@ -42,6 +42,7 @@ class Kwf_Util_ModelSync
         $this->_model->freeMemory();
 
         $this->_lastSyncStat['check'] = count($existingRows);
+        $i = 1;
         foreach ($data as $id => $d) {
             $keyValues = array();
             foreach ($this->_compareColumns as $column) {
@@ -62,9 +63,14 @@ class Kwf_Util_ModelSync
                 $this->_lastSyncStat['create']++;
                 $row = $this->_model->createRow($d);
                 $row->save();
+
+                if ($i % 100 == 0) $this->_model->freeMemory();
+                $i++;
             }
             $this->_lastSyncMapping[$id] = $row->id;
         }
+        $this->_model->freeMemory();
+
         foreach ($existingRows as $row) {
             $this->_lastSyncStat['delete']++;
             $row->delete();
