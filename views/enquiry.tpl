@@ -18,7 +18,7 @@
                     $first = true;
                     foreach ($this->to as $to) {
                         if (!$first) echo '; ';
-                        echo Kwf_Util_HtmlSpecialChars::filter($to['name']).' &lt;'.Kwf_Util_HtmlSpecialChars::filter($to['email']).'&gt;');
+                        echo Kwf_Util_HtmlSpecialChars::filter($to['name']).' &lt;'.Kwf_Util_HtmlSpecialChars::filter($to['email']).'&gt;';
                         $first = false;
                     }
                 ?>

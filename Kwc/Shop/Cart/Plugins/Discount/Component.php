@@ -19,7 +19,8 @@ class Kwc_Shop_Cart_Plugins_Discount_Component extends Kwf_Component_Plugin_Abst
         return array(array(
             'amount' => $amount,
             'text' => $order->discount_text.':',
-            'type' => 'discount'
+            'type' => 'discount',
+            'class' => 'discount'
         ));
     }
 
