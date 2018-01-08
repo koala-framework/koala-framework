@@ -18,7 +18,7 @@
                     $first = true;
                     foreach ($this->to as $to) {
                         if (!$first) echo '; ';
-                        echo htmlspecialchars($to['name']).' &lt;'.htmlspecialchars($to['email']).'&gt;');
+                        echo htmlspecialchars($to['name']).' &lt;'.htmlspecialchars($to['email']).'&gt;';
                         $first = false;
                     }
                 ?>
