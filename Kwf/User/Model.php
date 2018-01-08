@@ -232,7 +232,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
 
         $loginData = Kwf_Auth::getInstance()->getStorage()->read();
         if (!$loginData || !isset($loginData['userId']) || !$loginData['userId']) {
-            return null;
+            return $this->_authedUser ? $this->_authedUser->id : null;
         }
         return $loginData['userId'];
     }
