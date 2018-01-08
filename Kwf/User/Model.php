@@ -252,6 +252,11 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         return $this->_authedUser;
     }
 
+    public function setAuthedUser($userRow)
+    {
+        $this->_authedUser = $userRow;
+    }
+
     public function clearAuthedUser()
     {
         $this->_authedUser = null;
