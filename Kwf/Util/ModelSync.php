@@ -72,6 +72,8 @@ class Kwf_Util_ModelSync
         $this->_model->freeMemory();
 
         foreach ($existingRows as $row) {
+            if ($this->_model->hasDeletedFlag() && $row->deleted) continue;
+
             $this->_lastSyncStat['delete']++;
             $row->delete();
         }
