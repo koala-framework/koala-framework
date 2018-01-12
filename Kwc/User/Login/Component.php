@@ -8,6 +8,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['plugins'] = array('Kwc_User_Login_Plugin');
         $ret['flags']['processInput'] = true;
+        $ret['componentName'] = trlKwfStatic('Login Component');
         return $ret;
     }
 
