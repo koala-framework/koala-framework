@@ -110,7 +110,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
             $format == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML)
         {
             $html = $this->getHtml($recipient, $addViewTracker);
-            $mail->setDomain($this->getData()->getDomain());
+            $mail->setDomain($this->getData()->getDomainPreliminary());
             $mail->setAttachImages($this->_getSetting('attachImages'));
             $mail->setBodyHtml($html);
         }
