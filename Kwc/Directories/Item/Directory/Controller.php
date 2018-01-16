@@ -158,7 +158,8 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
             array('ignoreVisible'=>true, 'limit'=>1)
         );
         foreach ($ids as $id) {
-            $child = $dir->getChildComponent(array('id'=>'-'.$id, 'ignoreVisible'=>true));
+            $sep = $dir->getGenerator('detail')->getIdSeparator();
+            $child = $dir->getChildComponent(array('id'=>$sep.$id, 'ignoreVisible'=>true));
             $newChild = Kwf_Util_Component::duplicate($child, $dir, $progressBar);
             $newChild->row->save();
             $this->view->data['duplicatedIds'][] = $newChild->id;
