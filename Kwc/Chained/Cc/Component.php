@@ -5,7 +5,7 @@ class Kwc_Chained_Cc_Component extends Kwc_Chained_Abstract_Component
     {
         $ret = parent::getSettings($masterComponentClass);
         $copySettings = array('componentName', 'componentIcon', 'editComponents', 'viewCache', 'contentSender', 'plugins', 'masterTemplate', 'resetMaster');
-        $copyFlags = array('processInput', 'menuCategory', 'hasHome', 'chainedType', 'subroot', 'hasAlternativeComponent', 'hasFulltext', 'skipFulltext', 'skipFulltextRecursive', 'assetsPackage');
+        $copyFlags = array('processInput', 'menuCategory', 'hasHome', 'chainedType', 'subroot', 'hasAlternativeComponent', 'hasFulltext', 'skipFulltext', 'skipFulltextRecursive');
         $ret = Kwc_Chained_Abstract_Component::getChainedSettings($ret, $masterComponentClass, 'Cc', $copySettings, $copyFlags);
         return $ret;
     }
