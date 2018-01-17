@@ -214,43 +214,20 @@ class Kwf_Component_Data
     }
 
     /**
-     * Returns preliminary domain (if set) or domain for current component
-     *
-     * @return string
-     */
-    public function getDomainPreliminary()
-    {
-        if ($domain = $this->getBaseProperty('preliminaryDomain')) {
-            return $domain;
-        } else {
-            return $this->getDomain();
-        }
-    }
-
-    /**
-     * Returns absolute url including domain and protocoal using preliminary domain (if set) or domain for current component
-     *
-     * @return string
-     */
-    public function getAbsoluteUrlPreliminary()
-    {
-        if ($domain = $this->getBaseProperty('preliminaryDomain')) {
-            $https = Kwf_Util_Https::domainSupportsHttps($domain);
-            $protocol = $https ? 'https' : 'http';
-            return $protocol . '://'.$domain.$this->url;
-        } else {
-            return $this->getAbsoluteUrl();
-        }
-    }
-
-    /**
      * Returns preview url
      *
      * @return string
      */
     public function getPreviewUrl()
     {
-        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($this->getAbsoluteUrlPreliminary().'?kwcPreview');
+        if ($domain = $this->getBaseProperty('preliminaryDomain')) {
+            $https = Kwf_Util_Https::domainSupportsHttps($domain);
+            $protocol = $https ? 'https' : 'http';
+            $url = $protocol . '://'.$domain.$this->url;
+        } else {
+            $url = $this->getAbsoluteUrl();
+        }
+        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($url.'?kwcPreview');
     }
 
     public function __get($var)
