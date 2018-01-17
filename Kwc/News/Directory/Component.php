@@ -33,8 +33,6 @@ class Kwc_News_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
         //config fuer admin button oben
         $ret['extConfigControllerIndex'] = 'Kwc_Directories_Item_Directory_ExtConfigEditButtons';
 
-        $ret['flags']['assetsPackage'] = 'News';
-
         return $ret;
     }
 

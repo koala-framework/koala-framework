@@ -20,36 +20,6 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
         $ret['language'] = $this->getData()->getLanguage();
         $ret['subroot'] = $this->getData()->getSubroot();
         $ret['assetsPackages'] = array('Frontend');
-
-        $packageNames = array();
-        $page = $this->getData()->getPage();
-        if (Kwc_Abstract::getFlag($page->componentClass, 'assetsPackage')) {
-            $packageName = Kwc_Abstract::getFlag($page->componentClass, 'assetsPackage');
-            if ($packageName && !in_array($packageName, $packageNames)) {
-                $packageNames[] = $packageName;
-            }
-        }
-        foreach ($page->getRecursiveChildComponents(array('flags'=>array('assetsPackage'=>true), 'page'=>false)) as $d) {
-            $packageName = Kwc_Abstract::getFlag($d->componentClass, 'assetsPackage');
-            if ($packageName && !in_array($packageName, $packageNames)) {
-                $packageNames[] = $packageName;
-            }
-        }
-        $d = $page;
-        while ($d) {
-            if (Kwc_Abstract::getFlag($d->componentClass, 'assetsPackage')) {
-                $packageName = Kwc_Abstract::getFlag($d->componentClass, 'assetsPackage');
-                if ($packageName && !in_array($packageName, $packageNames)) {
-                    $packageNames[] = $packageName;
-                }
-            }
-            $d = $d->parent;
-        }
-        foreach ($packageNames as $packageName) {
-            if ($packageName != 'Default') {
-                $ret['assetsPackages'][] = 'ComponentPackage'.$packageName;
-            }
-        }
         $ret['kwfUp'] = Kwf_Config::getValue('application.uniquePrefix') ? Kwf_Config::getValue('application.uniquePrefix').'-' : '';
         return $ret;
     }
