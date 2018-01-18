@@ -19,7 +19,7 @@ Kwf.Form.Field.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
 
     initComponent: function() {
         var radios = [];
-        for (var i in this.dimensions) {
+        for (i = 0; i < this.dimensions.length; i++) {
             radios.push({
                 inputValue: i,
                 boxLabel: Kwf.Form.Field.Image.DimensionField.getDimensionString(this.dimensions[i], this._dpr2Check),
