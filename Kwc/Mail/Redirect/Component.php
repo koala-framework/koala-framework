@@ -251,7 +251,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 
     protected function _createHashedRedirectUrl(array $parameters)
     {
-        return $this->getData()->getAbsoluteUrlPreliminary().'?d='
+        return $this->getData()->getAbsoluteUrl().'?d='
             .implode('_', $parameters)
             .'_'.$this->_createRedirectHash($parameters);
     }
