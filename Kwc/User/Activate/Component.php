@@ -8,6 +8,7 @@ class Kwc_User_Activate_Component extends Kwc_Abstract_Composite_Component
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
+        $ret['componentName'] = trlKwfStatic('Activate-User Component');
         return $ret;
     }
 
