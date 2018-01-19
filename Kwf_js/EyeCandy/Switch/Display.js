@@ -15,8 +15,8 @@ var $ = require('jQuery');
         $.extend(this.config, config);
 
         this.el = $(el);
-        this.switchLink = this.el.find(this.config.link || '.kwfUp-switchLink');
-        this.switchContainer = this.el.find(this.config.container || '.kwfUp-switchContent');
+        this.switchLink = this.el.find(this.config.link || '.kwfUp-switchLink:first');
+        this.switchContainer = this.el.find(this.config.container || '.kwfUp-switchContent:first');
         this.boundEvent = this.config.hover ? 'hover' : 'click';
         this.activeTimeout = null;
 
@@ -96,15 +96,15 @@ var $ = require('jQuery');
                 SwitchDisplay(el, config);
             }, { defer: true });
             onReady.onRender(elOrSelector, function(el, config) {
-                if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('active')) {
-                    el.find(config.container || 'div.kwfUp-switchContent').hide();
+                if (!el.find(config.container || 'div.kwfUp-switchContent:first').hasClass('active')) {
+                    el.find(config.container || 'div.kwfUp-switchContent:first').hide();
                 }
             });
         } else {
             config = config || {};
             el = elOrSelector;
-            if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('active')) {
-                el.find(config.container || 'div.kwfUp-switchContent').hide();
+            if (!el.find(config.container || 'div.kwfUp-switchContent:first').hasClass('active')) {
+                el.find(config.container || 'div.kwfUp-switchContent:first').hide();
             }
             el = elOrSelector.get(0);
 
