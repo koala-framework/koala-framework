@@ -1,1 +1,3 @@
-window.KWF_BASE_URL = __webpack_require__.KWF_BASE_URL;
+var BaseUrl = require('kwf/commonjs/base-url');
+
+window.KWF_BASE_URL = BaseUrl.get();
