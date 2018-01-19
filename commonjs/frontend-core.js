@@ -1,4 +1,5 @@
 var $ = require('jquery');
+var BaseUrl = require('kwf/commonjs/base-url');
 
 //this sets the public_path like it is set for the first found script tag
 //required when using cdn
@@ -10,7 +11,8 @@ if (script.length) {
     if (m) {
         __webpack_public_path__ = m[1];
     }
-    __webpack_require__.KWF_BASE_URL = script.data('base-url');
+    window.KWF_BASE_URL = script.data('base-url');
 } else {
-    __webpack_require__.KWF_BASE_URL = '';
+    window.KWF_BASE_URL = '';
 }
+BaseUrl.set(__webpack_require__.KWF_BASE_URL);
