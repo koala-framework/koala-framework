@@ -3,7 +3,9 @@
     {% set attribute = name|slice(0, 3) == 'og:' ? 'property' : 'name' %}
     <meta {{ attribute }}="{{ name }}" content="{{ content }}" />
 {% endfor %}
-<link href="{{ canonicalUrl }}" rel="canonical" />
+{% if canonicalUrl %}
+    <link href="{{ canonicalUrl }}" rel="canonical" />
+{% endif %}
 {% for key in keys %}
     {{ renderer.component(_context[key]) }}
 {% endfor %}
