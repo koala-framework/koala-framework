@@ -80,7 +80,6 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['metaTags'] = $this->_getMetaTags();
-        $ret['canonicalUrl'] = $this->getData()->getAbsoluteUrl();
         $ret['kwfUp'] = Kwf_Config::getValue('application.uniquePrefix') ? Kwf_Config::getValue('application.uniquePrefix').'-' : '';
         return $ret;
     }
