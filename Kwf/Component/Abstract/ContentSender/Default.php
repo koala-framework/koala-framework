@@ -130,7 +130,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         //if one of those headers is not wanted we have to make them configurable.
         header('Strict-Transport-Security: max-age=31536000');
         header('X-Content-Type-Options: nosniff');
-        header('X-Frame-Options: DENY');
+        header('X-Frame-Options: SAMEORIGIN');
         header('X-XSS-Protection: 1; mode=block');
         header('Referrer-Policy: strict-origin-when-cross-origin');
 
