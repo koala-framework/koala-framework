@@ -40,11 +40,12 @@ class Kwf_Util_Maintenance_Dispatcher
         return ($a < $b) ? -1 : 1;
     }
 
-    public static function executeJobs($jobFrequency, $debug, $output)
+    public static function executeJobs($jobFrequency, $debug, $output, $options = array())
     {
         foreach (self::getAllMaintenanceJobs() as $job) {
             if ($job->getFrequency() == $jobFrequency) {
                 if (!$job->hasWorkload()) continue;
+                if ($options) $job->setOptions($options);
                 if ($debug) echo "executing ".get_class($job)."\n";
                 self::executeJob($job, $debug, $output);
             }
@@ -65,6 +66,7 @@ class Kwf_Util_Maintenance_Dispatcher
         $t = microtime(true);
         $cmd = "php bootstrap.php maintenance-jobs internal-run-job --runId=".escapeshellarg($runRow->id);
         if ($debug) $cmd .= " --debug";
+        if ($options = $job->getOptions()) $cmd .= " --options=" . escapeshellarg(serialize($options));
 
         $process = new Process($cmd);
         $process->start(function ($type, $buffer) use ($runsModel, $runRow, $debug) {

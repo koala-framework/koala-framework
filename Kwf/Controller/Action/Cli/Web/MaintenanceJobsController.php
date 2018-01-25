@@ -1,9 +1,22 @@
 <?php
 class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Controller_Action_Cli_Abstract
 {
+    private $_options;
+
     public static function getHelp()
     {
         return "execute mainteanance commands, should be run by process-control";
+    }
+
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        if (!$this->_options) {
+            $this->_options = array_filter($this->_getAllParams(), function ($key) {
+                return !in_array($key, array('job', 'debug'));
+            }, ARRAY_FILTER_USE_KEY);
+        }
     }
 
     public function runAction()
@@ -55,10 +68,10 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
                 if ($debug) echo "Next daily run: ".date('Y-m-d H:i:s', $nextDailyRun)."\n";
             }
 
-            Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_SECONDS, $debug, $output);
+            Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_SECONDS, $debug, $output, $this->_options);
             if (!$lastMinutelyRun || time()-$lastMinutelyRun > 60) {
                 $lastMinutelyRun = time();
-                Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_MINUTELY, $debug, $output);
+                Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_MINUTELY, $debug, $output, $this->_options);
 
                 //discard connection to database to reconnect on next job run
                 //avoids problems with auto closed connections due to inactivity
@@ -76,7 +89,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
                 if ($debug) echo date('Y-m-d H:i:s')." execute hourly jobs\n";
                 $lastHourlyRun = time();
                 file_put_contents('temp/maintenance-hourly-run', $lastHourlyRun);
-                Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_HOURLY, $debug, $output);
+                Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_HOURLY, $debug, $output, $this->_options);
 
                 //set to vanished if last_process_seen has not been updated for 60 seconds
                 $s = new Kwf_Model_Select();
@@ -100,7 +113,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
                 $lastDailyRun = time();
                 file_put_contents('temp/maintenance-daily-run', $lastDailyRun);
                 $nextDailyRun = null;
-                Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug, $output);
+                Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug, $output, $this->_options);
             }
 
             Kwf_Component_Data_Root::getInstance()->freeMemory();
@@ -119,6 +132,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
                     $nextCustomRun[$jobClass] = $job->getNextRuntime($lastCustomRun[$jobClass]);
 
                     if (!$job->hasWorkload()) continue;
+                    if ($this->_options) $job->setOptions($this->_options);
                     if ($debug) echo "execute custom job {$jobClass}\n";
                     Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug, $output);
                 }
@@ -131,7 +145,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     public function runDailyAction()
     {
         $debug = $this->_getParam('debug');
-        Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug, true);
+        Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug, true, $this->_options);
         exit;
     }
 
@@ -166,6 +180,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
         $t = microtime(true);
         $job = new $jobClassName();
+        if ($this->_options) $job->setOptions($this->_options);
         Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug, true);
         Kwf_Events_ModelObserver::getInstance()->process();
         $t = microtime(true)-$t;
@@ -182,6 +197,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
         $job = new $jobClassName();
         $job->setDebug($debug);
         $job->setJobRun($runRow);
+        if ($options = $this->_getParam('options')) $job->setOptions(unserialize($options));
 
         $progressSteps = $job->getProgressSteps();
         $progressBar = null;

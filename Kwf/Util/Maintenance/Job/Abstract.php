@@ -11,6 +11,7 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
 
     protected $_progressBar;
     protected $_jobRun;
+    protected $_options = array();
 
     abstract public function getFrequency();
 
@@ -73,5 +74,24 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
         if ($this->getFrequency() == self::FREQUENCY_CUSTOM) {
             throw new Kwf_Exception("getNextRuntime has to be implemented for this frequency in job ".get_class($this));
         }
+    }
+
+    public function setOptions(array $options)
+    {
+        $this->_options = $options;
+    }
+
+    public function getOptions()
+    {
+        return $this->_options;
+    }
+
+    protected function _getOption($key)
+    {
+        if (array_key_exists($key, $this->_options)) {
+            return $this->_options[$key];
+        }
+
+        return null;
     }
 }
