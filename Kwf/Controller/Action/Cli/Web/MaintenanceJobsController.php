@@ -164,12 +164,9 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             exit;
         }
 
-        $t = microtime(true);
         $job = new $jobClassName();
         Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug, true);
         Kwf_Events_ModelObserver::getInstance()->process();
-        $t = microtime(true)-$t;
-        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
         exit;
     }
 
