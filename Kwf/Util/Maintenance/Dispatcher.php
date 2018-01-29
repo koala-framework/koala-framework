@@ -28,6 +28,12 @@ class Kwf_Util_Maintenance_Dispatcher
         foreach ($jobClasses as $i) {
             $ret[] = new $i();
         }
+
+        $kernel = Kwf_SymfonyKernel::getInstance();
+        if ($kernel) {
+            $ret = array_merge($ret, $kernel->getContainer()->get('kwf.maintenance_jobs_locator')->getMaintenanceJobs());
+        }
+
         usort($ret, array('Kwf_Util_Maintenance_Dispatcher', '_compareJobsPriority'));
         return $ret;
     }
