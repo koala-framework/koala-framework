@@ -47,8 +47,12 @@ abstract class Kwf_SymfonyKernel extends Kernel
     {
         if (!isset(self::$_instance)) {
             $cls = Kwf_Config::getValue('symfony.kernelClass');
-            self::$_instance = new $cls();
-            self::$_instance->boot(); //make sure it is booted (won't do it twice)
+            if ($cls) {
+                self::$_instance = new $cls();
+                self::$_instance->boot(); //make sure it is booted (won't do it twice)
+            } else {
+                return null;
+            }
         }
         return self::$_instance;
     }

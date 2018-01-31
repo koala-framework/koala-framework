@@ -1,4 +1,8 @@
 <?php
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\LineFormatter;
+
 class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
@@ -164,12 +168,9 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             exit;
         }
 
-        $t = microtime(true);
         $job = new $jobClassName();
         Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug, true);
         Kwf_Events_ModelObserver::getInstance()->process();
-        $t = microtime(true)-$t;
-        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
         exit;
     }
 
@@ -198,7 +199,20 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             $runRow->save();
             $job->setProgressBar($progressBar);
         }
-        $job->execute($debug);
+        if ($job instanceof KwfBundle\MaintenanceJobs\AbstractJob) {
+            $logger = new Logger('name');
+            $level = Logger::INFO;
+            if ($debug) {
+                $level = Logger::DEBUG;
+            }
+            $handler = new StreamHandler('php://stdout', $level);
+            $handler->setFormatter(new LineFormatter("%message% %context% %extra%\n", null, true, true));
+            $logger->pushHandler($handler);
+            $job->execute($logger);
+        } else {
+            $job->execute($debug);
+        }
+
         Kwf_Events_ModelObserver::getInstance()->process();
         exit;
     }

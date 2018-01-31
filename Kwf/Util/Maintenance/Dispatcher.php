@@ -28,6 +28,12 @@ class Kwf_Util_Maintenance_Dispatcher
         foreach ($jobClasses as $i) {
             $ret[] = new $i();
         }
+
+        $kernel = Kwf_SymfonyKernel::getInstance();
+        if ($kernel) {
+            $ret = array_merge($ret, $kernel->getContainer()->get('kwf.maintenance_jobs_locator')->getMaintenanceJobs());
+        }
+
         usort($ret, array('Kwf_Util_Maintenance_Dispatcher', '_compareJobsPriority'));
         return $ret;
     }
@@ -67,8 +73,8 @@ class Kwf_Util_Maintenance_Dispatcher
         if ($debug) $cmd .= " --debug";
 
         $process = new Process($cmd);
-        $process->start(function ($type, $buffer) use ($runsModel, $runRow, $debug) {
-            if ($debug) {
+        $process->start(function ($type, $buffer) use ($runsModel, $runRow, $output) {
+            if ($output) {
                 if (Process::ERR === $type) {
                     echo $buffer;
                 } else {
@@ -112,7 +118,7 @@ class Kwf_Util_Maintenance_Dispatcher
         }
 
         $t = microtime(true)-$t;
-        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
+        if ($debug && $output) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
 
         if ($runRow->status == 'success' && $runRow->runtime > $maxTime) {
             $runRow->status = 'timelimit';
@@ -123,7 +129,7 @@ class Kwf_Util_Maintenance_Dispatcher
                 file_put_contents('php://stderr', $msg."\n");
             }
         }
-        if ($debug) echo "\n";
+        if ($debug && $output) echo "\n";
 
         $runRow->save();
         if ($runRow->status != 'success' && Kwf_Config::getValue('maintenanceJobs.sendFailNotification')) {

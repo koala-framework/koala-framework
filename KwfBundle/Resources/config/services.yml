@@ -60,3 +60,6 @@ services:
         class: KwfBundle\EventListener\CsrfProtection
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 12 }
+
+    kwf.maintenance_jobs_locator:
+        class: KwfBundle\MaintenanceJobs\Locator
