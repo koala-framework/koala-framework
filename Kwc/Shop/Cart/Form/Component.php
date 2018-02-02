@@ -1,5 +1,5 @@
 <?php
-class Kwc_Shop_Cart_Form_Component extends Kwc_Form_Component
+class Kwc_Shop_Cart_Form_Component extends Kwc_Form_NonAjax_Component
 {
     public static function getSettings($param = null)
     {
@@ -13,7 +13,7 @@ class Kwc_Shop_Cart_Form_Component extends Kwc_Form_Component
     public function processInput(array $postData)
     {
         foreach ($this->getData()->parent->getComponent()->getFormComponents() as $form) {
-            $form->processAjaxInput($postData);
+            $form->processInput($postData);
         }
     }
 
