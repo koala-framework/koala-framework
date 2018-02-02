@@ -7,12 +7,12 @@ class Kwc_Shop_Cart_Form_Component extends Kwc_Form_Component
         $ret['generators']['child']['component']['success'] = false;
         $ret['placeholder']['submitButton'] = trlKwfStatic('Save');
         $ret['viewCache'] = false;
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
     public function processInput(array $postData)
     {
-        parent::processInput($postData);
         foreach ($this->getData()->parent->getComponent()->getFormComponents() as $form) {
             $form->processAjaxInput($postData);
         }
