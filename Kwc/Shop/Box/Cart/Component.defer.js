@@ -1,25 +1,21 @@
 var onReady = require('kwf/on-ready');
+var $ = require('jQuery');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 
-onReady.onContentReady(function(readyEl, param) {
-    if (!param.newRender) return false;
-    Ext2.select('.kwfUp-kwcForm > form', true, readyEl).each(function(form) {
-        form = form.parent('.kwfUp-kwcForm', false);
-        if (form.dom.shopBoxCartInitDone) return;
-        form.dom.shopBoxCartInitDone = true;
-        form.kwcForm.on('submitSuccess', function(r) {
-            Ext2.select('.kwcShopBoxCart').each(function(el) {
-                Ext2.Ajax.request({
-                    params: { componentId: el.dom.id },
-                    url: getKwcRenderUrl(),
-                    success: function(response, options) {
-                        this.replaceWith({ html: response.responseText });
-                        onReady.callOnContentReady(this.dom, {newRender: true});
-                    },
-                    scope: el
-                });
+onReady.onRender('.kwcClass',function(el) {
+    var url = getKwcRenderUrl();
 
-            }, this);
-        }, this);
-    });
+    $.each($('.kwfUp-addToCardForm .kwfUp-formContainer'), $.proxy(function(index, form) {
+        $(form).on('kwfUp-form-submitSuccess', $.proxy(function(event) {
+            $.ajax({
+                url: url,
+                data: { componentId: el.data('component-id') },
+                success: function(response) {
+                    console.log(this, form);
+                    el.html(response);
+                    onReady.callOnContentReady(el, {newRender: true});
+                }
+            });
+        }, el));
+    }, el));
 }, { priority: 0 }); //call after Kwc.Form.Component
