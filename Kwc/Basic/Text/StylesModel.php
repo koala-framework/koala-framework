@@ -45,7 +45,15 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         } else {
             $filename = 'build/assets/Frontend.css';
         }
-        return self::parseMasterStyles(file_get_contents($filename));
+        $fileGetContentsContextOptions = array();
+        if (Kwf_Config::getValue('server.https') && Kwf_Config::getValue('debug.webpackDevServer')) {
+            $fileGetContentsContextOptions["ssl"] = array(
+                "verify_peer" => false,
+                "verify_peer_name" => false
+            );
+        }
+
+        return self::parseMasterStyles(file_get_contents($filename, false, stream_context_create($fileGetContentsContextOptions)));
     }
 
     public function getStyles($ownStyles = false)

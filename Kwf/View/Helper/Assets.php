@@ -25,7 +25,8 @@ class Kwf_View_Helper_Assets
                 if (!$isRunning) {
                     throw new Kwf_Exception("webpack-dev-server not running, please start clear-cache-watcher");
                 }
-                $webpackUrl = 'http://localhost:'.Kwf_Assets_WebpackConfig::getDevServerPort();
+                $protocol = Kwf_Config::getValue('server.https') ? 'https://' : 'http://';
+                $webpackUrl = $protocol.'localhost:'.Kwf_Assets_WebpackConfig::getDevServerPort();
             }
         }
 
@@ -36,7 +37,15 @@ class Kwf_View_Helper_Assets
             $htmlFile = 'build/assets/'.$assetsPackage.'.'.$language.'.html';
         }
 
-        $c = file_get_contents($htmlFile);
+        $fileGetContentsContextOptions = array();
+        if (Kwf_Config::getValue('server.https') && Kwf_Config::getValue('debug.webpackDevServer')) {
+            $fileGetContentsContextOptions["ssl"] = array(
+                "verify_peer" => false,
+                "verify_peer_name" => false
+            );
+        }
+
+        $c = file_get_contents($htmlFile, false, stream_context_create($fileGetContentsContextOptions));
 
         $c = preg_replace('#</?head>#', '', $c);
         $c = str_replace('/assets/build/./', '/assets/build/', $c);
