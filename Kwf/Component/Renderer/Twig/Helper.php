@@ -2,7 +2,7 @@
 class Kwf_Component_Renderer_Twig_Helper
 {
     private $_renderer;
-    public function __construct(Kwf_Component_Renderer_Abstract $renderer)
+    public function __construct(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $this->_renderer = $renderer;
     }
