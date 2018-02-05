@@ -4,6 +4,7 @@
           action="{{ data.url }}"
           method="post"
     >
+        {% block beforeView %}{% endblock %}
         {{ renderer.component(view) }}
         {% block sumRows %}
             {% for row in sumRows %}
