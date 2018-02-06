@@ -4,8 +4,9 @@
           action="{{ data.url }}"
           method="post"
     >
-        {% block beforeView %}{% endblock %}
+        {% block view %}
         {{ renderer.component(view) }}
+        {% endblock %}
         {% block sumRows %}
             {% for row in sumRows %}
                 <div class="{{ 'amounts'|bemClass }} {% if row.class is defined and row.class %} {{ row.class }} {% endif %}">
