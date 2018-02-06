@@ -987,7 +987,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                     $text = $helperDateTime->dateTime($text);
                 }
                 $sheet->setCellValueExplicit($cell, $text, $cellType);
-                if ($renderer[$col] == 'clickableLink') {
+                if ($renderer[$col] == 'clickableLink' && $text) {
                     $sheet->getCell($cell)->getHyperlink()->setUrl($text);
                 }
             }
