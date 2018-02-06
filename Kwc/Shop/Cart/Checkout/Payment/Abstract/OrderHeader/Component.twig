@@ -1,0 +1,23 @@
+<div class="{{rootElementClass}}">
+    <div class="{{ 'receiver'|bemClass }}">
+        <span class="{{ 'receiver__title'|bemClass }}">{{ order.title }}</span>
+        <span class="{{ 'receiver__name'|bemClass }}">{{ order.firstname }} {{ order.lastname }}</span>
+        <span class="{{ 'receiver__street'|bemClass }}">{{ order.street }}</span>
+        <span class="{{ 'receiver__country'|bemClass }}">{{ order.country }}</span>
+        <span class="{{ 'receiver__city'|bemClass }}">{{ order.zip }} {{ order.city }}</span>
+        <span class="{{ 'receiver__email'|bemClass }}">{{ order.email }}</span>
+        <span class="{{ 'receiver__phone'|bemClass }}">{{ order.phone }}</span>
+    </div>
+    {% if order.comment %}
+        <div class="{{ 'receiverComment'|bemClass }}">
+            <span class="{{ 'receiverComment__title'|bemClass }}">{{ data.trlKwf('Your Comment') }}</span>
+            <span class="{{ 'receiverComment__comment'|bemClass }}">{{ order.comment }}</span>
+        </div>
+    {% endif %}
+    {% if order.paymentTypeText %}
+        <div class="{{ 'orderInfo'|bemClass }}">
+            <span class="{{ 'orderInfo__title'|bemClass }}">{{ data.trlKwf('You pay by') }}</span>
+            <span class="{{ 'orderInfo__text'|bemClass }}">{{ paymentTypeText }}</span>
+        </div>
+    {% endif %}
+</div>
