@@ -43,15 +43,38 @@ class Kwc_Newsletter_Subscribe_RecipientController extends Kwf_Controller_Action
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
-        if ($row->getModel()->hasColumn('activated')) {
-            $row->activated = 1;
-        }
         $row->newsletter_component_id = $this->_getParam('newsletterComponentId');
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('newsletterComponentId'), array('ignoreVisible' => true));
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
         $row->setLogSource($c->trlKwf('Backend'));
-        $row->writeLog($c->trlKwf('Subscribed and activated (double-opt-in) by {0}', array($user->name)));
+        $row->writeLog($c->trlKwf('Subscribed by {0}', array($user->name)));
+    }
+
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
+    {
+        parent::_afterInsert($row);
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Kwf_Registry::get('config')->server->domain;
+        }
+
+        $root = Kwf_Component_Data_Root::getInstance();
+        $nlData = $root->getComponentById($this->_getParam('newsletterComponentId'), array('ignoreVisible' => true));
+        $subscribeData = $root->getComponentByClass('Kwc_Newsletter_Subscribe_Component', array('ignoreVisible' => true, 'subroot' => $nlData->getSubroot()));
+
+        $editComponent = $nlData->getChildComponent('_editSubscriber');
+        $doubleOptInComponent = $subscribeData->getChildComponent('_doubleOptIn');
+
+        $mail = $subscribeData->getChildComponent('_mail')->getComponent();
+        $mail->send($row, array(
+            'formRow' => $row,
+            'host' => $host,
+            'editComponent' => $editComponent,
+            'doubleOptInComponent' => $doubleOptInComponent
+        ));
     }
 
     protected function _beforeSave(Kwf_Model_Row_Interface $row)
