@@ -30,6 +30,7 @@ class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
             $ret['row'] = $this->getData()->row;
             $ret['price'] = $addCmp->getComponent()->getPrice($ret['row']);
             $ret['text'] = $addCmp->getComponent()->getProductText($ret['row']);
+            $ret['image'] = $addCmp->getComponent()->getProduct()->getRow()->image_url;
         }
         return $ret;
     }
