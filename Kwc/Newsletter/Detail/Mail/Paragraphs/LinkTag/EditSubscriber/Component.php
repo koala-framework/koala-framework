@@ -1,21 +1,16 @@
 <?php
 class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_EditSubscriber_Component
-    extends Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
+    extends Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Abstract_Component
 {
     public static function getSettings($param = null)
     {
         $ret = parent::getSettings($param);
-        $ret = array_merge(parent::getSettings($param), array(
-            'componentName' => trlKwfStatic('Newsletter Subscriber settings')
-        ));
+        $ret['componentName'] = trlKwfStatic('Newsletter Subscriber settings');
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
+    protected function _getTargetComponent()
     {
-        $ret = parent::getTemplateVars($renderer);
-        $nlData = $this->_getNewsletterComponent();
-        $ret['editSubscriber'] = $nlData->getChildComponent('_editSubscriber');
-        return $ret;
+        return $this->_getNewsletterComponent()->getChildComponent('_editSubscriber');
     }
 }
