@@ -51,13 +51,7 @@ class Kwc_Newsletter_Subscribe_RecipientController extends Kwf_Controller_Action
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('newsletterComponentId'), array('ignoreVisible' => true));
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
         $row->setLogSource($c->trlKwf('Backend'));
-        if (Kwc_Abstract::getSetting($this->_getParam('class'), 'subscribeType') == Kwc_Newsletter_Subscribe_Component::DOUBLE_OPT_IN) {
-            $logMessage = $c->trlKwf('Subscribed and activated (double-opt-in) by {0}', array($user->name));
-        } else {
-            $logMessage = $c->trlKwf('Subscribed and activated by {0}', array($user->name));
-        }
-
-        $row->writeLog($logMessage);
+        $row->writeLog($c->trlKwf('Subscribed and activated (double-opt-in) by {0}', array($user->name)));
     }
 
     protected function _beforeSave(Kwf_Model_Row_Interface $row)
