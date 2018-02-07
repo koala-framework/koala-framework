@@ -14,13 +14,8 @@ class Kwc_Directories_TopChoose_Events extends Kwc_Abstract_Events
 
     public function onRowUpdated(Kwf_Events_Event_Row_Updated $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventDirectoryChanged($this->_class));
-        /*
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->row->component_id) as $component) {
-            foreach (Kwc_Directories_TopChoose_Component::getItemDirectoryClasses($component->componentClass) as $class) {
-                $this->fireEvent(new Kwc_Directories_List_EventItemsUpdated($this->_class));
-            }
-        };
-        */
+        if ($event->isDirty('directory_component_id')) {
+            $this->fireEvent(new Kwc_Directories_List_EventDirectoryChanged($this->_class));
+        }
     }
 }
