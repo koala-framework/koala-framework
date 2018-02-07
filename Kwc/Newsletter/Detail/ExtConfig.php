@@ -68,6 +68,11 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
                         'xtype' => 'kwc.newsletter.startNewsletter'
                     )
                 ),
+                'receivers' => array(
+                    'xtype' => 'kwf.autogrid',
+                    'controllerUrl' => $this->getControllerUrl('Receivers'),
+                    'title' => trlKwf('Receivers')
+                ),
                 'statistics' => array(
                     'xtype'                 => 'kwf.autogrid',
                     'controllerUrl'         => $this->getControllerUrl('Statistics'),
