@@ -7,4 +7,6 @@ interface Kwc_Newsletter_PluginInterface
     public function getNewsletterStatisticRows($newsletterRow);
     public function modifyRecipientsGridColumns(Kwf_Collection $columns, $gridType);
     public function modifyRecipientsSelect(Kwf_Model_Select $select, $gridType);
+    public function modifyReceiversSelect(Kwf_Model_Select $select);
+    public function getFiltersForReceiversGrid();
 }
