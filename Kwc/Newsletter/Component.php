@@ -41,6 +41,7 @@ class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Compon
     {
         return array(
             'Kwc_Newsletter_StartMaintenanceJob',
+            'Kwc_Newsletter_DeleteUnsubscribedJob'
         );
     }
 }

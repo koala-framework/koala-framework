@@ -79,4 +79,26 @@ class Kwc_Newsletter_Subscribe_Row extends Kwf_Model_Db_Row
         ));
         if ($saveImmediatly) $childRow->save();
     }
+
+    protected function _beforeDelete()
+    {
+        parent::_beforeDelete();
+
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('subscriber_id', $this->id);
+        $this->getModel()->getDependentModel('Logs')->deleteRows($select);
+    }
+
+    protected function _afterSave()
+    {
+        parent::_afterSave();
+
+        if ($this->isDirty('activated') && $this->activated) {
+            $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_UnsubscribedEmailHashesModel');
+
+            $select = new Kwf_Model_Select();
+            $select->whereId(md5($this->email));
+            if ($model->countRows($select)) $model->deleteRows($select);
+        }
+    }
 }
