@@ -28,6 +28,7 @@ class Kwc_Newsletter_Detail_ReceiversController extends Kwf_Controller_Action_Au
             ),
             'width'  => 120
         );
+        $this->_addPluginFilters();
 
         $columns = $this->_columns;
         $columns->add(new Kwf_Grid_Column_Datetime('send_date', trlKwf('Send date')));
@@ -50,7 +51,26 @@ class Kwc_Newsletter_Detail_ReceiversController extends Kwf_Controller_Action_Au
     {
         $ret = parent::_getSelect();
         $ret->whereEquals('newsletter_id', $this->_getNewsletterRow()->id);
+
+        $ret = $this->_addPluginSelect($ret);
         return $ret;
+    }
+
+    protected function _addPluginSelect($select)
+    {
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            $plugin->modifyReceiversSelect($select);
+        }
+        return $select;
+    }
+
+    protected function _addPluginFilters()
+    {
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwc_Newsletter_PluginInterface') as $plugin) {
+            foreach ($plugin->getFiltersForReceiversGrid() as $column => $filter) {
+                $this->_filters[$column] = $filter;
+            }
+        }
     }
 
     private function _getNewsletterRow()
