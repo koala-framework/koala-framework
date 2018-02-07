@@ -79,4 +79,13 @@ class Kwc_Newsletter_Subscribe_Row extends Kwf_Model_Db_Row
         ));
         if ($saveImmediatly) $childRow->save();
     }
+
+    protected function _beforeDelete()
+    {
+        parent::_beforeDelete();
+
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('subscriber_id', $this->id);
+        $this->getModel()->getDependentModel('Logs')->deleteRows($select);
+    }
 }
