@@ -38,7 +38,11 @@ class Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Component
 
     public final function getSumRows($order)
     {
-        return $order->getSumRows();
+        $ret = $order->getSumRows();
+        foreach ($ret as &$r) {
+            $r['text'] = $this->getData()->trlStaticExecute($r['text']);
+        }
+        return $ret;
     }
 
     public function getPayments()
