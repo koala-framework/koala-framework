@@ -190,8 +190,8 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
 
     public function onDirectoryChanged(Kwc_Directories_List_EventDirectoryChanged $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class));
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $event->subroot));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class, $event->subroot));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $event->subroot));
     }
 }
