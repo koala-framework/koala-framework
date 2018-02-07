@@ -1,8 +1,0 @@
-.kwcClass label { width: 140px; }
-.kwcClass .kwfFormFieldRadioHorizontal label { float: none; margin-left: 0px; }
-.ext-ie7 .kwcClass .kwfFormFieldRadioHorizontal label { position: relative; top: -5px; }
-.ext-ie7 .kwcClass .kwfFormFieldRadioHorizontal span { margin-left: -13px; }
-.kwcClass .kwfFormFieldRadioHorizontal input { margin-left: 0px; }
-.kwcClass .kwfFormFieldTextField input,
-.kwcClass .kwfFormFieldTextArea textarea { width: 300px; }
-.kwcClass p.formText { margin: 5px 0px; }

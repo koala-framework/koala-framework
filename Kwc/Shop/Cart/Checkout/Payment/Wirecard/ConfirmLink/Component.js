@@ -1,18 +1,19 @@
-var onReady = require('kwf/on-ready-ext2');
+var onReady = require('kwf/on-ready');
+var $ = require('jQuery');
 
-onReady.onRender('.kwcClass', function(el, config) {
-    var form = el.child('form');
-    el.child('.submit').on('click', function(e) {
+onReady.onRender('.kwcClass', function(el) {
+    var form = el.find('form');
+    el.find('.submit').click(function(e) {
         e.preventDefault();
-        el.child('.process').show();
+        el.find('.kwcBem__process').show();
         form.hide();
-        Ext2.Ajax.request({
+        var config = el.data('options');
+        $.ajax({
             url: config.controllerUrl,
-            params: config.params,
-            callback: function(response, options) {
-                form.dom.submit();
-            },
-            scope: this
+            data: config.params,
+            success: function (responseText) {
+                form[0].submit();
+            }
         });
-    }, this);
+    });
 });
