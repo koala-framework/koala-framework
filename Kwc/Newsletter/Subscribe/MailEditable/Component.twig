@@ -1,0 +1,25 @@
+{% block header %}{% endblock %}
+<div class="{{ rootElementClass }}">
+    {% if content.hasContent() %}
+        {% block paragraphs %}
+            {% if content is defined %}
+                {{ renderer.component(content) }}
+            {% endif %}
+        {% endblock %}
+    {% else %}
+        {% block emptyText %}
+            {{ data.trlKwf('Hello {0}', ['%firstname% %lastname%'|trim]) }}!<br /><br />
+
+            {{ data.trlKwf('You have just been subscribed to the newsletter at {0}.', ['%host%']) }}<br /><br />
+
+            -- {{ data.trlKwf('ACTIVATION LINK') }} --<br />
+            {{ renderer.componentLink(doubleOptInComponent, data.trlKwf('Please click here, to confirm your E-Mail address and to receive our newsletters in future.')) }}<br /><br />
+
+            {{ data.trlKwf('To change you data or settings, click this link:') }}<br />
+            {{ renderer.componentLink(editComponent, data.trlKwf('Settings')) }}<br /><br />
+
+            {{ data.trlKwf('Thanks for your subscription!') }}<br />
+        {% endblock %}
+    {% endif %}
+</div>
+{% block footer %}{% endblock %}

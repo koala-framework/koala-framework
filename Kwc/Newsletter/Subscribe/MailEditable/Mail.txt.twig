@@ -1,0 +1,23 @@
+{% block header %}{% endblock %}
+{% if content.hasContent() %}
+    {% block paragraphs %}
+        {{ renderer.component(content) }}
+    {% endblock %}
+{% else %}
+    {% block emptyText %}
+        {{ data.trlKwf('Hello {0}', ['%firstname% %lastname%'|trim]) }}!
+
+        {{ data.trlKwf('You have just been subscribed to the newsletter at {0}.', ['%host%']) }}
+
+        {{ data.trlKwf('Please click the following link to confirm your E-Mail address and to receive our newsletters in future.') }}
+        -- {{ data.trlKwf('ACTIVATION LINK') }} --
+        {{ doubleOptInComponent.getAbsoluteUrl() }}
+
+        {{ data.trlKwf('To change you data or settings, click this link:') }}
+        {{ editComponent.getAbsoluteUrl() }}
+
+        {{ data.trlKwf('Thanks for your subscription!') }}
+
+    {% endblock %}
+{% endif %}
+{% block footer %}{% endblock %}
