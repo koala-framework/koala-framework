@@ -1,5 +1,5 @@
 <?php
-class Kwc_Shop_Cart_Detail_Form_Component extends Kwc_Form_Component
+class Kwc_Shop_Cart_Detail_Form_Component extends Kwc_Form_NonAjax_Component
 {
     public static function getSettings($param = null)
     {
