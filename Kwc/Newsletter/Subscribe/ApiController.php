@@ -61,7 +61,7 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
         }
     }
 
-    protected function _insertSubscription(Kwc_Newsletter_Subscribe_Row $row)
+    protected function _insertSubscription(Kwf_Model_Row_Abstract $row)
     {
         return $this->_subscribe->getComponent()->insertSubscription($row);
     }
