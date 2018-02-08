@@ -409,6 +409,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
                         url: this.controllerUrl+'/json-delete',
                         params: params,
                         success: function(response, options, r) {
+                            this.fireEvent('datachange');
                         },
                         callback: function() {
                             this._hideLoading();

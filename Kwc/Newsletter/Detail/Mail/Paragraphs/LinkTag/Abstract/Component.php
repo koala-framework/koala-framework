@@ -3,21 +3,17 @@ abstract class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Abstract_Component 
 {
     protected function _getNewsletterComponent()
     {
-        $nlData = null;
-        $d = $this->getData()->parent;
-        while ($d) {
-            if (is_instance_of($d->componentClass, 'Kwc_Newsletter_Component')) {
-                $nlData = $d;
-                break;
-            }
-            if (!$d->parent) break;
-            $d = $d->parent;
+        $ret = $this->getData()->getParentByClass('Kwc_Newsletter_Component');
+        if (!$ret) {
+            $ret = Kwf_Component_Data_Root::getInstance()->getComponentByClass(
+                'Kwc_Newsletter_Component', array('subroot' => $this->getData()->getSubroot())
+            );
         }
 
-        if (!$nlData) {
+        if (!$ret) {
             throw new Kwf_Exception("Newsletter component can not be found");
         }
-        return $nlData;
+        return $ret;
     }
 
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
