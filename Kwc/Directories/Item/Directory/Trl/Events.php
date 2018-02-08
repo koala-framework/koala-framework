@@ -79,7 +79,7 @@ class Kwc_Directories_Item_Directory_Trl_Events extends Kwc_Chained_Trl_Events
 
     public function onMasterChildModelUpdated(Kwc_Directories_List_EventItemsUpdated $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventItemsUpdated($this->_class));
+        $this->fireEvent(new Kwc_Directories_List_EventItemsUpdated($this->_class, $event->subroot));
     }
 
     // trl model (optional)
@@ -113,6 +113,6 @@ class Kwc_Directories_Item_Directory_Trl_Events extends Kwc_Chained_Trl_Events
 
     public function onChildModelUpdated(Kwf_Events_Event_Model_Updated $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventItemsUpdated($this->_class));
+        $this->fireEvent(new Kwc_Directories_List_EventItemsUpdated($this->_class, $event->subroot));
     }
 }

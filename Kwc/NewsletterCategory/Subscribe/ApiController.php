@@ -3,7 +3,7 @@ class Kwc_NewsletterCategory_Subscribe_ApiController extends Kwc_Newsletter_Subs
 {
     protected $_model = 'Kwc_NewsletterCategory_Subscribe_Model';
 
-    protected function _insertSubscription(Kwc_Newsletter_Subscribe_Row $row)
+    protected function _insertSubscription(Kwf_Model_Row_Abstract $row)
     {
         //TODO: multiple categories
         if (!(int)$this->_getParam('categoryId')) {

@@ -1,0 +1,16 @@
+<div class="{{ 'product'|bemClass }}">
+    {{ placeholder.product }}{{ renderer.componentLink(product, text) }}
+</div>
+<div class="{{ 'amount'|bemClass }}">
+    {{ renderer.component(form) }}
+</div>
+<div class="{{ 'price'|bemClass }}">
+    {{ placeholder.unitPrice }}<span class="{{ 'price'|bemClass }}">{{ price|money }}</span>
+</div>
+<div class="{{ 'delete'|bemClass }}">
+    <input class="{{ 'submit'|bemClass }} kwfUp-shopDeleteButton"
+           type="submit"
+           name="{{ data.componentId }}-delete"
+           value="{{ data.trlKwf('Delete') }}"
+    />
+</div>

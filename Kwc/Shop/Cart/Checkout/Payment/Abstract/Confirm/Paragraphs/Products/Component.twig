@@ -1,0 +1,34 @@
+<div class="{{ rootElementClass }}">
+    {% if not items|empty %}
+        <span class="{{ 'title'|bemClass }}">
+            {{ data.trlKwf('You ordered the following product', 'You ordered the following products', items|length) }}
+        </span>
+        <div>
+            {% for item in items %}
+                <div class="{{ 'productItem'|bemClass }}">
+                    <span class="{{ 'product'|bemClass }}">{{ item.text }}</span>
+                    {% for orderData in item.additionalOrderData %}
+                        <span class="{{ 'product__orderDataName'|bemClass }}">{{ data.trlStaticExecute(orderData.name) }}:</span>
+                        <span class="{{ 'product__orderDataValue'|bemClass }}">{{ orderData.value }}</span>
+                    {% endfor %}
+                    <span class="{{ 'price'|bemClass }}">{{ item.price|money }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        <ul class="{{ 'money'|bemClass }} kwfUp-webListNone">
+            {% for row in sumRows %}
+                <li class="{{ 'money__info'~index|bemClass }}">
+                    <span class="{{ 'money__info__text'|bemClass }}">{{ data.trlStaticExecute(row.text) }}</span>
+                    <span class="{{ 'money__info__price'|bemClass }}">{{ row.amount|money }}</span>
+                </li>
+            {% endfor %}
+            {% if tableFooterText %}
+                <li class="{{ 'money__footer'|bemClass }}">
+                    {{ tableFooterText }}
+                </li>
+            {% endif %}
+        </ul>
+    {% elseif %}
+        <span>{{ data.trlKwf('Productlist') }}</span>
+    {% endif %}
+</div>

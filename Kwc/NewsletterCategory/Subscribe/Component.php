@@ -10,7 +10,7 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
         return $ret;
     }
 
-    public function insertSubscriptionWithCategory(Kwc_Newsletter_Subscribe_Row $row, $categoryId)
+    public function insertSubscriptionWithCategory(Kwf_Model_Row_Abstract $row, $categoryId)
     {
         $exists = $this->_subscriptionExists($row);
         $nl2cat = Kwf_Model_Abstract::getInstance('Kwc_NewsletterCategory_Subscribe_SubscriberToCategory');
