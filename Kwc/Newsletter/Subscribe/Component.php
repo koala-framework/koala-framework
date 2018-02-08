@@ -45,7 +45,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         return $nlData;
     }
 
-    public function insertSubscription(Kwc_Newsletter_Subscribe_Row $row)
+    public function insertSubscription(Kwf_Model_Row_Abstract $row)
     {
         $exists = $this->_subscriptionExists($row);
         if (!$exists) {
@@ -71,7 +71,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
         return false;
     }
 
-    protected function _subscriptionExists(Kwc_Newsletter_Subscribe_Row $row)
+    protected function _subscriptionExists(Kwf_Model_Row_Abstract $row)
     {
         if ($row->id) {
             throw new Kwf_Exception("you can only insert unsaved rows");
