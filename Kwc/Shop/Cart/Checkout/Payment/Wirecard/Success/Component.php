@@ -13,8 +13,11 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Edit
 
     public function getNameForEdit()
     {
-        return trlKwf('Shop Confirmation Text') . ' (' .$this->getData()->getSubroot()->id . ') '
-            . Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName'));
+        $ret = trlKwf('Shop Confirmation Text');
+        $subroot = $this->getData()->getSubroot();
+        if ($subroot && isset($subroot->id)) $ret .= ' (' .$this->getData()->getSubroot()->id . ')';
+        $ret .= ' ' . Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName'));
+        return $ret;
     }
 
     protected function _getOrder()
