@@ -11,6 +11,11 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
         return true;
     }
 
+    protected function _validateCsrf()
+    {
+        //allow for everyone, as anyone can subscribe in frontend form too
+    }
+
     public function preDispatch()
     {
         parent::preDispatch();
