@@ -39,7 +39,7 @@ Kwc.Mail.Editable.Panel = Ext2.extend(Ext2.Panel, {
         var record = this.componentsGrid.getSelected();
         if (!record) {
             this.settings.disable();
-            return;
+            return false;
         }
         this.settings.enable();
         var i = false;
