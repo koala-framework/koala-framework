@@ -5,7 +5,7 @@ class Kwc_Newsletter_Subscribe_MailEditable_Events extends Kwc_Abstract_Events
     {
         $ret = parent::getListeners();
         $ret[] = array(
-            'class' => 'Kwc_Newsletter_Subscribe_MailEditable_Content_Component',
+            'class' => Kwc_Abstract::getChildComponentClass($this->_class, 'content'),
             'event' => 'Kwf_Component_Event_Component_HasContentChanged',
             'callback' => 'onContentChanged'
         );
