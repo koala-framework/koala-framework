@@ -68,9 +68,6 @@ class Kwc_Newsletter_Detail_Mail_Component extends Kwc_Mail_Component
             $recipient->getMailUnsubscribe()) {
             $ret = false;
 
-        } else if ($recipient instanceof Kwf_Model_Row_Abstract &&
-            $recipient->hasColumn('activated') && !$recipient->activated) {
-            $ret = false;
         }
         return $ret;
     }
