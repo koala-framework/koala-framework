@@ -62,6 +62,10 @@ class Kwc_Mail_HtmlParser
             if (isset($style['selector'])) throw new Kwf_Exception("don't use tag AND selector");
             return ($style['tag'] == '*' || $style['tag'] == $tag) && (!isset($style['class']) || $class == $style['class']);
         } else if (isset($style['selector'])) {
+            $uniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
+            if ($uniquePrefix) {
+                $style['selector'] = str_replace('kwfUp-', $uniquePrefix . '-', $style['selector']);
+            }
             $selectors = explode(' ', $style['selector']); //css-artiger selector
             $selectors = array_reverse($selectors);
             $stack = array_reverse($stack);
