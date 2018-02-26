@@ -36,8 +36,12 @@ class Kwf_Media_Output_Component
                     'timeout' => 20,
                     'persistent' => false
                 );
-                if (Kwf_Config::getValue('http.proxy.host')) {
+                if (extension_loaded('curl')) {
+                    $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Curl';
+                } else if (Kwf_Config::getValue('http.proxy.host')) {
                     $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
+                }
+                if (Kwf_Config::getValue('http.proxy.host')) {
                     $httpClientConfig['proxy_host'] = Kwf_Config::getValue('http.proxy.host');
                     $httpClientConfig['proxy_port'] = Kwf_Config::getValue('http.proxy.port');
                 }
