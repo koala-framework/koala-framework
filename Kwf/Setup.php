@@ -64,6 +64,9 @@ class Kwf_Setup
             if (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED) {
                 $ignore = true;
             }
+            if (defined('E_USER_DEPRECATED') && $error["type"] == E_USER_DEPRECATED) {
+                $ignore = true;
+            }
             if (!$ignore) {
                 $e = new ErrorException($error["message"], 0, $error["type"], $error["file"], $error["line"]);
                 Kwf_Debug::handleException($e);
