@@ -3,7 +3,6 @@ namespace KwfBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Reference;
 
 class MaintenanceJobsCompilerPass implements CompilerPassInterface
 {
@@ -22,8 +21,8 @@ class MaintenanceJobsCompilerPass implements CompilerPassInterface
         );
         foreach ($taggedServices as $id => $tags) {
             $definition->addMethodCall(
-                'addMaintenanceJob',
-                array(new Reference($id))
+                'addMaintenanceJobServiceId',
+                array($id)
             );
         }
     }
