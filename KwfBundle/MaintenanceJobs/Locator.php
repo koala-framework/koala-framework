@@ -3,20 +3,20 @@ namespace KwfBundle\MaintenanceJobs;
 
 class Locator
 {
-    private $maintenanceJobs;
+    private $maintenanceJobServiceIds;
 
     public function __construct()
     {
-        $this->maintenanceJobs = array();
+        $this->maintenanceJobServiceIds = array();
     }
 
-    public function addMaintenanceJob(AbstractJob $job)
+    public function addMaintenanceJobServiceId($jobServiceId)
     {
-        $this->maintenanceJobs[] = $job;
+        $this->maintenanceJobServiceIds[] = $jobServiceId;
     }
 
-    public function getMaintenanceJobs()
+    public function getMaintenanceJobServiceIds()
     {
-        return $this->maintenanceJobs;
+        return $this->maintenanceJobServiceIds;
     }
 }

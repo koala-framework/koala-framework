@@ -12,6 +12,21 @@ abstract class Kwf_Util_Maintenance_Job_AbstractBase
     protected $_progressBar;
     protected $_jobRun;
 
+    public static function getInstance($jobIdentifier)
+    {
+        if (substr($jobIdentifier, 0, 6) === 'class:') {
+            $jobIdentifier = substr($jobIdentifier, 6);
+
+            static $instances = array();
+            if (!isset($instances[$jobIdentifier])) {
+                $instances[$jobIdentifier] = new $jobIdentifier();
+            }
+            return $instances[$jobIdentifier];
+        } else {
+            return Kwf_SymfonyKernel::getInstance()->getContainer()->get($jobIdentifier);
+        }
+    }
+
     abstract public function getFrequency();
 
     public function getPriority()

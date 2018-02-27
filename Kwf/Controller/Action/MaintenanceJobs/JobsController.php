@@ -16,14 +16,16 @@ class Kwf_Controller_Action_MaintenanceJobs_JobsController extends Kwf_Controlle
         $model = Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel');
 
         $data = array();
-        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobIdentifiers() as $jobIdentifier) {
+            $job = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($jobIdentifier);
+
             $s = $model->select();
-            $s->whereEquals('job', get_class($job));
+            $s->whereEquals('job', $jobIdentifier);
             $s->order('start', 'DESC');
             $lastRun = $model->getRow($s);
             $data[] = array(
-                'id' => get_class($job),
-                'job' => get_class($job),
+                'id' => $jobIdentifier,
+                'job' => $jobIdentifier,
                 'frequency' => $job->getFrequency(),
                 'last_run' => $lastRun ? $lastRun->start : null,
                 'last_run_status' => $lastRun ? $lastRun->status : null,

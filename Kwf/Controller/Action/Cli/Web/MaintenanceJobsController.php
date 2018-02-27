@@ -109,7 +109,9 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
             Kwf_Component_Data_Root::getInstance()->freeMemory();
 
-            foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
+            foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobIdentifiers() as $jobIdentifier) {
+                $job = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($jobIdentifier);
+
                 if ($job->getFrequency() == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_CUSTOM) {
                     $jobClass = get_class($job);
 
@@ -124,7 +126,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
                     if (!$job->hasWorkload()) continue;
                     if ($debug) echo "execute custom job {$jobClass}\n";
-                    Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug, $output);
+                    Kwf_Util_Maintenance_Dispatcher::executeJob($jobIdentifier, $debug, $output);
                 }
             }
 
@@ -142,8 +144,8 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     public function showJobsAction()
     {
         echo "List of available jobs:\n";
-        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
-            echo "  ".get_class($job)."\n";
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobIdentifiers() as $jobIdentifier) {
+            echo "  {$jobIdentifier}\n";
         }
         exit;
     }
@@ -151,14 +153,14 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     public function runJobAction()
     {
         $debug = $this->_getParam('debug');
-        $jobClassName = $this->_getParam('job');
-        if (!$jobClassName) {
+        $jobIdentifier = $this->_getParam('job');
+        if (!$jobIdentifier) {
             echo "Missing parameter job.\n";
             exit;
         }
         $jobFound = false;
-        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
-            if (get_class($job) === $jobClassName) {
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobIdentifiers() as $identifier) {
+            if ($identifier === $jobIdentifier) {
                 $jobFound = true;
                 break;
             }
@@ -168,8 +170,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             exit;
         }
 
-        $job = new $jobClassName();
-        Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug, true);
+        Kwf_Util_Maintenance_Dispatcher::executeJob($jobIdentifier, $debug, true);
         Kwf_Events_ModelObserver::getInstance()->process();
         exit;
     }
@@ -179,8 +180,8 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
         $debug = $this->_getParam('debug');
         $runId = $this->_getParam('runId');
         $runRow = Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel')->getRow($runId);
-        $jobClassName = $runRow->job;
-        $job = new $jobClassName();
+        $jobIdentifier = $runRow->job;
+        $job = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($jobIdentifier);
         $job->setDebug($debug);
         $job->setJobRun($runRow);
 
