@@ -1,1 +1,5 @@
-{{ renderer.componentLink(target) }}
+{% if target.url %}
+    <a href="{{ target.url }}">
+{% else %}
+    <a>
+{% endif %}
