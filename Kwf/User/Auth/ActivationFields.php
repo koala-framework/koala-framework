@@ -27,6 +27,11 @@ class Kwf_User_Auth_ActivationFields extends Kwf_User_Auth_Abstract implements K
         return crypt($string, substr($activateToken[1], 0, 30));
     }
 
+    protected function _getValidityDurationInDays($type)
+    {
+        return ($type == self::TYPE_ACTIVATE) ? 7 : 1;
+    }
+
     public function validateActivationToken(Kwf_Model_Row_Interface $row, $token)
     {
         if (!$row->activate_token) return false;
@@ -43,7 +48,7 @@ class Kwf_User_Auth_ActivationFields extends Kwf_User_Auth_Abstract implements K
     public function generateActivationToken(Kwf_Model_Row_Interface $row, $type)
     {
         $token = Kwf_Util_Hash::hash(microtime(true).uniqid('', true).mt_rand());
-        $days = ($type == self::TYPE_ACTIVATE) ? 7 : 1;
+        $days = $this->_getValidyDurationInDays($type);
         $expire = time()+$days*24*60*60;
         $row->activate_token = $expire.':'.$this->_encodePasswordBcrypt($row, $token);
         $row->save();
