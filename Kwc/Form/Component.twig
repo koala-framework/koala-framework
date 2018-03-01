@@ -1,4 +1,5 @@
 <div class="{{ rootElementClass }}" data-width="100%" data-config="{{ config|json_encode() }}">
+{% block beforeForm %}{% endblock %}
 {% if message %}
     <div class="kwfUp-webStandard">
         {{ message }}
@@ -50,4 +51,5 @@
     {% endblock %}
     </div>
 {% endif %}
+{% block afterForm %}{% endblock %}
 </div>
