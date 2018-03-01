@@ -1,5 +1,5 @@
 <div class="{{ rootElementClass }}">
-    {% if not items|empty %}
+    {% if items %}
         <span class="{{ 'title'|bemClass }}">
             {{ data.trlKwf('You ordered the following product', 'You ordered the following products', items|length) }}
         </span>
@@ -28,7 +28,7 @@
                 </li>
             {% endif %}
         </ul>
-    {% elseif %}
+    {% else %}
         <span>{{ data.trlKwf('Productlist') }}</span>
     {% endif %}
 </div>

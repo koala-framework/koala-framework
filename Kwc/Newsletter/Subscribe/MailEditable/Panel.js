@@ -18,7 +18,8 @@ Kwc.Newsletter.Subscribe.MailEditable.Panel = Ext2.extend(Kwc.Mail.Editable.Pane
     },
 
     onComponentsGridSelectionChange: function () {
-        Kwc.Newsletter.Subscribe.MailEditable.Panel.superclass.onComponentsGridSelectionChange.call(this);
+        var ret = Kwc.Newsletter.Subscribe.MailEditable.Panel.superclass.onComponentsGridSelectionChange.call(this);
+        if (ret === false) return false;
 
         this.preview.setBaseParams({
             componentId: this.componentsGrid.getSelected().id
