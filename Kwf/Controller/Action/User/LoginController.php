@@ -141,14 +141,18 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             return;
         }
 
-        $state = $this->_getParam('state');
+        $state = explode('.', $this->_getParam('state'));
 
         $ns = new Kwf_Session_Namespace('kwf-login-redirect');
-        if (!$ns->state || $state != $ns->state) {
+        if (!$ns->state || $this->_getParam('state') != $ns->state) {
+            if (count($state) == 5 && strpos($state[0], 'activate') === 0) {
+                $redirect = urldecode(str_replace('kwfdot', '.', $state[4]));
+                if ($redirect !== 'jsCallback') {
+                    Kwf_Util_Redirect::redirect($redirect);
+                }
+            }
             throw new Kwf_Exception("Invalid state");
         }
-
-        $state = explode('.', $state);
 
         if (count($state) < 3) throw new Kwf_Exception_NotFound();
         $action = $state[0]; //login or activate
