@@ -99,6 +99,18 @@ interface Kwf_User_Auth_Interface_Redirect
     public function associateUserByCallbackParams(Kwf_Model_Row_Interface $user, $redirectBackUrl, array $params);
 
     /**
+     * Handle case state not in session.
+     *
+     * This can happen if creating OAuth account while activating kwf-account and creating OAuth
+     * account needs email verification and returns to us afterwards as this can happen on a
+     * different device or simply after session expires.
+     * @param $state
+     * @param array $params
+     * @return mixed
+     */
+    public function getParamsForReturnedStateNotInSession($state, array $params);
+
+    /**
      * If password should be allowed for this user.
      *
      * Can return false if a user exists in sso service and we want to prevent he creates his own password in our app.

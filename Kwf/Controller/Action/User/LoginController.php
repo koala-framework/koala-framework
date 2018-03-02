@@ -141,11 +141,23 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             return;
         }
 
-        $state = $this->_getParam('state');
+        $state = explode('.', $this->_getParam('state'));
 
         $ns = new Kwf_Session_Namespace('kwf-login-redirect');
-        if (!$ns->state || $state != $ns->state) {
-            throw new Kwf_Exception("Invalid state");
+        if (!$ns->state || $this->_getParam('state') != $ns->state) {
+            $authMethod = $state[1];
+            $users = Zend_Registry::get('userModel');
+            $authMethods = $users->getAuthMethods();
+            if (!isset($authMethods[$authMethod])) {
+                throw new Kwf_Exception_NotFound();
+            }
+            $params = $authMethods[$authMethod]->getParamsForReturnedStateNotInSession($state, $this->getRequest()->getParams());
+            if (!$params) {
+                throw new Kwf_Exception("Invalid state");
+            }
+            // TODO überlegen was login-controller mit params anstellt
+
+            return;
         }
 
         $state = explode('.', $state);
