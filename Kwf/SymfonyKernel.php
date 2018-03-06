@@ -22,24 +22,6 @@ abstract class Kwf_SymfonyKernel extends Kernel
         AnnotationRegistry::registerLoader(array('Kwf_Loader', 'loadClass'));
     }
 
-    public function locateResource($name, $dir = null, $first = true)
-    {
-        if (substr($name, 0, 4) == '@Kwc') {
-            if (!$first) throw new \Kwf_Exception_NotYetImplemented();
-            $componentClass = substr($name, 4, strpos($name, '/')-4);
-            $name = substr($name, strpos($name, '/')+1);
-            $paths = \Kwc_Abstract::getSetting($componentClass, 'parentFilePaths');
-            foreach ($paths as $path=>$cls) {
-                if (file_exists($path.'/'.$name)) {
-                    return $path.'/'.$name;
-                }
-            }
-            throw new \Kwf_Exception();
-        } else {
-            return parent::locateResource($name, $dir, $first);
-        }
-    }
-
     /**
      * Don't use this method in Symfony context
      */
