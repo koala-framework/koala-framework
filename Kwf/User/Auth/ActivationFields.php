@@ -27,7 +27,7 @@ class Kwf_User_Auth_ActivationFields extends Kwf_User_Auth_Abstract implements K
     public function generateActivationToken(Kwf_Model_Row_Interface $row, $type)
     {
         $token = Kwf_Util_Hash::hash(microtime(true).uniqid('', true).mt_rand());
-        $days = $this->_getValidyDurationInDays($type);
+        $days = $this->_getValidityDurationInDays($type);
         $expire = time()+$days*24*60*60;
         $row->activate_token = $expire.':'.Kwf_User_Auth_Bcrypt::encodeValue($row, $token);
         $row->save();
