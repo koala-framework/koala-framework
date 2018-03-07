@@ -25,7 +25,7 @@ class Kwf_View_Helper_Assets
                 if (!$isRunning) {
                     throw new Kwf_Exception("webpack-dev-server not running, please start clear-cache-watcher");
                 }
-                $protocol = Kwf_Config::getValue('server.https') ? 'https://' : 'http://';
+                $protocol = Kwf_Config::getValue('server.https') === true ? 'https://' : 'http://';
                 $webpackUrl = $protocol.'localhost:'.Kwf_Assets_WebpackConfig::getDevServerPort();
             }
         }
@@ -38,7 +38,7 @@ class Kwf_View_Helper_Assets
         }
 
         $fileGetContentsContextOptions = array();
-        if (Kwf_Config::getValue('server.https') && Kwf_Config::getValue('debug.webpackDevServer')) {
+        if (Kwf_Config::getValue('server.https') === true && Kwf_Config::getValue('debug.webpackDevServer')) {
             $fileGetContentsContextOptions["ssl"] = array(
                 "verify_peer" => false,
                 "verify_peer_name" => false

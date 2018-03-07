@@ -46,7 +46,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
             $filename = 'build/assets/Frontend.css';
         }
         $fileGetContentsContextOptions = array();
-        if (Kwf_Config::getValue('server.https') && Kwf_Config::getValue('debug.webpackDevServer')) {
+        if (Kwf_Config::getValue('server.https') === true && Kwf_Config::getValue('debug.webpackDevServer')) {
             $fileGetContentsContextOptions["ssl"] = array(
                 "verify_peer" => false,
                 "verify_peer_name" => false
