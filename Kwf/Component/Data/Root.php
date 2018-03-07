@@ -176,9 +176,6 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         if (!isset($parsedUrl['host'])) {
             throw new Kwf_Exception("Host is missing in url '$url'");
         }
-        if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
-            $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
-        }
         foreach ($this->getPlugins('Kwf_Component_PluginRoot_Interface_PreResolveUrl') as $p) {
             $parsedUrl = $p->preFormatPath($parsedUrl);
         }
