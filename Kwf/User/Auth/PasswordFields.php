@@ -28,13 +28,6 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     {
         return md5($password.$row->password_salt);
     }
-    private function _encodePasswordBcrypt(Kwf_Model_Row_Interface $row, $password)
-    {
-        $rounds = '08';
-        $string = $this->_getHashHmacStringForBCrypt($row, $password);
-        $salt = substr ( str_shuffle ( './0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' ) , 0, 22 );
-        return crypt ( $string, '$2a$' . $rounds . '$' . $salt );
-    }
 
     //not part of interface but used by Kwf_User_EditRow
     public function generatePasswordSalt(Kwf_Model_Row_Interface $row)
@@ -46,7 +39,7 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     public function validatePassword(Kwf_Model_Row_Interface $row, $password)
     {
         if (preg_match('#^\$2a\$#', $row->password)) {
-            if ($this->_validatePasswordBcrypt($row, $password) === $row->password) {
+            if (Kwf_User_Auth_Bcrypt::validateValue($row, $password, $row->password) === $row->password) {
                 return true;
             }
         } else {
@@ -60,7 +53,7 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     public function setPassword(Kwf_Model_Row_Interface $row, $password)
     {
         if ($this->getPasswordHashMethod() == 'bcrypt') {
-            $row->password = $this->_encodePasswordBcrypt($row, $password);
+            $row->password = Kwf_User_Auth_Bcrypt::encodeValue($row, $password);
         } else if ($this->getPasswordHashMethod() == 'md5') {
             $this->generatePasswordSalt($row);
             $row->password = $this->_encodePasswordMd5($row, $password);
@@ -93,18 +86,5 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     public function getPasswordHashMethod()
     {
         return $this->_passwordHashMethod;
-    }
-
-
-    private function _getHashHmacStringForBCrypt(Kwf_Model_Row_Interface $row, $password)
-    {
-        $globalSalt = Kwf_Registry::get('config')->user->passwordSalt;
-        return hash_hmac ( "whirlpool", str_pad ( $password, strlen ( $password ) * 4, sha1 ( $row->id ), STR_PAD_BOTH ), $globalSalt, true );
-    }
-
-    private function _validatePasswordBcrypt($row, $password)
-    {
-        $string = $this->_getHashHmacStringForBCrypt($row, $password);
-        return crypt($string, substr($row->password, 0, 30));
     }
 }
