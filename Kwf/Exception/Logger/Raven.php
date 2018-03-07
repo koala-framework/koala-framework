@@ -43,7 +43,7 @@ class Kwf_Exception_Logger_Raven extends Kwf_Exception_Logger_Abstract
                 }
             }
             if ($to) {
-                mail(implode('; ', $to),
+                mail(implode(', ', $to),
                     'Error while trying to submit exception using raven',
                     $e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
                     );
