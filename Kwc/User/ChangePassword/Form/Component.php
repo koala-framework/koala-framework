@@ -21,6 +21,8 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
     public function processInput($postData)
     {
         $users = Kwf_Registry::get('userModel');
+        $userRow = $users->getAuthedUser();
+        if (!$userRow) return;
 
         $showPassword = false;
         //is there a password auth?
@@ -34,7 +36,7 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         //if a redirect auth doesn't allow password hide it
         foreach ($users->getAuthMethods() as $auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
-                if (!$auth->allowPasswordForUser($users->getAuthedUser())) {
+                if (!$auth->allowPasswordForUser($userRow)) {
                     $label = $auth->getLoginRedirectLabel();
                     $label = Kwf_Trl::getInstance()->trlStaticExecute($label['name']);
                     $msg = $this->getData()->trlKwf("This user doesn't have a password, he must log in using {0}", $label);
