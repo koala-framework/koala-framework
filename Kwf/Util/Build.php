@@ -25,8 +25,6 @@ class Kwf_Util_Build
         $types[] = new Kwf_Util_Build_Types_Events();
         $types[] = new Kwf_Util_Build_Types_Assets();
 
-        $types[] = new Kwf_Util_Build_Types_RteStyles();
-
         $files = array('composer.json');
         $files = array_merge($files, glob('vendor/*/*/composer.json'));
         foreach ($files as $file) {
