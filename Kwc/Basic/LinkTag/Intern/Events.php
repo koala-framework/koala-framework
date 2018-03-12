@@ -81,13 +81,13 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     protected function _deleteCacheForTarget($targetIds, $includeSubpages, $subroot)
     {
         if (!$targetIds) return;
-        if (count($targetIds) > 100) {
+        if (count($targetIds) > 1000) {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
             $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $subroot));
             return;
         }
         $dbIds = self::_getComponentDbIdsForTarget($this->_class, $targetIds, $includeSubpages);
-        if (count($dbIds) > 100) {
+        if (count($dbIds) > 1000) {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
             $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $subroot));
             return;
