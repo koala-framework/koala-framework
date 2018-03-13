@@ -44,13 +44,13 @@ class Kwf_Assets_BuildCache_File
     protected function _deleteFiles($target)
     {
         if (is_dir($target)){
-            $files = glob( $target . '*', GLOB_MARK ); //GLOB_MARK adds a slash to directories returned
+            $files = glob($target . '*', GLOB_MARK); //GLOB_MARK adds a slash to directories returned
             foreach ($files as $file)
             {
-                $this->_deleteFiles( $file );
+                $this->_deleteFiles($file);
             }
         } elseif (is_file($target)) {
-            unlink( $target );
+            unlink($target);
         }
     }
 }
