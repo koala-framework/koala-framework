@@ -45,8 +45,7 @@ class Kwf_Assets_BuildCache_File
     {
         if (is_dir($target)){
             $files = glob($target . '*', GLOB_MARK); //GLOB_MARK adds a slash to directories returned
-            foreach ($files as $file)
-            {
+            foreach ($files as $file) {
                 $this->_deleteFiles($file);
             }
         } elseif (is_file($target)) {
