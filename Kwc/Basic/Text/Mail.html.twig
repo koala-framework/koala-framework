@@ -1,0 +1,13 @@
+<table class="{{ rootElementClass }}" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            {% for part in contentParts  %}
+                {% if part is iterable %}
+                    {{ renderer.component(part.component) }}
+                {% else %}
+                    {{ part|raw }}
+                {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+</table>
