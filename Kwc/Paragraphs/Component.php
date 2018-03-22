@@ -48,6 +48,8 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             'contact'      => trlKwfStatic('Contact'),
             'admin'        => trlKwfStatic('Admin'),
         );
+        $ret['apiContent'] = 'Kwc_Paragraphs_ApiContent';
+        $ret['apiContentType'] = 'paragraphs';
         return $ret;
     }
 
