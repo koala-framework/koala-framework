@@ -26,10 +26,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
             'enableStyles'      => true,
             'enableStylesEditor'=> true,
             'enableTagsWhitelist'=> true,
-            'defaultText'       => Kwc_Abstract::LOREM_IPSUM,
-
-            //veraltert NICHT VERWENDEN!! (in der Kwc_Mail komponente ist ein besserer ersatz)
-            'emailStyles'       => array()
+            'defaultText'       => Kwc_Abstract::LOREM_IPSUM
         ));
 
         $ret['stylesModel'] = 'Kwc_Basic_Text_StylesModel';
@@ -147,7 +144,6 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                 $ret['contentParts'][] = $part;
             }
         }
-        $ret['styles'] = $this->_getSetting('emailStyles');
         return $ret;
     }
 
