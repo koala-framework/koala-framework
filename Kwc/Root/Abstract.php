@@ -65,6 +65,27 @@ class Kwc_Root_Abstract extends Kwc_Abstract implements Kwf_Util_Maintenance_Job
                     if ($ret) return $ret;
                 }
             }
+
+            $matchChildUrlPageFilenames = Kwf_Cache_SimpleStatic::fetch('matchChildUrlPageFilenames');
+            if ($matchChildUrlPageFilenames === false) {
+                $matchChildUrlPages = $component->getChildComponents(array(
+                    'page' => true,
+                    'static' => true,
+                    'generatorFlags' => array(
+                        'matchChildUrls' => true
+                    )
+                ));
+                $matchChildUrlPageFilenames = array();
+                foreach ($matchChildUrlPages as $p) {
+                    $matchChildUrlPageFilenames[$p->filename] = $p->componentId;
+                }
+                Kwf_Cache_SimpleStatic::add('matchChildUrlPageFilenames', $matchChildUrlPageFilenames);
+            }
+            $firstPath = strpos($path, '/') !== false ? substr($path, 0, strpos($path, '/')) : $path;
+            if (isset($matchChildUrlPageFilenames[$firstPath])) {
+                $ret = Kwf_Component_Data_Root::getInstance()->getComponentById($matchChildUrlPageFilenames[$firstPath]);
+                return $ret;
+            }
             $ret = $component->getChildPageByPath($path);
         }
 

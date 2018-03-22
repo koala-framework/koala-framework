@@ -195,7 +195,11 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
             }
             $path = trim($path, '/');
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
-            if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
+
+            if ($ret && (
+                   $ret->generator->getGeneratorFlag('matchChildUrls')
+                || rawurldecode($ret->url) == $parsedUrl['path']) //nur cachen wenn kein redirect gemacht wird
+            ) {
                 $exactMatch = true;
                 if ($ret->isVisible()) {
                     Kwf_Component_Cache_Url_Abstract::getInstance()->save($cacheUrl, $ret);
