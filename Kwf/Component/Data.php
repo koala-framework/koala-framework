@@ -112,12 +112,7 @@ class Kwf_Component_Data
                 $filename = $data->id.($filename ? ':' : '').$filename;
             }
             if ($data->isPseudoPage || $data->componentId == 'root') {
-                if ($filename && Kwc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
-                    $filename = call_user_func(array($data->componentClass, 'getShortcutUrl'), $data->componentClass, $data).($filename ? '/' : '').$filename;
-                    break;
-                } else {
-                    if ($data->filename) $filename = $data->filename.($filename ? '/' : '').$filename;
-                }
+                if ($data->filename) $filename = $data->filename.($filename ? '/' : '').$filename;
                 if ($data->componentId != 'root' && $data->generator->getGeneratorFlag('static')) {
                     $hadStaticPage = true;
                 } else {
