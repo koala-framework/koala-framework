@@ -74,9 +74,8 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
 
     protected function _saveWithoutResetDirty()
     {
-        $insert =
-            !is_array($this->_getPrimaryKey())
-            && !$this->getCleanValue($this->_getPrimaryKey());
+        $insert = (!is_array($this->_getPrimaryKey()) && !$this->getCleanValue($this->_getPrimaryKey()))
+            || ($this->_model->hasDeletedFlag() && $this->isDirty('deleted') && !$this->deleted);
 
         if ($insert) {
             $this->_beforeInsert();
