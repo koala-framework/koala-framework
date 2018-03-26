@@ -6,7 +6,7 @@ class Kwc_Paragraphs_ApiContent implements Kwf_Component_ApiContent_Interface
         $ret = array();
         $ret['paragraphs'] = array();
         foreach($data->getChildComponents(array('generator'=>'paragraphs')) as $paragraph) {
-            $ret['paragraphs'][] = Kwf_Component_ApiContent_Helper::getContent($paragraph);
+            $ret['paragraphs'][] = $paragraph;
         }
         return $ret;
     }
