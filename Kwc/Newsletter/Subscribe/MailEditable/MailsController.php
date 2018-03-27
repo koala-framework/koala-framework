@@ -7,6 +7,6 @@ class Kwc_Newsletter_Subscribe_MailEditable_MailsController extends Kwc_Mail_Edi
         $this->view->xtype = 'kwc.newsletter.subscribe.mailEditable';
 
         $admin = Kwc_Admin::getInstance($this->_getParam('class'));
-        $this->view->previewControllerUrl = $admin->getControllerUrl('Preview');
+        $this->view->componentsControllerUrl = $admin->getControllerUrl('Components');
     }
 }

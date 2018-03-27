@@ -4,14 +4,15 @@ Kwc.Newsletter.Subscribe.MailEditable.Panel = Ext2.extend(Kwc.Mail.Editable.Pane
     initComponent: function() {
         Kwc.Newsletter.Subscribe.MailEditable.Panel.superclass.initComponent.call(this);
 
-        this.preview = new Kwc.Newsletter.Subscribe.MailEditable.PreviewPanel({
-            title: trlKwf('Preview'),
-            region: 'center',
-            controllerUrl: this.previewControllerUrl
+        this.preview = new Ext2.Panel({
+            layout: 'card',
+            title: trlKwf('Preview')
         });
 
         this.content.on('datachange', function () {
-            this.preview.load();
+            this.preview.items.each(function(itm) {
+                itm.load();
+            }, this);
         }, this);
 
         this.items.get(0).add(this.preview);
@@ -21,10 +22,28 @@ Kwc.Newsletter.Subscribe.MailEditable.Panel = Ext2.extend(Kwc.Mail.Editable.Pane
         var ret = Kwc.Newsletter.Subscribe.MailEditable.Panel.superclass.onComponentsGridSelectionChange.call(this);
         if (ret === false) return false;
 
-        this.preview.setBaseParams({
-            componentId: this.componentsGrid.getSelected().id
+        var record = this.componentsGrid.getSelected();
+
+        var i = false;
+        this.preview.items.each(function(itm) {
+            if (itm.controllerUrl == record.get('preview_controller_url')) {
+                i = itm;
+            }
+        }, this);
+        if (!i) {
+            i = new Kwc.Newsletter.Subscribe.MailEditable.PreviewPanel({
+                title: trlKwf('Preview'),
+                region: 'center',
+                controllerUrl: record.get('preview_controller_url')
+            });
+            this.preview.add(i);
+            this.preview.doLayout();
+        }
+        this.preview.getLayout().setActiveItem(i);
+        i.setBaseParams({
+            componentId: record.get('id')
         });
-        this.preview.load();
+        i.load();
     }
 });
 Ext2.reg('kwc.newsletter.subscribe.mailEditable', Kwc.Newsletter.Subscribe.MailEditable.Panel);
