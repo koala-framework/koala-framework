@@ -141,7 +141,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
             'Strict-Transport-Security' => 'max-age=31536000',
             'X-Content-Type-Options' => 'nosniff',
             'X-Frame-Options' => 'SAMEORIGIN',
-            'X-XSS-Protection' => 'mode=block',
+            'X-XSS-Protection' => '1; mode=block',
             'Referrer-Policy' => 'strict-origin-when-cross-origin',
         );
     }
