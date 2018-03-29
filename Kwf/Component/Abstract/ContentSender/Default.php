@@ -127,15 +127,23 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
             ob_end_clean();
         }
 
-        //if one of those headers is not wanted we have to make them configurable.
-        header('Strict-Transport-Security: max-age=31536000');
-        header('X-Content-Type-Options: nosniff');
-        header('X-Frame-Options: SAMEORIGIN');
-        header('X-XSS-Protection: 1; mode=block');
-        header('Referrer-Policy: strict-origin-when-cross-origin');
+        foreach ($this->_getHeaders() as $header => $headerValue) {
+            header($header . ': ' . $headerValue);
+        }
 
         Kwf_Media_Output::outputWithoutShutdown($content);
         exit;
+    }
+
+    protected function _getHeaders()
+    {
+        return array(
+            'Strict-Transport-Security' => 'max-age=31536000',
+            'X-Content-Type-Options' => 'nosniff',
+            'X-Frame-Options' => 'SAMEORIGIN',
+            'X-XSS-Protection' => 'mode=block',
+            'Referrer-Policy' => 'strict-origin-when-cross-origin',
+        );
     }
 
     //removed, if required add _getMimeType() method
