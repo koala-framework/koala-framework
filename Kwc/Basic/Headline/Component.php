@@ -46,6 +46,8 @@ class Kwc_Basic_Headline_Component extends Kwc_Abstract
             )
         );
         $ret['flags']['hasAnchors'] = true;
+        $ret['apiContent'] = 'Kwc_Basic_Headline_ApiContent';
+        $ret['apiContentType'] = 'headline';
         return $ret;
     }
 

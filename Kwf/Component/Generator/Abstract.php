@@ -851,7 +851,7 @@ abstract class Kwf_Component_Generator_Abstract
 
     public function getGeneratorFlags()
     {
-        return array();
+        return isset($this->_settings['flags']) ? $this->_settings['flags'] : array();
     }
 
     public final function getGeneratorFlag($flag)

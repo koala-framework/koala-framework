@@ -59,13 +59,6 @@ class Kwc_Root_Abstract extends Kwc_Abstract implements Kwf_Util_Maintenance_Job
         if ($path == '') {
             $ret = $component->getChildPage(array('home' => true), array());
         } else {
-            foreach (Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::getFlag($c, 'shortcutUrl')) {
-                    $ret = call_user_func(array($c, 'getDataByShortcutUrl'), $c, $path);
-                    if ($ret) return $ret;
-                }
-            }
-
             $matchChildUrlPageFilenames = Kwf_Cache_SimpleStatic::fetch('matchChildUrlPageFilenames');
             if ($matchChildUrlPageFilenames === false) {
                 $matchChildUrlPages = $component->getChildComponents(array(
