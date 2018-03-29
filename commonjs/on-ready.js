@@ -327,6 +327,15 @@ var callOnContentReady = function(renderedEl, options)
 
 };
 
+if ('kwfUp-'.length) {
+    var ns = 'kwfUp-'.substr(0, 'kwfUp-'.length-1);
+    if (typeof window[ns].Kwf == 'undefined') window[ns].Kwf = {};
+    window[ns].Kwf.callOnContentReady = callOnContentReady;
+} else {
+    if (typeof window.Kwf == 'undefined') window.Kwf = {};
+    window.Kwf.callOnContentReady = callOnContentReady;
+}
+
 
 $(document).ready(function() {
     if ($(document.body).is('.kwfUp-frontend')) {
