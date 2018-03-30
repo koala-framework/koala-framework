@@ -25,6 +25,7 @@ class Kwc_Mail_Editable_ComponentsController extends Kwf_Controller_Action_Auto_
         parent::_initColumns();
         $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Name'), 290));
         $this->_columns->add(new Kwf_Grid_Column('settings_controller_url'));
+        $this->_columns->add(new Kwf_Grid_Column('preview_controller_url'));
         $this->_columns->add(new Kwf_Grid_Column('edit_components'))
             ->setData(new Kwc_Mail_Editable_ComponentsController_EditComponentsData());
     }
