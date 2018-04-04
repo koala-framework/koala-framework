@@ -1,5 +1,5 @@
-Ext2.ns('Kwc.Newsletter.Subscribe.MailEditable');
-Kwc.Newsletter.Subscribe.MailEditable.PreviewPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
+Ext2.ns('Kwc.Mail.Editable');
+Kwc.Mail.Editable.PreviewPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
     border: false,
     autoScroll: true,
     bodyCssClass: 'mailPreviewPanel',
@@ -33,7 +33,7 @@ Kwc.Newsletter.Subscribe.MailEditable.PreviewPanel = Ext2.extend(Kwf.Binding.Abs
         });
 
         this.tbar = [this.button['html'], this.button['text']];
-        Kwc.Newsletter.Subscribe.MailEditable.PreviewPanel.superclass.initComponent.call(this);
+        Kwc.Mail.Editable.PreviewPanel.superclass.initComponent.call(this);
     },
 
     load: function(params, options) {
@@ -64,4 +64,4 @@ Kwc.Newsletter.Subscribe.MailEditable.PreviewPanel = Ext2.extend(Kwf.Binding.Abs
         }
     }
 });
-Ext2.reg('Kwc.Newsletter.Subscribe.MailEditable.preview', Kwc.Newsletter.Subscribe.MailEditable.PreviewPanel);
+Ext2.reg('kwc.mail.editable.preview', Kwc.Mail.Editable.PreviewPanel);

@@ -1,5 +1,5 @@
 <?php
-class Kwc_Newsletter_Subscribe_MailEditable_Events extends Kwc_Abstract_Events
+class Kwc_Mail_Editable_Events extends Kwc_Abstract_Events
 {
     public function getListeners()
     {

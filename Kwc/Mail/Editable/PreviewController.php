@@ -1,5 +1,5 @@
 <?php
-class Kwc_Newsletter_Subscribe_MailEditable_PreviewController extends Kwc_Mail_PreviewController
+class Kwc_Mail_Editable_PreviewController extends Kwc_Mail_PreviewController
 {
     public function jsonDataAction()
     {
