@@ -1,6 +1,7 @@
 <?php
 class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_Abstract
-    implements Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_SkipProcessInput
+    implements Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_Login,
+               Kwf_Component_Plugin_Interface_SkipProcessInput, Kwf_Component_Plugin_Interface_Redirect
 {
     public static function getSettings($param = null)
     {
@@ -9,14 +10,21 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
         return $ret;
     }
 
-    public function replaceOutput($renderer)
+    public function getRedirectUrl(Kwf_Component_Data $page)
     {
         if (!$this->isLoggedIn()) {
             $url = $this->_getRedirectUrl();
             $connector = (strstr($url, '?')) ? '&' : '?';
-            $url .= $connector.'redirect=' . urlencode($this->_getRedirectParam());
-            header('Location: ' . $url);
-            exit;
+            $url .= $connector . 'redirect=' . urlencode($this->_getRedirectParam());
+            return $url;
+        }
+        return false;
+    }
+
+    public function replaceOutput($renderer)
+    {
+        if (!$this->isLoggedIn()) {
+            throw new Kwf_Exception("Component should not be rendered, redirect did not happen probably because this plugin is not used at page level");
         }
         return false;
     }

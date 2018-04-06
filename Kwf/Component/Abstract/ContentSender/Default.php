@@ -81,6 +81,14 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
             if (!$ignore) Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
         }
 
+        foreach ($this->_data->getPlugins('Kwf_Component_Plugin_Interface_Redirect') as $p) {
+            $p = Kwf_Component_Plugin_Abstract::getInstance($p, $this->_data->componentId);
+            if ($redirect = $p->getRedirectUrl($this->_data)) {
+                header('Location: '.$redirect);
+                exit;
+            }
+        }
+
         $benchmarkEnabled = Kwf_Benchmark::isEnabled();
 
         if ($benchmarkEnabled) $startTime = microtime(true);
