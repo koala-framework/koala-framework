@@ -58,6 +58,7 @@ services:
 
     kwf.crsfprotection_listener:
         class: KwfBundle\EventListener\CsrfProtection
+        arguments: ['%kwf.csrf_protection.ignore_paths%']
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 12 }
 
