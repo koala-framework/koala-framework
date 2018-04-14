@@ -29,7 +29,7 @@
 
     ul {
         li {
-            .dropdown {
+            .kwcBem__dropdown {
                 margin-left: 0;
                 z-index: 50;
                 display: none;
@@ -47,10 +47,10 @@
                             padding: 5px 10px;
                         }
 
-                        &.first {
+                        &.kwcBem__item--first {
                             padding-top: 10px;
                         }
-                        &.last {
+                        &.kwcBem__item--last {
                             margin-bottom: 10px;
                         }
                     }
@@ -76,16 +76,16 @@
                 font-weight: 500;
 
             }
-            &.current >  a {
+            &.kwcBem__item--current >  a {
                 color: #000000;
             }
-            &.last {
+            &.kwcBem__item--last {
                 a {
                     padding: 0 0 0 10px;
                 }
             }
             ul li {
-                &.last {
+                &.kwcBem__item--last {
                     a {
                         padding: 5px 10px;
                     }
