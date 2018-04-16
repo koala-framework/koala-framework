@@ -46,7 +46,7 @@ services:
             - { name: serializer.normalizer, priority: -10 }
         public: false
 
-    kwf.exception_handler:
+    kwf.exception_listener:
         class: KwfBundle\EventListener\ExceptionHandler
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: 13 }
