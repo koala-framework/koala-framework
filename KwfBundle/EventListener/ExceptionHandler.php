@@ -1,11 +1,9 @@
 <?php
-namespace KwfBundle;
+namespace KwfBundle\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
-class ExceptionHandler implements EventSubscriberInterface
+class ExceptionHandler
 {
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
@@ -15,12 +13,5 @@ class ExceptionHandler implements EventSubscriberInterface
             \Kwf_Debug::handleException($event->getException());
             exit;
         }
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return array(
-            KernelEvents::EXCEPTION => array('onKernelException')
-        );
     }
 }

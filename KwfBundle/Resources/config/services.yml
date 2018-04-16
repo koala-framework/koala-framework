@@ -47,9 +47,9 @@ services:
         public: false
 
     kwf.exception_handler:
-        class: KwfBundle\ExceptionHandler
+        class: KwfBundle\EventListener\ExceptionHandler
         tags:
-            - { name: kernel.event_subscriber }
+            - { name: kernel.event_listener, event: kernel.exception, priority: 13 }
 
     kwf.modelobserver_listener:
         class: KwfBundle\EventListener\ModelObserverProcess
