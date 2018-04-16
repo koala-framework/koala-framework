@@ -1,4 +1,5 @@
 var onReady = require('kwf/commonjs/on-ready');
+var $ = require('jquery');
 
 onReady.onRender('.kwcClass', function(el) {
     var menu = $(el).find('.kwcBem__menu');
