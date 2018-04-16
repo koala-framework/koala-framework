@@ -20,9 +20,7 @@ class KwfExtension extends Extension implements PrependExtensionInterface
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        if (isset($config['csrf_protection']['ignore_paths'])) {
-            $container->setParameter('kwf.csrf_protection.ignore_paths', $config['csrf_protection']['ignore_paths']);
-        }
+        $container->setParameter('kwf.csrf_protection.ignore_paths', $config['csrf_protection']['ignore_paths']);
     }
 
     public function prepend(ContainerBuilder $container)

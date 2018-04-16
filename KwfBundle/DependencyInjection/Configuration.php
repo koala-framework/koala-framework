@@ -14,6 +14,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('csrf_protection')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->arrayNode('ignore_paths')
                             ->prototype('scalar')
