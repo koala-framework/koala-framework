@@ -15,8 +15,8 @@ var $ = require('jQuery');
         $.extend(this.config, config);
 
         this.el = $(el);
-        this.switchLink = this.el.find(this.config.link || '.kwfUp-switchLink:first');
-        this.switchContainer = this.el.find(this.config.container || '.kwfUp-switchContent:first');
+        this.switchLink = $(this.el.find(this.config.link || '.kwfUp-switchLink')[0]);
+        this.switchContainer = $(this.el.find(this.config.container || '.kwfUp-switchContent')[0]);
         this.boundEvent = this.config.hover ? 'hover' : 'click';
         this.activeTimeout = null;
 
