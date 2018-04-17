@@ -11,6 +11,8 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
         $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
         $ret['generators']['child']['component']['image'] = 'Kwc_TextImage_ImageEnlarge_Component';
         $ret['mailImageVAlign'] = 'center'; // valign von Image
+        $ret['apiContent'] = 'Kwc_TextImage_ApiContent';
+        $ret['apiContentType'] = 'textImage';
         return $ret;
     }
 

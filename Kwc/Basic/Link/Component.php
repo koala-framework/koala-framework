@@ -16,6 +16,8 @@ class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'text';
+        $ret['apiContent'] = 'Kwc_Basic_Link_ApiContent';
+        $ret['apiContentType'] = 'link';
         return $ret;
     }
 
