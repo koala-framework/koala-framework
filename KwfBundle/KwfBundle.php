@@ -4,6 +4,7 @@ namespace KwfBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use KwfBundle\DependencyInjection\MaintenanceJobsCompilerPass;
+use KwfBundle\DependencyInjection\UpdatesProviderCompilerPass;
 
 class KwfBundle extends Bundle
 {
@@ -32,5 +33,6 @@ class KwfBundle extends Bundle
         $container->set('session.storage', 'session.storage.kwf');
 
         $container->addCompilerPass(new MaintenanceJobsCompilerPass());
+        $container->addCompilerPass(new UpdatesProviderCompilerPass());
     }
 }
