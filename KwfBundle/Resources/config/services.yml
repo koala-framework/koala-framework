@@ -64,3 +64,6 @@ services:
 
     kwf.maintenance_jobs_locator:
         class: KwfBundle\MaintenanceJobs\Locator
+
+    kwf.updates_provider_locator:
+        class: KwfBundle\UpdatesProvider\Locator
