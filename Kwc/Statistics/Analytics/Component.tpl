@@ -10,6 +10,7 @@
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
         ga('create', '<?=$this->code?>', 'auto');
+        ga('set', 'anonymizeIp', true);
         ga('send', 'pageview');
     }
     <? if ($this->ignoreCode) { echo "*/"; } ?>
