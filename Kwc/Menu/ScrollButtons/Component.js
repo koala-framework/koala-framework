@@ -1,12 +1,13 @@
 var onReady = require('kwf/commonjs/on-ready');
+var $ = require('jquery');
 
 onReady.onRender('.kwcClass', function(el) {
-    var menu = $(el).find('.menu');
+    var menu = $(el).find('.kwcBem__menu');
 
     $(menu).before('<a class="arrowLeft"></a>').before('<a class="arrowRight"></a>');
 
-    var arrowLeft = $(el).find('.arrowLeft').hide();
-    var arrowRight = $(el).find('.arrowRight').hide();
+    var arrowLeft = $(el).find('.kwcBem__arrowLeft').hide();
+    var arrowRight = $(el).find('.kwcBem__arrowRight').hide();
 
     $(arrowLeft).on('click', function(e) {
         $(menu).animate({
