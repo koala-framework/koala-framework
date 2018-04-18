@@ -4,6 +4,7 @@
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', '<?=$this->code?>']);
   _gaq.push(['_trackPageview']);
+  _gaq.push(['_gat._anonymizeIp']);
 
   if (!location.search.match(/[\?&]kwcPreview/)) {
       (function() {
