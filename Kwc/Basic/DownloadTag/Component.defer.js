@@ -1,5 +1,5 @@
-var onReady = require('kwf/on-ready');
-var statistics = require('kwf/statistics');
+var onReady = require('kwf/commonjs/on-ready');
+var statistics = require('kwf/commonjs/statistics');
 
 onReady.onRender('.kwcClass', function (el, config) {
 
