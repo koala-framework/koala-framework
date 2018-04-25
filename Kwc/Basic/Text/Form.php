@@ -57,7 +57,7 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
         if (Kwf_Assets_WebpackConfig::getDevServerUrl()) {
             $urls[] = Kwf_Assets_WebpackConfig::getDevServerUrl() . 'assets/build/Frontend.css';
         } else {
-            $urls[] = 'build/assets/Frontend.css';
+            $urls[] = '/assets/build/Frontend.css';
         }
         $styleEditorUrl = Kwc_Admin::getInstance($this->getClass())->getControllerUrl().'/styles-content';
         $styleEditorUrl .= '?t='.$t->getMTime();
