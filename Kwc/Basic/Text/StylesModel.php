@@ -43,7 +43,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         if (Kwf_Assets_WebpackConfig::getDevServerUrl()) {
             $filename = Kwf_Assets_WebpackConfig::getDevServerUrl() . 'assets/build/Frontend.css';
         } else {
-            $filename = 'build/assets/Frontend.css';
+            $filename = '/assets/build/Frontend.css';
         }
         $fileGetContentsContextOptions = array();
         if (Kwf_Config::getValue('server.https') && Kwf_Config::getValue('debug.webpackDevServer')) {
