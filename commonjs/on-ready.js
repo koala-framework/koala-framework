@@ -329,6 +329,7 @@ var callOnContentReady = function(renderedEl, options)
 
 if ('kwfUp-'.length) {
     var ns = 'kwfUp-'.substr(0, 'kwfUp-'.length-1);
+    if (typeof window[ns] == 'undefined') window[ns] = {};
     if (typeof window[ns].Kwf == 'undefined') window[ns].Kwf = {};
     window[ns].Kwf.callOnContentReady = callOnContentReady;
 } else {
