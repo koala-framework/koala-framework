@@ -283,23 +283,42 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTotalViews()
+    /**
+     * @param null|Zend_Db_Expr $where
+     */
+    public function getTotalViews($where = null)
     {
         $db = Kwf_Registry::get('db');
-        $sql = "
-            SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
-            FROM kwc_mail_views WHERE mail_component_id=?";
-        return $db->fetchOne($sql, $this->getData()->componentId);
+
+        $select = new Zend_Db_Select($db);
+        $select
+            ->from(
+                array('kwc_mail_views'),
+                array(new Zend_Db_Expr('count(distinct(concat(recipient_id,recipient_model_shortcut)))'))
+            )
+            ->where('mail_component_id = ?', $this->getData()->componentId);
+        if ($where) $select->where($where);
+
+        return $db->fetchOne($select);
     }
 
-    public function getTotalClicks()
+    /**
+     * @param null|Zend_Db_Expr $where
+     */
+    public function getTotalClicks($where = null)
     {
         $db = Kwf_Registry::get('db');
-        $sql = "
-            SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
-            FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
-            WHERE s.redirect_id=r.id AND mail_component_id=?";
-        return $db->fetchOne($sql, $this->getData()->componentId);
+
+        $select = new Zend_Db_Select($db);
+        $select
+            ->from(
+                array('kwc_mail_redirect_statistics'),
+                array(new Zend_Db_Expr('count(distinct(concat(recipient_id,recipient_model_shortcut)))'))
+            )
+            ->where('mail_component_id = ?', $this->getData()->componentId);
+        if ($where) $select->where($where);
+
+        return $db->fetchOne($select);
     }
 
     public static function getMediaOutput($id, $type, $className)
