@@ -18,7 +18,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         if (Kwf_Assets_WebpackConfig::getDevServerPublic()) {
             $cmd .= " --public=".Kwf_Assets_WebpackConfig::getDevServerPublic();
         }
-        if (Kwf_Config::getValue('server.https')) {
+        if (Kwf_Config::getValue('server.https') === true) {
             $cmd .= " --https";
         }
         echo $cmd."\n";

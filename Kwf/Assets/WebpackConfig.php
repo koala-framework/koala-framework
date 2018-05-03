@@ -41,7 +41,7 @@ class Kwf_Assets_WebpackConfig
     {
         $proxy = Kwf_Config::getValue('debug.webpackDevServerProxy');
         if (!$proxy) {
-            $proxy = (Kwf_Config::getValue('server.https') ? 'https' : 'http') .  '://'.Kwf_Config::getValue('server.domain');
+            $proxy = (Kwf_Config::getValue('server.https') === true ? 'https' : 'http') .  '://'.Kwf_Config::getValue('server.domain');
         }
         return $proxy;
     }
@@ -54,7 +54,7 @@ class Kwf_Assets_WebpackConfig
         if ($url = Kwf_Config::getValue('debug.webpackDevServerUrl')) {
             return $url;
         } else {
-            $protocol = Kwf_Config::getValue('server.https') ? 'https://' : 'http://';
+            $protocol = Kwf_Config::getValue('server.https') === true ? 'https://' : 'http://';
             return $protocol.self::getDevServerPublic().'/';
         }
     }

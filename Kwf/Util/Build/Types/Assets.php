@@ -74,7 +74,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
     {
         $cmd = 'NODE_PATH=vendor/koala-framework/koala-framework/node_modules_build ./vendor/bin/node  node_modules/.bin/webpack --colors';
         if (!isset($_SERVER['NO_PROGRESS'])) $cmd .= ' --progress';
-        if (Kwf_Config::getValue('server.https')) {
+        if (Kwf_Config::getValue('server.https') === true) {
             $cmd .= ' --https';
         }
         passthru($cmd, $retVal);
