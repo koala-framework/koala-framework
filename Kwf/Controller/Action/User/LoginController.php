@@ -168,8 +168,10 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         if ($action == 'login') {
             if (count($state) != 4) throw new Kwf_Exception_NotFound();
             $redirect = urldecode(str_replace('kwfdot', '.', $state[3]));
+            $params = $this->getRequest()->getParams();
+            $params['redirect'] = urlencode($redirect);
             try {
-                $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+                $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $params);
             } catch (Kwf_Exception_Client $e) {
                 $this->getRequest()->setParam('redirect', urlencode($redirect));
                 $this->getRequest()->setParam('errorMessage', $e->getMessage());
