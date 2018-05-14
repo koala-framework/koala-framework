@@ -96,7 +96,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                     'redirect' => $_SERVER['REQUEST_URI'],
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
-                    'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
+                    'formOptionsHtml' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
                 );
             }
         }

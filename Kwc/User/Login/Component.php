@@ -97,7 +97,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
                     'redirect' => '%redirect%',
                     'name' => $this->getData()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
-                    'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
+                    'formOptionsHtml' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
                 );
             }
         }
