@@ -275,4 +275,14 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
         ));
         return $ret;
     }
+
+    public function freeMemory()
+    {
+        $this->getProxyModel()->freeMemory();
+
+        foreach ($this->_rows as $row) {
+            if (is_object($row)) $row->freeMemory();
+        }
+        $this->_rows = array();
+    }
 }
