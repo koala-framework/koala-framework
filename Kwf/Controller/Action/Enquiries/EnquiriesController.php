@@ -2,7 +2,7 @@
 class Kwf_Controller_Action_Enquiries_EnquiriesController
     extends Kwf_Controller_Action_Auto_Grid
 {
-    protected $_buttons = array();
+    protected $_buttons = array('delete');
     protected $_defaultOrder = array('field'=>'id', 'direction'=>'DESC');
     protected $_paging = 25;
     protected $_model = 'Kwf_Model_Mail';
