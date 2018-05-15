@@ -92,6 +92,7 @@ class Kwc_Root_Abstract extends Kwc_Abstract implements Kwf_Util_Maintenance_Job
     public static function getMaintenanceJobs()
     {
         return array(
+            'Kwc_Root_MaintenanceJobs_DeleteOldEnquiries',
             'Kwc_Root_MaintenanceJobs_PageMetaUpdate',
             'Kwc_Root_MaintenanceJobs_PageMetaRebuild',
             'Kwc_Root_MaintenanceJobs_CacheCleanup',
