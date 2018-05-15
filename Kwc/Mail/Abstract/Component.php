@@ -84,6 +84,35 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         return $this->_getSetting('recipientSources');
     }
 
+    /**
+     * @param string $modelShortcut
+     * @param string|int $id
+     * @return Kwf_Model_Row_Interface
+     * @throws Kwf_Exception
+     */
+    public function getRecipientFromShortcut($modelShortcut, $id)
+    {
+        $modelName = null;
+        foreach ($this->getRecipientSources() as $shortcut => $recipientSource) {
+            if ($shortcut === $modelShortcut) {
+                $modelName = $recipientSource['model'];
+                break;
+            }
+        }
+        if (!$modelName) {
+            throw new Kwf_Exception("No recipient source for shortcut \"{$modelShortcut}\" found");
+        } else if (!is_instance_of($modelName, 'Kwf_Model_Abstract')) {
+            throw new Kwf_Exception("Recipient-Model for shortcut \"{$modelShortcut}\" and id \"{$id}\" has to be a model.");
+        }
+
+        $row = Kwf_Model_Abstract::getInstance($modelName)->getRow($id);
+        if ($row && !$row instanceof Kwc_Mail_Recipient_Interface) {
+            throw new Kwf_Exception("Recipient-Row has to implement Kwc_Mail_Recipient_Interface");
+        }
+
+        return $row;
+    }
+
     public function getHtmlStyles()
     {
         $ret = $this->_getSetting('mailHtmlStyles');
