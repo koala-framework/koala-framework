@@ -128,7 +128,8 @@ class Kwf_Controller_Front extends Zend_Controller_Front
                 if (isset($argv[1]) && $argv[1] == 'symfony') {
                     unset($argv[0]);
                     unset($argv[1]);
-                    $cmd = './symfony/bin/console --ansi '.implode(' ', array_map('escapeshellarg', $argv));
+                    if (!in_array("--no-ansi", $argv)) $argv[] = '--ansi';
+                    $cmd = './symfony/bin/console '.implode(' ', array_map('escapeshellarg', $argv));
                     passthru($cmd, $retVar);
                     exit($retVar);
                 }
