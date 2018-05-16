@@ -120,8 +120,8 @@ var callOnContentReady = function(renderedEl, options)
 
         if (options.action == 'render' && !html) {
             var t = benchmarkBox.now();
-            html = renderedEl.innerHTML;
-            benchmarkBox.time('innerHTML', benchmarkBox.now()-t);
+            html = renderedEl.outerHTML;
+            benchmarkBox.time('outerHTML', benchmarkBox.now()-t);
         }
 
         var useSelectorCache;
@@ -142,7 +142,7 @@ var callOnContentReady = function(renderedEl, options)
                 } else {
                     useSelectorCache = false;
                 }
-                benchmarkBox.time('checkInnerHtml', benchmarkBox.now()-t);
+                benchmarkBox.time('checkOuterHtml', benchmarkBox.now()-t);
             }
         }
 
