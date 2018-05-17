@@ -264,43 +264,4 @@ class Kwf_Media_Output
             return $contents;
         }
     }
-
-    // returns the partial content from a file
-    private static function _getPartialFileContent($file, $range)
-    {
-        $length = $range[1]-$range[0]+1;
-
-        if( !$handle = fopen($file, 'r') )
-            throw new Kwf_Exception(sprintf("Could not get handle for file %s", $file));
-        if( fseek($handle, $range[0], SEEK_SET) == -1 )
-            throw new Kwf_Exception(sprintf("Could not seek to byte offset {$rage[0]}"));
-
-        $ret = fread($handle, $length);
-        return $ret;
-    }
-
-    /**
-     * @see http://php.net/manual/de/function.readfile.php#54295
-     */
-    private static function _readfileChunked($filename, $retbytes=true) {
-        $chunksize = 1*(1024*1024); // how many bytes per chunk
-        $buffer = '';
-        $cnt =0;
-        $handle = fopen($filename, 'rb');
-        if ($handle === false) { return false; }
-        while (!feof($handle)) {
-            $buffer = fread($handle, $chunksize);
-            echo $buffer;
-            ob_flush();
-            flush();
-            if ($retbytes) {
-                $cnt += strlen($buffer);
-            }
-        }
-        $status = fclose($handle);
-        if ($retbytes && $status) {
-            return $cnt; // return num. bytes delivered like readfile() does.
-        }
-        return $status;
-    }
 }
