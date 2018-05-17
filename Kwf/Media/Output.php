@@ -35,10 +35,28 @@ class Kwf_Media_Output
         }
         if (isset($data['contents'])) {
             echo $data['contents'];
+
         } else if (isset($data['file'])) {
-            readfile($data['file']);
-            //self::_readfileChunked($data['file']);
+            if (!$handle = fopen($data['file'], 'r'))
+                throw new Kwf_Exception(sprintf("Could not get handle for file %s", $file));
+
+            if (fseek($handle, $data['range'][0], SEEK_SET) == -1)
+                throw new Kwf_Exception(sprintf("Could not seek to byte offset {$data['range'][0]}"));
+
+            $maxChunkSize = 4096;
+            $readLength = $data['range'][1]-$data['range'][0]+1;
+            $buffer = '';
+            $readCount = 0;
+            while ($readCount < $readLength) {
+                $chunkSize = min($readLength-$readCount, $maxChunkSize);
+                $buffer = fread($handle, $chunkSize);
+                echo $buffer;
+                flush();
+                $readCount += strlen($buffer);
+            }
+            fclose($handle);
         }
+
         $ret = array(
             'responseCode' => $data['responseCode'],
             'contentLength' => $data['contentLength'],
@@ -214,22 +232,23 @@ class Kwf_Media_Output
                     $ret['contents'] = $file['contents'];
                 }
             } else if (isset($file['file'])) {
+                $ret['file'] = $file['file'];
+                $filesize = filesize($file['file']);
+                $rangeMax = $filesize-1;
+                $ret['range'] = array(0, $rangeMax);
+
                 if (isset($headers['Range'])) {
                     $range = explode('=', $headers['Range']);
                     $range = explode('-', $range[1]);
                     if (!$range[1]) {
-                        $range[1] = filesize($file['file'])-1;
+                        $range[1] = $rangeMax;
                     }
-                    $ret['contents'] = self::_getPartialFileContent($file['file'], $range);
-                    $ret['contentLength'] = strlen($ret['contents']);
-                    $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
+                    $ret['range'] = $range;
                     $ret['headers'][] = 'Content-Range: bytes ' . $range[0] . '-'
-                        . $range[1] . '/' . filesize($file['file']);
-                } else {
-                    $ret['contentLength'] = filesize($file['file']);
-                    $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
-                    $ret['file'] = $file['file'];
+                        . $range[1] . '/' . $filesize;
                 }
+                $ret['contentLength'] = $ret['range'][1] - $ret['range'][0] +1;
+                $ret['headers'][] = 'Content-Length: ' . $ret['contentLength'];
             } else {
                 throw new Kwf_Exception("contents not set");
             }
