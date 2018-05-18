@@ -36,7 +36,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             $ret['config']['directoryViewComponentId'] = false;
             $ret['config']['directoryComponentId'] = false;
             $ret['config']['directoryComponentClass'] = $itemDir;
-        } else {
+        } else if ($itemDir) {
             $ret['config']['directoryViewComponentId'] = $itemDir->getChildComponent('-view')->componentId;
             $ret['config']['directoryComponentId'] = $itemDir->componentId;
             $ret['config']['directoryComponentClass'] = $itemDir->componentClass;
