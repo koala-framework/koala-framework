@@ -11,23 +11,25 @@ abstract class Kwc_Directories_CategorySimple_List_Component extends Kwc_Directo
 
     public function getSelect()
     {
-        if (!$this->getRow()->category_id) {
-            throw new Kwf_Exception_Client(trlKwf('No category selected.'));
-        }
-        $model = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(
-            $this->_getSetting('categoryComponentClass'), 'categoryToItemModelName'
-        ));
-        $itemIds = array();
-        $s = $model->select()
-            ->whereEquals('category_id', $this->getRow()->getParentRow('Category')->getRecursiveIds());
-        foreach ($model->getRows($s) as $row) {
-            $itemIds[] = $row->item_id;
-        }
-
         $select = parent::getSelect();
-        $select->whereEquals('id', array_unique($itemIds));
-        $select->order('date', 'DESC');
-        $select->order('priority', 'DESC');
+        if (!$this->getRow()->category_id) {
+            $select->where(new Kwf_Model_Select_Expr_Boolean(false));
+
+        } else {
+            $model = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(
+                $this->_getSetting('categoryComponentClass'), 'categoryToItemModelName'
+            ));
+            $itemIds = array();
+            $s = $model->select()
+                ->whereEquals('category_id', $this->getRow()->getParentRow('Category')->getRecursiveIds());
+            foreach ($model->getRows($s) as $row) {
+                $itemIds[] = $row->item_id;
+            }
+
+            $select->whereEquals('id', array_unique($itemIds));
+            $select->order('date', 'DESC');
+            $select->order('priority', 'DESC');
+        }
         return $select;
     }
 }
