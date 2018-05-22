@@ -34,7 +34,7 @@
                     <form method="GET" action="<?=Kwf_Util_HtmlSpecialChars::filter($r['url'])?>">
                     <input type="hidden" name="authMethod" value="<?=Kwf_Util_HtmlSpecialChars::filter($r['authMethod'])?>" />
                     <input type="hidden" name="redirect" value="<?=Kwf_Util_HtmlSpecialChars::filter($r['redirect'])?>" />
-                    <?=$r['formOptions']?>
+                    <?=$r['formOptionsHtml']?>
                     <button>
                         <?php if ($r['icon']) { ?>
                             <img src="<?=Kwf_Util_HtmlSpecialChars::filter($r['icon'])?>" />
