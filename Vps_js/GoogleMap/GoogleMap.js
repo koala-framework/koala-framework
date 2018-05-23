@@ -17,7 +17,7 @@ Vps.GoogleMap.load = function(callback, scope)
 
     Vps.GoogleMap.isLoaded = true;
 
-    var url = 'http:/'+'/maps.google.com/maps?file=api&v=2.x&key={Vps_Assets_GoogleMapsApiKey::getKey()}&c&async=2&hl='+trlVps('en');
+    var url = 'https:/'+'/maps.google.com/maps?file=api&v=2.x&key={Vps_Assets_GoogleMapsApiKey::getKey()}&c&async=2&hl='+trlVps('en');
     url += '&callback=Vps.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
