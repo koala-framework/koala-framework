@@ -51,7 +51,7 @@ abstract class Kwc_Shop_AddToCartAbstract_OrderProductData
         $addComponents = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId);
         if (count($addComponents) > 1) {
             foreach ($addComponents as $addComponent) {
-                if ($addComponent->getSubroot() == $subroot->getSubroot()) {
+                if ($addComponent->getSubroot()->componentId == $subroot->getSubroot()->componentId) {
                     $ret = $addComponent;
                     break;
                 }
