@@ -17,7 +17,7 @@ Kwf.GoogleMap.load = function(callback, scope)
 
     Kwf.GoogleMap.isLoaded = true;
 
-    var url = 'http:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key={Kwf_Assets_GoogleMapsApiKey::getKey()}&c&libraries=places&async=2&language='+trlKwf('en');
+    var url = 'https:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key={Kwf_Assets_GoogleMapsApiKey::getKey()}&c&libraries=places&async=2&language='+trlKwf('en');
     url += '&callback=Kwf.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
