@@ -9,7 +9,7 @@ class Kwf_Test
             'password'=>'test',
             'dbname'=>$dbName
         ));
-        $db->query('SET names UTF8');
+        $db->query('SET names utf8mb4');
         if (Zend_Registry::get('config')->debug->querylog) {
             $profiler = new Kwf_Db_Profiler(true);
             $db->setProfiler($profiler);
