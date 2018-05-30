@@ -23,7 +23,7 @@ abstract class Kwf_Util_Maintenance_Job_AbstractBase
             }
             return $instances[$jobIdentifier];
         } else {
-            return Kwf_SymfonyKernel::getInstance()->getContainer()->get($jobIdentifier);
+            return Kwf_Util_Symfony::getKernel()->getContainer()->get($jobIdentifier);
         }
     }
 
