@@ -9,8 +9,7 @@ class Kwf_Util_Maintenance_Dispatcher
         if (isset($ret)) return $ret;
 
         $ret = array();
-        $kernel = Kwf_SymfonyKernel::getInstance();
-        if ($kernel) {
+        if ($kernel = Kwf_Util_Symfony::getKernel()) {
             $ret = array_merge($ret, $kernel->getContainer()->get('kwf.maintenance_jobs_locator')->getMaintenanceJobServiceIds());
         }
 
