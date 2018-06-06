@@ -20,6 +20,11 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         }
         if (Kwf_Config::getValue('server.https')) {
             $cmd .= " --https";
+
+            $ssl = Kwf_Config::getValueArray('debug.webpackDevServerSSL');
+            if ($ssl['key']) $cmd .= " --key {$ssl['key']}";
+            if ($ssl['cert']) $cmd .= " --cert {$ssl['cert']}";
+            if ($ssl['cacert']) $cmd .= " --cacert {$ssl['cacert']}";
         }
         echo $cmd."\n";
 
