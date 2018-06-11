@@ -26,12 +26,7 @@ class Kwc_Box_MetaTagsContent_OpenGraphImage_Component extends Kwc_Abstract_Imag
     {
         $ret = parent::getTemplateVars($renderer);
 
-        $imageUrl = $this->getAbsoluteImageUrl();
-        $ret['imageSecureUrl'] = '';
-        if (substr($imageUrl, 0, 8) == 'https://') {
-            $ret['imageSecureUrl'] = $imageUrl;
-        }
-        $ret['imageUrl'] = $imageUrl;
+        $ret['imageUrl'] = $this->getAbsoluteImageUrl();
         $ret['width'] = '';
         $ret['height'] = '';
         $imageDimensions = $this->getImageDimensions();
