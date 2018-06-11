@@ -255,6 +255,10 @@ class Kwc_Form_NonAjax_Component extends Kwc_Abstract_Composite_Component
             $this->_formTrlStaticExecuted = true;
         }
 
+        $ret['config'] = array(
+            'componentId' => $this->getData()->componentId
+        );
+
         $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;
         $ret['errors'] = Kwf_Form::formatValidationErrors($this->getErrors());
