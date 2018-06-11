@@ -62,6 +62,12 @@ div.kwcClass {
         }
     }
 
+    &.col1 {
+        > .listItem, > .morePics > .listItem {
+            width: 100%;
+        }
+    }
+
     @for $i from 3 through 10 {
         &.col#{$i} {
             @if $i % 2 == 0 {
