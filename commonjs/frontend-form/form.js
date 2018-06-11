@@ -60,7 +60,9 @@ var FormComponent = function(form)
         }
     }
 
-    this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
+    if (!this._isNonAjaxForm) {
+        this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
+    }
 
     $.each(this.fields, function(i, f) {
         f.initField();
@@ -173,7 +175,12 @@ FormComponent.prototype = {
             return;
         }
 
-        this.submit();
+        if (this._isNonAjaxForm) {
+            this.el.find('form').submit();
+        } else {
+            this.submit();
+        }
+
     },
 
     submit: function()
@@ -307,6 +314,11 @@ FormComponent.prototype = {
                 this.el.trigger('kwfUp-form-submitSuccess', this, r);
             }).bind(this)
         });
+    },
+
+    _isNonAjaxForm: function()
+    {
+        return this.config.isNonAjaxForm;
     }
 };
 
