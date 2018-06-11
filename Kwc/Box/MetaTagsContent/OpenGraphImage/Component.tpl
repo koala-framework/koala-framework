@@ -1,6 +1,9 @@
 <?php if ($this->imageUrl) { ?>
 <meta property="og:image" content="<?=$this->imageUrl?>" />
 <?php } ?>
+<?php if ($this->imageSecureUrl) { ?>
+<meta property="og:image:secure_url" content="<?=$this->imageSecureUrl?>" />
+<?php } ?>
 <?php if ($this->width) { ?>
 <meta property="og:image:width" content="<?=$this->width?>" />
 <?php } ?>
