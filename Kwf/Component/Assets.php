@@ -15,6 +15,12 @@ class Kwf_Component_Assets
 
     public static function build($rootComponentClass)
     {
+        $webFiles = array(
+            'files' => array(),
+            'assets' => array(),
+            'assetsDefer' => array(),
+            'assetsAdmin' => array()
+        );
         $componentFiles = array();
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             $componentFiles[$class] = array(
@@ -30,6 +36,31 @@ class Kwf_Component_Assets
             // array_reverse because assets must be loaded in correct order
             foreach (array_reverse(array_merge($files['masterCss'], $files['css'], $files['js'])) as $f) {
                 $componentFiles[$class]['files'][] = $f;
+            }
+
+            foreach ($componentFiles[$class]['files'] as $key => $file) {
+                $filename = substr($file, strrpos($file, "/")+1);
+                if (substr($filename, 0, 4) === 'Web.' || substr($filename, 0, 6) === 'fonts.') {
+                    if (!in_array($file, $webFiles['files'])) $webFiles['files'][] = $file;
+                    array_splice($componentFiles[$class]['files'], $key, 1);
+                }
+            }
+
+            foreach (array('assets', 'assetsDefer', 'assetsAdmin') as $type) {
+                foreach ($componentFiles[$class][$type]['files'] as $key => $file) {
+                    $filename = substr($file, strrpos($file, "/")+1);
+                    if (substr($filename, 0, 4) === 'Web.' || substr($filename, 0, 6) === 'fonts.') {
+                        if (!in_array($file, $webFiles[$type])) $webFiles[$type][] = $file;
+                        array_splice($componentFiles[$class][$type]['files'], $key, 1);
+                    }
+                }
+            }
+        }
+
+        if ($root = Kwf_Config::getValue('kwc.rootComponent')) {
+            $componentFiles[$root]['files'] = array_merge($componentFiles[$root]['files'], $webFiles['files']);
+            foreach (array('assets', 'assetsDefer', 'assetsAdmin') as $type) {
+                $componentFiles[$root][$type]['files'] = array_merge($componentFiles[$root][$type]['files'], $webFiles[$type]);
             }
         }
 
