@@ -323,6 +323,10 @@ class Kwc_Form_NonAjax_Component extends Kwc_Abstract_Composite_Component
 
         $ret['submitCaption'] = $this->_getPlaceholder('submitButton');
 
+        $ret['config'] = array(
+            'componentId' => $this->getData()->componentId
+        );
+
         return $ret;
     }
 
