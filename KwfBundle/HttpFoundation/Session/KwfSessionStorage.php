@@ -1,10 +1,8 @@
 <?php
 namespace KwfBundle\HttpFoundation\Session;
 
-use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeSessionHandler;
-use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
 
 class KwfSessionStorage extends PhpBridgeSessionStorage
 {
@@ -18,7 +16,7 @@ class KwfSessionStorage extends PhpBridgeSessionStorage
     public function setSaveHandler($saveHandler = null)
     {
         //parent::setSaveHandler($saveHandler);
-        $this->saveHandler = new SessionHandlerProxy($saveHandler);
+        $this->saveHandler = $saveHandler;
     }
 
     public function start()
