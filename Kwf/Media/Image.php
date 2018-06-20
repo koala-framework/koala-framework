@@ -570,7 +570,7 @@ class Kwf_Media_Image
             if (isset($size['imageCompressionQuality'])) {
                 $im->setImageCompressionQuality($size['imageCompressionQuality']);
             } else {
-                $im->setImageCompressionQuality(80);
+                $im->setImageCompressionQuality(Kwf_Config::getValue('imageCompressionQuality'));
             }
             $ret = $im->getImageBlob();
             $im->destroy();
@@ -656,7 +656,7 @@ class Kwf_Media_Image
         }
 
         $im->stripImage();
-        $im->setImageCompressionQuality(80);
+        $im->setImageCompressionQuality(Kwf_Config::getValue('imageCompressionQuality'));
 
         $version = $im->getVersion();
         if (isset($version['versionNumber']) && (int)$version['versionNumber'] >= 1632) {
