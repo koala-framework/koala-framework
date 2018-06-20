@@ -445,7 +445,8 @@ class Kwf_Util_Setup
             $ret .= "            header('Location: '.\$target, true, 301);\n";
             $ret .= "        } else {\n";
             $ret .= "            //redirect to main domain (server.domain)\n";
-            $ret .= "            header('Location: http://'.\$redirect.\$_SERVER['REQUEST_URI'], true, 301);\n";
+            $ret .= "            \$protocol = Kwf_Util_Https::domainSupportsHttps(\$redirect) ? 'https' : 'http';\n";
+            $ret .= "            header('Location: '.\$protocol.'://'.\$redirect.\$_SERVER['REQUEST_URI'], true, 301);\n";
             $ret .= "        }\n";
             $ret .= "        exit;\n";
             $ret .= "    }\n";
