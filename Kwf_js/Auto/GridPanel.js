@@ -646,7 +646,7 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
 
         this.el.mask(trlKwf('Saving...'));
 
-        var params = this.getBaseParams() || {};
+        var params = Ext2.apply({}, this.getBaseParams());
         params.data = Ext2.util.JSON.encode(data);
         return params;
     },
@@ -795,7 +795,7 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         if (!selectedRows.length) return;
 
         var ids = [];
-        var params = this.getBaseParams() || {};
+        var params = Ext2.apply({}, this.getBaseParams());
         var newNewRecords = [];
         selectedRows.each(function(selectedRow)
         {
@@ -855,7 +855,7 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         var selectedRows = this.getGrid().getSelectionModel().getSelections();
 
         var ids = [];
-        var params = this.getBaseParams() || {};
+        var params = Ext2.apply({}, this.getBaseParams());
         selectedRows.each(function(selectedRow) {
             if (selectedRow.data.id != 0) {
                 ids.push(selectedRow.id);
