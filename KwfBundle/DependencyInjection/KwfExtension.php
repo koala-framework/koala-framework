@@ -57,5 +57,9 @@ class KwfExtension extends Extension implements PrependExtensionInterface
             ),
             'param_fetcher_listener' => true
         ));
+
+        $container->prependExtensionConfig('security', array(
+            'session_fixation_strategy' => 'none'
+        ));
     }
 }
