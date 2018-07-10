@@ -1,7 +1,7 @@
 <?php
 class Kwf_Media_Output
 {
-    const ENCODING_NONE = 'none';
+    const ENCODING_NONE = 'identity';
     const ENCODING_GZIP = 'gzip';
     const ENCODING_DEFLATE = 'deflate';
 
