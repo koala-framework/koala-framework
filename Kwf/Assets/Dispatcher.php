@@ -22,7 +22,7 @@ class Kwf_Assets_Dispatcher
             $url = substr($url, 0, strpos($url, '?'));
         }
 
-        if ($encoding != 'none') {
+        if ($encoding != Kwf_Media_Output::ENCODING_NONE) {
             //own cache for encoded contents, not using Kwf_Assets_Cache as we don't need to in two-level cache
             $cacheId = 'as_'.str_replace(array(':', '/', ','), '_', $url).'_'.$encoding;
             $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
