@@ -183,7 +183,9 @@ class Kwf_Media_Output
                 }
             }
             $ret['encoding'] = $encoding;
-            $ret['headers'][] = 'Content-Encoding: ' . $encoding;
+            if ($encoding != self::ENCODING_NONE) {
+                $ret['headers'][] = 'Content-Encoding: ' . $encoding;
+            }
             $ret['headers'][] = 'Content-Type: ' . $file['mimeType'];
             if (!isset($file['contents']) && isset($file['contentsCallback'])) {
                 if (isset($file['cache'])) {
