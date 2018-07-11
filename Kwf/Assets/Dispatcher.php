@@ -53,7 +53,7 @@ class Kwf_Assets_Dispatcher
             throw new Kwf_Exception_AccessDenied();
         }
 
-        if ($encoding != 'none') {
+        if ($encoding != Kwf_Media_Output::ENCODING_NONE) {
             //own cache for encoded contents, not using Kwf_Assets_Cache as we don't need to in two-level cache
             $cacheId = false;
             if (Kwf_Config::getValue('assets.useCacheSimpleStatic')) {
