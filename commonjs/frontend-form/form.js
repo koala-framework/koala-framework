@@ -184,7 +184,9 @@ FormComponent.prototype = {
         button.prepend('<div class="kwfUp-saving"></div>');
         button.find('.kwfUp-submit').css('visibility', 'hidden');
 
-        this.errorStyle.hideErrors();
+        if (this.errorStyle) {
+            this.errorStyle.hideErrors();
+        }
 
         var data = this.el.find('form').serialize();
         data += '&'+$.param(this.config.baseParams);
@@ -196,22 +198,24 @@ FormComponent.prototype = {
             data: data,
             dataType: 'json',
             error: (function() {
-                this.errorStyle.showErrors({
-                    errorFields: [],
-                    errorMessages: [t.trlKwf('The form was not submitted sucessfully')],
-                    errorPlaceholder: t.trlKwf('An error has occurred')
-                });
+                if (this.errorStyle) {
+                    this.errorStyle.showErrors({
+                        errorFields: [],
+                        errorMessages: [t.trlKwf('The form was not submitted sucessfully')],
+                        errorPlaceholder: t.trlKwf('An error has occurred')
+                    });
+                }
                 button.find('.kwfUp-saving').remove();
                 button.find('.kwfUp-submit').css('visibility', 'visible');
             }).bind(this),
             success: (function(r) {
-
-                this.errorStyle.showErrors({
-                    errorFields: r.errorFields,
-                    errorMessages: r.errorMessages,
-                    errorPlaceholder: r.errorPlaceholder
-                });
-
+                if (this.errorStyle) {
+                    this.errorStyle.showErrors({
+                        errorFields: r.errorFields,
+                        errorMessages: r.errorMessages,
+                        errorPlaceholder: r.errorPlaceholder
+                    });
+                }
                 for (var fieldName in r.errorFields) {
                     var field = this.findField(fieldName);
                     field.onError(r.errorFields[fieldName]);
