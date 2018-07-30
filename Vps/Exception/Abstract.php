@@ -63,7 +63,7 @@ abstract class Vps_Exception_Abstract extends Exception
         $view->exception = $this->getException();
         $view->message = $this->getException()->getMessage();
         $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
-            $_SERVER['REQUEST_URI'] : '' ;
+            htmlspecialchars($_SERVER['REQUEST_URI']) : '' ;
         $view->debug = Vps_Exception::isDebug();
 
         $header = $this->getHeader();
