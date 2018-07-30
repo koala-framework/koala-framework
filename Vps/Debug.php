@@ -213,7 +213,7 @@ class Vps_Debug
         $view->exception = $exception->getException();
         $view->message = $exception->getException()->getMessage();
         $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
-            $_SERVER['REQUEST_URI'] : '' ;
+            htmlspecialchars($_SERVER['REQUEST_URI']) : '' ;
         $view->debug = Vps_Exception::isDebug();
 
         $header = $exception->getHeader();
