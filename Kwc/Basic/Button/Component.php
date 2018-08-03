@@ -11,9 +11,11 @@ class Kwc_Basic_Button_Component extends Kwc_Basic_Link_Component
         $ret['styles'] = array(
             'default' => trlKwfStatic('Default'),
         );
+        $ret['apiContent'] = 'Kwc_Basic_Button_ApiContent';
+        $ret['apiContentType'] = 'button';
         return $ret;
     }
-    
+
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
