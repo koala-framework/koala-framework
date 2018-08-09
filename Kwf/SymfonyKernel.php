@@ -7,7 +7,7 @@ abstract class Kwf_SymfonyKernel extends Kernel
 {
     public function __construct()
     {
-        $environment = (Kwf_Config::getValue('symfony.environment')) ? Kwf_Config::getValue('symfony.environment') : 'prod';
+        $environment = (Kwf_Config::getValue('symfony.environment.name')) ? Kwf_Config::getValue('symfony.environment.name') : 'prod';
         $debug = (Kwf_Config::getValue('symfony.environment.debug')) ? Kwf_Config::getValue('symfony.environment.debug') : false;
         
         parent::__construct($environment, $debug);
