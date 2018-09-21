@@ -7,15 +7,9 @@ abstract class Kwf_SymfonyKernel extends Kernel
 {
     public function __construct()
     {
-        $env = Kwf_Config::getValue('symfony.environment');
-        if (in_array($env, array('test', 'dev'))) {
-            $environment = $env;
-            $debug = true;
-            //Debug::enable();
-        } else {
-            $environment = 'prod';
-            $debug = false;
-        }
+        $environment = (Kwf_Config::getValue('symfony.environment.name')) ? Kwf_Config::getValue('symfony.environment.name') : 'prod';
+        $debug = (Kwf_Config::getValue('symfony.environment.debug')) ? Kwf_Config::getValue('symfony.environment.debug') : false;
+        
         parent::__construct($environment, $debug);
 
         AnnotationRegistry::registerLoader(array('Kwf_Loader', 'loadClass'));

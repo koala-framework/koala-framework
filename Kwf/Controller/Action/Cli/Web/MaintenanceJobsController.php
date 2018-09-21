@@ -5,6 +5,8 @@ use Monolog\Formatter\LineFormatter;
 
 class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Controller_Action_Cli_Abstract
 {
+    const TIME_TO_KEEP_PREVIOUS_RUNS_IN_DAYS = 7;
+
     public static function getHelp()
     {
         return "execute mainteanance commands, should be run by process-control";
@@ -93,7 +95,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
                 //delete runs older than a week
                 $s = new Kwf_Model_Select();
-                $s->where(new Kwf_Model_Select_Expr_Lower('start', new Kwf_DateTime(time()-7*24*60*60)));
+                $s->where(new Kwf_Model_Select_Expr_Lower('start', new Kwf_DateTime(time() - self::getTimeToKeepPreviousRunsInSeconds())));
                 Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel')->deleteRows($s);
             }
 
@@ -216,5 +218,12 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
         Kwf_Events_ModelObserver::getInstance()->process();
         exit;
+    }
+
+    public static function getTimeToKeepPreviousRunsInSeconds()
+    {
+        $daysFromSettings = Kwf_Config::getValue('maintenanceJobs.timeToKeepPreviousRunsInDays');
+        $resolvedDays = (intval($daysFromSettings) >= 1) ? intval($daysFromSettings) : self::TIME_TO_KEEP_PREVIOUS_RUNS_IN_DAYS; // force minimum to be one day
+        return $resolvedDays * 24 * 60 * 60;
     }
 }
