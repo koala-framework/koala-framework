@@ -6,7 +6,6 @@ var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
 var errorStyleRegistry = require('kwf/commonjs/frontend-form/error-style-registry');
 var formRegistry = require('kwf/commonjs/frontend-form/form-registry');
 var statistics = require('kwf/commonjs/statistics');
-var t = require('kwf/commonjs/trl');
 
 require('kwf/commonjs/frontend-form/error-style/above');
 require('kwf/commonjs/frontend-form/error-style/below-field');
@@ -196,8 +195,8 @@ FormComponent.prototype = {
             error: (function() {
                 this.errorStyle.showErrors({
                     errorFields: [],
-                    errorMessages: [t.trlKwf('The form was not submitted sucessfully')],
-                    errorPlaceholder: t.trlKwf('An error has occurred')
+                    errorMessages: [__trlKwf('The form was not submitted sucessfully')],
+                    errorPlaceholder: __trlKwf('An error has occurred')
                 });
                 button.find('.kwfUp-saving').remove();
                 button.find('.kwfUp-submit').css('visibility', 'visible');
@@ -230,6 +229,7 @@ FormComponent.prototype = {
 
                 // show success content
                 if (r.successContent) {
+                    this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
                     statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
                     var el = $(r.successContent).appendTo(this.el.parent());
                     if (this.config.hideFormOnSuccess) {
@@ -242,6 +242,7 @@ FormComponent.prototype = {
                     }
                     onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
+                    this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
                     statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
                     document.location.href = r.successUrl;
                 } else {
