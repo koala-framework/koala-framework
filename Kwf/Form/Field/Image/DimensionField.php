@@ -63,7 +63,7 @@ class Kwf_Form_Field_Image_DimensionField extends Kwf_Form_Field_Abstract
         }
         if (!is_array($value)) $value = array();
         $row->{$this->_fieldPrefix.'dimension'} = isset($value['dimension']) ? $value['dimension'] : null;
-        $row->{$this->_fieldPrefix.'width'} = (isset($value['width']) && $value['width']) ? $value['width'] : null;
+        $row->{$this->_fieldPrefix.'width'} = (isset($value['width']) && (int)$value['width']) ? $value['width'] : null;
         $row->{$this->_fieldPrefix.'height'} = (isset($value['height']) && $value['height']) ? $value['height'] : null;
         if (isset($value['cropData'])) {
             $row->{$this->_fieldPrefix.'crop_x'} = (isset($value['cropData']['x']) && $value['cropData']['x'] !== null)

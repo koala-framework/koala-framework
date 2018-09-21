@@ -230,6 +230,7 @@ FormComponent.prototype = {
 
                 // show success content
                 if (r.successContent) {
+                    this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
                     statistics.trackEvent(t.trlKwf('Form Submission'), location.pathname, button.find('span').text());
                     var el = $(r.successContent).appendTo(this.el.parent());
                     if (this.config.hideFormOnSuccess) {
@@ -242,6 +243,7 @@ FormComponent.prototype = {
                     }
                     onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
+                    this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
                     statistics.trackEvent(t.trlKwf('Form Submission'), location.pathname, button.find('span').text());
                     document.location.href = r.successUrl;
                 } else {
