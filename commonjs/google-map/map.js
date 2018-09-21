@@ -54,6 +54,7 @@ var Map = function(config) {
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
+    if (typeof this.config.singleMarkerZoom == 'undefined') this.config.singleMarkerZoom = 15;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
     if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
@@ -230,8 +231,13 @@ Map.prototype = {
                     latlngbounds.extend(this.markers[i].getPosition());
                 }
             }
+
             this.gmap.setCenter(latlngbounds.getCenter());
             this.gmap.fitBounds(latlngbounds);
+
+            if (this.markers.length === 1) {
+                this.gmap.setZoom(this.config.singleMarkerZoom);
+            }
 
             google.maps.event.addListener(this.gmap, "idle",
                 $.proxy(this._reloadMarkersOnMapChange, this, []));

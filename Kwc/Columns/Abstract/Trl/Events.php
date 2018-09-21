@@ -12,16 +12,27 @@ class Kwc_Columns_Abstract_Trl_Events extends Kwc_Abstract_Events
         );
         $masterComponentClass = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
         $cls = strpos($masterComponentClass, '.') ? substr($masterComponentClass, 0, strpos($masterComponentClass, '.')) : $masterComponentClass;
-        $m = call_user_func(array($cls, 'createChildModel'), $masterComponentClass);
+        $childModel = call_user_func(array($cls, 'createChildModel'), $masterComponentClass);
         $ret[] = array(
-            'class' => $m,
+            'class' => $childModel,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onMasterRowUpdate'
         );
         $ret[] = array(
-            'class' => $m,
+            'class' => $childModel,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onMasterRowDelete'
+        );
+        $ownModel = call_user_func(array($cls, 'createOwnModel'), $masterComponentClass);
+        $ret[] = array(
+            'class' => $ownModel,
+            'event' => 'Kwf_Events_Event_Row_Updated',
+            'callback' => 'onMasterOwnRowUpdate'
+        );
+        $ret[] = array(
+            'class' => $ownModel,
+            'event' => 'Kwf_Events_Event_Row_Inserted',
+            'callback' => 'onMasterOwnRowUpdate'
         );
         return $ret;
     }
@@ -66,6 +77,24 @@ class Kwc_Columns_Abstract_Trl_Events extends Kwc_Abstract_Events
                 $this->fireEvent(
                     new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c)
                 );
+            }
+        }
+    }
+
+    public function onMasterOwnRowUpdate(Kwf_Events_Event_Row_Abstract $event)
+    {
+        $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
+            $event->row->component_id, array('ignoreVisible'=>true)
+        );
+        foreach ($cmps as $c) {
+            $chainedType = 'Trl';
+            $select = array('ignoreVisible'=>true);
+            $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType, $select);
+            foreach ($chained as $i) {
+                if ($i->componentClass != $this->_class) { continue; }
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $i
+                ));
             }
         }
     }
