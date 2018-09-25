@@ -17,7 +17,7 @@ Vps.GoogleMap.load = function(callback, scope)
 
     Vps.GoogleMap.isLoaded = true;
 
-    var url = 'https:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key={Vps_Assets_GoogleMapsApiKey::getKey()}&c&libraries=places&async=2&language='+trlVps('en');
+    var url = 'https:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&key={Vps_Assets_GoogleMapsApiKey::getKey()}&c&libraries=places&async=2&language='+trlVps('en');
     url += '&callback=Vps.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
@@ -94,6 +94,8 @@ Vps.GoogleMap.Map = function(config) {
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/vps/images/googlemap/markerBlue.png';
+    if (typeof this.config.streetViewControl == 'undefined') this.config.streetViewControl = false;
+    if (typeof this.config.clickableIcons == 'undefined') this.config.clickableIcons = false;
 
 
     if (!this.config.markers) this.config.markers = [ ];
@@ -193,7 +195,9 @@ Ext.extend(Vps.GoogleMap.Map, Ext.util.Observable, {
             zoomControl: this.config.zoom_properties,
             scaleControl: this.config.scale,
             mapTypeControl: this.config.map_type,
-            overviewMapControl: this.config.overview
+            overviewMapControl: this.config.overview,
+            streetViewControl: this.config.streetViewControl,
+            clickableIcons: this.config.clickableIcons
         };
         this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
             mapOptions);
