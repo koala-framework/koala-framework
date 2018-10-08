@@ -80,3 +80,6 @@ services:
 
     kwf.updates_provider_locator:
         class: KwfBundle\UpdatesProvider\Locator
+
+    kwf.validator.error_collect_validator:
+        class: KwfBundle\Validator\ErrorCollectValidator

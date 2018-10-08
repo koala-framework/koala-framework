@@ -318,19 +318,27 @@ class Kwf_Setup
         $authUser = !empty($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : false;
         $authPW = !empty($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : false;
 
+        $kwfAuthorization = null;
         if (isset($_SERVER['HTTP_X_KWF_AUTHORIZATION'])) {
-            $authValue = explode(' ', $_SERVER['HTTP_X_KWF_AUTHORIZATION']);
-            if (count($authValue) == 2 && strtolower($authValue[0]) == 'basic') {
+            $kwfAuthorization = $_SERVER['HTTP_X_KWF_AUTHORIZATION'];
+        } else if (isset($_COOKIE['KWF-Authorization'])) {
+            $kwfAuthorization = $_COOKIE['KWF-Authorization'];
+        }
+
+        if ($kwfAuthorization !== null) {
+            $authValue = explode(' ', $kwfAuthorization);
+            if (count($authValue) === 2 && strtolower($authValue[0]) === 'basic') {
                 $authorization = explode(':', base64_decode($authValue[1]));
-                if (count($authorization) == 2) {
+                if (count($authorization) === 2) {
                     $authUser = $authorization[0];
                     $authPW = $authorization[1];
                 }
             }
         }
+
         if (!$authUser || !$authPW
-            || $authUser != $requiredUsername
-            || $authPW != $requiredPassword
+            || $authUser !== $requiredUsername
+            || $authPW !== $requiredPassword
         ) {
             header('WWW-Authenticate: Basic realm="Page locked by preLogin"');
             throw new Kwf_Exception_Unauthorized('PreLogin required');
