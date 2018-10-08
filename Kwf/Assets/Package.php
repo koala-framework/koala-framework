@@ -415,7 +415,7 @@ class Kwf_Assets_Package
 
     public function getPackageUrl($ext, $language)
     {
-        return Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
+        return '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
             .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getInstance()->getAssetsVersion();
     }
 
@@ -431,11 +431,6 @@ class Kwf_Assets_Package
         $cacheId = $this->getPackageUrlsCacheId($mimeType, $language);
         $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
         if ($ret !== false) {
-            if (Kwf_Setup::getBaseUrl()) {
-                foreach ($ret as $k=>$i) {
-                    $ret[$k] = Kwf_Setup::getBaseUrl().$i;
-                }
-            }
             return $ret;
         }
 

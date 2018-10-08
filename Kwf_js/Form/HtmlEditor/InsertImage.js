@@ -25,7 +25,7 @@ Ext2.extend(Kwf.Form.HtmlEditor.InsertImage, Ext2.util.Observable, {
     afterCreateToolbar: function() {
         var tb = this.cmp.getToolbar();
         tb.insert(9, {
-            icon: KWF_BASE_URL+'/assets/silkicons/picture.png',
+            icon: '/assets/silkicons/picture.png',
             handler: this.onInsertImage,
             scope: this,
             tooltip: {

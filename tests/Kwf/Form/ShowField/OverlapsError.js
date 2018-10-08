@@ -10,7 +10,7 @@ Kwf.Test.OverlapsError = Ext2.extend(Ext2.Panel, {
             text:'testA',
             handler : function(){
                 var win = new Kwf.Auto.Form.Window({
-                    controllerUrl: KWF_BASE_URL+'/kwf/test/kwf_form_show-field_value-overlaps-error-form'
+                    controllerUrl: '/kwf/test/kwf_form_show-field_value-overlaps-error-form'
                 });
                 win.showAdd();
                 win.on('addaction', function(form, data) {

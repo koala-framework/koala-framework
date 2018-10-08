@@ -25,7 +25,7 @@ Kwf.Utils.MultiFileUploadPanel = Ext2.extend(Ext2.Panel,
         this.uploadButton = new Ext2.Button({
             text: trlKwf('Upload Files'),
             cls: 'x2-btn-text-icon',
-            icon: KWF_BASE_URL+'/assets/silkicons/add.png',
+            icon: '/assets/silkicons/add.png',
             renderTo: container
         });
 

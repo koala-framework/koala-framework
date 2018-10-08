@@ -176,15 +176,6 @@ class Kwf_Util_Setup
         $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "\n";
         $ret .= "\$requestUri = isset(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : null;\n";
-        if (Kwf_Setup::getBaseUrl()) {
-            $ret .= "if (\$requestUri !== null) {\n";
-            $ret .= "    if (substr(\$requestUri, 0, ".strlen(Kwf_Setup::getBaseUrl()).") != '".Kwf_Setup::getBaseUrl()."') {\n";
-            $ret .= "        echo 'Invalid baseUrl, expected \'".Kwf_Setup::getBaseUrl()."\'';\n";
-            $ret .= "        exit;\n";
-            $ret .= "    }\n";
-            $ret .= "    \$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
-            $ret .= "}\n";
-        }
         $ret .= "\n";
 
         if (Kwf_Config::getValue('debug.benchmark') || Kwf_Config::getValue('debug.benchmarklog')) {
@@ -353,7 +344,7 @@ class Kwf_Util_Setup
 
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
-        $ret .= " '".Kwf_Setup::getBaseUrl()."/',";   //path
+        $ret .= " '/',";   //path
         $ret .= " null,";  //domain
         $ret .= " isset(\$_SERVER['HTTPS']),"; //secure
         $ret .= " true";   //httponly

@@ -21,7 +21,7 @@ class Kwf_Data_Kwc_Image extends Kwf_Data_Abstract implements Kwf_Data_Kwc_ListI
         $row = $model->getRow($componentId);
         if ($row && $row->kwf_upload_id) {
             $hashKey = Kwf_Util_Hash::hash($row->kwf_upload_id);
-            return Kwf_Setup::getBaseUrl() . '/kwf/media/upload/preview?uploadId='.$row->kwf_upload_id.
+            return '/kwf/media/upload/preview?uploadId='.$row->kwf_upload_id.
                    '&hashKey='.$hashKey.'&size='.$this->_size;
         } else {
             return '';

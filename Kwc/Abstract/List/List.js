@@ -10,7 +10,7 @@ Kwc.Abstract.List.List = Ext2.extend(Kwf.Binding.ProxyPanel,
 
         this.actions.copy = new Ext2.Action({
             text    : trlKwf('Copy'),
-            icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
+            icon: '/assets/silkicons/page_white_copy.png',
             //cls     : 'x2-btn-text-icon',
             handler : this.onCopy,
             disabled: true,
@@ -18,7 +18,7 @@ Kwc.Abstract.List.List = Ext2.extend(Kwf.Binding.ProxyPanel,
         });
         this.actions.paste = new Ext2.Action({
             text    : trlKwf('Paste'),
-            icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
+            icon: '/assets/silkicons/page_white_copy.png',
             //cls     : 'x2-btn-text-icon',
             handler : this.onPaste,
             scope   : this
@@ -36,7 +36,7 @@ Kwc.Abstract.List.List = Ext2.extend(Kwf.Binding.ProxyPanel,
                     if (tb && this.showCopyPaste) {
                         tb.add({
                             cls: 'x2-btn-icon',
-                            icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
+                            icon: '/assets/silkicons/page_white_copy.png',
                             menu: [
                                    this.actions.copy,
                                    this.actions.paste

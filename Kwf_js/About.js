@@ -8,7 +8,7 @@ Kwf.About = Ext2.extend(Ext2.Window, {
         this.modal = true;
         this.items = [new Ext2.Panel({
             cls: 'kwf-about',
-            autoLoad: KWF_BASE_URL+'/kwf/user/about/content'
+            autoLoad: '/kwf/user/about/content'
         })];
         Kwf.About.superclass.initComponent.call(this);
     }

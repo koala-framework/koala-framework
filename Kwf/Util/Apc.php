@@ -80,8 +80,7 @@ class Kwf_Util_Apc
             } else {
                 $urlPart = "http://";
             }
-            $baseUrl = Kwf_Setup::getBaseUrl();
-            $url = "$urlPart$d[domain]$baseUrl/kwf/util/apc/$method";
+            $url = "$urlPart$d[domain]/kwf/util/apc/$method";
 
             $config = array(
                 'timeout' => 60,
@@ -114,7 +113,7 @@ class Kwf_Util_Apc
             }
             $url2 = null;
             if (!$result && isset($d['alternative'])) {
-                $url2 = "$urlPart$d[alternative]$baseUrl/kwf/util/apc/$method";
+                $url2 = "$urlPart$d[alternative]/kwf/util/apc/$method";
                 $client = new Zend_Http_Client($url2, $config);
                 $client->setMethod(Zend_Http_Client::POST);
                 $client->setParameterPost($params);
@@ -153,10 +152,6 @@ class Kwf_Util_Apc
         }
 
         $uri = $_SERVER['REQUEST_URI'];
-        $baseUrl = Kwf_Setup::getBaseUrl();
-        if ($baseUrl && substr($uri, 0, strlen($baseUrl)) == $baseUrl) {
-            $uri = substr($uri, strlen($baseUrl));
-        }
         if (substr($uri, 0, 25) == '/kwf/util/apc/clear-cache') {
             $s = microtime(true);
             if (isset($_REQUEST['deleteCacheSimple'])) {

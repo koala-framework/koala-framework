@@ -15,7 +15,7 @@ Kwf.Test.ConnectionsError = Ext2.extend(Ext2.Panel, {
                     timeout: 1000,
                     params: {test:1},
                     errorText: 'foo1',
-                    url: KWF_BASE_URL+'/kwf/test/kwf_connection_test/json-timeout',
+                    url: '/kwf/test/kwf_connection_test/json-timeout',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"abort\">abort</div>");
                     },
@@ -36,7 +36,7 @@ Kwf.Test.ConnectionsError = Ext2.extend(Ext2.Panel, {
                     timeout: 1000,
                     params: {test:1},
                     errorText: 'timeoutError',
-                    url: KWF_BASE_URL+'/kwf/test/kwf_connection_test/json-timeout',
+                    url: '/kwf/test/kwf_connection_test/json-timeout',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"aborttimeout\">aborttimeout</div>");
                     },
@@ -49,7 +49,7 @@ Kwf.Test.ConnectionsError = Ext2.extend(Ext2.Panel, {
                     timeout: 1000,
                     params: {test:2},
                     errorText: 'exceptionError',
-                    url: KWF_BASE_URL+'/kwf/test/kwf_connection_test/json-exception',
+                    url: '/kwf/test/kwf_connection_test/json-exception',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"abortexception\">abortexception</div>");
                     },
@@ -68,7 +68,7 @@ Kwf.Test.ConnectionsError = Ext2.extend(Ext2.Panel, {
                 Kwf.Debug.displayErrors = true;
                 Ext2.Ajax.request({
                     params: {test:1},
-                    url: KWF_BASE_URL+'/kwf/test/kwf_connection_test/json-real-exception',
+                    url: '/kwf/test/kwf_connection_test/json-real-exception',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"abort\">abort</div>");
                     },

@@ -64,8 +64,6 @@ class Kwf_Controller_Front extends Zend_Controller_Front
             $plugin->setErrorHandlerController('cli');
         }
         $this->registerPlugin($plugin);
-
-        $this->setBaseUrl(Kwf_Setup::getBaseUrl());
     }
 
     public static function getInstance()

@@ -52,11 +52,11 @@ Kwc.PostsWritePreview.replaceText = function(v)
     v = v.replace(/>/g, '&gt;');
 
     // smileys
-    v = v.replace(/:-?\)/g, '<img src=KWF_BASE_URL+"/assets/silkicons/emoticon_smile.png" alt=":-)" />');
-    v = v.replace(/:-?D/g, '<img src=KWF_BASE_URL+"/assets/silkicons/emoticon_grin.png" alt=":-D" />');
-    v = v.replace(/:-?P/g, '<img src=KWF_BASE_URL+"/assets/silkicons/emoticon_tongue.png" alt=":-P" />');
-    v = v.replace(/:-?\(/g, '<img src=KWF_BASE_URL+"/assets/silkicons/emoticon_unhappy.png" alt=":-(" />');
-    v = v.replace(/;-?\)/g, '<img src=KWF_BASE_URL+"/assets/silkicons/emoticon_wink.png" alt=";-)" />');
+    v = v.replace(/:-?\)/g, '<img src="/assets/silkicons/emoticon_smile.png" alt=":-)" />');
+    v = v.replace(/:-?D/g, '<img src="/assets/silkicons/emoticon_grin.png" alt=":-D" />');
+    v = v.replace(/:-?P/g, '<img src="/assets/silkicons/emoticon_tongue.png" alt=":-P" />');
+    v = v.replace(/:-?\(/g, '<img src="/assets/silkicons/emoticon_unhappy.png" alt=":-(" />');
+    v = v.replace(/;-?\)/g, '<img src="/assets/silkicons/emoticon_wink.png" alt=";-)" />');
 
     // zitate
     var qOpened = 0;

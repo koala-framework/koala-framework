@@ -50,7 +50,7 @@ Kwf.Form.Field.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
         this._cropButton = new Ext2.Button({
             text: trlKwf('Edit'),
             cls: 'x2-btn-text-icon kwf-form-field-image-dimension-cropbutton',
-            icon: KWF_BASE_URL+'/assets/silkicons/shape_handles.png',
+            icon: '/assets/silkicons/shape_handles.png',
             renderTo: this.getEl(),
             scope: this,
             handler: this._onButtonClick

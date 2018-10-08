@@ -75,7 +75,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
 
         this.actions.showPreview = new Ext2.Action({
             text : trlKwf('Preview'),
-            icon : KWF_BASE_URL+'/assets/silkicons/zoom.png',
+            icon : '/assets/silkicons/zoom.png',
             cls  : 'x2-btn-text-icon',
             enableToggle: true,
             handler: function(b) {
@@ -91,7 +91,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
 
         this.actions.showPreviewWeb = new Ext2.Action({
             text : trlKwf('Preview in web'),
-            icon : KWF_BASE_URL+'/assets/silkicons/zoom_in.png',
+            icon : '/assets/silkicons/zoom_in.png',
             cls  : 'x2-btn-text-icon',
             handler: function(b) {
                 window.open(this.controllerUrl+'/open-preview?componentId='+
@@ -102,7 +102,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
 
         this.actions.makeAllVisible = new Ext2.Action({
             text : trlKwf('All Visible'),
-            icon : KWF_BASE_URL+'/assets/silkicons/tick.png',
+            icon : '/assets/silkicons/tick.png',
             cls  : 'x2-btn-text-icon',
             handler: function(b) {
                 Ext2.Msg.show({
@@ -148,20 +148,20 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
                 text: trlKwf('copy/paste'),
                 menu: [{
                     text: trlKwf('Copy all Paragraphs'),
-                    icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
+                    icon: '/assets/silkicons/page_white_copy.png',
                     scope: this,
                     handler: function() {
                         this.onCopyAllParagraphs();
                     }
                 },{
                     text: trlKwf('Paste Paragraph'),
-                    icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
+                    icon: '/assets/silkicons/page_white_copy.png',
                     scope: this,
                     handler: function() {
                         this.onPasteParagraph();
                     }
                 }],
-                icon: KWF_BASE_URL+'/assets/silkicons/page_white_copy.png',
+                icon: '/assets/silkicons/page_white_copy.png',
                 cls  : 'x2-btn-text-icon',
                 listeners: {
                     scope: this,

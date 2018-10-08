@@ -1,6 +1,6 @@
 Kwc.Paragraphs.AddParagraphButton = Ext2.extend(Ext2.Button, {
     text : trlKwf('Add Paragraph'),
-    icon : KWF_BASE_URL+'/assets/kwf/images/paragraphAdd.png',
+    icon : '/assets/kwf/images/paragraphAdd.png',
     cls  : 'x2-btn-text-icon',
     initComponent: function() {
         this.addEvents('addParagraph');

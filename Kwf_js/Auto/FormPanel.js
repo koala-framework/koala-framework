@@ -24,14 +24,14 @@ Kwf.Auto.FormPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
         );
         this.actions.save = new Ext2.Action({
             text    : trlKwf('Save'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_save.png',
+            icon    : '/assets/silkicons/table_save.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onSave,
             scope   : this
         });
         this.actions.saveBack = new Ext2.Action({
             text    : trlKwf('Save and Back'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_save.png',
+            icon    : '/assets/silkicons/table_save.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onSaveBack,
             scope   : this,
@@ -39,14 +39,14 @@ Kwf.Auto.FormPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
         });
         this.actions['delete'] = new Ext2.Action({
             text    : trlKwf('Delete'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_delete.png',
+            icon    : '/assets/silkicons/table_delete.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onDelete,
             scope   : this
         });
         this.actions.add = new Ext2.Action({
             text    : trlKwf('New Entry'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_add.png',
+            icon    : '/assets/silkicons/table_add.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onAdd,
             scope   : this
@@ -100,7 +100,7 @@ Kwf.Auto.FormPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
             if (meta.helpText) {
                 meta.form.tbar.push('->');
                 meta.form.tbar.push(new Ext2.Action({
-                    icon : KWF_BASE_URL+'/assets/silkicons/information.png',
+                    icon : '/assets/silkicons/information.png',
                     cls : 'x2-btn-icon',
                     handler : function (a) {
                         var helpWindow = new Ext2.Window({

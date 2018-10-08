@@ -1,5 +1,5 @@
 <?php if ($this->pages) { ?>
-    <a class="kwfUp-frontendLink" href="<?=$this->baseUrl?>/">
+    <a class="kwfUp-frontendLink" href="/">
         <div class="kwfUp-innerFrontendLink">
             <div class="kwfUp-front"><?=trlKwf('Go to<br />Website');?></div>
             <div class="kwfUp-back"></div>

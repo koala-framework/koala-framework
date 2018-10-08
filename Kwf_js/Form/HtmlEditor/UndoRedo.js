@@ -21,7 +21,7 @@ Kwf.Form.HtmlEditor.UndoRedo = Ext2.extend(Ext2.util.Observable, {
             },
             scope: this,
             disabled: true,
-            icon: KWF_BASE_URL+'/assets/silkicons/arrow_undo.png',
+            icon: '/assets/silkicons/arrow_undo.png',
             tooltip: {
                 cls: 'x2-html-editor-tip',
                 title: trlKwf('Undo (Ctrl+Z)'),
@@ -37,7 +37,7 @@ Kwf.Form.HtmlEditor.UndoRedo = Ext2.extend(Ext2.util.Observable, {
             },
             scope: this,
             disabled: true,
-            icon: KWF_BASE_URL+'/assets/silkicons/arrow_redo.png',
+            icon: '/assets/silkicons/arrow_redo.png',
             tooltip: {
                 cls: 'x2-html-editor-tip',
                 title: trlKwf('Redo'),

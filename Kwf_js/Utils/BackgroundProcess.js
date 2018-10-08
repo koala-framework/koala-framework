@@ -56,7 +56,7 @@ Kwf.Utils.BackgroundProcess = {
         if (options.pid) params.pid = options.pid;
         if (options.outputFile) params.outputFile = options.outputFile;
         options.currentStatusRequest = Ext2.Ajax.request({
-            url: KWF_BASE_URL+'/kwf/json-progress-status',
+            url: '/kwf/json-progress-status',
             params: params,
             bgOptions: options,
             success: function(response, o, r) {

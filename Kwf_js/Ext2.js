@@ -1,4 +1,4 @@
-Ext2.BLANK_IMAGE_URL = KWF_BASE_URL+'/assets/ext2/resources/images/default/s.gif';
+Ext2.BLANK_IMAGE_URL = '/assets/ext2/resources/images/default/s.gif';
 
 Ext2.applyIf(Array.prototype, {
     each : function(fn, scope){
@@ -66,7 +66,7 @@ Kwf.requestSentSinceLastKeepAlive = false;
 
 Kwf.keepAlive = function() { //can be overridden
     Ext2.Ajax.request({
-        url: KWF_BASE_URL+'/kwf/user/login/json-keep-alive',
+        url: '/kwf/user/login/json-keep-alive',
         ignoreErrors: true
     });
 };

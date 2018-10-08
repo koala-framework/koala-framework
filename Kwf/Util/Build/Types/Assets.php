@@ -175,11 +175,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
                     $progress->next(1, "$depName $extension $language");
                     $urls = $p->getPackageUrls(self::$_mimeTypeByExtension[$extension], $language);
-                    if (Kwf_Setup::getBaseUrl()) {
-                        foreach ($urls as $k=>$i) {
-                            $urls[$k] = substr($i, strlen(Kwf_Setup::getBaseUrl()));
-                        }
-                    }
                     $cacheId = $p->getPackageUrlsCacheId(self::$_mimeTypeByExtension[$extension], $language);
                     Kwf_Assets_BuildCache::getInstance()->save($urls, $cacheId);
 

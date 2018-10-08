@@ -17,7 +17,7 @@ Kwc.Mail.Editable.Panel = Ext2.extend(Ext2.Panel, {
             componentConfigs: this.componentConfigs,
             autoLoad: false,
             mainComponentText: trlKwf('Content'),
-            mainComponentIcon: KWF_BASE_URL+'/assets/silkicons/email_open.png'
+            mainComponentIcon: '/assets/silkicons/email_open.png'
         });
         this.content.on('datachange', function () {
             this.preview.items.each(function(itm) {

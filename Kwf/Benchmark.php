@@ -376,17 +376,16 @@ class Kwf_Benchmark
 
     protected function _getUrlType()
     {
-        $prefixLen = strlen(Kwf_Setup::getBaseUrl());
         if (!isset($_SERVER['REQUEST_URI'])) {
             if (PHP_SAPI == 'cli') $urlType = 'cli';
             else $urlType = 'unknown';
-        } else if (substr($_SERVER['REQUEST_URI'], $prefixLen, 8) == '/assets/') {
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 8) == '/assets/') {
             $urlType = 'asset';
-        } else if (substr($_SERVER['REQUEST_URI'], $prefixLen, 7) == '/media/') {
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 7) == '/media/') {
             $urlType = 'media';
-        } else if (substr($_SERVER['REQUEST_URI'], $prefixLen, 7) == '/admin/') {
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 7) == '/admin/') {
             $urlType = 'admin';
-        } else if (substr($_SERVER['REQUEST_URI'], $prefixLen, 5) == '/kwf/') {
+        } else if (substr($_SERVER['REQUEST_URI'], 0, 5) == '/kwf/') {
             $urlType = 'admin';
         } else {
             $urlType = 'content';

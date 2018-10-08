@@ -14,7 +14,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
     public function preDispatch()
     {
         $this->_model = Kwf_Registry::get('userModel')->getEditModel();
-        $this->_editDialog['controllerUrl'] = $this->getRequest()->getBaseUrl().$this->_editDialog['controllerUrl'];
         parent::preDispatch();
     }
 
@@ -140,7 +139,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         }
 
         $kwfRow = $row->getModel()->getKwfUserRowById($row->id);
-        $this->view->url = Kwf_Setup::getBaseUrl().'/kwf/user/login/activate?code='.$kwfRow->id.'-'.$kwfRow->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
+        $this->view->url = '/kwf/user/login/activate?code='.$kwfRow->id.'-'.$kwfRow->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
     }
 
     protected function _getSelect()
@@ -181,13 +180,13 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
     public function indexAction()
     {
         $config = array(
-            'controllerUrl' => $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/')
+            'controllerUrl' => $this->getRequest()->getPathInfo()
         );
         if (Kwf_Registry::get('acl')->has('kwf_user_log')) {
-            $config['logControllerUrl'] = $this->getRequest()->getBaseUrl().'/kwf/user/log';
+            $config['logControllerUrl'] = '/kwf/user/log';
         }
         if (Kwf_Registry::get('acl')->has('kwf_user_comments')) {
-            $config['commentsControllerUrl'] = $this->getRequest()->getBaseUrl().'/kwf/user/comments';
+            $config['commentsControllerUrl'] = '/kwf/user/comments';
         }
         $this->view->ext('Kwf.User.Grid.Index', $config);
     }

@@ -8,7 +8,7 @@ Kwf.Form.HtmlEditor.PastePlain = Ext2.extend(Ext2.util.Observable, {
     afterCreateToolbar: function() {
         var tb = this.cmp.getToolbar();
         tb.insert(10, {
-            icon: KWF_BASE_URL+'/assets/kwf/images/pastePlain.gif',
+            icon: '/assets/kwf/images/pastePlain.gif',
             handler: this.onPastePlain,
             scope: this,
             tooltip: {

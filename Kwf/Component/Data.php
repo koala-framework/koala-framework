@@ -121,8 +121,7 @@ class Kwf_Component_Data
             }
         } while ($data = $data->parent);
 
-        $baseUrl = Kwf_Setup::getBaseUrl(); //TODO baseUrl vs. root filename: both do the same
-        return ($baseUrl ? $baseUrl : '').'/'.$filename;
+        return '/' . $filename;
     }
 
     /**
@@ -222,7 +221,7 @@ class Kwf_Component_Data
         } else {
             $url = $this->getAbsoluteUrl();
         }
-        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($url.'?kwcPreview');
+        return '/admin/component/preview/?url='.urlencode($url.'?kwcPreview');
     }
 
     public function __get($var)

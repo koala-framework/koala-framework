@@ -4,7 +4,7 @@ Kwf.Welcome = Ext2.extend(Ext2.Panel,
         this.welcomePanel = new Ext2.Panel({
             cls: 'kwf-welcome',
             width: 304,
-            autoLoad: KWF_BASE_URL+'/kwf/welcome/content',
+            autoLoad: '/kwf/welcome/content',
             border: false,
             renderTo: this.getEl()
         });
