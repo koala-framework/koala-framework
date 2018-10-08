@@ -21,6 +21,7 @@ class Kwc_Advanced_IntegratorTemplate_Embed_Component extends Kwc_Abstract_Compo
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['includeCode'] = $this->getIncludeCode('content');
+        $ret['baseUrl'] = $this->getData()->getDomainComponent()->getAbsoluteUrl();
         return $ret;
     }
 
