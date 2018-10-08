@@ -1,10 +1,12 @@
 var onReady = require('kwf/on-ready');
 var benchmarkBox = require('kwf/benchmark/box');
+var KwfBaseUrl = require('kwf/base-url');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 
 onReady.onRender('.kwcClass', function(el) {
+    var baseUrl = KwfBaseUrl.get();
     $.ajax({
-        url: getKwcRenderUrl(),
+        url: baseUrl + getKwcRenderUrl(),
         data: {
             componentId: el.attr('data-load-id'),
             pageUrl: location.href
