@@ -12,7 +12,7 @@ Kwf.Form.HtmlEditor.Indent = Ext2.extend(Ext2.util.Observable, {
                 this.cmp.tinymceEditor.editorCommands.execCommand('Indent');
             },
             scope: this,
-            icon: KWF_BASE_URL+'/assets/silkicons/text_indent.png',
+            icon: '/assets/silkicons/text_indent.png',
             tooltip: {
                 cls: 'x2-html-editor-tip',
                 title: trlKwf('Indent'),
@@ -27,7 +27,7 @@ Kwf.Form.HtmlEditor.Indent = Ext2.extend(Ext2.util.Observable, {
                 this.cmp.tinymceEditor.editorCommands.execCommand('Outdent');
             },
             scope: this,
-            icon: KWF_BASE_URL+'/assets/silkicons/text_indent_remove.png',
+            icon: '/assets/silkicons/text_indent_remove.png',
             tooltip: {
                 cls: 'x2-html-editor-tip',
                 title: trlKwf('Indent'),

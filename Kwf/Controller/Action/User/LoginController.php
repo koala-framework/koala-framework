@@ -80,7 +80,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $this->_helper->viewRenderer->setRender('Login');
         $this->view->ext('');
         $this->view->username = '';
-        $this->view->action = Kwf_Setup::getBaseUrl().'/kwf/user/login/show-form';
+        $this->view->action = '/kwf/user/login/show-form';
         if ($this->_getParam('username')) {
             $result = $this->_login();
             $this->view->username = $this->_getParam('username');
@@ -255,7 +255,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
                 $user = $user['user'];
             }
             $users->loginUserRow($user, true);
-            if (!$redirect) $redirect = Kwf_Setup::getBaseUrl().'/';
+            if (!$redirect) $redirect = '/';
             Kwf_Util_Redirect::redirect($redirect);
         } else {
             throw new Kwf_Exception_AccessDenied();

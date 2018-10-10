@@ -134,14 +134,6 @@ class Kwf_Setup
         return $requestPath;
     }
 
-    public static function getBaseUrl()
-    {
-        static $ret;
-        if (isset($ret)) return $ret;
-        $ret = Kwf_Config::getValue('server.baseUrl');
-        return $ret;
-    }
-
     public static function dispatchKwc()
     {
         $requestPath = self::getRequestPath();
@@ -149,13 +141,6 @@ class Kwf_Setup
         $fullRequestPath = $requestPath;
 
         $data = null;
-        $baseUrl = Kwf_Setup::getBaseUrl();
-        if ($baseUrl) {
-            if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
-                throw new Kwf_Exception_NotFound();
-            }
-            $requestPath = substr($requestPath, strlen($baseUrl));
-        }
         $uri = substr($requestPath, 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
@@ -165,7 +150,7 @@ class Kwf_Setup
         }
 
         if ($uri == 'sitemap.xml') {
-            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].Kwf_Setup::getBaseUrl().'/', null);
+            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', null);
             Kwf_Component_Sitemap::output($data->getDomainComponent());
         }
         if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf', 'api'))) {
@@ -235,13 +220,6 @@ class Kwf_Setup
         $requestPath = self::getRequestPath();
         if ($requestPath === false) return;
 
-        $baseUrl = Kwf_Setup::getBaseUrl();
-        if ($baseUrl) {
-            if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
-                throw new Kwf_Exception_NotFound();
-            }
-            $requestPath = substr($requestPath, strlen($baseUrl));
-        }
         $urlParts = explode('/', substr($requestPath, 1));
         if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 7) {

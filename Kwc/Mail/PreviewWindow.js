@@ -4,7 +4,7 @@ Kwc.Mail.PreviewWindow = Ext2.extend(Ext2.Window, {
     {
         this.button = [];
         this.button['html'] = new Ext2.Toolbar.Button ({
-            icon    : KWF_BASE_URL+'/assets/silkicons/html.png',
+            icon    : '/assets/silkicons/html.png',
             cls     : 'x2-btn-text-icon',
             text	: trlKwf('HTML'),
             enableToggle: true,
@@ -15,7 +15,7 @@ Kwc.Mail.PreviewWindow = Ext2.extend(Ext2.Window, {
             name : 'html'
         });
         this.button['text'] = new Ext2.Toolbar.Button ({
-            icon    : KWF_BASE_URL+'/assets/silkicons/page_white_text.png',
+            icon    : '/assets/silkicons/page_white_text.png',
             cls     : 'x2-btn-text-icon',
             text	: trlKwf('Text'),
             enableToggle: true,
@@ -37,7 +37,7 @@ Kwc.Mail.PreviewWindow = Ext2.extend(Ext2.Window, {
         this.tbar = [];
 
         var send = new Ext2.Toolbar.Button ({
-            icon    : KWF_BASE_URL+'/assets/silkicons/email_go.png',
+            icon    : '/assets/silkicons/email_go.png',
             cls     : 'x2-btn-text-icon',
             text	: trlKwf('Send'),
             handler : function(a, b, c) {

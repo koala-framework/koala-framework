@@ -12,7 +12,7 @@ Kwf.Form.GoogleMapWindow = Ext2.extend(Ext2.Window,
                 this.fireEvent('clear', this);
                 this.hide();
             },
-            icon    : KWF_BASE_URL+'/assets/silkicons/bin_closed.png',
+            icon    : '/assets/silkicons/bin_closed.png',
             cls     : 'x2-btn-text-icon',
             scope : this}
         );
@@ -22,7 +22,7 @@ Kwf.Form.GoogleMapWindow = Ext2.extend(Ext2.Window,
             '->', {
             text:trlKwf('Search Location'),
             handler: this.addressPrompt,
-            icon    : KWF_BASE_URL+'/assets/silkicons/zoom.png',
+            icon    : '/assets/silkicons/zoom.png',
             cls     : 'x2-btn-text-icon',
             scope : this
         }, this.actions.clear);

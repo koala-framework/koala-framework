@@ -31,10 +31,10 @@ class Kwf_Media
         }
         $class = rawurlencode($class);
         $checksum = self::getChecksum($class, $id, $checksumType, rawurlencode($filename));
-        $prefix = Kwf_Setup::getBaseUrl();
+        $prefix = '';
         if ($r = Kwf_Component_Data_Root::getInstance()) {
             if ($r->filename) {
-                $prefix .= '/'.$r->filename;
+                $prefix = '/'.$r->filename;
             }
         }
         if (is_null($time)) {

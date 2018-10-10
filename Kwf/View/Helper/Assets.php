@@ -55,7 +55,7 @@ class Kwf_View_Helper_Assets
         if ($ev->prefix) {
             $c = str_replace('/assets/build/', $ev->prefix.'/assets/build/', $c);
         }
-        $c = preg_replace('#<script #', '<script data-kwf-unique-prefix="'. Kwf_Config::getValue('application.uniquePrefix') .'" data-base-url="'.Kwf_Config::getValue('server.baseUrl').'" ', $c, 1);
+        $c = preg_replace('#<script #', '<script data-kwf-unique-prefix="'. Kwf_Config::getValue('application.uniquePrefix') .'"', $c, 1);
 
         $ret .= $c;
         return $ret;

@@ -46,7 +46,7 @@ Kwf.Auto.SyncTreePanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
         this.actions.reload = new Ext2.Action({
             text    : '',
             handler : function () { this.reload(); },
-            icon    : KWF_BASE_URL+'/assets/silkicons/arrow_rotate_clockwise.png',
+            icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x2-btn-icon',
             tooltip : trlKwf('Reload'),
             scope   : this

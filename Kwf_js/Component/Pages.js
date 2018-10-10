@@ -22,12 +22,12 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
             cls     : 'x2-btn-text-icon bmenu',
             text    : trlKwf('Page'),
             menu    : this.pageButtonMenu,
-            icon    : KWF_BASE_URL+'/assets/silkicons/page.png',
+            icon    : '/assets/silkicons/page.png',
             disabled: true
         });
 
         this.treePanel = new Kwf.Auto.TreePanel({
-            controllerUrl: KWF_BASE_URL+'/admin/component/pages',
+            controllerUrl: '/admin/component/pages',
             title       : trlKwf('Page tree'),
             region      : 'west',
             split       : true,
@@ -83,7 +83,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
        this.editDialog = new Kwf.Auto.Form.Window({
             width: 620,
             height: 700,
-            controllerUrl: KWF_BASE_URL+'/admin/component/page'
+            controllerUrl: '/admin/component/page'
         });
         this.editDialog.on('datachange', function(test) {
             this.treePanel.tree.root.reload();
@@ -275,7 +275,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
                     this.editDialog.getAutoForm().setBaseParams({});
                     this.editDialog.showEdit(node.id);
                 },
-                icon    : KWF_BASE_URL+'/assets/silkicons/page_gear.png',
+                icon    : '/assets/silkicons/page_gear.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -290,7 +290,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
                     });
                     this.editDialog.showAdd();
                 },
-                icon    : KWF_BASE_URL+'/assets/silkicons/page_add.png',
+                icon    : '/assets/silkicons/page_add.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -300,7 +300,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
                 handler : function() {
                     this.treePanel.onDelete();
                 },
-                icon    : KWF_BASE_URL+'/assets/silkicons/page_delete.png',
+                icon    : '/assets/silkicons/page_delete.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -310,7 +310,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
                 handler : function() {
                     this.onCopy();
                 },
-                icon    : KWF_BASE_URL+'/assets/silkicons/page_copy.png',
+                icon    : '/assets/silkicons/page_copy.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -320,7 +320,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
                 handler : function() {
                     this.onPaste();
                 },
-                icon    : KWF_BASE_URL+'/assets/silkicons/page_paste.png',
+                icon    : '/assets/silkicons/page_paste.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -330,7 +330,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
                 handler : function() {
                     this.treePanel.onVisible();
                 },
-                icon    : KWF_BASE_URL+'/assets/fx_invisible/silkicons/page.png',
+                icon    : '/assets/fx_invisible/silkicons/page.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -346,7 +346,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
                         fn: function(btn, text) {
                             if (btn == 'yes') {
                                 Ext2.Ajax.request({
-                                    url: KWF_BASE_URL+'/admin/component/pages/json-make-home',
+                                    url: '/admin/component/pages/json-make-home',
                                     success: function(r) {
                                         response = Ext2.decode(r.responseText);
                                         var oldhome = this.treePanel.tree.getNodeById(response.oldhome);
@@ -364,7 +364,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
                         scope: this
                     });
                 },
-                icon    : KWF_BASE_URL+'/assets/silkicons/application_home.png',
+                icon    : '/assets/silkicons/application_home.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -372,7 +372,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
             this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Expand here'),
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().expand(true); },
-                icon    : KWF_BASE_URL+'/assets/silkicons/bullet_add.png',
+                icon    : '/assets/silkicons/bullet_add.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -380,7 +380,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
             this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Collapse here'),
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().collapse(true); },
-                icon    : KWF_BASE_URL+'/assets/silkicons/bullet_delete.png',
+                icon    : '/assets/silkicons/bullet_delete.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });
@@ -388,10 +388,10 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
             this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Open preview'),
                 handler : function () {
-                    window.open(KWF_BASE_URL+'/admin/component/pages/open-preview?page_id='+
+                    window.open('/admin/component/pages/open-preview?page_id='+
                                 this.treePanel.getSelectedId());
                 },
-                icon    : KWF_BASE_URL+'/assets/silkicons/page_white_magnify.png',
+                icon    : '/assets/silkicons/page_white_magnify.png',
                 cls     : 'x2-btn-text-icon',
                 scope   : this
             });

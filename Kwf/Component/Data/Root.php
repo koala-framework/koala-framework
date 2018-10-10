@@ -185,14 +185,6 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
             if (is_null($path)) return null;
-            $baseUrl = Kwf_Setup::getBaseUrl();
-            if ($baseUrl) {
-                if (substr($path, 0, strlen($baseUrl)) != $baseUrl) {
-                    return null;
-                } else {
-                    $path = substr($path, strlen($baseUrl));
-                }
-            }
             $path = trim($path, '/');
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
 

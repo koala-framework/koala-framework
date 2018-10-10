@@ -15,7 +15,7 @@ Kwc.Abstract.List.EditButton = Ext2.extend(Ext2.form.Field, {
         this.button = new Ext2.Button({
             text: this.editButtonText,
             renderTo: this.el.parent(),
-            icon: KWF_BASE_URL+'/assets/silkicons/page_white_edit.png',
+            icon: '/assets/silkicons/page_white_edit.png',
             cls: 'x2-btn-text-icon',
             scope: this,
             enabled: false,

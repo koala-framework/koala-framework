@@ -3,7 +3,7 @@ Kwf.Form.HtmlEditor.Styles = function(config) {
 
     this.editStyles = new Ext2.Action({
         testId: 'editStyles',
-        icon: KWF_BASE_URL+'/assets/silkicons/style_edit.png',
+        icon: '/assets/silkicons/style_edit.png',
         handler: function() {
             this.stylesEditorDialog.show();
         },

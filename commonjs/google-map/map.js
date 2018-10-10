@@ -55,7 +55,7 @@ var Map = function(config) {
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.singleMarkerZoom == 'undefined') this.config.singleMarkerZoom = 15;
-    if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = KWF_BASE_URL+'/assets/kwf/images/googlemap/markerBlue.png';
+    if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
     if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
     if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';

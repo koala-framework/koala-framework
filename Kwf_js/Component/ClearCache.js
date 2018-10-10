@@ -55,7 +55,7 @@ Kwf.Component.ClearCache = Ext2.extend(Ext2.Panel, {
 
         new Ext2.Button({
             text: 'Clear View Cache',
-            icon: KWF_BASE_URL+'/assets/silkicons/page_white_text.png',
+            icon: '/assets/silkicons/page_white_text.png',
             cls: 'x2-btn-text-icon',
             renderTo: this.body,
             style: 'margin-bottom: 20px',

@@ -13,7 +13,7 @@ class Kwc_User_Activate_Form_Success_Component extends Kwc_Form_Success_Componen
         $ret = parent::getTemplateVars($renderer);
         $redirectUrl = '/';
         if (isset($_REQUEST['redirect']) && $_REQUEST['redirect']
-            && substr($_REQUEST['redirect'], 0, strlen(Kwf_Setup::getBaseUrl())+1) === Kwf_Setup::getBaseUrl().'/'
+            && substr($_REQUEST['redirect'], 0, 1) === '/'
         ) {
             $redirectUrl = $_REQUEST['redirect'];
         }

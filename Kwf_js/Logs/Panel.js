@@ -14,7 +14,7 @@ Kwf.Logs.Panel = Ext2.extend(Ext2.Panel, {
         });
         grid.actions.deleteAll = new Ext2.Action({
             text: trlKwf('Delete All'),
-            icon: KWF_BASE_URL+'/assets/silkicons/bin_empty.png',
+            icon: '/assets/silkicons/bin_empty.png',
             cls: 'x-btn-text-icon',
             handler: function(){
                 Ext2.Msg.confirm(
@@ -40,7 +40,7 @@ Kwf.Logs.Panel = Ext2.extend(Ext2.Panel, {
         });
         grid.actions.parse = new Ext2.Action({
             text: trlKwf('Parse files'),
-            icon: KWF_BASE_URL+'/assets/silkicons/magnifier.png',
+            icon: '/assets/silkicons/magnifier.png',
             cls: 'x-btn-text-icon',
             handler: function() {
                 Ext2.Ajax.request({
@@ -57,7 +57,7 @@ Kwf.Logs.Panel = Ext2.extend(Ext2.Panel, {
         });
         grid.actions.deleteFiles = new Ext2.Action({
             text: trlKwf('Delete Files'),
-            icon: KWF_BASE_URL+'/assets/silkicons/script_delete.png',
+            icon: '/assets/silkicons/script_delete.png',
             cls: 'x-btn-text-icon',
             handler: function(){
                 Ext2.Msg.confirm(

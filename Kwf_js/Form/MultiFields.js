@@ -193,7 +193,7 @@ Kwf.Form.MultiFieldsDeleteButton = Ext2.extend(Ext2.BoxComponent,  {
     onRender : function(ct, position){
         this.el = ct.createChild({
             tag: 'a',
-            html: '<img src="'+KWF_BASE_URL+'/assets/silkicons/delete.png" />',
+            html: '<img src="/assets/silkicons/delete.png" />',
             href: '#',
             style: 'float: right; position: relative; z-index: 10; left: -20px; top: 1px;'
         }, position);
@@ -222,7 +222,7 @@ Kwf.Form.MultiFieldsUpButton = Ext2.extend(Ext2.BoxComponent,  {
     onRender : function(ct, position){
         this.el = ct.createChild({
             tag: 'a',
-            html: '<img src="'+KWF_BASE_URL+'/assets/silkicons/arrow_up.png" />',
+            html: '<img src="/assets/silkicons/arrow_up.png" />',
             href: '#',
             style: 'float: right; position: relative; z-index: 10; left: -20px; top: 1px;'
         }, position);
@@ -250,7 +250,7 @@ Kwf.Form.MultiFieldsDownButton = Ext2.extend(Ext2.BoxComponent,  {
     onRender : function(ct, position){
         this.el = ct.createChild({
             tag: 'a',
-            html: '<img src="'+KWF_BASE_URL+'/assets/silkicons/arrow_down.png" />',
+            html: '<img src="/assets/silkicons/arrow_down.png" />',
             href: '#',
             style: 'float: right; position: relative; z-index: 10; left: -20px; top: 1px;'
         }, position);
@@ -282,7 +282,7 @@ Kwf.Form.MultiFieldsAddButton = Ext2.extend(Ext2.BoxComponent,  {
     onRender : function(ct, position){
         this.el = ct.createChild({
             tag: 'a',
-            html: '<img src="'+KWF_BASE_URL+'/assets/silkicons/add.png" />',
+            html: '<img src="/assets/silkicons/add.png" />',
             href: '#',
             style: 'float: right; position: relative; z-index: 10; left: -20px; top: 1px;'
         }, position);

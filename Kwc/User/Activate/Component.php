@@ -39,7 +39,7 @@ class Kwc_User_Activate_Component extends Kwc_Abstract_Composite_Component
                 }
             }
 
-            $redirectBackUrl = Kwf_Setup::getBaseUrl().'/';
+            $redirectBackUrl = '/';
             $f = new Kwf_Filter_StrongRandom();
             $state = 'activate.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.$postData['code'].'.'.$redirectBackUrl;
 

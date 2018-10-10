@@ -2,7 +2,7 @@ Ext2.namespace('Kwf.Component');
 Kwf.Component.Components = Ext2.extend(Kwf.Auto.SyncTreePanel, {
     initComponent : function()
     {
-        this.controllerUrl = KWF_BASE_URL+'/admin/component/components';
+        this.controllerUrl = '/admin/component/components';
         Kwf.Component.Components.superclass.initComponent.call(this);
     }
 });

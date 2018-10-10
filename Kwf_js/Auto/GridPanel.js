@@ -24,7 +24,7 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         );
 
         this.actions.reload = new Ext2.Action({
-            icon    : KWF_BASE_URL+'/assets/silkicons/arrow_rotate_clockwise.png',
+            icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x2-btn-icon',
             tooltip : trlKwf('Reload'),
             handler : this.reload,
@@ -32,7 +32,7 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         });
         this.actions.save = new Ext2.Action({
             text    : trlKwf('Save'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_save.png',
+            icon    : '/assets/silkicons/table_save.png',
             cls     : 'x2-btn-text-icon',
             disabled: true,
             handler : this.onSave,
@@ -40,14 +40,14 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         });
         this.actions.add = new Ext2.Action({
             text    : trlKwf('Add'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_add.png',
+            icon    : '/assets/silkicons/table_add.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onAdd,
             scope: this
         });
         this.actions['delete'] = new Ext2.Action({
             text    : trlKwf('Delete'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_delete.png',
+            icon    : '/assets/silkicons/table_delete.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onDelete,
             scope: this,
@@ -55,7 +55,7 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         });
         this.actions.edit = new Ext2.Action({
             text    : trlKwf('Edit'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_edit.png',
+            icon    : '/assets/silkicons/table_edit.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onEdit,
             scope: this,
@@ -63,7 +63,7 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         });
         this.actions.duplicate = new Ext2.Action({
             text    : trlKwf('Duplicate'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/table_go.png',
+            icon    : '/assets/silkicons/table_go.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onDuplicate,
             scope: this,
@@ -71,21 +71,21 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         });
         this.actions.pdf = new Ext2.Action({
             text    : trlKwf('Print'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/printer.png',
+            icon    : '/assets/silkicons/printer.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onPdf,
             scope: this
         });
         this.actions.csv = new Ext2.Action({
             text    : trlKwf('CSV Export'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/page_code.png',
+            icon    : '/assets/silkicons/page_code.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onCsv,
             scope: this
         });
         this.actions.xls = new Ext2.Action({
             text    : trlKwf('Excel Export'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/page_excel.png',
+            icon    : '/assets/silkicons/page_excel.png',
             cls     : 'x2-btn-text-icon',
             handler : this.onXls,
             scope: this
@@ -502,7 +502,7 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         if (meta.helpText) {
             gridConfig.tbar.add('->');
             gridConfig.tbar.add(new Ext2.Action({
-                icon : KWF_BASE_URL+'/assets/silkicons/information.png',
+                icon : '/assets/silkicons/information.png',
                 cls : 'x2-btn-icon',
                 handler : function (a) {
                     var helpWindow = new Ext2.Window({

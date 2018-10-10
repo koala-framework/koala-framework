@@ -25,7 +25,7 @@ Ext2.extend(Kwf.Form.HtmlEditor.InsertDownload, Ext2.util.Observable, {
     afterCreateToolbar: function() {
         var tb = this.cmp.getToolbar();
         this.action = new Ext2.Action({
-            icon: KWF_BASE_URL+'/assets/silkicons/folder_link.png',
+            icon: '/assets/silkicons/folder_link.png',
             handler: this.onInsertDownload,
             scope: this,
             tooltip: {

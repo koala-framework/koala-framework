@@ -9,7 +9,7 @@ Kwf.Component.Generator.Plugin.StatusUpdate.Panel = Ext2.extend(Kwf.Binding.Prox
         });
         this.actions.send = new Ext2.Action({
             text    : trlKwf('Send'),
-            icon    : KWF_BASE_URL+'/assets/silkicons/comments.png',
+            icon    : '/assets/silkicons/comments.png',
             cls     : 'x2-btn-text-icon',
             handler : this.send,
             scope   : this
