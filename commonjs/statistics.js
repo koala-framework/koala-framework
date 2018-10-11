@@ -1,5 +1,6 @@
 var views = [];
 var events = [];
+var addTrackingData = [];
 
 var Statistics = {};
 Statistics.onView = function(fn) {
@@ -8,13 +9,16 @@ Statistics.onView = function(fn) {
 Statistics.onEvent = function(fn) {
     events.push(fn);
 };
+Statistics.onAddTrackingData = function(fn) {
+    addTrackingData.push(fn);
+};
 
 Statistics.count = Statistics.onView;
 Statistics.onCount = Statistics.onView;
 
-Statistics.trackView = function(url) {
+Statistics.trackView = function(data) {
     views.forEach(function(c) {
-        c.call(this, url);
+        c.call(this, data);
     }, this);
 };
 
@@ -23,5 +27,12 @@ Statistics.trackEvent = function(category, action, name, value) {
         c.call(this, category, action, name, value);
     }, this);
 };
-module.exports = Statistics;
 
+Statistics.addTrackingData = function(data) {
+    addTrackingData.forEach(function(c) {
+        c.call(this, data);
+    }, this);
+};
+
+
+module.exports = Statistics;

@@ -117,6 +117,7 @@ ViewAjax.prototype = {
                     this.load();
                     clearTimeout(this.addHistoryEntryTimer);
                     this.addHistoryEntryTimer = setTimeout(this.pushSearchFormHistoryState.bind(this), 2000);
+                    this.$el.trigger('searchTermEntered', this._getState().searchFormValues);
                 }
             }, this, { buffer: 500 });
 
