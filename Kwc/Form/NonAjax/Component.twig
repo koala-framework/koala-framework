@@ -1,4 +1,4 @@
-<div class="{{ rootElementClass }}{% if isPosted %} kwfUp-kwfImportant{% endif %}" data-width="100%">
+<div class="{{ rootElementClass }}{% if isPosted %} kwfUp-kwfImportant{% endif %}" data-width="100%" {% if config %}data-config="{{ config|json_encode }}"{% endif %}>
     {% if showSuccess %}
         {{ renderer.component(success) }}
     {% elseif message %}
