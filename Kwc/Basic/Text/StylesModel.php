@@ -23,18 +23,21 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         $styles = array();
         $up = Kwf_Config::getValue('application.uniquePrefix');
         if ($up) $up .= '-';
+
         if (strpos($masterContent, ".{$up}webStandard")===false) return $styles;
         $up = str_replace('-', '\-', $up);
-        preg_match_all("#\.{$up}webStandard\s+(span|p|h[1-6])(\.(.+))?\s+{([^}]+)}\s*/\*(.*)\*/#mU", $masterContent, $m);
+        preg_match_all("#\.{$up}webStandard\s+(span|p|h[1-6])(\.(.+))?(\s+)?{([^}]+)}\s*\/\*(.*)\*\/#mU", $masterContent, $m);
+
         foreach (array_keys($m[1]) as $i) {
             $styles[] = array(
                 'id' => 'master'.$i,
-                'name' => trim($m[5][$i]),
+                'name' => trim($m[6][$i]),
                 'tagName' => $m[1][$i],
                 'className' => $m[3][$i],
-                'styles' => $m[4][$i],
+                'styles' => $m[5][$i],
             );
         }
+
         return $styles;
     }
 
@@ -45,7 +48,15 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         } else {
             $filename = 'build/assets/Frontend.css';
         }
-        return self::parseMasterStyles(file_get_contents($filename));
+        $fileGetContentsContextOptions = array();
+        if (Kwf_Config::getValue('server.https') && Kwf_Config::getValue('debug.webpackDevServer')) {
+            $fileGetContentsContextOptions["ssl"] = array(
+                "verify_peer" => false,
+                "verify_peer_name" => false
+            );
+        }
+
+        return self::parseMasterStyles(file_get_contents($filename, false, stream_context_create($fileGetContentsContextOptions)));
     }
 
     public function getStyles($ownStyles = false)

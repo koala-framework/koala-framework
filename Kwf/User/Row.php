@@ -108,6 +108,11 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         throw new Kwf_Exception();
     }
 
+    public function getAdditionalRoles()
+    {
+        return $this->getProxiedRow()->getAdditionalRoles();
+    }
+
     //moved to model
     protected final function _allowFrontendUrls()
     {}

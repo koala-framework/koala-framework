@@ -6,9 +6,6 @@ class Kwc_Newsletter_Subscribe_MailEditable_Component extends Kwc_Mail_Editable_
         $ret = parent::getSettings($param);
         $ret['recipientSources']['sub'] = 'Kwc_Newsletter_Subscribe_Model';
         $ret['generators']['content']['component'] = 'Kwc_Newsletter_Subscribe_MailEditable_Content_Component';
-
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Subscribe/MailEditable/Panel.js';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Subscribe/MailEditable/PreviewPanel.js';
         return $ret;
     }
 

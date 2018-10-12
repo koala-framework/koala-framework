@@ -34,7 +34,7 @@ class Kwf_Assets_WebpackConfig
         if ($ret = Kwf_Config::getValue('debug.webpackDevServerPublic')) {
             return $ret;
         } else {
-            return trim(`hostname`).':'.self::getDevServerPort();
+            return Kwf_Config::getValue('server.domain').':'.self::getDevServerPort();
         }
     }
     public static function getDevServerProxy()
@@ -54,7 +54,8 @@ class Kwf_Assets_WebpackConfig
         if ($url = Kwf_Config::getValue('debug.webpackDevServerUrl')) {
             return $url;
         } else {
-            return 'http://'.self::getDevServerPublic().'/';
+            $protocol = Kwf_Config::getValue('server.https') ? 'https://' : 'http://';
+            return $protocol.self::getDevServerPublic().'/';
         }
     }
 }

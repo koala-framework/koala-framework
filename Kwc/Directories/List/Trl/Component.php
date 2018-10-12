@@ -38,6 +38,28 @@ class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
         );
     }
 
+    public function getItems($select = null)
+    {
+        $ret = array();
+        $items = $this->getData()->chained->getComponent()->getItems($select);
+        foreach ($items as $item) {
+            $ret[] = self::getChainedByMaster($item, $this->getData());
+        }
+        return $ret;
+    }
+
+    public function getItemIds($select = null)
+    {
+        $ret = array();
+        $items = $this->getItems($select);
+        foreach ($items as $item) {
+            if ($item) {
+                $ret[] = $item->id;
+            }
+        }
+        return $ret;
+    }
+
     public function getSelect()
     {
         $itemDirectory = $this->getItemDirectory();

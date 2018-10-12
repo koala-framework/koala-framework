@@ -14,6 +14,7 @@ class Kwc_Mail_Editable_ComponentsModel extends Kwf_Model_Data_Abstract
                     'id' => $c->dbId,
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($c->getComponent()->getNameForEdit()),
                     'settings_controller_url' => $a->getControllerUrl(),
+                    'preview_controller_url' => $a->getControllerUrl('Preview'),
                     'content_component_class' => $c->getChildComponent('-content')->componentClass,
                 );
             }
@@ -21,5 +22,4 @@ class Kwc_Mail_Editable_ComponentsModel extends Kwf_Model_Data_Abstract
         $this->_data = $data;
         parent::__construct($config);
     }
-
 }

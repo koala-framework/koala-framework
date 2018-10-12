@@ -1,27 +1,42 @@
-{% block header %}{% endblock %}
-{% if content.hasContent() %}
-    {% block paragraphs %}
-        <table width="100%" height="100%" cellspacing="0" cellpadding="0">
-            <tr>
-                <td valign="top">
-                    {{ renderer.component(content) }}
-                </td>
-            </tr>
-        </table>
+<html>
+<head>
+    {% block head %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="format-detection" content="telephone=no">
     {% endblock %}
-{% else %}
-    {% block emptyText %}
-        {{ data.trlKwf('Hello {0}', ['%firstname% %lastname%'|trim]) }}!<br /><br />
+</head>
+<body>
+    <table class="{{ rootElementClass }}" width="100%" cellspacing="0" cellpadding="0">
+        {% block header %}{% endblock %}
+        {% if content.hasContent() %}
+            {% block paragraphs %}
+                <tr>
+                    <td>
+                        {{ renderer.component(content) }}
+                    </td>
+                </tr>
+            {% endblock %}
+        {% else %}
+            {% block emptyText %}
+                <tr>
+                    <td>
+                        {{ data.trlKwf('Hello {0}', ['%firstname% %lastname%'|trim]) }}!<br /><br />
 
-        {{ data.trlKwf('You have just been subscribed to the newsletter at {0}.', ['%host%']) }}<br /><br />
+                        {{ data.trlKwf('You have just been subscribed to the newsletter at {0}.', ['%host%']) }}<br /><br />
 
-        -- {{ data.trlKwf('ACTIVATION LINK') }} --<br />
-        {{ renderer.componentLink(doubleOptInComponent, data.trlKwf('Please click here, to confirm your E-Mail address and to receive our newsletters in future.')) }}<br /><br />
+                        -- {{ data.trlKwf('ACTIVATION LINK') }} --<br />
+                        {{ renderer.componentLink(doubleOptInComponent, data.trlKwf('Please click here, to confirm your E-Mail address and to receive our newsletters in future.')) }}<br /><br />
 
-        {{ data.trlKwf('To change you data or settings, click this link:') }}<br />
-        {{ renderer.componentLink(editComponent, data.trlKwf('Settings')) }}<br /><br />
+                        {{ data.trlKwf('To change you data or settings, click this link:') }}<br />
+                        {{ renderer.componentLink(editComponent, data.trlKwf('Settings')) }}<br /><br />
 
-        {{ data.trlKwf('Thanks for your subscription!') }}<br />
-    {% endblock %}
-{% endif %}
-{% block footer %}{% endblock %}
+                        {{ data.trlKwf('Thanks for your subscription!') }}<br />
+                    </td>
+                </tr>
+            {% endblock %}
+        {% endif %}
+        {% block footer %}{% endblock %}
+    </table>
+</body>
+</html>

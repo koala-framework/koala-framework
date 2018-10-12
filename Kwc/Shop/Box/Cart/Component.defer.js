@@ -11,7 +11,7 @@ onReady.onRender('.kwcClass',function(el) {
                 url: url,
                 data: { componentId: el.data('component-id') },
                 success: function(response) {
-                    el.html(response);
+                    el.html($(response).html());
                     onReady.callOnContentReady(el, {newRender: true});
                 }
             });

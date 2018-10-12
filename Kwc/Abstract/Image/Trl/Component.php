@@ -87,10 +87,13 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         if ($this->getRow()->own_image) {
             return $this->getData()->getChildComponent('-image')->getComponent()->getImageUrl();
         } else {
-            $baseUrl = $this->getBaseImageUrl();
-            if ($baseUrl) {
-                $dimensions = $this->getImageDimensions();
-                return str_replace('{width}', $dimensions['width'], $baseUrl);
+            // TODO: Use implementation from non-trl version
+            $imageData = $this->getImageDataOrEmptyImageData();
+            if ($imageData) {
+                $s = $this->getImageDimensions();
+                $width = Kwf_Media_Image::getResponsiveWidthStep($s['width'],
+                    Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['file']));
+                return str_replace('{width}', $width, $this->getBaseImageUrl());
             }
         }
         return null;

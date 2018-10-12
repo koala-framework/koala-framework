@@ -19,6 +19,23 @@ class Kwf_Assets_Dispatcher
         }
     }
 
+    public function allowSourceAccess()
+    {
+        $ok = false;
+        foreach (Kwf_Config::getValueArray('debug.assets.sourceAccessIp') as $i) {
+            if (!$i) continue;
+            if (substr($i, -1)=='*') {
+                $i = substr($i, 0, -1);
+                if (substr($_SERVER['REMOTE_ADDR'], 0, strlen($i)) == $i) {
+                    $ok = true;
+                }
+            } else {
+                if ($_SERVER['REMOTE_ADDR'] == $i) $ok = true;
+            }
+        }
+        return $ok;
+    }
+
     public function getOutputForUrl($url)
     {
         if (substr($url, 0, 14) != '/assets/build/') throw new Kwf_Exception("invalid url: '$url'");
