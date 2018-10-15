@@ -14,6 +14,7 @@ class Kwc_Advanced_IntegratorTemplate_Embed_Component extends Kwc_Abstract_Compo
             'inherit' => true
         );
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['removeParts'] = array();
         return $ret;
     }
 
