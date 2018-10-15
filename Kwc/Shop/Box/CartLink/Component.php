@@ -6,7 +6,6 @@ class Kwc_Shop_Box_CartLink_Component extends Kwc_Abstract
         $ret = parent::getSettings($param);
         $ret['viewCache'] = false;
         $ret['rootElementClass'] = 'kwfUp-webStandard kwcShopBoxCartLink';
-        $ret['assets']['dep'][] = 'ExtConnection';
         $ret['placeholder']['toCart'] = trlKwfStatic('To cart');
         $ret['ordersModel'] = 'Kwc_Shop_Cart_Orders';
         return $ret;
