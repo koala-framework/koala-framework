@@ -9,25 +9,27 @@ class Kwf_Util_Geocode
      */
     public static function getCoordinates($address)
     {
+        $config = Kwf_Registry::get('config');
         $q = $address;
         $q = str_replace(array('ä','ö','ü','Ä','Ö','Ü','ß'), array('ae','oe','ue','Ae','Oe','Ue','ss'), $q);
         $getParams = array(
             'address' => $q,
-            'sensor' => 'false'
+            'sensor' => 'false',
+            'key' => $config->googleServerToServerApiKey
         );
 
         $httpClientConfig = array(
             'timeout' => 20,
             'persistent' => false
         );
-        $config = Kwf_Registry::get('config');
+
         if ($config->http && $config->http->proxy && $config->http->proxy->host && $config->http->proxy->port) {
             $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
             $httpClientConfig['proxy_host'] = $config->http->proxy->host;
             $httpClientConfig['proxy_port'] = $config->http->proxy->port;
         }
 
-        $client = new Zend_Http_Client("http://maps.googleapis.com/maps/api/geocode/json", $httpClientConfig);
+        $client = new Zend_Http_Client("https://maps.googleapis.com/maps/api/geocode/json", $httpClientConfig);
         $client->setMethod(Zend_Http_Client::GET);
         $client->setParameterGet($getParams);
         $body = utf8_encode($client->request()->getBody());

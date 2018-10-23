@@ -5,7 +5,9 @@ var Field = function(fieldEl, form) {
     this.el = fieldEl;
     this.form = form;
     this.on('change', function(value) {
-        this.form.errorStyle.hideFieldError(this);
+        if (this.form.errorStyle) {
+            this.form.errorStyle.hideFieldError(this);
+        }
     }, this);
 };
 Field.prototype = {
