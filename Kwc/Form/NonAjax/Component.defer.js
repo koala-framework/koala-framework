@@ -1,5 +1,5 @@
-var onReady = require('kwf/commonjs/on-ready');
-var Form = require('kwf/commonjs/frontend-form/form');
+var onReady = require('kwf/on-ready');
+var Form = require('kwf/frontend-form/form');
 
 onReady.onRender('.kwcClass', function form(form) {
     if (!form.get(0).kwcForm) {
