@@ -141,18 +141,6 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
         return $rows->current()->nr;
     }
 
-    protected function _beforeDelete()
-    {
-        $table = new Kwc_Basic_Text_ChildComponentsModel();
-        $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
-        foreach ($rows as $row) {
-            $t = substr($row->component, 0, 1);
-            $admin = Kwc_Admin::getInstance($this->_classes[$row->component]);
-            $admin->delete($this->component_id . '-' . $t.$row->nr);
-            $row->delete();
-        }
-    }
-
     //childComponents löschen die aus dem html-code entfernt wurden
     protected function _beforeSave()
     {

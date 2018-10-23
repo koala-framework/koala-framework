@@ -53,6 +53,9 @@ class Kwc_Basic_Text_Admin extends Kwc_Admin
             }
         }
 
+
+        $targetRow = $source->getComponent()->getOwnModel()->getRow($target->dbId);
+        if ($targetRow) { $targetRow->delete(); }
         $source->getComponent()->getRow()->duplicate(array(
             'component_id' => $target->dbId,
             'content'      => $content
