@@ -77,6 +77,7 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
         if ($this->_getParam('all')) {
             echo "clearing media cache, this can take some time...\n";
             Kwf_Media_OutputCache::getInstance()->clean();
+            Kwf_Media_MtimeCache::getInstance()->clean();
             echo "done\n";
 
             $ev = new Kwf_Events_Event_Media_ClearAll('Kwf_Media_OutputCache');
@@ -85,6 +86,7 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
         } else if($class = $this->_getParam('class')) {
             echo "clearing media cache, this can take some time...\n";
             Kwf_Media_OutputCache::getInstance()->clear($class);
+            Kwf_Media_MtimeCache::getInstance()->clear($class);
             Kwf_Events_Dispatcher::fireEvent(new Kwf_Events_Event_Media_ClearAll('Kwf_Media_OutputCache'));
 
         } else {
