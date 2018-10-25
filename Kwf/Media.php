@@ -38,12 +38,7 @@ class Kwf_Media
             }
         }
         if (is_null($time)) {
-            $cacheId = 'mtime-'.self::createCacheId($class, $id, $type);
-            $time = Kwf_Media_OutputCache::getInstance()->load($cacheId);
-            if (!$time) {
-                $time = time();
-                Kwf_Media_OutputCache::getInstance()->save($time, $cacheId);
-            }
+            $time = Kwf_Media_MtimeCache::getInstance()->loadOrCreate($class, $id, $type);
         }
         return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.rawurlencode($filename);
     }
@@ -135,7 +130,7 @@ class Kwf_Media
         foreach ($types as $type) {
             $cacheId = self::createCacheId($class, $id, $type);
             Kwf_Media_OutputCache::getInstance()->remove($cacheId);
-            Kwf_Media_OutputCache::getInstance()->remove('mtime-'.$cacheId);
+            Kwf_Media_MtimeCache::getInstance()->remove($class, $id, $type);
             //not required to delete cache/media/$cacheId, that will be regenerated if $cacheId is deleted
         }
     }
