@@ -320,8 +320,8 @@ class Kwf_Setup
             }
         }
         if (!$authUser || !$authPW
-            || $authUser != $requiredUsername
-            || $authPW != $requiredPassword
+            || Kwf_Util_Hash::hash($authUser) != $requiredUsername
+            || Kwf_Util_Hash::hash($authPW) != $requiredPassword
         ) {
             header('WWW-Authenticate: Basic realm="Page locked by preLogin"');
             throw new Kwf_Exception_Unauthorized('PreLogin required');

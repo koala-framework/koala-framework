@@ -528,7 +528,7 @@ class Kwf_Util_Setup
             }
 
             $ret .= "    if (!\$ignore) {\n";
-            $ret .= "        Kwf_Setup::checkPreLogin('".Kwf_Config::getValue('preLoginUser')."', '".Kwf_Config::getValue('preLoginPassword')."');\n";
+            $ret .= "        Kwf_Setup::checkPreLogin('".Kwf_Util_Hash::hash(Kwf_Config::getValue('preLoginUser'))."', '".Kwf_Util_Hash::hash(Kwf_Config::getValue('preLoginPassword'))."');\n";
             $ret .= "    }\n";
             $ret .= "}\n";
 
