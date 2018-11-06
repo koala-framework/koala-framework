@@ -26,7 +26,7 @@ class Url implements ColumnNormalizerInterface, CacheableInterface
             $e->logOrThrow();
             return null;
         }
-        return $c->url;
+        return $c->getAbsoluteUrl();
     }
 
     public function getEventSubscribers(Kwf_Model_Interface $model, $column, array $settings)
