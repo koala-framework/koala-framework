@@ -104,10 +104,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['altText'] = $this->_getAltText();
 
-        $imageData = $this->getImageDataOrEmptyImageData();
-        $ret = array_merge($ret,
-            Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['dimensions'])
-        );
+        $ret = array_merge($ret, $this->_getImageOutputData());
 
         $ret['baseUrl'] = $this->getBaseImageUrl();
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
@@ -135,6 +132,29 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['imgAttributes']['title'] = $titleText;
         }
         return $ret;
+    }
+
+    public function getApiData()
+    {
+        $image = $this->_getImageOutputData();
+        return array(
+            'caption' => $this->_getCaptionText(),
+            'alt' => $this->_getAltText(),
+            'title' => $this->_getTitleText(),
+            'aspectRatio' => $image['aspectRatio'],
+            'widthSteps' => $image['widthSteps'],
+            'baseUrl' => $this->_getAbsoluteUrl($this->getBaseImageUrl()),
+            'url' => $this->getAbsoluteImageUrl(),
+            'maxResolutionUrl' => $this->getMaxResolutionAbsoluteImageUrl(),
+        );
+    }
+
+    private function _getImageOutputData()
+    {
+        $imageData = $this->getImageDataOrEmptyImageData();
+        return Kwf_Media_Output_Component::getResponsiveImageVars(
+            $this->getImageDimensions(), $imageData['dimensions']
+        );
     }
 
     public function getDimensionSetting()
@@ -173,6 +193,15 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret = '';
         if ($this->_getSetting('titleText')) {
             $ret = $this->_getRow()->title_text;
+        }
+        return $ret;
+    }
+
+    protected function _getCaptionText()
+    {
+        $ret = '';
+        if ($this->_getSetting('imageCaption')) {
+            $ret = $this->_getRow()->image_caption;
         }
         return $ret;
     }
