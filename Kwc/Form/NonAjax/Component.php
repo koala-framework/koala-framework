@@ -306,7 +306,7 @@ class Kwc_Form_NonAjax_Component extends Kwc_Abstract_Composite_Component
             } else {
                 $ret['action'] = $this->getData()->url;
             }
-            if (isset($_SERVER["QUERY_STRING"])) {
+            if (!$this->_getSetting('viewCache') && isset($_SERVER["QUERY_STRING"])) {
                 $ret['action'] .= '?' . $_SERVER["QUERY_STRING"];
             }
 
