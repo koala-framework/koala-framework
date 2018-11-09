@@ -39,6 +39,7 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         $ret['text'] = $this->_getRow()->text;
         $ret['moreText'] = $this->_getRow()->more_text;
         $ret['acceptText'] = $this->_getRow()->accept_text;
+        $ret['kwfUp'] = Kwf_Config::getValue('application.uniquePrefix') ? Kwf_Config::getValue('application.uniquePrefix').'-' : '';
         return $ret;
     }
 }
