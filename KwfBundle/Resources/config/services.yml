@@ -35,6 +35,7 @@ services:
 
     kwf.model_normalizer:
         class: KwfBundle\Serializer\KwfModelNormalizer
+        arguments: ['%kwf.model.normalizer_camel_case%']
         tags:
             - { name: serializer.normalizer }
         public: false

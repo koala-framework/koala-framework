@@ -21,6 +21,7 @@ class KwfExtension extends Extension implements PrependExtensionInterface
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('kwf.csrf_protection.ignore_paths', $config['csrf_protection']['ignore_paths']);
+        $container->setParameter('kwf.model.normalizer_camel_case', $config['model']['normalizer_camel_case']);
     }
 
     public function prepend(ContainerBuilder $container)

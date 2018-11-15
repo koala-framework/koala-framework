@@ -10,6 +10,13 @@ use Kwf_Cache_Simple;
 
 class KwfModelNormalizer extends AbstractNormalizer
 {
+    private $makeKeysCamelCase = true;
+
+    public function __construct($makeKeysCamelCase)
+    {
+        $this->makeKeysCamelCase = $makeKeysCamelCase;
+    }
+
     public function supportsNormalization($data, $format = null)
     {
         if ($data instanceof \Kwf_Model_Row_Abstract) {
@@ -31,10 +38,19 @@ class KwfModelNormalizer extends AbstractNormalizer
             foreach ($columns as $column=>$settings) {
                 $ret[$column] = $object->normalizeColumn($column, $format, $context);
             }
-            return $ret;
         } else {
-            return $object->toArray();
+            $ret = $object->toArray();
         }
+        if ($this->makeKeysCamelCase) {
+            foreach ($ret as $key => $val) {
+                $camelCaseKey = lcfirst(str_replace("_", "", ucwords($key, "_")));
+                if ($camelCaseKey != $key) {
+                    $ret[$camelCaseKey] = $val;
+                    unset($ret[$key]);
+                }
+            }
+        }
+        return $ret;
     }
 
     public function supportsDenormalization($data, $type, $format = null)
