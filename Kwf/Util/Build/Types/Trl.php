@@ -117,6 +117,10 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
                         echo "\n - Translation defined in kwf is also translated in package:";
                         echo "\n - $file: {$entry['key']}\n";
 
+                        $trlEntries[$entry['key']] = array(
+                            'source' => $kwfTrlFile,
+                            'translation' => $entry['translation']
+                        );
                     } else if ($trlEntries[$entry['key']]['translation'] != $entry['translation']) {
                         $secondFile = $trlEntries[$entry['key']]['source'];
                         echo "\n - Translation is defined in a second package but translated differently:";
@@ -135,6 +139,10 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
                         if ($trlEntries[$entry['pluralKey']]['source'] == $kwfTrlFile) {
                             echo "\nTranslation defined in kwf is also translated in package: $file:{$entry['pluralKey']}\n";
 
+                            $trlEntries[$entry['pluralKey']] = array(
+                                'source' => $kwfTrlFile,
+                                'translation' => $entry['pluralTranslation']
+                            );
                         } else if ($trlEntries[$entry['pluralKey']]['translation'] != $entry['pluralTranslation']) {
                             $secondFile = $trlEntries[$entry['pluralKey']]['source'];
                             echo "\nTranslation is defined in a second package but translated differently:";
