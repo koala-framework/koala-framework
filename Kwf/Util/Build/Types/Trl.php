@@ -82,13 +82,14 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         return $ret;
     }
 
-    private function _loadTrlArray($source, $targetLanguage)
+    private function _loadKwfTrlArray($targetLanguage)
     {
         $trlEntries = array();
-        $kwfTrlFile = KWF_PATH.'/trl/'.$targetLanguage.'.po';
+
+        $kwfTrlFile = KWF_PATH . '/trl/' . $targetLanguage . '.po';
         if (!file_exists($kwfTrlFile)) {
-            $trlConfig = json_decode(file_get_contents(KWF_PATH.'/composer.json'));
-            if (!file_exists(KWF_PATH.'/trl')) mkdir(KWF_PATH.'/trl');
+            $trlConfig = json_decode(file_get_contents(KWF_PATH . '/composer.json'));
+            if (!file_exists(KWF_PATH . '/trl')) mkdir(KWF_PATH . '/trl');
             $this->_downloadTrlFile($trlConfig->extra->{'kwf-lingohub'}, $kwfTrlFile, $targetLanguage);
         }
         $kwfPoParser = \Sepia\PoParser::parseFile($kwfTrlFile);
@@ -107,7 +108,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             }
         }
 
-        $poParsers = $this->_getAllPoParsersExceptKwf($source, $targetLanguage);
+        $poParsers = $this->_getAllPoParsersForPackagesExceptKwfPackage($targetLanguage);
         foreach ($poParsers as $file => $poParser) {
             foreach ($poParser->entries() as $entry) {
                 $entry = $this->_convertTrlEntry($entry);
@@ -157,17 +158,71 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         return $trl;
     }
 
-    private function _getAllPoParsersExceptKwf($source, $targetLanguage)
+    private function _loadWebTrlArray($targetLanguage)
     {
-        $files = array();
-        if ($source == Kwf_Trl::SOURCE_WEB) {
-            if (file_exists('trl/'.$targetLanguage.'.po')) {
-                $files = array('trl/'.$targetLanguage.'.po');
+        $trlEntries = array();
+        $filename = 'trl/'.$targetLanguage.'.po';
+        if (file_exists($filename)) {
+            require_once VENDOR_PATH.'/autoload.php';
+            $poParser = \Sepia\PoParser::parseFile($filename);
+
+            foreach ($poParser->entries() as $entry) {
+                $entry = $this->_convertTrlEntry($entry);
+
+                if (isset($trlEntries[$entry['key']])) {
+                    if ($trlEntries[$entry['key']]['translation'] != $entry['translation']) {
+                        $secondFile = $trlEntries[$entry['key']]['source'];
+                        echo "\n - Translation is defined in a second package but translated differently:";
+                        echo "\n - $secondFile & $filename | {$entry['key']}";
+                        echo "\n - Please consider adding context to one or both.\n";
+                    }
+                } else {
+                    $trlEntries[$entry['key']] = array(
+                        'source' => $filename,
+                        'translation' => $entry['translation']
+                    );
+                }
+
+                if (isset($entry['pluralKey'])) {
+                    if (isset($trlEntries[$entry['pluralKey']])) {
+                        if ($trlEntries[$entry['pluralKey']]['translation'] != $entry['pluralTranslation']) {
+                            $secondFile = $trlEntries[$entry['pluralKey']]['source'];
+                            echo "\nTranslation is defined in a second package but translated differently:";
+                            echo "\n{$entry['pluralKey']} | $secondFile & $filename";
+                            echo "\nPlease consider adding context to one or both.\n";
+                        }
+                    } else {
+                        $trlEntries[$entry['pluralKey']] = array(
+                            'source' => $filename,
+                            'translation' => $entry['pluralTranslation']
+                        );
+                    }
+                }
             }
-        } else if ($source == Kwf_Trl::SOURCE_KWF) {
-            // check all composer packages
-            $files = $this->_getAllPackagesTrlFiles($targetLanguage);
         }
+
+        $trl = array();
+        foreach ($trlEntries as $id => $value) {
+            $trl[$id] = $value['translation'];
+        }
+        return $trl;
+    }
+
+    private function _loadTrlArray($source, $targetLanguage)
+    {
+        if ($source == 'kwf') {
+            return $this->_loadKwfTrlArray($targetLanguage);
+        } else if ($source == 'web') {
+            return $this->_loadWebTrlArray($targetLanguage);
+        } else {
+            throw new Kwf_Exception_NotYetImplemented();
+        }
+    }
+
+    private function _getAllPoParsersForPackagesExceptKwfPackage($targetLanguage)
+    {
+        // check all composer packages
+        $files = $this->_getAllPackagesTrlFilesExceptKwfTrlFiles($targetLanguage);
         require_once VENDOR_PATH.'/autoload.php';
         $poParsers = array();
         foreach ($files as $file) {
@@ -176,7 +231,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         return $poParsers;
     }
 
-    private function _getAllPackagesTrlFiles($targetLanguage)
+    private function _getAllPackagesTrlFilesExceptKwfTrlFiles($targetLanguage)
     {
         $composerFiles = array_merge(
             //Explicitly add koala-framework composer.json because of tests
@@ -186,7 +241,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         $existingFiles = array();
         $composerFiles = array_unique($composerFiles);
         foreach ($composerFiles as $composerFile) {
-            if (strpos($composerFile, 'koala-framework/koala-framework') !== false) continue;
+            if (strpos($composerFile, 'koala-framework/koala-framework') !== false) continue; // ignore kwf trl-files as they are the base for package-translations
             $trlDir = dirname($composerFile).'/trl/';
 
             $trlFilePath = $trlDir.$targetLanguage.'.po';
