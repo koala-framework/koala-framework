@@ -196,7 +196,8 @@ class Kwf_Media
                     $output['mtime'] = time();
                 }
             }
-            if ($useCache) {
+            $disableMediaCache = array_key_exists('disableMediaCache', $output) && $output['disableMediaCache'];
+            if (!$disableMediaCache && $useCache) {
                 if (isset($output['contents']) && strlen($output['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
                     $cacheFileName = self::_generateCacheFilePath($class, $id, $type);
