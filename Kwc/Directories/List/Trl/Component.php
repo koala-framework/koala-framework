@@ -43,7 +43,11 @@ class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
         $ret = array();
         $items = $this->getData()->chained->getComponent()->getItems($select);
         foreach ($items as $item) {
-            $ret[] = self::getChainedByMaster($item, $this->getData());
+            $trlItemCmp = self::getChainedByMaster($item, $this->getData(), array('ignoreVisible' => true));
+            if ($trlItemCmp) {
+                $trlItemCmp->parent->getComponent()->callModifyItemData($trlItemCmp);
+                $ret[] = $trlItemCmp;
+            }
         }
         return $ret;
     }
