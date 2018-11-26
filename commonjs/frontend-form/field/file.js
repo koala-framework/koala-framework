@@ -7,10 +7,10 @@ require('kwf/commonjs/frontend-form/field/file.scss');
 
 var File = kwfExtend(Field, {
     initField: function() {
-        this.el.addClass('dropField');
+        this.el.addClass('kwfUp-dropField');
         this.dropContainer = this.el;
         this.fileInput = this.el.find('input[type="file"]');
-        this.uploadIdField = this.dropContainer.find('input.kwfUploadIdField');
+        this.uploadIdField = this.dropContainer.find('input.kwfUp-kwfUploadIdField');
         this.fileSizeLimit = this.fileInput.data('fileSizeLimit');
 
         // Prevent Event-Bubbling
@@ -44,10 +44,10 @@ var File = kwfExtend(Field, {
         }
 
         var progressbar = $(
-            '<div class="kwfFormFieldUploadProgressBar">' +
-                '<div class="inner">' +
-                    '<span class="progress"></span>' +
-                    '<span class="processing">'+__trlKwf("Processing")+'...</span>' +
+            '<div class="kwfUp-kwfFormFieldUploadProgressBar">' +
+                '<div class="kwfUp-inner">' +
+                    '<span class="kwfUp-progress"></span>' +
+                    '<span class="kwfUp-processing">'+__trlKwf("Processing")+'...</span>' +
                 '</div>' +
             '</div>');
 
@@ -71,11 +71,11 @@ var File = kwfExtend(Field, {
             if (data.lengthComputable) {
                 var progress = (data.loaded / data.total) * 100;
                 if (progress < 100) {
-                    progressbar.find('span.progress').css('width', progress+'%');
+                    progressbar.find('span.kwfUp-progress').css('width', progress+'%');
                 } else {
-                    progressbar.find('span.progress').css('width', '100%');
-                    progressbar.find('span.progress').hide();
-                    progressbar.find('span.processing').addClass('visible');
+                    progressbar.find('span.kwfUp-progress').css('width', '100%');
+                    progressbar.find('span.kwfUp-progress').hide();
+                    progressbar.find('span.kwfUp-processing').addClass('visible');
                 }
             }
         }).bind(this);
@@ -96,9 +96,9 @@ var File = kwfExtend(Field, {
                 } catch (e) {
                     return alert(__trlKwf('An error occured, please try again later'));
                 }
-                this.dropContainer.find('input.fileSelector').val('');
+                this.dropContainer.find('input.kwfUp-fileSelector').val('');
                 uploadIdField.val(response.value.uploadId+'_'+response.value.hashKey);
-                this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(response.value.filename);
+                this.dropContainer.find('input.kwfUp-kwfFormFieldFileUnderlayText').val(response.value.filename);
 
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
                 this.form.enableSubmit();
@@ -107,7 +107,7 @@ var File = kwfExtend(Field, {
         }).bind(this);
     },
     getFieldName: function() {
-        var inp = this.el.find('input.fileSelector');
+        var inp = this.el.find('input.kwfUp-fileSelector');
         if (!inp.length) return null;
         return inp.get(0).name;
     },
