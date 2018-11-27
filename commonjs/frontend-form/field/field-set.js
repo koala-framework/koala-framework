@@ -2,6 +2,7 @@ var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
 var Field = require('kwf/commonjs/frontend-form/field/field');
 var kwfExtend = require('kwf/commonjs/extend');
 var onReady = require('kwf/commonjs/on-ready');
+require('kwf/commonjs/frontend-form/field/field-set.css');
 
 onReady.onRender('div.kwfUp-kwfFormContainerFieldSet fieldset > legend > input[type="checkbox"]', function fieldSet(c)
 {
