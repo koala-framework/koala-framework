@@ -5,7 +5,7 @@ class Kwc_Basic_LinkTag_Phone_Form extends Kwc_Abstract_Form
     {
         parent::_initFields();
 
-        $this->add(new Kwf_Form_Field_TextField('phone', trlStatic('Telefonnummer')))
+        $this->add(new Kwf_Form_Field_TextField('phone', trlKwf('Phone')))
             ->setWidth(300);
     }
 }
