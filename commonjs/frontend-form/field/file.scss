@@ -1,40 +1,40 @@
-.kwfFormFieldFileInner img {
+.kwfUp-kwfFormFieldFileInner img {
     margin-top: -20px;
 }
 
-.kwfFormFieldFile {
-    .kwfFormFieldFileInnerContent {
-        .fileSelector, > input {
+.kwfUp-kwfFormFieldFile {
+    .kwfUp-kwfFormFieldFileInnerContent {
+        .kwfUp-fileSelector, > input {
             position: absolute;
             width: 100%;
         }
 
-        .fileSelector {
+        .kwfUp-fileSelector {
             z-index: 2;
             opacity: 0;
             filter: alpha(opacity=0);
         }
 
-        .underlayFileSelector {
+        .kwfUp-underlayFileSelector {
             z-index: 1;
-            a.kwfFormFieldFileUploadButton {
+            a.kwfUp-kwfFormFieldFileUploadButton {
                 float: right;
             }
         }
 
-        .kwfFormFieldFieldDropText {
+        .kwfUp-kwfFormFieldFieldDropText {
             display: none;
         }
     }
 
-    &.dropField {
-        .kwfFormFieldFileInnerContent {
+    &.kwfUp-dropField {
+        .kwfUp-kwfFormFieldFileInnerContent {
             position: relative;
             width: 100%;
             border: 1px solid;
             display: block;
             height: 90px;
-            .kwfFormFieldFileUploadWrapper {
+            .kwfUp-kwfFormFieldFileUploadWrapper {
                 position: relative;
 
                 input {
@@ -44,18 +44,18 @@
                     border: none;
                 }
 
-                .underlayFileSelector {
+                .kwfUp-underlayFileSelector {
                     position: absolute;
                     width: 100%;
 
-                    a.kwfFormFieldFileUploadButton {
+                    a.kwfUp-kwfFormFieldFileUploadButton {
                         position: absolute;
                         right: 0;
                     }
                 }
             }
 
-            .kwfFormFieldFieldDropText {
+            .kwfUp-kwfFormFieldFieldDropText {
                 position: absolute;
                 display: block;
             }
@@ -64,7 +64,7 @@
 }
 
 
-.kwfFormFieldUploadProgressBar {
+.kwfUp-kwfFormFieldUploadProgressBar {
     display: block;
     position: absolute;
     width: 200px;
@@ -76,7 +76,7 @@
     top: 50%;
     margin-top: -21px;
 
-    .inner {
+    .kwfUp-inner {
         display: block;
         width: 180px;
         height: 20px;
@@ -84,7 +84,7 @@
         border: 1px solid;
         position: relative;
 
-        span.progress {
+        span.kwfUp-progress {
             width: 0%;
             background: #4169e1;
             display: block;
@@ -95,7 +95,7 @@
             line-height: 24px;
         }
 
-        span.processing {
+        span.kwfUp-processing {
             background: #4169e1;
             display: none;
             text-align: center;
