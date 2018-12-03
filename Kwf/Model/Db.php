@@ -705,7 +705,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             $col1 = $dbDepM->transformColumnName($ref['column']);
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
-            $depSelect->where("{$dbDepM->_formatField($col1)}={$dbDepOf->_formatField($col2)}");
+            $depSelect->where("{$dbDepM->_formatField($col1)}={$dbDepOf->_formatField($col2, null, $tableNameAlias)}");
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $exprStr = new Zend_Db_Expr($dbDepM->_formatField($expr->getField(), $depDbSelect));
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
