@@ -39,9 +39,7 @@ abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composi
             'scale' => 1,
             'satelite' => 1,
             'overview' => 1,
-            'routing' => 1,
-            'streetViewControl' => 0,
-            'clickableIcons' => 0
+            'routing' => 1
         );
         foreach ($defaults as $k=>$i) {
             if (!isset($options[$k])) {
