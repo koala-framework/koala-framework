@@ -108,13 +108,15 @@ Kwf.GoogleMap.Map = function(config) {
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
     if (typeof this.config.height == 'undefined') this.config.height = 300;
-    if (typeof this.config.satelite == 'undefined') this.config.satelite = 1;
-    if (typeof this.config.scale == 'undefined') this.config.scale = 1;
-    if (typeof this.config.zoom_properties == 'undefined') this.config.zoom_properties = 0;
-    if (typeof this.config.overview == 'undefined') this.config.overview = 1;
+    if (typeof this.config.satelite == 'undefined') this.config.satelite = true;
+    if (typeof this.config.scale == 'undefined') this.config.scale = true;
+    if (typeof this.config.zoom_properties == 'undefined') this.config.zoom_properties = false;
+    if (typeof this.config.overview == 'undefined') this.config.overview = true;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
+    if (typeof this.config.streetViewControl == 'undefined') this.config.streetViewControl = false;
+    if (typeof this.config.clickableIcons == 'undefined') this.config.clickableIcons = false;
 
 
     if (!this.config.markers) this.config.markers = [ ];
@@ -214,7 +216,9 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
             zoomControl: this.config.zoom_properties,
             scaleControl: this.config.scale,
             mapTypeControl: this.config.map_type,
-            overviewMapControl: this.config.overview
+            overviewMapControl: this.config.overview,
+            streetViewControl: this.config.streetViewControl,
+            clickableIcons: this.config.clickableIcons
         };
         this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
             mapOptions);
