@@ -7,6 +7,9 @@ class Kwc_Tags_ComponentToTag extends Kwf_Model_Db
         'Tag' => 'tag_id->Kwc_Tags_Model',
         'Component' => 'component_id->Kwc_Tags_ComponentModel'
     );
+    protected $_dependentModels = array(
+        'Suggestions' => 'Kwc_Tags_Suggestions_Model'
+    );
 
     protected function _init()
     {
