@@ -30,7 +30,6 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
 
         $defaults = array();
         $defaults['zoomControl'] = true;
-        $defaults['streetView'] = 1;
         $defaults['zoom'] = 10;
         $defaults['height'] = 400;
         $defaults['width'] = ''; // use 100% width, if no width is given
@@ -38,6 +37,8 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
         $defaults['overview'] = 1;
         $defaults['routing'] = 1;
         $defaults['autoOpenInfoWindow'] = 1;
+        $defaults['streetViewControl'] = false;
+        $defaults['clickableIcons'] = false;
 
         foreach ($defaults as $k=>$i) {
             if (!isset($options[$k])) {
