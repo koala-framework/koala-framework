@@ -14,6 +14,7 @@ class Kwc_Basic_DownloadTag_Trl_Events extends Kwc_Basic_LinkTag_Abstract_Trl_Ev
 
     public function onMasterMediaCacheChanged(Kwf_Events_Event_Media_Changed $e)
     {
+        if ($e->component->parent->componentClass == $this->_class) return;
         foreach (Kwc_Chained_Trl_Component::getAllChainedByMaster($e->component, 'Trl') as $chained) {
             $row = $chained->getComponent()->getRow();
             if (!isset($row->own_download) || !$row->own_download) {
