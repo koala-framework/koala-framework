@@ -1,7 +1,7 @@
 <?php
 class Kwc_Directories_Item_Directory_Trl_FormController_ComponentData extends Kwf_Data_Table
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $name = $this->getField();
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible' => true));
