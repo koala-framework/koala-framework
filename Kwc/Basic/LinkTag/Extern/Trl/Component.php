@@ -9,5 +9,4 @@ class Kwc_Basic_LinkTag_Extern_Trl_Component extends Kwc_Basic_LinkTag_Abstract_
         $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
         return $ret;
     }
-
 }
