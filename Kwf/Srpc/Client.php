@@ -62,7 +62,8 @@ class Kwf_Srpc_Client
     {
         $httpClientConfig = array(
             'timeout' => $this->_timeout,
-            'persistent' => true
+            'persistent' => true,
+            'adapter' => 'Zend_Http_Client_Adapter_Curl'
         );
         if ($this->_proxy) {
             $httpClientConfig = array_merge($httpClientConfig, $this->_proxy);
