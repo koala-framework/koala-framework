@@ -1,5 +1,3 @@
-@import "compass/css3/box-sizing";
-
 @mixin label-left-input-all {
     > div.kwfUp-kwcForm > form {
         .kwfUp-kwfFormFieldWrapper {
@@ -7,13 +5,13 @@
             width: 100%;
 
             > input, textarea, select {
-                @include box-sizing(border-box);
+                box-sizing: border-box;
                 width: 100% !important;
             }
         }
 
         label {
-            @include box-sizing(border-box);
+            box-sizing: border-box;
             display: table-cell;
             vertical-align: top;
             padding-right: 20px;
