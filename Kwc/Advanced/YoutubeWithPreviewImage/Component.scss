@@ -6,7 +6,6 @@
         cursor: pointer;
         z-index: 2;
         opacity: 1;
-        -webkit-transition: opacity 0.5s;
         transition: opacity 0.5s;
     }
 
@@ -22,7 +21,6 @@
         width: auto;
         z-index: 3;
         opacity: 0;
-        -webkit-transition: opacity 0.5s;
         transition: opacity 0.5s;
     }
 
