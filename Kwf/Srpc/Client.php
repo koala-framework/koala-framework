@@ -64,10 +64,12 @@ class Kwf_Srpc_Client
             'timeout' => $this->_timeout,
             'persistent' => true
         );
-        if ($this->_proxy) {
-            $httpClientConfig = array_merge($httpClientConfig, $this->_proxy);
+        if (extension_loaded('curl')) {
+            $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Curl';
+        } else if ($this->_proxy) {
             $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
         }
+        if ($this->_proxy) $httpClientConfig = array_merge($httpClientConfig, $this->_proxy);
         $serverUrl = $this->getServerUrl();
         $httpClient = new Zend_Http_Client($serverUrl, $httpClientConfig);
         $httpClient->setMethod(Zend_Http_Client::POST);
