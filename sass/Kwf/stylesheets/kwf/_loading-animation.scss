@@ -16,7 +16,6 @@
         & {
           background-image: url($path + '/dpr2/' + $file + '.png');
           background-size: $width $height;
-          -webkit-background-size: $width $height;
         }
     }
 }
