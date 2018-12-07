@@ -1,5 +1,3 @@
-@import "compass/css3/box-sizing";
-
 .kwcClass {
     > .listItem {
         padding-bottom: 20px;
@@ -21,7 +19,7 @@
     margin-right: -20px;
 
     > .listItem {
-        @include box-sizing(border-box);
+        box-sizing: border-box;
         padding-right: 20px;
         float: left;
         display: inline;
