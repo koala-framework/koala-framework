@@ -1,4 +1,3 @@
-@import "compass/css3/box-sizing";
 @import "compass/utilities/general/clearfix";
 
 .kwcClass {
@@ -9,8 +8,8 @@
         }
 
         &__teaser {
-            @include box-sizing(border-box);
             @include pie-clearfix;
+            box-sizing: border-box;
             padding: 6px 10px;
         }
 
