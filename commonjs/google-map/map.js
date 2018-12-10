@@ -58,6 +58,7 @@ var Map = function(config) {
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = true;
     if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
     if (typeof this.config.streetViewControl == 'undefined') this.config.streetViewControl = false;
+    if (typeof this.config.clickableIcons == 'undefined') this.config.clickableIcons = false;
 
     if (!this.config.markers) this.config.markers = [ ];
     if (typeof this.config.markers[0] == 'undefined' &&

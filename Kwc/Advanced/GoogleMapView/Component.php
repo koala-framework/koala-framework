@@ -38,6 +38,7 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
         $defaults['autoOpenInfoWindow'] = true;
         $defaults['mapTypeControl'] = true;
         $defaults['singleMarkerZoom'] = null;
+        $defaults['clickableIcons'] = false;
 
         foreach ($defaults as $k=>$i) {
             if (!isset($options[$k])) {
