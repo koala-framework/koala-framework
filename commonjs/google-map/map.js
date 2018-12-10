@@ -49,18 +49,17 @@ var Map = function(config) {
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
     if (typeof this.config.height == 'undefined') this.config.height = 300;
-    if (typeof this.config.satelite == 'undefined') this.config.satelite = true;
+    if (typeof this.config.satelite == 'undefined') this.config.satelite = 1;
     if (typeof this.config.zoomControl == 'undefined') this.config.zoomControl = true;
-    if (typeof this.config.overview == 'undefined') this.config.overview = true;
+    if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.singleMarkerZoom == 'undefined') this.config.singleMarkerZoom = 15;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = KWF_BASE_URL+'/assets/kwf/images/googlemap/markerBlue.png';
-    if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = true;
+    if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
     if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
     if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
     if (typeof this.config.streetViewControl == 'undefined') this.config.streetViewControl = false;
-    if (typeof this.config.clickableIcons == 'undefined') this.config.clickableIcons = false;
 
     if (!this.config.markers) this.config.markers = [ ];
     if (typeof this.config.markers[0] == 'undefined' &&
@@ -136,8 +135,7 @@ Map.prototype = {
             mapTypeControl: this.config.mapType,
             overviewMapControl: this.config.overview,
             streetViewControl: this.config.streetViewControl,
-            scrollwheel: this.config.scrollwheel,
-            clickableIcons: this.config.clickableIcons
+            scrollwheel: this.config.scrollwheel
         };
         if (this.config.styles) {
             mapOptions.styles = this.config.styles;
