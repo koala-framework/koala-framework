@@ -5,6 +5,8 @@ var onReady = require('kwf/commonjs/on-ready');
 /**
  * The Kwf GoogleMaps object
  *
+ * @deprecated DO NOT USE THIS CLASS. Rather use the loader (loader.js) and the Google Maps API itself.
+ *
  * @param config The configuration object that may / must contain the following values
  *     mapContainer (mandatory): The wrapper element of the map (id, dom-element or jquery-element).
  *             Must contain a div with class 'container', where the google map itself will be put into.
@@ -220,7 +222,7 @@ Map.prototype = {
             this.gmap.setCenter(latlngbounds.getCenter());
             this.gmap.fitBounds(latlngbounds);
 
-            if (this.markers.length === 1) {
+            if (this.markers.length === 1 && this.config.singleMarkerZoom) {
                 this.gmap.setZoom(this.config.singleMarkerZoom);
             }
 

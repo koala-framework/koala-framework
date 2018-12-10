@@ -27,6 +27,8 @@ class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Compon
         foreach ($fields as $f) {
             if ($f == 'zoomControl') {
                 $ret[$f] = $row->zoom_control;
+            } else if ($f == 'mapTypeControl') {
+                $ret[$f] = $row->map_type_control;
             } else {
                 $ret[$f] = $row->$f;
             }
