@@ -125,7 +125,7 @@ Map.prototype = {
                 position: google.maps.ControlPosition[this.config.zoomControlPosition]
             },
             streetViewControl: this.config.streetViewControl,
-            scrollwheel: this.config.scrollwheel,
+            gestureHandling: this.config.scrollwheel ? "greedy" : "cooperative",
             mapTypeControl: this.config.mapTypeControl,
             mapTypeId: this.config.mapType,
             clickableIcons: this.config.clickableIcons
