@@ -32,17 +32,14 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
         $options['coordinates'] = str_replace(';', ',', $options['coordinates']);
 
         $defaults = array(
-            'zoom_properties' => false,
+            'zoom_properties' => 0,
             'zoom' => 10,
             'height' => 400,
             'width' => 400,
-            'scale' => true,
-            'satelite' => true,
-            'overview' => true,
-            'routing' => true,
-            'autoOpenInfoWindow' => true,
-            'streetViewControl' => false,
-            'clickableIcons' => false
+            'scale' => 1,
+            'satelite' => 1,
+            'overview' => 1,
+            'routing' => 1
         );
         foreach ($defaults as $k=>$i) {
             if (!isset($options[$k])) {
