@@ -14,6 +14,17 @@ class Kwc_Mail_HtmlParser
 
     public function __construct(array $styles)
     {
+        $up = Kwf_Config::getValue('application.uniquePrefix');
+        if ($up) $up .= '-';
+
+        foreach ($styles as $key => $value) {
+            if (isset($value['styles'])) {
+                foreach ($value['styles'] as $styleKey => $styleValue) {
+                    $styles[$key]['styles'][$styleKey] = str_replace('kwfUp-', $up, $styleValue);
+                }
+            }
+        }
+
         $this->_styles = $styles;
     }
 
