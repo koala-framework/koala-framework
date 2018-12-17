@@ -49,7 +49,8 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             'types' => $this->_getParam('type'),
             'output' => true,
             'refresh' => true,
-            'excludeTypes' => ''
+            'excludeTypes' => '',
+            'environment' => Kwf_Config::getValue('buildEnvironment'),
         );
         if (Kwf_Config::getValue('debug.webpackDevServer')) {
             $options['excludeTypes'] .= ',assets';
