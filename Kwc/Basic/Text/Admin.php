@@ -70,7 +70,10 @@ class Kwc_Basic_Text_Admin extends Kwc_Admin
     {
         $ret = parent::exportContent($cmp);
         $ownRow = $cmp->getComponent()->getRow();
-        $ret['content'] = $ownRow->content;
+        $defaultText = Kwc_Abstract::getSetting($cmp->componentClass, 'defaultText');
+        if ($cmp->hasContent() && strip_tags($ownRow->content) != strip_tags($defaultText)) {
+            $ret['content'] = $ownRow->content;
+        }
         return $ret;
     }
 
