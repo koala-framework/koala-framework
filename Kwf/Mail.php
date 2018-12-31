@@ -28,7 +28,7 @@ class Kwf_Mail extends Zend_Mail
 
     public function addCc($email, $name='')
     {
-        if (true || Kwf_Registry::get('config')->debug->sendAllMailsTo) {
+        if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
             $this->_addDebugAddressHeader('X-Real-Cc', $email, $name);
         } else {
             parent::addCc($email, $name);
