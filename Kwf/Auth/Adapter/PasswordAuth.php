@@ -41,10 +41,8 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
             );
         }
 
-        $failedLoginsFromThisIpCacheId = 'failed-logins-from-ip-'.preg_replace('/[^0-9a-z_]/', '_', $_SERVER['REMOTE_ADDR']);
-        $failedLoginsFromThisIp = Kwf_Cache_Simple::fetch($failedLoginsFromThisIpCacheId);
-
-        if ($failedLoginsFromThisIp && $failedLoginsFromThisIp >= 15) {
+        $bruteForceIp = new Kwf_Util_BruteForceCheck('passwordAuth-'.$_SERVER['REMOTE_ADDR'], 280);
+        if ($bruteForceIp->getTriesCount() >= 15) {
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_identity,
                 array(
@@ -53,10 +51,8 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
             );
         }
 
-        $failedLoginsForIdentityCacheId = 'failed-logins-for-identity-'.preg_replace('/[^0-9a-z_]/', '_', $this->_identity);
-        $failedLoginsForIdentity = Kwf_Cache_Simple::fetch($failedLoginsForIdentityCacheId);
-
-        if ($failedLoginsForIdentity && $failedLoginsForIdentity >= 5) {
+        $bruteForceIdentity = new Kwf_Util_BruteForceCheck('passwordAuth-'.$this->_identity, 280);
+        if ($bruteForceIdentity->getTriesCount() >= 5) {
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_UNCATEGORIZED, $this->_identity,
                 array(
@@ -119,15 +115,12 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
         }
 
         if (!$ret->isValid()) {
-            if (!$failedLoginsFromThisIp) $failedLoginsFromThisIp = 0;
-            $failedLoginsFromThisIp++;
-            Kwf_Cache_Simple::add($failedLoginsFromThisIpCacheId, $failedLoginsFromThisIp, 280);
+            $bruteForceIp->increaseTriesCount();
+            $bruteForceIdentity->increaseTriesCount();
 
-            if (!$failedLoginsForIdentity) $failedLoginsForIdentity = 0;
-            $failedLoginsForIdentity++;
-            Kwf_Cache_Simple::add($failedLoginsForIdentityCacheId, $failedLoginsForIdentity, 280);
-
-            if ($failedLoginsFromThisIp > 3 || $failedLoginsForIdentity > 3) sleep(3);
+            if ($bruteForceIp->getTriesCount() > 3 || $bruteForceIdentity->getTriesCount() > 3) {
+                sleep(3);
+            }
 
             $this->_sendWrongLoginMail(array('Identity' => $this->_identity));
         }
