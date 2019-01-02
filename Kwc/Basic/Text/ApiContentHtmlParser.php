@@ -55,7 +55,7 @@ class Kwc_Basic_Text_ApiContentHtmlParser
     public function parse(Kwf_Component_Data $data)
     {
         $row = $data->getComponent()->getRow();
-        $html = $row->content;
+        $html = str_replace('&nbsp;', '&#160;', $row->content); //Known bug https://bugs.php.net/bug.php?id=15092
         foreach ($data->getChildComponents() as $c) {
             $this->_childComponents[$c->dbId] = $c;
         }
