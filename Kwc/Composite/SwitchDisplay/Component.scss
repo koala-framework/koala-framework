@@ -1,0 +1,9 @@
+.kwcClass {
+    .kwcBem__content {
+        display: none; // Prevent showing the content before it is hidden by JS
+    }
+
+    .kwcBem__switchLink {
+        display: block;
+    }
+}
