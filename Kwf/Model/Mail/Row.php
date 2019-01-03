@@ -81,6 +81,10 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
                 $mail->addTo($v['email'], $v['name']);
             }
         }
+        $replyto = $this->getReplyTo();
+        if ($replyto && $replyto['email']) {
+            $mail->setReplyTo($replyto['email'], $replyto['name']);
+        }
         $returnPath = $this->getReturnPath();
         if ($returnPath) {
             $mail->setReturnPath($returnPath);
@@ -294,6 +298,12 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
         );
     }
 
+    public function setReplyTo($email, $name = '')
+    {
+        $row = $this->_getEssentialsRow();
+        $row->replyto = serialize(array('email' => $email, 'name' => $name));
+    }
+
     public function setReturnPath($email)
     {
         $row = $this->_getEssentialsRow();
@@ -343,6 +353,13 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
         $row = $this->_getEssentialsRow();
         if (!$row->to) return array();
         return unserialize($row->to);
+    }
+
+    public function getReplyTo()
+    {
+        $row = $this->_getEssentialsRow();
+        if (!$row->replyto) return array();
+        return unserialize($row->replyto);
     }
 
     public function getReturnPath()
