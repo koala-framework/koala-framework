@@ -1,0 +1,12 @@
+<div class="{{ rootElementClass }} kwfUp-kwfSwitchDisplay">
+    <a class="{{ 'switchLink'|bemClass }} kwfUp-linktext kwfUp-switchLink" href="#">
+        {% block switchLink %}
+            {{ renderer.component(linktext) }}
+        {% endblock %}
+    </a>
+    <div class="{{ 'content'|bemClass }} kwfUp-switchContent {% if startOpened %}kwfUp-active{% endif %}">
+        {% block switchContent %}
+            {{ renderer.component(content) }}
+        {% endblock %}
+    </div>
+</div>
