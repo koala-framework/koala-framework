@@ -6,9 +6,19 @@
  */
 class Kwf_Filter_Ascii implements Zend_Filter_Interface
 {
+    /**
+     * @var int
+     */
+    private $_length;
+
+    public function __construct($length = 60)
+    {
+        $this->_length = $length;
+    }
+
     public function filter($value)
     {
         URLify::$remove_list = array();
-        return URLify::filter($value, 60, 'de');
+        return URLify::filter($value, $this->_length, 'de');
     }
 }
