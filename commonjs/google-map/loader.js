@@ -68,7 +68,7 @@ module.exports = function(callback, options)
         }
     }
 
-    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries='+options.libraries.join(',')+'&async=2&language='+ __trlKwf('en');
+    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&key='+key+'&c&libraries='+options.libraries.join(',')+'&async=2&language='+ __trlKwf('en');
     url += '&callback=';
     url += 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
     var s = document.createElement('script');

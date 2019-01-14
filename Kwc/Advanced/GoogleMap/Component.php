@@ -23,12 +23,20 @@ class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Compon
     {
         $row = $this->_getRow();
         $fields = array('coordinates', 'zoom', 'width', 'height', 'zoomControl',
-                'satelite', 'overview', 'routing', 'map_type', 'scrollwheel');
+            'mapTypeControl', 'routing', 'scrollwheel');
         foreach ($fields as $f) {
-            if ($f == 'zoomControl') {
-                $ret[$f] = $row->zoom_control;
+            if ($f == 'zoom') {
+                $ret[$f] = intval($row->$f);
+            } else if ($f == 'zoomControl') {
+                $ret[$f] = !!$row->zoom_control;
+            } else if ($f == 'mapTypeControl') {
+                $ret[$f] = !!$row->map_type_control;
             } else {
-                $ret[$f] = $row->$f;
+                if (in_array($f, array('routing', 'scrollwheel'))) {
+                    $ret[$f] = !!$row->$f;
+                } else {
+                    $ret[$f] = $row->$f;
+                }
             }
         }
         if (!isset($ret['coordinates'])) $ret['coordinates'] = '';
