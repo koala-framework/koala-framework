@@ -54,7 +54,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
 
         $src = $dependency->getContentsSource();
         if ($src['type'] == 'file') {
-            $cacheId = str_replace(array('/', '.', '-', '$'), '_', $src['file']).'__'.md5_file($src['file']);
+            $cacheId = str_replace(array('/', '.', '-', '$', '@'), '_', $src['file']).'__'.md5_file($src['file']);
         } else if ($src['type'] == 'contents') {
             $cacheId = md5($src['contents']);
         } else {
