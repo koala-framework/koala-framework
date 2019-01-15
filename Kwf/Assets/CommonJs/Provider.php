@@ -94,7 +94,11 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             }
             if (file_exists("node_modules/" . (string)$dependency)) {
                 $dep = (string)$dependency;
-                $package = json_decode(file_get_contents("node_modules/" . substr($dep, 0, strpos($dep, "/")) . '/package.json'), true);
+                $possibleFilename = "node_modules/" . substr($dep, 0, strpos($dep, "/")) . '/package.json';
+                if (!file_exists($possibleFilename)) {
+                    $possibleFilename = "node_modules/" . substr($dep, 0, strpos($dep, "/", strpos($dep, "/")+1)) . '/package.json';
+                }
+                $package = json_decode(file_get_contents($possibleFilename), true);
                 if (isset($package['browser'])) {
                     if (is_string($package['browser'])) {
                         $depBrowserAlternatives[$package['main']] = $package['browser'];
