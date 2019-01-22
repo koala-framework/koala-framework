@@ -5,6 +5,9 @@ class Kwf_Acl_Component extends Kwf_Acl
     {
         parent::__construct();
 
+        $this->addResource(new Kwf_Acl_Resource_MediaDownload('media_download'));
+        $this->allow('guest', 'media_download'); // TODO default deny in kwf 5.2
+
         $this->addRole(new Kwf_Acl_Role('superuser', trlKwfStatic('Superuser')));
         $this->addRole(new Kwf_Acl_Role('preview', trlKwfStatic('Preview')));
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_superuser', 'superuser'), 'edit_role');
