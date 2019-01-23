@@ -263,9 +263,11 @@ class Kwc_Mail_HtmlParser
 
     private static function _replaceUniquePrefix($value)
     {
-        if ($uniquePrefix = Kwf_Config::getValue('application.uniquePrefix')) {
-            $value = str_replace('kwfUp-', $uniquePrefix . '-', $value);
+        static $up;
+        if(!isset($up)) {
+            $up = Kwf_Config::getValue('application.uniquePrefix');
+            if ($up) $up .= '-';
         }
-        return $value;
+        return str_replace('kwfUp-', $up, $value);
     }
 }
