@@ -94,10 +94,14 @@ class Handler
             } else {
                 $type = 'Column';
             }
-            if (!class_exists($type)) {
-                $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\'.$type;
+            if (substr($type, 0, 1) === '@') {
+                $columnNormalizer = \Kwf_Util_Symfony::getKernel()->getContainer()->get(substr($type, 1));
+            } else {
+                if (!class_exists($type)) {
+                    $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\' . $type;
+                }
+                $columnNormalizer = new $type;
             }
-            $columnNormalizer = new $type;
             $constraints = $columnNormalizer->getValidationConstraints($column, $settings, $context);
             $fields[] = array(
                 'name' => $column,
