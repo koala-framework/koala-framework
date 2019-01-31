@@ -282,7 +282,7 @@ class Kwf_Setup
     /**
      * Check if user is logged in (faster than directly calling user model)
      *
-     * Only asks user model (expensive) when there is something stored in the session
+     * Only asks user model (expensive) when there is something stored in the session or class already loaded
      *
      * @return boolean if user is logged in
      */
@@ -291,21 +291,28 @@ class Kwf_Setup
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
         if ($benchmarkEnabled) $t = microtime(true);
-        if (!Zend_Session::isStarted() &&
-            !Zend_Session::sessionExists() &&
-            !Kwf_Config::getValue('autologin')
-        ) {
-            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: no session', microtime(true)-$t);
-            return false;
+        if (class_exists('Kwf_User_Model', false)) {
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: Kwf_User_Model already loaded, asked model', microtime(true)-$t);
+            $m = Kwf_Registry::get('userModel');
+            if (!$m) return false;
+            $ret = $m->hasAuthedUser();
+        } else {
+            if (!Zend_Session::isStarted() &&
+                !Zend_Session::sessionExists() &&
+                !Kwf_Config::getValue('autologin')
+            ) {
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: no session', microtime(true)-$t);
+                return false;
+            }
+            if (!Kwf_Auth::getInstance()->getStorage()->read()) {
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: storage empty', microtime(true)-$t);
+                return false;
+            }
+            $m = Kwf_Registry::get('userModel');
+            if (!$m) return false;
+            $ret = $m->hasAuthedUser();
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: asked model', microtime(true)-$t);
         }
-        if (!Kwf_Auth::getInstance()->getStorage()->read()) {
-            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: storage empty', microtime(true)-$t);
-            return false;
-        }
-        $m = Kwf_Registry::get('userModel');
-        if (!$m) return false;
-        $ret = $m->hasAuthedUser();
-        if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: asked model', microtime(true)-$t);
         return $ret;
     }
 
