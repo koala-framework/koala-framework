@@ -88,7 +88,7 @@ var FormComponent = function(form)
 
     var button = form.find('form button.kwfUp-submit');
     if (button) {
-        button.on('click', this.onSubmit.bind(this));
+        button.on('click.kwfUp-commonjsFrontendFormForm', this.onSubmit.bind(this));
     }
 
     $.each(this.fields, (function(i, f) {
