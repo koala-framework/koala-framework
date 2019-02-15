@@ -1207,10 +1207,14 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             } else {
                 $type = 'Column';
             }
-            if (in_array($type, array('Column','ParentRow','ChildRows','Component\\Render','Component\\Url')) || !class_exists($type)) {
-                $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\'.$type;
+            if (substr($type, 0, 1) === '@') {
+                $columnNormalizer = Kwf_Util_Symfony::getKernel()->getContainer()->get(substr($type, 1));
+            } else {
+                if (in_array($type, array('Column','ParentRow','ChildRows','Component\\Render','Component\\Url')) || !class_exists($type)) {
+                    $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\' . $type;
+                }
+                $columnNormalizer = new $type;
             }
-            $columnNormalizer = new $type;
             if ($columnNormalizer instanceof \KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface) {
                 $ret = array_merge($ret, $columnNormalizer->getEventSubscribers($this, $column, $settings));
             }
