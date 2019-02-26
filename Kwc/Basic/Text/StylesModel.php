@@ -26,7 +26,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 
         if (strpos($masterContent, ".{$up}webStandard")===false) return $styles;
         $up = str_replace('-', '\-', $up);
-        preg_match_all("#\.{$up}webStandard\s+(span|p|h[1-6])(\.(.+))?(\s+)?{([^}]+)}\s*\/\*(.*)\*\/#mU", $masterContent, $m);
+        preg_match_all("#\.{$up}webStandard\s+(span|p|h[1-6])(\.(.+))?(\s+)?{([^}]+)}\s*\/\*\!(.*)\*\/#mU", $masterContent, $m);
 
         foreach (array_keys($m[1]) as $i) {
             $styles[] = array(

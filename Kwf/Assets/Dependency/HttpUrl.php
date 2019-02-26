@@ -8,11 +8,6 @@ class Kwf_Assets_Dependency_HttpUrl extends Kwf_Assets_Dependency_Abstract
         $this->_url = $url;
     }
 
-    public function getIncludeInPackage()
-    {
-        return false;
-    }
-
     public function getUrl()
     {
         return $this->_url;
@@ -38,11 +33,6 @@ class Kwf_Assets_Dependency_HttpUrl extends Kwf_Assets_Dependency_Abstract
             }
             throw new Kwf_Exception("Unknown file type");
         }
-    }
-
-    public function getContentsPacked()
-    {
-        return null;
     }
 
     public function getIdentifier()

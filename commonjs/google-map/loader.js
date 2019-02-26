@@ -43,7 +43,6 @@ module.exports = function(callback, options)
 
 
     //try find the correct api key
-    //apiKeys is set by Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys
     var key = '';
     if (typeof apiKeys == 'string') {
         //one api key can have multiple domains configured
