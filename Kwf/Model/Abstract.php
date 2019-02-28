@@ -667,6 +667,9 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 $row = $this->getRow($row[$this->getPrimaryKey()]);
             }
             $reference = $row->getModel()->getReference($expr->getParent());
+            if ($row->{$reference['column']} == null) {
+                return null;
+            }
             $parentModel = $row->getModel()->getReferencedModel($expr->getParent());
             $select = new Kwf_Model_Select();
             $select->whereId($row->{$reference['column']});
