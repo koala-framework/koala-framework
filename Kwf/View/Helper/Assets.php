@@ -50,10 +50,10 @@ class Kwf_View_Helper_Assets
         $c = preg_replace('#</?head>#', '', $c);
         $c = str_replace('/assets/build/./', '/assets/build/', $c);
 
-        $ev = new Kwf_Events_Event_CreateAssetsPackageUrls(get_class($this), $assetsPackage, $subroot);
-        Kwf_Events_Dispatcher::fireEvent($ev);
-        if ($ev->prefix) {
-            $c = str_replace('/assets/build/', $ev->prefix.'/assets/build/', $c);
+        if (!$webpackDevServer) {
+            $ev = new Kwf_Events_Event_CreateAssetsPackageUrls(get_class($this), $assetsPackage, $subroot);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            if ($ev->prefix) $c = str_replace('/assets/build/', $ev->prefix.'/assets/build/', $c);
         }
         $c = preg_replace('#<script #', '<script data-kwf-unique-prefix="'. Kwf_Config::getValue('application.uniquePrefix') .'"', $c, 1);
 
