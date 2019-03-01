@@ -135,7 +135,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             return array_unique($ret);
 
         } else if ($selectType == 'array' && is_string($class) && count($select) == 1 &&
-            isset($select['componentClass']) && count($select['componentClass']) == 1
+            isset($select['componentClass']) && is_string($select['componentClass'])
         ) {
             //simple case no 3: looking for a single comopnentClass
             foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
