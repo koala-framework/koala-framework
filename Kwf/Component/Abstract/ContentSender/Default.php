@@ -113,7 +113,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
             }
         }
 
-        if (!$hasDynamicParts) {
+        if (!$hasDynamicParts && !$process) {
             $ret['lifetime'] = 60*60;
         }
         self::_callPostProcessInput($process);

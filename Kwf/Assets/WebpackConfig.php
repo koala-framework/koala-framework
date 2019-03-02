@@ -22,7 +22,7 @@ class Kwf_Assets_WebpackConfig
                         break;
                     }
                 }
-                $port = rand(1024, 65535);
+                $port = rand(11700, 11800);
             }
             file_put_contents('cache/webpack-dev-server-port', $port);
         }
