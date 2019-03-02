@@ -25,26 +25,6 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         $cachedProviders = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if ($cachedProviders === false) {
             $cachedProviders = array();
-            $paths = glob(VENDOR_PATH."/*/*");
-            $paths[] = '.';
-            foreach ($paths as $i) {
-                if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
-                    $config = new Zend_Config_Ini($i.'/dependencies.ini');
-                    if (isset($config->config)) {
-                        $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
-                        if ($config->provider) {
-                            $provider = $config->provider;
-                            if (is_string($provider)) $provider = array($provider);
-                            foreach ($provider as $p) {
-                                $cachedProviders[] = array(
-                                    'cls' => $p,
-                                    'file' => $i.'/dependencies.ini'
-                                );
-                            }
-                        }
-                    }
-                }
-            }
             foreach (glob(VENDOR_PATH.'/bower_components/*') as $i) {
                 $cachedProviders[] = array(
                     'cls' => 'Kwf_Assets_Provider_BowerBuiltFile',
