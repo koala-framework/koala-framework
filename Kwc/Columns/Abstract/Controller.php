@@ -39,7 +39,8 @@ class Kwc_Columns_Abstract_Controller extends Kwc_Abstract_List_Controller
         $select->whereEquals('component_id', $this->_getParam('componentId'));
 
         $columnTypes = Kwc_Abstract::getSetting($this->_getParam('class'), 'columns');
-        $typeName = array_shift((array_keys($columnTypes)));
+        $columnTypeKeys = array_keys($columnTypes);
+        $typeName = array_shift($columnTypeKeys);
         if ($row && $row->type) $typeName = $row->type;
         $difference = count($columnTypes[$typeName]['colSpans']) - $this->_model->countRows($select);
         while ($difference > 0) {
