@@ -461,7 +461,7 @@ class Kwf_Media_Image
                 }
                 $blob = Kwf_Media_Scaler_Abstract::getInstance()->scale(
                     $f,
-                    array('width' => $realWidth, 'height' => $realHeight, 'crop' => array('x'=>0, 'y' => 0, 'width' => $realWidth, 'height' => $realHeight)),
+                    array('width' => $realWidth, 'height' => $realHeight, 'crop' => array('x'=>0, 'y' => 0, 'width' => $sourceSize['width'], 'height' => $sourceSize['height'])),
                     $mimeType,
                     array('skipCleanup' => !!$previousCacheFile)
                 );
