@@ -220,8 +220,8 @@ class Kwc_Chained_Cc_Events extends Kwc_Chained_Abstract_Events
         $select = array('ignoreVisible'=>true);
         $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($event->component, $chainedType, $select);
         foreach ($chained as $i) {
-            $newParent = Kwc_Chained_Abstract_Component::getChainedByMaster($event->newParent, $i, $chainedType, $select);
-            $oldParent = Kwc_Chained_Abstract_Component::getChainedByMaster($event->oldParent, $i, $chainedType, $select);
+            $newParent = Kwc_Chained_Cc_Component::getChainedByMaster($event->newParent, $i, $select);
+            $oldParent = Kwc_Chained_Cc_Component::getChainedByMaster($event->oldParent, $i, $select);
             $eventCls = get_class($event);
             $this->fireEvent(
                 new $eventCls($this->_class, $i, $newParent, $oldParent)
