@@ -180,7 +180,8 @@ class Kwf_Component_Data
     public function getDomainComponentId()
     {
         if (!isset($this->_domainComponentIdCache)) { //cache ist vorallem für bei kwfUnserialize nützlich
-            $this->_domainComponentIdCache = $this->getDomainComponent()->componentId;
+            $domainComponent = $this->getDomainComponent();
+            $this->_domainComponentIdCache = $domainComponent ? $domainComponent->componentId : null;
         }
         return $this->_domainComponentIdCache;
     }
