@@ -7,8 +7,8 @@ class Kwc_Abstract_Image_Pdf extends Kwc_Abstract_Pdf
     {
         $data = $this->_component->getImageData();
 
-        if ($data && $data['file'] && is_file($data['file'])) {
-            $source = $data['file'];
+        if ($data && $data['file'] && is_file($data['file']->getFileSource())) {
+            $source = $data['file']->getFileSource();
             $size = $this->getSize();
 
             $imageSize = array(
