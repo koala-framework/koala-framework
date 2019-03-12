@@ -520,6 +520,9 @@ class Kwf_Util_Setup
                     $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$i') \$ignore = true;\n";
                 }
             }
+            foreach (Kwf_Config::getValueArray('preLoginIgnoreHost') as $i) {
+                $ret .= "    if (isset(\$_SERVER['HTTP_HOST']) && \$_SERVER['HTTP_HOST'] === '$i') \$ignore = true;\n";
+            }
 
             $ret .= "    if (!\$ignore) {\n";
             $ret .= "        Kwf_Setup::checkPreLogin('".Kwf_Config::getValue('preLoginUser')."', '".Kwf_Config::getValue('preLoginPassword')."');\n";

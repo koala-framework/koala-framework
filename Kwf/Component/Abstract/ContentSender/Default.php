@@ -78,6 +78,9 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                     if (substr($ip, -strlen($i)) == $i) $ignore = true;
                 }
             }
+            foreach (Kwf_Config::getValueArray('preLoginIgnoreHost') as $i) {
+                if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === $i) $ignore = true;
+            }
             if (!$ignore) Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
         }
 
