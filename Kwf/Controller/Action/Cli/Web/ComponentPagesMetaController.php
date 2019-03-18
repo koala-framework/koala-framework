@@ -48,6 +48,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             ));
             if ($this->_getParam('verbose')) echo " done\n";
             foreach ($childPages as $c) {
+                if ($this->_getRecursiveSkip($c)) continue;
                 if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
                 $queue[] = $c->componentId;
                 file_put_contents($queueFile, implode("\n", $queue));
@@ -193,6 +194,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         );
         $ret = array();
         foreach ($childPages as $p) {
+            if ($this->_getRecursiveSkip($p)) continue;
             $m = Kwf_Component_PagesMetaModel::getInstance();
             $r = $m->getRow($p->componentId);
             if (!$r) {
@@ -203,5 +205,20 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             $r->save();
             $this->_processRecursive($p);
         }
+    }
+
+    private function _getRecursiveSkip(Kwf_Component_Data $page)
+    {
+        if (Kwc_Abstract::getFlag($page->componentClass, 'skipPagesMeta')) {
+            return true;
+        }
+        $c = $page->parent;
+        while ($c) {
+            if (Kwc_Abstract::getFlag($c->componentClass, 'skipPagesMeta')) {
+                return true;
+            }
+            $c = $c->parent;
+        }
+        return false;
     }
 }
