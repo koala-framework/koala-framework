@@ -451,11 +451,12 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         if (is_instance_of ($contentSender, 'Kwf_Component_Abstract_ContentSender_Lightbox')) {
             $ret['icon'] = 'image';
         }
-
         if ($component->isHome) {
             $ret['iconEffects'][] = 'home';
         } else if (!$component->visible) {
             $ret['iconEffects'][] = 'invisible';
+        } else if ($component->row->hide) {
+            $ret['icon'] = 'page_red';
         }
         foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_IconEffects') as $p) {
             $ret['iconEffects'] = array_merge($ret['iconEffects'], $p->getIconEffects($component));
