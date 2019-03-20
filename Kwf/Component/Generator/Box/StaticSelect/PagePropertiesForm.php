@@ -37,14 +37,15 @@ class Kwf_Component_Generator_Box_StaticSelect_PagePropertiesForm extends Kwf_Fo
             $values[$k] = $t;
         }
         $select->setValues($values);
-        $select->setDefaultValue(array_shift((array_Keys($values))));
-
+        $valueKeys = array_Keys($values);
+        $select->setDefaultValue(array_shift($valueKeys));
     }
 
     protected function _createMissingRow($id)
     {
         $ret = parent::_createMissingRow($id);
-        $ret->component = array_shift((array_keys($this->_generator->getSetting('component'))));
+        $keys = array_keys($this->_generator->getSetting('component'));
+        $ret->component = array_shift($keys);
         return $ret;
     }
 }

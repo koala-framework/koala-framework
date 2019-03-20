@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Bundle\TwigBundle\Controller\ExceptionController;
 use KwfBundle\Validator\ValidationException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ExceptionHandler
 {
@@ -46,7 +47,7 @@ class ExceptionHandler
             $event->setResponse($this->controller->showAction($request, $flattenException));
         } else if ($exception instanceof \Exception) {
             $event->stopPropagation();
-            \Kwf_Debug::handleException($event->getException());
+            \Kwf_Debug::handleException($exception instanceof AccessDeniedException ? new \Kwf_Exception_AccessDenied() : $event->getException());
             exit;
         }
     }
