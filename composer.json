@@ -14,7 +14,7 @@
         "koala-framework/kwf-trl-jsparser": ">=1.0.x-dev,<2.0.x.dev",
         "twig/twig": "^1.16.1",
         "koala-framework/sourcemaps": "~0.4",
-        "koala-framework/file-watcher": "*",
+        "koala-framework/file-watcher": "~1.0",
         "symfony/console": "~2.5",
         "symfony/process": "~2.5",
         "sepia/po-parser": "^4.2.1",
