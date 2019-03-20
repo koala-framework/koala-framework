@@ -41,7 +41,7 @@ class Kwc_Basic_Table_Trl_ControllerIsTrlData extends Kwf_Data_Abstract
         $this->_column = $column;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         return $row->getMasterValueIfNoTrl($this->_column);
     }
