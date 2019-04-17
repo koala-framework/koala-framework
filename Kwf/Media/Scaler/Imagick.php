@@ -43,12 +43,12 @@ class Kwf_Media_Scaler_Imagick extends Kwf_Media_Scaler_Abstract
             $hasIccProfile = in_array('icc', $profiles);
             // if it doesnt have a CMYK ICC profile, we add one
             if ($hasIccProfile === false) {
-                $iccCmyk = file_get_contents(dirname(__FILE__).'/icc/ISOuncoated.icc');
+                $iccCmyk = file_get_contents(dirname(__FILE__).'/../icc/ISOuncoated.icc');
                 $im->profileImage('icc', $iccCmyk);
                 unset($iccCmyk);
             }
             // then we add an RGB profile
-            $iccRgb = file_get_contents(dirname(__FILE__).'/icc/sRGB_v4_ICC_preference.icc');
+            $iccRgb = file_get_contents(dirname(__FILE__).'/../icc/sRGB_v4_ICC_preference.icc');
             $im->profileImage('icc', $iccRgb);
             unset($iccRgb);
         }
