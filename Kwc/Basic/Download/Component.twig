@@ -1,0 +1,13 @@
+<div class="{{ rootElementClass }}">
+    {% if icon %}
+        <img src="{{ icon }}">
+    {% endif %}
+    {{ renderer.component(downloadTag) }}
+        {{ infotext|mailEncodeText }}
+    {% if downloadTag.hasContent %}
+        </a>
+        {% if filesize %}
+            <span>({{ filesize|fileSize }})</span>
+        {% endif %}
+    {% endif %}
+</div>

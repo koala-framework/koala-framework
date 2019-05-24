@@ -1,0 +1,18 @@
+<div class="{{ rootElementClass }}">
+    {% if showAnchor %}
+        {% block anchor %}
+            <div class="{{ 'componentAnchor'|bemClass }}" id="{{ row.component_id }}"></div>
+        {% endblock %}
+    {% endif %}
+
+    <{{ headlineType.tag }} class="{{ 'headline'|bemClass }} {% if headlineType.class %}{{ headlineType.class|bemClass }}{% endif %}">
+        {% block headline %}
+            {% block main %}
+                <span>{{ headline1|raw }}</span>
+            {% endblock %}
+            {% block sub %}
+                <span class="{{ 'sub'|bemClass }}">{{ headline2|raw }}</span>
+            {% endblock %}
+        {% endblock %}
+    </{{ headlineType.tag }}>
+</div>
