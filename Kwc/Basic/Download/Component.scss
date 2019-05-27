@@ -1,3 +1,9 @@
 @import "config/colors";
-.kwcClass { margin-bottom: 5px; }
-.kwcClass span { color: $typo; }
+
+.kwcClass {
+    margin-bottom: 5px;
+
+    span {
+        color: $typo;
+    }
+}

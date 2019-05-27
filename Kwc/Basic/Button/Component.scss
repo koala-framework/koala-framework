@@ -2,6 +2,7 @@
 
 .kwcClass {
     @include pie-clearfix;
+
     .kwcBem__text {
         font-size: 14px;
         padding: 12px 30px;
@@ -12,6 +13,7 @@
         display: inline-block;
         color: white;
         background: #333;
+
         &:hover {
             background: #666;
         }
