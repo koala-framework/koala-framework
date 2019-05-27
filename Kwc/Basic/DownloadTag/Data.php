@@ -27,16 +27,4 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
     {
         return $this->url;
     }
-
-    public function getLinkDataAttributes()
-    {
-        $ret = parent::getLinkDataAttributes();
-        $ret['kwc-popup'] = 'blank';
-        return $ret;
-    }
-
-    public function getLinkClass()
-    {
-        return parent::getLinkClass().' kwfUp-kwcPopup';
-    }
 }
