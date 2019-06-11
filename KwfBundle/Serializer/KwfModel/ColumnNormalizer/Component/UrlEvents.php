@@ -1,5 +1,6 @@
 <?php
 namespace KwfBundle\Serializer\KwfModel\ColumnNormalizer\Component;
+
 class UrlEvents extends \Kwf_Events_Subscriber
 {
     public function getListeners()
@@ -10,15 +11,34 @@ class UrlEvents extends \Kwf_Events_Subscriber
             'event' => 'Kwf_Component_Event_Page_UrlChanged',
             'callback' => 'onUrlChanged'
         );
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_Page_RecursiveUrlChanged',
+            'callback' => 'onRecursiveUrlChanged'
+        );
         return $ret;
     }
 
     public function onUrlChanged(\Kwf_Component_Event_Page_UrlChanged $ev)
     {
+        $this->_deleteCache($ev->component);
+    }
+
+    public function onRecursiveUrlChanged(\Kwf_Component_Event_Page_RecursiveUrlChanged $ev)
+    {
+        if ($ev->component->componentClass == $this->_config['componentClass']) {
+            $this->_deleteCache($ev->component);
+        } else {
+            foreach ($ev->component->getRecursiveChildComponents(array('componentClass' => $this->_config['componentClass'])) as $component) {
+                $this->_deleteCache($component);
+            }
+        }
+    }
+
+    private function _deleteCache(\Kwf_Component_Data $data)
+    {
         $model = \Kwf_Model_Factory_Abstract::getModelInstance($this->_config['modelFactoryConfig']);
 
         $row = null;
-        $data = $ev->data;
         while ($data) {
             if (isset($data->row) && $data->row->getModel() == $model) {
                 $row = $data->row;
@@ -27,7 +47,7 @@ class UrlEvents extends \Kwf_Events_Subscriber
             $data = $data->parent;
         }
         if (!$row) {
-            throw new \Kwf_Exception("Can't find row matching model for $ev->data->componentId");
+            throw new \Kwf_Exception("Can't find row matching model for $data->componentId");
         }
         $cacheId =  'normalizer__'.$model->getUniqueIdentifier().'__'.$this->_config['column'].'__'.$row->id;
         \Kwf_Cache_Simple::delete($cacheId);
