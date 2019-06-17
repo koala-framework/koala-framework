@@ -222,7 +222,8 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             $html = Kwf_Util_Tidy::repairHtml($html, $config);
             if (!$parser) {
                 $parser = new Kwc_Basic_Text_Parser($this->componentId, $this->getModel());
-                $parser->setMasterStyles(Kwc_Basic_Text_StylesModel::getMasterStyles());
+                $stylesModel = Kwc_Abstract::getSetting($this->_componentClass, 'stylesModel');
+                $parser->setMasterStyles(call_user_func(array($stylesModel, 'getMasterStyles')));
             }
             $parser->setEnableColor(Kwc_Abstract::getSetting($this->_componentClass, 'enableColors'));
             $parser->setEnableTagsWhitelist(Kwc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
