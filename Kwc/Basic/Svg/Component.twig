@@ -1,0 +1,7 @@
+<div class="{{ rootElementClass }}">
+    {% if fileSource %}
+        {{ fileSource|raw }}
+    {% elseif fileUrl %}
+        <img src="{{ fileUrl }}" />
+    {% endif %}
+</div>
