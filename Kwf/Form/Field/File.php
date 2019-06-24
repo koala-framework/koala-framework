@@ -12,6 +12,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         $this->setFrontendButtonText(trlKwfStatic('Browse').'...');
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
+        $this->setAllowOnlySvg(false);
         $this->setMaxResolution(false);
         $this->setDropText(trlKwfStatic('Drop your file here'));
         $this->setXtype('kwf.file');
@@ -87,6 +88,11 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
                 if ($this->getAllowOnlyImages() && !$row->getImageDimensions()) {
                     $ret[] = array(
                         'message' => trlKwf('Only png, gif and jpeg supported.'),
+                        'field' => $this
+                    );
+                } else if ($this->getAllowOnlySvg() && $row->mime_type !== 'image/svg+xml') {
+                    $ret[] = array(
+                        'message' => trlKwf('Only svg supported.'),
                         'field' => $this
                     );
                 }
