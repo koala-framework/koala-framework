@@ -5,11 +5,16 @@ class Kwf_Util_ModelSync
     protected $_compareColumns;
     protected $_lastSyncStat = null;
     protected $_lastSyncMapping = null;
+    protected $_ignoreDeleted = false;
 
     public function __construct(Kwf_Model_Abstract $model, array $compareColumns)
     {
         $this->_model = $model;
         $this->_compareColumns = $compareColumns;
+    }
+
+    public function setIgnoreDeleted(){
+        $this->_ignoreDeleted = true;
     }
 
     public function syncData(array $data, Kwf_Model_Select $select = null)
@@ -70,6 +75,8 @@ class Kwf_Util_ModelSync
             $this->_lastSyncMapping[$id] = $row->id;
         }
         $this->_model->freeMemory();
+
+        if ($this->_ignoreDeleted) return true;
 
         foreach ($existingRows as $row) {
             if ($this->_model->hasDeletedFlag() && $row->deleted) continue;
