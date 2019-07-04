@@ -289,4 +289,12 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         }
         return $ret;
     }
+
+    public function getViewCacheSettings()
+    {
+        return array_merge(
+            parent::getViewCacheSettings(),
+            $this->getData()->parent->getComponent()->getViewCacheSettings()
+        );
+    }
 }
