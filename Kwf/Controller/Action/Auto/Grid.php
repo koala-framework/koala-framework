@@ -39,7 +39,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
     public function indexAction()
     {
-        $this->view->controllerUrl = $this->getRequest()->getPathInfo();
+        $this->view->controllerUrl = '/' . ltrim($this->getRequest()->getPathInfo(), '/');
         if ($this->_getParam('componentId')) {
             $this->view->baseParams = array(
                 'componentId' => $this->_getParam('componentId')
