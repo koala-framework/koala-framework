@@ -15,7 +15,7 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
             region: 'center',
             border: false,
             height: 120,
-            html: '<iframe scrolling="no" src=KWF_BASE_URL+"/kwf/user/login/show-form" width="100%" '+
+            html: '<iframe scrolling="no" src="'+KWF_BASE_URL+'/kwf/user/login/show-form" width="100%" '+
                     'height="100%" style="border: 0px"></iframe>'
         });
         this.lostPasswordButton = new Ext2.Button({
