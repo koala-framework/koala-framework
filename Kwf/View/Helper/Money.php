@@ -16,6 +16,8 @@ class Kwf_View_Helper_Money
 
     public function money($amount)
     {
+        if ($amount === null || $amount === '') return '';
+
         $component = $this->_data;
         if ($component) {
             $format = $component->getBaseProperty('money.format');
