@@ -87,4 +87,23 @@ class Kwc_Root_CategoryGenerator extends Kwf_Component_Generator_Table
         $ret += Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
         return $ret;
     }
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        $ret = parent::exportContent($cmp);
+        $row = $cmp->row;
+        $ret['name'] = $row->name;
+        return $ret;
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+        parent::importContent($cmp, $data);
+        if (isset($data['name'])) {
+            $row = $cmp->row;
+            $row->name = $data['name'];
+            $row->save();
+        }
+
+    }
 }
