@@ -203,4 +203,21 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
     {
         $data->row->visible = $visible;
     }
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        $ret = parent::exportContent($cmp);
+        $row = $cmp->row;
+        $ret['name'] = $row->name;
+        return $ret;
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+        parent::importContent($cmp, $data);
+        if (isset($data['name'])) {
+            $cmp->row->name = $data['name'];
+            $cmp->row->save();
+        }
+    }
 }
