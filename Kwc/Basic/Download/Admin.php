@@ -15,4 +15,23 @@ class Kwc_Basic_Download_Admin extends Kwc_Abstract_Composite_Admin
     {
         return $data->getComponent()->getRow()->infotext;
     }
+
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        $ret = parent::exportContent($cmp);
+        $ownRow = $cmp->getComponent()->getRow();
+        $ret['infotext'] = $ownRow->infotext;
+        return $ret;
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+        parent::importContent($cmp, $data);
+        $ownRow = $cmp->getComponent()->getRow();
+        if (isset($data['infotext'])) {
+            $ownRow->infotext = $data['infotext'];
+        }
+        $ownRow->save();
+    }
 }

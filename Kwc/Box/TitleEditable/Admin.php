@@ -19,4 +19,28 @@ class Kwc_Box_TitleEditable_Admin extends Kwc_Abstract_Admin
         //others have no title
         return null;
     }
+
+    protected function _duplicateOwnRow($source, $target)
+    {
+        //NOOP, contents should not be duplicated
+    }
+
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        $ret = parent::exportContent($cmp);
+        $ownRow = $cmp->getComponent()->getRow();
+        $ret['title'] = $ownRow->title;
+        return $ret;
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+        parent::importContent($cmp, $data);
+        $ownRow = $cmp->getComponent()->getRow();
+        if (isset($data['title'])) {
+            $ownRow->title = $data['title'];
+        }
+        $ownRow->save();
+    }
 }
