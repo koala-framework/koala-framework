@@ -15,4 +15,22 @@ class Kwc_Basic_Link_Admin extends Kwc_Abstract_Composite_Admin
     {
         return $data->getComponent()->getRow()->text;
     }
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        $ret = parent::exportContent($cmp);
+        $ownRow = $cmp->getComponent()->getRow();
+        $ret['text'] = $ownRow->text;
+        return $ret;
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+        parent::importContent($cmp, $data);
+        $ownRow = $cmp->getComponent()->getRow();
+        if (isset($data['text'])) {
+            $ownRow->text = $data['text'];
+        }
+        $ownRow->save();
+    }
 }
