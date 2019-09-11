@@ -71,13 +71,13 @@ class Kwc_Menu_Mobile_Events extends Kwc_Abstract_Events
 
     private function _deleteCache(Kwf_Component_Data $d, $deleteCacheForParent = true)
     {
-        if (Kwc_Abstract::getFlag($data->componentClass, 'subroot') || $data->componentId == 'root') {
-            Kwf_Cache_Simple::delete('kwcMenuMobile-root-'.$data->componentId.'-'.$this->_class);
+        if (Kwc_Abstract::getFlag($d->componentClass, 'subroot') || $d->componentId == 'root') {
+            Kwf_Cache_Simple::delete('kwcMenuMobile-root-'.$d->componentId.'-'.$this->_class);
 
             return true;
-        } else if ($data->isPage) {
-            Kwf_Cache_Simple::delete('kwcMenuMobile-'.$data->componentId);
-            if ($deleteCacheForParent) $this->_deleteCache(($p = $data->getParentPage()) ? $p : $data->getSubroot(), false);
+        } else if ($d->isPage) {
+            Kwf_Cache_Simple::delete('kwcMenuMobile-'.$d->componentId);
+            if ($deleteCacheForParent) $this->_deleteCache(($p = $d->getParentPage()) ? $p : $d->getSubroot(), false);
 
             return true;
         }
