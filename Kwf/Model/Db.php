@@ -58,7 +58,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function getColumnType($col)
     {
-        if (isset($this->_columnTypes[$col])) {
+        if (array_key_exists($col, $this->_columnTypes)) {
             return $this->_columnTypes[$col];
         }
         $info = $this->getTable()->info();
