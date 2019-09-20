@@ -44,6 +44,7 @@ class Kwc_Directories_List_Cc_Component extends Kwc_Abstract_Composite_Cc_Compon
     public function getItems($select = null)
     {
         $ret = array();
+        $select = $this->getData()->chained->getComponent()->getSelect($select);
         $items = $this->getData()->chained->getComponent()->getItems($select);
         foreach ($items as $item) {
             $trlItemCmp = self::getChainedByMaster($item, $this->getData(), array('ignoreVisible' => true));
