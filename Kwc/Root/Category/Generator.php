@@ -345,6 +345,10 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         $page = $this->_getPageData($id);
 
+        if ($parentData && isset($page['parent_id']) && $page['parent_id'] != $parentData->id) {
+            $parentData = null;
+        }
+
         if (!$parentData || ($parentData->componentClass == $this->_class && $page['parent_id'])) {
             $parentData = $page['parent_id'];
         }
