@@ -1,4 +1,5 @@
 var apiKeys = require('kwf-webpack/loader/google-maps-api-key!');
+require('core-js/es6/symbol');
 var t = require('kwf/commonjs/trl');
 var isLoaded = false;
 var isCallbackCalled = false;
