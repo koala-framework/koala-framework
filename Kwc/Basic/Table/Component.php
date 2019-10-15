@@ -35,6 +35,8 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $ret['rootElementClass'] = 'kwfUp-webStandard';
 
         $ret['extConfig'] = 'Kwc_Basic_Table_ExtConfig';
+        $ret['apiContent'] = 'Kwc_Basic_Table_ApiContent';
+        $ret['apiContentType'] = 'table';
         return $ret;
     }
 
