@@ -13,6 +13,8 @@ class Kwc_Basic_Space_Component extends Kwc_Abstract
         $ret['componentPriority'] = 70;
         $ret['ownModel'] = 'Kwc_Basic_Space_Model';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
+        $ret['apiContent'] = 'Kwc_Basic_Space_ApiContent';
+        $ret['apiContentType'] = 'space';
         return $ret;
     }
 
