@@ -23,6 +23,8 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         $ret['hasVisible'] = true;
         $ret['defaultVisible'] = false;
         $ret['maxEntries'] = 100;
+        $ret['apiContent'] = 'Kwc_Abstract_List_ApiContent';
+        $ret['apiContentType'] = 'list';
         return $ret;
     }
 
