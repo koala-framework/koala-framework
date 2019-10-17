@@ -9,8 +9,6 @@ class Kwc_TextImage_ApiContent implements Kwf_Component_ApiContent_Interface
             $ret['position'] = $row->position;
             $ret['image'] = $data->getChildComponent('-image');
             $ret['imageWidth'] = $row->image_width;
-        } else {
-            $ret['image'] = false;
         }
         $ret['text'] = $data->getChildComponent('-text');
         return $ret;
