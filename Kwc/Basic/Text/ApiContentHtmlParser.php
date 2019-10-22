@@ -99,6 +99,8 @@ class Kwc_Basic_Text_ApiContentHtmlParser
     {
         $row = $data->getComponent()->getRow();
         $html = str_replace('&nbsp;', '&#160;', $row->content); //Known bug https://bugs.php.net/bug.php?id=15092
+        if (trim($html) == '') return array();
+
         foreach ($data->getChildComponents() as $c) {
             $this->_childComponents[$c->dbId] = $c;
         }
