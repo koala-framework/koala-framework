@@ -96,6 +96,7 @@ abstract class Kwf_Exception_Abstract extends Exception
         $view = Kwf_Debug::getView();
         $view->exception = $msg;
         $view->message = $exception->getMessage();
+        $view->method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '';
         $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
             htmlspecialchars($_SERVER['REQUEST_URI']) : '' ;
         $view->debug = Kwf_Exception::isDebug();
