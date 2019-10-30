@@ -12,6 +12,8 @@ class Kwf_Benchmark_Counter
                     //kein memcache-fallback, da der dann *nur* für den counter verwendet werden würde
                     $i = new Kwf_Benchmark_Counter_File();
                 }
+            } else if (class_exists('Memcached')) {
+                $i = new Kwf_Benchmark_Counter_Memcached();
             } else if (class_exists('Memcache')) {
                 $i = new Kwf_Benchmark_Counter_Memcache();
             } else {
