@@ -146,14 +146,20 @@ class Kwf_Setup
         if ($i) $uri = substr($uri, 0, $i);
 
         if ($uri == 'robots.txt') {
+            self::restrictRequestMethod();
+
             Kwf_Util_RobotsTxt::output();
         }
 
         if ($uri == 'sitemap.xml') {
+            self::restrictRequestMethod();
+
             $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', null);
             Kwf_Component_Sitemap::output($data->getDomainComponent());
         }
         if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf', 'api'))) {
+            self::restrictRequestMethod();
+
             if (!isset($_SERVER['HTTP_HOST'])) {
                 $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$fullRequestPath;
             } else {
@@ -210,6 +216,8 @@ class Kwf_Setup
             exit;
 
         } else if ($requestPath == '/kwf/util/kwc/render') {
+            self::restrictRequestMethod();
+
             Kwf_User_Autologin::processCookies();
             Kwf_Util_Component::dispatchRender();
         }
@@ -222,6 +230,8 @@ class Kwf_Setup
 
         $urlParts = explode('/', substr($requestPath, 1));
         if (is_array($urlParts) && $urlParts[0] == 'media') {
+            self::restrictRequestMethod();
+
             if (sizeof($urlParts) != 7) {
                 throw new Kwf_Exception_NotFound();
             }
@@ -328,5 +338,14 @@ class Kwf_Setup
             header('WWW-Authenticate: Basic realm="Page locked by preLogin"');
             throw new Kwf_Exception_Unauthorized('PreLogin required');
         }
+    }
+
+    /**
+     * @throws Kwf_Exception_MethodNotAllowed
+     */
+    public static function restrictRequestMethod()
+    {
+        $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
+        if ($method && !in_array($method, array('HEAD', 'GET', 'POST'))) throw new Kwf_Exception_MethodNotAllowed($method);
     }
 }

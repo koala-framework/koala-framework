@@ -3,9 +3,7 @@ class Kwf_Util_RobotsTxt
 {
     public static function output()
     {
-        $contents = "User-agent: *\n".
-            "Allow: /admin/component/edit/\n".
-            "Disallow: /admin/\n";
+        $contents = "User-agent: *\n";
 
         $contents .= "Sitemap: http".(isset($_SERVER['HTTPS']) ? 's' : '')."://"
                         . $_SERVER['HTTP_HOST'] . "/sitemap.xml\n";
