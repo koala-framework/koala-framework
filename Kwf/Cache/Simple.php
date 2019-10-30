@@ -31,7 +31,11 @@ class Kwf_Cache_Simple
         }
         if (Kwf_Config::getValue('server.memcache.host')) {
             //prefer memcache over redis
-            $ret = 'memcache';
+            if (extension_loaded('memcached')) {
+                $ret = 'memcached';
+            } else {
+                $ret = 'memcache';
+            }
         } else if (Kwf_Config::getValue('server.redis.host')) {
             $ret = 'redis';
         } else if (extension_loaded('apcu') && !Kwf_Config::getValue('server.apcStaticOnly')) {
@@ -67,7 +71,9 @@ class Kwf_Cache_Simple
 
             if (self::$_zendCache) {
                 $be = self::$_zendCache->getBackend();
-                if ($be instanceof Zend_Cache_Backend_Memcached) {
+                if ($be instanceof Zend_Cache_Backend_Libmemcached) {
+                    self::$_zendCache->setOption('cache_id_prefix', self::_getMemcachedPrefix());
+                } else if ($be instanceof Zend_Cache_Backend_Memcached) {
                     self::$_zendCache->setOption('cache_id_prefix', self::_getMemcachePrefix());
                 }
             }
@@ -90,6 +96,18 @@ class Kwf_Cache_Simple
         $memcache = new Memcache;
         $memcache->addServer(self::$memcacheHost, self::$memcachePort);
         return $memcache;
+    }
+
+    public static function getMemcached()
+    {
+        static $memcached;
+        if (isset($memcached)) return $memcached;
+        if (!self::$memcacheHost) {
+            return false;
+        }
+        $memcached = new Memcached;
+        $memcached->addServer(self::$memcacheHost, self::$memcachePort);
+        return $memcached;
     }
 
     public static function getRedis()
@@ -122,6 +140,22 @@ class Kwf_Cache_Simple
         return self::$namespace;
     }
 
+    private static function _getMemcachedPrefix()
+    {
+        if (!isset(self::$namespace)) {
+            $mc = self::getMemcached();
+            //namespace is incremented in Kwf_Util_ClearCache
+            //use memcache directly as Zend would not save the integer directly and we can't increment it then
+            $v = $mc->get(self::$uniquePrefix.'cache_namespace');
+            if (!$v) {
+                $v = time();
+                $mc->set(self::$uniquePrefix.'cache_namespace', $v);
+            }
+            self::$namespace = self::$uniquePrefix.'-'.$v;
+        }
+        return self::$namespace;
+    }
+
     //for 'file' backend
     public static function _getFileNameForCacheId($cacheId)
     {
@@ -134,7 +168,11 @@ class Kwf_Cache_Simple
 
     public static function fetch($cacheId, &$success = true)
     {
-        if (self::getBackend() == 'memcache') {
+        if (self::getBackend() == 'memcached') {
+            $ret = self::getMemcached()->get(self::_getMemcachedPrefix().md5($cacheId));
+            $success = $ret !== false;
+            return $ret;
+        } else if (self::getBackend() == 'memcache') {
             $ret = self::getMemcache()->get(self::_getMemcachePrefix().md5($cacheId));
             $success = $ret !== false;
             return $ret;
@@ -178,7 +216,9 @@ class Kwf_Cache_Simple
 
     public static function add($cacheId, $data, $ttl = null)
     {
-        if (self::getBackend() == 'memcache') {
+        if (self::getBackend() == 'memcached') {
+            return self::getMemcached()->set(self::_getMemcachedPrefix().md5($cacheId), $data, $ttl);
+        } else if (self::getBackend() == 'memcache') {
             return self::getMemcache()->set(self::_getMemcachePrefix().md5($cacheId), $data, 0, $ttl);
         } else if (self::getBackend() == 'redis') {
             if (!$ttl) $ttl = 365*24*60*60; //Set a TTL so it can be evicted http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
@@ -216,7 +256,9 @@ class Kwf_Cache_Simple
 
         $ret = true;
         foreach ($cacheIds as $cacheId) {
-            if (self::getBackend() == 'memcache') {
+            if (self::getBackend() == 'memcached') {
+                $r = self::getMemcached()->delete(self::_getMemcachedPrefix().md5($cacheId));
+            } else if (self::getBackend() == 'memcache') {
                 $r = self::getMemcache()->delete(self::_getMemcachePrefix().md5($cacheId));
             } else if (self::getBackend() == 'apc') {
                 static $prefix;
@@ -254,7 +296,18 @@ class Kwf_Cache_Simple
     //only call from Kwf_Util_ClearCache_Types_SimpleCache!
     public static function _clear()
     {
-        if (self::getBackend() == 'memcache') {
+        if (self::getBackend() == 'memcached') {
+            if (!Kwf_Config::getValue('cacheSimpleNamespace')) {
+                //increment namespace
+                $mc = Kwf_Cache_Simple::getMemcached();
+                if ($mc->get(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace')) {
+                    $mc->increment(Kwf_Cache_Simple::$uniquePrefix.'cache_namespace');
+                }
+            } else {
+                $mc = Kwf_Cache_Simple::getMemcached();
+                $mc->flush();
+            }
+        } else if (self::getBackend() == 'memcache') {
             if (!Kwf_Config::getValue('cacheSimpleNamespace')) {
                 //increment namespace
                 $mc = Kwf_Cache_Simple::getMemcache();
@@ -275,7 +328,7 @@ class Kwf_Cache_Simple
                 self::getRedis()->delete($keys);
             }
         } else if (self::getBackend() == 'file') {
-            foreach(glob('cache/simple/*') as $i) {
+            foreach (glob('cache/simple/*') as $i) {
                 unlink($i);
             }
         } else if (self::getBackend() == 'apc' || self::getBackend() == 'apcu') {

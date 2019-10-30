@@ -61,7 +61,11 @@ class Kwf_Util_SessionHandler
 
         $this->_initSessionData = null;
 
-        $this->_memcache = new Memcache();
+        if (extension_loaded('memcached')) {
+            $this->_memcache = new Memcached();
+        } else {
+            $this->_memcache = new Memcache();
+        }
         if (Kwf_Cache_Simple::$memcacheHost) {
             $servers = array(
                 array(
@@ -73,7 +77,9 @@ class Kwf_Util_SessionHandler
             throw new Kwf_Exception("no memcache configured");
         }
         foreach ($servers as $s) {
-            if (version_compare(phpversion('memcache'), '2.1.0') == -1 || phpversion('memcache')=='2.2.4') { // < 2.1.0
+            if (extension_loaded('memcached')) {
+                $this->_memcache->addServer($s['host'], $s['port']);
+            } else if (version_compare(phpversion('memcache'), '2.1.0') == -1 || phpversion('memcache')=='2.2.4') { // < 2.1.0
                 $this->_memcache->addServer($s['host'], $s['port'], true, 1, 1, 1);
             } else if (version_compare(phpversion('memcache'), '3.0.0') == -1) { // < 3.0.0
                 $this->_memcache->addServer($s['host'], $s['port'], true, 1, 1, 1, true, null, 10000);
@@ -158,12 +164,22 @@ class Kwf_Util_SessionHandler
             'data' => $data,
             'expiration' => $this->_lifeTime + time()
         );
-        $this->_memcache->set(
-            Kwf_Cache_Simple::getUniquePrefix().'sess-'.$sessionId,
-            $d,
-            false,
-            time() + $this->_lifeTime + $this->_refreshTime
-        );
+        if (extesion_loaded('memcached')) {
+            $this->_memcache->set(
+                Kwf_Cache_Simple::getUniquePrefix().'sess-'.$sessionId,
+                $d,
+                time() + $this->_lifeTime + $this->_refreshTime
+            );
+    
+        } else {
+            $this->_memcache->set(
+                Kwf_Cache_Simple::getUniquePrefix().'sess-'.$sessionId,
+                $d,
+                false,
+                time() + $this->_lifeTime + $this->_refreshTime
+            );
+    
+        }
     }
  
     /**
