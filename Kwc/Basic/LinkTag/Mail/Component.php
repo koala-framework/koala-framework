@@ -13,6 +13,8 @@ class Kwc_Basic_LinkTag_Mail_Component extends Kwc_Basic_LinkTag_Abstract_Compon
             'componentName' => 'Link.E-Mail',
             'default' => array()
         ));
+        $ret['apiContent'] = 'Kwc_Basic_LinkTag_Mail_ApiContent';
+        $ret['apiContentType'] = 'mail';
         return $ret;
     }
 }

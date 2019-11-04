@@ -29,8 +29,6 @@ class Kwc_Basic_LinkTag_Component extends Kwc_Abstract_Cards_Component
                 $cc->Kwc_Basic_LinkTag_Component->toArray()
             );
         }
-        $ret['apiContent'] = 'Kwc_Basic_LinkTag_ApiContent';
-        $ret['apiContentType'] = 'linkTag';
         return $ret;
     }
 

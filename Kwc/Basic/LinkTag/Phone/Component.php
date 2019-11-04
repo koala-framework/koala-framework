@@ -13,6 +13,8 @@ class Kwc_Basic_LinkTag_Phone_Component extends Kwc_Basic_LinkTag_Abstract_Compo
             'componentName' => 'Link.Phone',
             'default' => array()
         ));
+        $ret['apiContent'] = 'Kwc_Basic_LinkTag_Phone_ApiContent';
+        $ret['apiContentType'] = 'phone';
         return $ret;
     }
 }
