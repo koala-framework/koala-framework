@@ -2,8 +2,10 @@ var apiKeys = require('kwf-webpack/loader/google-maps-api-key!');
 var t = require('kwf/commonjs/trl');
 var isLoaded = false;
 var isCallbackCalled = false;
-var callbacks = [];
 var loadedLibraries;
+
+var callbackFunctionName = 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
+window[callbackFunctionName + '-callbacks'] = [];
 
 module.exports = function(callback, options)
 {
@@ -33,7 +35,7 @@ module.exports = function(callback, options)
         callback.call(scope);
         return;
     }
-    callbacks.push({
+    window[callbackFunctionName + '-callbacks'].push({
         callback: callback,
         scope: scope
     });
@@ -68,8 +70,7 @@ module.exports = function(callback, options)
     }
 
     var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&key='+key+'&c&libraries='+options.libraries.join(',')+'&async=2&language='+ __trlKwf('en');
-    url += '&callback=';
-    url += 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
+    url += '&callback=' + callbackFunctionName;
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
     s.setAttribute('src', url);
@@ -78,10 +79,10 @@ module.exports = function(callback, options)
     loadedLibraries = options.libraries;
 };
 
-window['kwfUp-KwfGoogleMapLoaded'.replace('-', '_')] = function()
+window[callbackFunctionName] = function()
 {
     isCallbackCalled = true;
-    callbacks.forEach(function(i) {
+    window[callbackFunctionName + '-callbacks'].forEach(function(i) {
         i.callback.call(i.scope || window);
     });
 };
