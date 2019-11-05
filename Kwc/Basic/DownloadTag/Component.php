@@ -12,6 +12,8 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         $ret['dataClass'] = 'Kwc_Basic_DownloadTag_Data';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/DownloadTag/Panel.js';
+        $ret['apiContent'] = 'Kwc_Basic_DownloadTag_ApiContent';
+        $ret['apiContentType'] = 'download';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         return $ret;
     }

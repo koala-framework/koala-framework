@@ -4,8 +4,8 @@ class Kwc_Basic_Download_ApiContent implements Kwf_Component_ApiContent_Interfac
     public function getContent(Kwf_Component_Data $data)
     {
         return array(
-            'infotext' => $data->getComponent()->getRow()->infotext,
-            'download' => $data->getChildComponent('-downloadTag')
+            'infoText' => $data->getComponent()->getRow()->infotext,
+            'link' => $data->getChildComponent('-downloadTag')
         );
     }
 }
