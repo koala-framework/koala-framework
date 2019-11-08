@@ -1,12 +1,13 @@
 var apiKeys = require('kwf-webpack/loader/google-maps-api-key!');
 require('core-js/es6/symbol');
 var t = require('kwf/commonjs/trl');
-var isLoaded = false;
-var isCallbackCalled = false;
 var loadedLibraries;
 
 var callbackFunctionName = 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
-window[callbackFunctionName + '-callbacks'] = [];
+if (typeof window[callbackFunctionName + '_callbacks'] === "undefined") window[callbackFunctionName + '_callbacks'] = [];
+
+if (typeof window[callbackFunctionName + '_isCallbackCalled'] === "undefined") window[callbackFunctionName + '_isCallbackCalled'] = false;
+if (typeof window[callbackFunctionName + '_isLoaded'] === "undefined") window[callbackFunctionName + '_isLoaded'] = false;
 
 module.exports = function(callback, options)
 {
@@ -32,17 +33,17 @@ module.exports = function(callback, options)
         throw new Error('Google map was already loaded with different libraries');
     }
 
-    if (isCallbackCalled) {
+    if (window[callbackFunctionName + '_isCallbackCalled']) {
         callback.call(scope);
         return;
     }
-    window[callbackFunctionName + '-callbacks'].push({
+    window[callbackFunctionName + '_callbacks'].push({
         callback: callback,
         scope: scope
     });
-    if (isLoaded) return;
+    if (window[callbackFunctionName + '_isLoaded']) return;
 
-    isLoaded = true;
+    window[callbackFunctionName + '_isLoaded'] = true;
 
 
     //try find the correct api key
@@ -82,8 +83,8 @@ module.exports = function(callback, options)
 
 window[callbackFunctionName] = function()
 {
-    isCallbackCalled = true;
-    window[callbackFunctionName + '-callbacks'].forEach(function(i) {
+    window[callbackFunctionName + '_isCallbackCalled'] = true;
+    window[callbackFunctionName + '_callbacks'].forEach(function(i) {
         i.callback.call(i.scope || window);
     });
 };
