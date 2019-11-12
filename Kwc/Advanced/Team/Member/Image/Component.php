@@ -1,5 +1,5 @@
 <?php
-class Kwc_Advanced_Team_Member_Image_Component extends Kwc_Abstract_Image_Component
+class Kwc_Advanced_Team_Member_Image_Component extends Kwc_Basic_Image_Component
 {
     public static function getSettings($param = null)
     {
