@@ -15,6 +15,8 @@ class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Compo
         $ret['assetsDefer']['dep'][] = 'KwfSwitchDisplay';
         $ret['extConfig'] = 'Kwc_Composite_SwitchDisplay_ExtConfig';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['apiContent'] = 'Kwc_Composite_SwitchDisplay_ApiContent';
+        $ret['apiContentType'] = 'switchDisplay';
         return $ret;
     }
 
