@@ -1,5 +1,3 @@
-// @require ModernizrTouchevents
-
 var onReady = require('kwf/on-ready');
 var $ = require('jQuery');
 
@@ -56,7 +54,7 @@ var DoubleTapToGo = function(el, params) {
         return;
     }
 
-    if (Modernizr.touchevents) {
+    if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
         $.each(el, function(i, element) {
             if ($(element).hasClass('kwfDoubleTapHandler')) return;
 
