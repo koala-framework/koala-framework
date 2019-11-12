@@ -51,26 +51,57 @@ class Kwc_Basic_Text_ApiContentHtmlParser
     protected function startElement($parser, $element, $attributes)
     {
         $current = $this->_stack[count($this->_stack)-1];
-        if (!isset($current)) $current->children = array();
         $newBlock = null;
         if (strtolower($element) == 'a') {
             if (isset($this->_childComponents[$attributes['HREF']])) {
                 $newBlock['element'] = 'component';
-                $newBlock['component'] = $this->_childComponents[$attributes['HREF']];
-            } else {
-                $newBlock = null;
+                $cmp = $this->_childComponents[$attributes['HREF']];
+                if (is_instance_of($cmp->componentClass, 'Kwc_Basic_LinkTag_Abstract_Component') // support all link-tags
+                    || is_instance_of($cmp->componentClass, 'Kwc_Basic_LinkTag_Component') // support special-case LinkTag-Component
+                ) {
+                    $newBlock['component'] = array(
+                        "type" => "componentLink",
+                        "id" => "no_id",
+                        "data" => array(
+                            "link" => $cmp
+                        )
+                    );
+                } else {
+                    $newBlock['component'] = $cmp;
+                }
             }
         } else {
             $newBlock = array(
                 'element' => strtolower($element),
             );
         }
-
         if ($newBlock) {
             $newBlock = (object)$newBlock;
-            $current->children[] = $newBlock;
+            if ($current->element == 'component') {
+                $this->addElementToComponent($current, $newBlock);
+            } else {
+                if (!isset($current)) $current->children = array();
+                $current->children[] = $newBlock;
+            }
         }
         array_push($this->_stack, $newBlock);
+    }
+
+    protected function addElementToComponent(&$componentElement, $element)
+    {
+        // only componentLink supports adding child-elements. other components need to handle their content on their own
+        if (!is_array($componentElement->component) || $componentElement->component['type'] != 'componentLink') return;
+
+        if (!isset($componentElement->component['data']['content'])) {
+            $componentElement->component['data']['content'] = array(
+                "type" => "text",
+                "id" => "no_id",
+                "data" => array(
+                    "content" => array()
+                )
+            );
+        }
+        $componentElement->component['data']['content']['data']['content'][] = $element;
     }
 
     protected function characterData($parser, $cdata)
@@ -78,8 +109,6 @@ class Kwc_Basic_Text_ApiContentHtmlParser
         $current = $this->_stack[count($this->_stack)-1];
 
         if ($current) {
-            if (!isset($current)) $current->children = array();
-
             $cdata = preg_replace('/\s+/', ' ', $cdata);
             if (in_array($current->element, $this->_breakingElements)) {
                 if (!isset($current->children) || count($current->children) == 0) {
@@ -87,10 +116,16 @@ class Kwc_Basic_Text_ApiContentHtmlParser
                 }
             }
             if ($cdata) {
-                $current->children[] = (object)array(
+                $element = (object)array(
                     'element' => 'text',
                     'text' => $cdata
                 );
+                if ($current->element == 'component') {
+                    $this->addElementToComponent($current, $element);
+                } else {
+                    if (!isset($current)) $current->children = array();
+                    $current->children[] = $element;
+                }
             }
         }
     }
