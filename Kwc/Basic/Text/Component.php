@@ -58,7 +58,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
         $ret['apiContent'] = 'Kwc_Basic_Text_ApiContent';
-        $ret['apiContentType'] = 'text';
+        $ret['apiContentType'] = 'formattedText';
         return $ret;
     }
 
