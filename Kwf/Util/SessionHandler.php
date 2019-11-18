@@ -164,7 +164,7 @@ class Kwf_Util_SessionHandler
             'data' => $data,
             'expiration' => $this->_lifeTime + time()
         );
-        if (extesion_loaded('memcached')) {
+        if (extension_loaded('memcached')) {
             $this->_memcache->set(
                 Kwf_Cache_Simple::getUniquePrefix().'sess-'.$sessionId,
                 $d,
