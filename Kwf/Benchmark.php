@@ -332,7 +332,7 @@ class Kwf_Benchmark
                     $ret .= "</ul>";
                 } else {
                     $ret .= "$k: (".count($i).') ';
-                    $len = '';
+                    $len = 0;
                     foreach ($i as $j) {
                         $v = $j['value'].' ';
                         $len += strlen($v);
