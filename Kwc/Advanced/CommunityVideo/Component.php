@@ -14,6 +14,9 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
             'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'url';
+
+        $ret['apiContent'] = 'Kwc_Advanced_CommunityVideo_ApiContent';
+        $ret['apiContentType'] = 'video';
         return $ret;
     }
 
