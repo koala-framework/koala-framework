@@ -14,6 +14,9 @@ class Kwc_Basic_LinkTag_Intern_Component extends Kwc_Basic_LinkTag_Abstract_Comp
         ));
         $ret['assetsAdmin']['dep'][] = 'KwfPageSelectField';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/LinkTag/Intern/AnchorField.js';
+
+        $ret['apiContent'] = 'Kwc_Basic_LinkTag_Intern_ApiContent';
+        $ret['apiContentType'] = 'linkIntern';
         return $ret;
     }
 }
