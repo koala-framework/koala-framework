@@ -3,6 +3,6 @@ class Kwc_Basic_LinkTag_Empty_ApiContent implements Kwf_Component_ApiContent_Int
 {
     public function getContent(Kwf_Component_Data $data)
     {
-        return new stdClass();
+        return null;
     }
 }
