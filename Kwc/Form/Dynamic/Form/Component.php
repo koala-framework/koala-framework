@@ -110,7 +110,7 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
             $c = Kwf_Component_Data_Root::getInstance()->getComponentById($settings['confirm_field_component_id']);
             if ($c && ($recipient = $row->{$c->getComponent()->getFormField()->getName()})) {
                 $mail = new Kwf_Mail();
-                $body = $this->getData()->trlKwf('Thank you for your inquiry, it will be processed as soon as posible.');
+                $body = $this->getData()->trlKwf('Thank you for your inquiry, it will be processed as soon as possible.');
                 $body .= "\n\n";
                 $body .= $msg;
                 $mail->setSubject(str_replace('%number%', $row->id, $settings['confirm_subject']));
