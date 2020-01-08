@@ -9,9 +9,9 @@ class Kwc_Directories_List_Trl_Cc_Component extends Kwc_Directories_List_Cc_Comp
             throw new Kwf_Exception_NotYetImplemented();
         } else {
             if (Kwc_Abstract::getSetting($this->getData()->chained->chained->componentClass, 'useDirectorySelect')) {
-                $ret = $itemDirectory->getComponent()->getSelect();
+                $ret = $this->_getChainedComponent()->getComponent()->getSelect();
             } else {
-                $ret = $itemDirectory->getGenerator('detail')
+                $ret = $this->_getChainedComponent()->getGenerator('detail')
                     ->select($this->getItemDirectory());
             }
         }

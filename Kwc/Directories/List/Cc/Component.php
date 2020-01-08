@@ -44,7 +44,6 @@ class Kwc_Directories_List_Cc_Component extends Kwc_Abstract_Composite_Cc_Compon
     public function getItems($select = null)
     {
         $ret = array();
-        $select = $this->getData()->chained->getComponent()->getSelect($select);
         $items = $this->getData()->chained->getComponent()->getItems($select);
         foreach ($items as $item) {
             $trlItemCmp = self::getChainedByMaster($item, $this->getData(), array('ignoreVisible' => true));
@@ -76,9 +75,9 @@ class Kwc_Directories_List_Cc_Component extends Kwc_Abstract_Composite_Cc_Compon
             throw new Kwf_Exception_NotYetImplemented();
         } else {
             if (Kwc_Abstract::getSetting($this->_getChainedComponent()->componentClass, 'useDirectorySelect')) {
-                $ret = $itemDirectory->getComponent()->getSelect();
+                $ret = $this->_getChainedComponent()->getComponent()->getSelect();
             } else {
-                $ret = $itemDirectory->getGenerator('detail')
+                $ret = $this->_getChainedComponent()->getGenerator('detail')
                     ->select($this->getItemDirectory());
             }
         }
