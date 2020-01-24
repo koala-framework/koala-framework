@@ -4,7 +4,6 @@ class Kwc_Statistics_GoogleTagManager_Component extends Kwc_Abstract_Composite_C
     public static function getSettings($param = null)
     {
         $ret = parent::getSettings($param);
-        $ret['assets']['dep'][] = 'KwfStatistics';
         $ret['flags']['hasHeaderIncludeCode'] = true;
         $ret['flags']['hasFooterIncludeCode'] = true;
         return $ret;
