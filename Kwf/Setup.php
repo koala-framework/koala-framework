@@ -160,18 +160,19 @@ class Kwf_Setup
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
 
-        if ($uri == 'robots.txt') {
+        if ($uri == 'robots.txt' || $uri == 'sitemap.xml') {
             self::restrictRequestMethod();
+            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://' . $_SERVER['HTTP_HOST'] . Kwf_Setup::getBaseUrl() . '/', null);
 
-            Kwf_Util_RobotsTxt::output();
+            if ($uri == 'robots.txt') {
+                Kwf_Util_RobotsTxt::output($data);
+            }
+
+            if ($uri == 'sitemap.xml') {
+                Kwf_Component_Sitemap::output($data->getDomainComponent());
+            }
         }
 
-        if ($uri == 'sitemap.xml') {
-            self::restrictRequestMethod();
-
-            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].Kwf_Setup::getBaseUrl().'/', null);
-            Kwf_Component_Sitemap::output($data->getDomainComponent());
-        }
         if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf', 'api'))) {
             self::restrictRequestMethod();
 
