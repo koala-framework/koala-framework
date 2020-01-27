@@ -11,21 +11,14 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             unlink($f);
         }
         $config = Zend_Registry::get('config');
-        $langs = array();
-        if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
 
-        if ($config->languages) {
-            foreach ($config->languages as $lang=>$name) {
-                $langs[] = $lang;
-            }
-        }
+        // First ask components for their languages
+        $langs = array();
         try {
             if (Kwf_Component_Data_Root::getComponentClass()) {
                 foreach(Kwc_Abstract::getComponentClasses() as $c) {
                     if (Kwc_Abstract::getFlag($c, 'hasAvailableLanguages')) {
-                        foreach (call_user_func(array($c, 'getAvailableLanguages'), $c) as $i) {
-                            if (!in_array($i, $langs)) $langs[] = $i;
-                        }
+                        $langs = array_merge($langs, call_user_func(array($c, 'getAvailableLanguages'), $c));
                     }
                 }
             }
@@ -36,6 +29,20 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             }
             throw $e;
         }
+
+        // If components don't have languages use static config
+        if (!$langs && is_array($config->languages)) {
+            foreach ($config->languages as $lang=>$name) {
+                $langs[] = $lang;
+            }
+        }
+
+        // If there's no static config use webCodeLanguage
+        if (!$langs && $config->webCodeLanguage) {
+            $langs[] = $config->webCodeLanguage;
+        }
+
+        $langs = array_unique($langs);
 
         //used by webpack
         file_put_contents('build/trl/languages.json', json_encode($langs));
