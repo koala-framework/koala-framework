@@ -49,12 +49,15 @@ class Kwc_Root_DomainRoot_Component extends Kwc_Root_Abstract
 
     public static function getDomains()
     {
-        $ret = Kwf_Config::getValueArray('kwc.domains');
         $availableDomains = Kwf_Config::getValue('kwc.availableDomains');
         if (is_array($availableDomains)) {
-            $ret = array_filter($ret, function ($domain) use ($availableDomains) {
-                return in_array($domain, $availableDomains);
-            }, ARRAY_FILTER_USE_KEY);
+            $domains = Kwf_Config::getValueArray('kwc.domains');
+            foreach ($availableDomains as $domain) {
+                if (!isset($domains[$domain])) continue;
+                $ret[$domain] = $domains[$domain];
+            }
+        } else {
+            $ret = Kwf_Config::getValueArray('kwc.domains');
         }
         return $ret;
     }
