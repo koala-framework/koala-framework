@@ -93,6 +93,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         return $d->getComponent();
     }
 
+    public function hasContent()
+    {
+        return !!$this->getImageDataOrEmptyImageData();
+    }
+
     /**
      * This function is used by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component
      * to get the url to show the image from parent with dimension defined through
@@ -193,6 +198,9 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
     public function getApiData()
     {
         $image = $this->_getImageOutputData();
+        if (!$this->getData()->hasContent()) {
+            return null;
+        }
         return array(
             'aspectRatio' => $image['aspectRatio'],
             'widthSteps' => $image['widthSteps'],
