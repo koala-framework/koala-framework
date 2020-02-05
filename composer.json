@@ -36,7 +36,7 @@
             "browser-pack": "~5.0.1",
             "module-deps": "~3.8.0",
             "JSONStream": "~1.0.4",
-            "modernizr": "^3.0.0",
+            "modernizr": "^3.0.0 <3.8.0",
             "postcss": "~5.0.13",
             "es6-promise": "~3.0.2",
             "css-selectors-count": "~1.0.1",
