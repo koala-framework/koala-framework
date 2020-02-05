@@ -271,7 +271,7 @@ Kwf.Auto.FormPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
         var params = this.getForm().getValues();
         params = Ext2.apply(params, this.getBaseParams());
         for (var i in params) {
-            if (typeof params[i] == 'object') {
+            if (typeof params[i] == 'object' && params[i] !== null) {
                 params[i] = Ext2.encode(params[i]);
             } else if (typeof params[i] == 'boolean') {
                 params[i] = params[i] ? '1' : '0';
