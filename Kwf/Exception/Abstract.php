@@ -44,7 +44,7 @@ abstract class Kwf_Exception_Abstract extends Exception
     public static function isLogEnabled()
     {
         try {
-            if (isset(self::$logErrors)) return !self::$logErrors;
+            if (isset(self::$logErrors)) return !!self::$logErrors;
             return Kwf_Config::getValue('debug.error.log');
         } catch (Exception $e) {
             return true;
