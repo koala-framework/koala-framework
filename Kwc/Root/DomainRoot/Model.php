@@ -10,7 +10,7 @@ class Kwc_Root_DomainRoot_Model extends Kwf_Model_Data_Abstract
         if (isset($config['domains'])) {
             $this->_domains = $config['domains'];
         } else {
-            $this->_domains = Kwf_Registry::get('config')->kwc->domains->toArray();
+            $this->_domains = Kwc_Root_DomainRoot_Component::getDomains();
         }
         parent::__construct($config);
     }

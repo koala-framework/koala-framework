@@ -16,7 +16,7 @@ class Kwc_Tags_Events extends Kwc_Abstract_Events
         );
         $ret[] = array(
             'class' => 'Kwc_Tags_Suggestions_Model',
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onTagRowUpdate'
         );
         return $ret;
