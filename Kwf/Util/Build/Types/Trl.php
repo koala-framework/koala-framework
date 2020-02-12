@@ -24,7 +24,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
                 foreach(Kwc_Abstract::getComponentClasses() as $c) {
                     if (Kwc_Abstract::getFlag($c, 'hasAvailableLanguages')) {
                         foreach (call_user_func(array($c, 'getAvailableLanguages'), $c) as $i) {
-                            if (!in_array($i, $langs)) $langs[] = $i;
+                            $langs[] = $i;
                         }
                     }
                 }
@@ -36,6 +36,8 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             }
             throw $e;
         }
+
+        $langs = array_unique($langs);
 
         //used by webpack
         file_put_contents('build/trl/languages.json', json_encode($langs));
