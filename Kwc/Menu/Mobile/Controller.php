@@ -86,6 +86,11 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         return true;
     }
 
+    protected function _validateCsrf()
+    {
+        // Not necessary for Frontend
+    }
+
     protected function _getChildPages()
     {
         $category = Kwc_Abstract::getSetting($this->_getParam('class'), 'level');
