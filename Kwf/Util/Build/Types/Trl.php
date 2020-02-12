@@ -37,7 +37,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             throw $e;
         }
 
-        $langs = array_unique($langs);
+        $langs = array_values(array_unique($langs));
 
         //used by webpack
         file_put_contents('build/trl/languages.json', json_encode($langs));
