@@ -50,6 +50,9 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
             Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_SECONDS, $debug);
             if (!$lastMinutelyRun || time()-$lastMinutelyRun > 60) {
+                if (!$lastMinutelyRun) {
+                    sleep(rand(0, 45)); // Prevents running jobs of multiple webs in the same second
+                }
                 $lastMinutelyRun = time();
                 Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_MINUTELY, $debug);
 
