@@ -34,7 +34,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $redirectBackUrl = $_GET['redirect'];
 
             $f = new Kwf_Filter_StrongRandom();
-            $state = 'login.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.str_replace('.', 'kwfdot', $redirectBackUrl);
+            $state = 'login.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.urlencode(str_replace('.', 'kwfdot', $redirectBackUrl));
 
             //save state in namespace to validate it later
             $ns = new Kwf_Session_Namespace('kwf-login-redirect');
