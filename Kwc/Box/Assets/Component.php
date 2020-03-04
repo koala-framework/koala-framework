@@ -19,7 +19,13 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars($renderer);
         $ret['language'] = $this->getData()->getLanguage();
         $ret['subroot'] = $this->getData()->getSubroot();
-        $ret['assetsPackages'] = array('Frontend');
+        $ret['assetsPackages'] = array(Kwf_Config::getValue('kwc.rootComponent'));
+        foreach (Kwf_Config::getValueArray('assets.componentPackages') as $componentPackage) {
+            $classes = Kwf_Component_Settings::getComponentClassesOfStartingClass($componentPackage);
+            if (in_array($this->getData()->getPage()->componentClass, $classes)) {
+                $ret['assetsPackages'][] = $componentPackage;
+            }
+        }
         $ret['kwfUp'] = Kwf_Config::getValue('application.uniquePrefix') ? Kwf_Config::getValue('application.uniquePrefix').'-' : '';
         return $ret;
     }

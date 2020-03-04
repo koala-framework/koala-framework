@@ -480,6 +480,13 @@ class Kwf_Component_Settings
         return $ret;
     }
 
+    public static function getComponentClassesOfStartingClass($startingClass)
+    {
+        $componentClasses = array($startingClass);
+        self::_getChildComponentClasses($componentClasses, $startingClass);
+        return $componentClasses;
+    }
+
     private static function _getChildComponentClasses(&$componentClasses, $class)
     {
         $tFull = microtime(true);

@@ -13,7 +13,7 @@ class Kwf_Component_Assets
         return $kwcClass;
     }
 
-    public static function build($rootComponentClass)
+    public static function build()
     {
         $componentFiles = array();
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
@@ -33,12 +33,22 @@ class Kwf_Component_Assets
             }
         }
 
-        $out = array();
-
-        foreach (Kwc_Abstract::getComponentClasses() as $c) {
-            $out[$c] = $componentFiles[$c];
+        // Output Assets for root-component and components in assets.componentPackages (the former does not include assets from latter packages)
+        $packageClasses = Kwf_Config::getValueArray('assets.componentPackages');
+        $packageClasses[] = Kwf_Config::getValue('kwc.rootComponent');
+        file_put_contents('temp/component-assets-build/package-classes.json', json_encode($packageClasses));
+        $processedClasses = array();
+        foreach ($packageClasses as $packageClass) {
+            $out = array();
+            $classes = Kwf_Component_Settings::getComponentClassesOfStartingClass($packageClass);
+            foreach ($classes as $class) {
+                if (!in_array($class, $processedClasses)) {
+                    $out[$class] = $componentFiles[$class];
+                }
+            }
+            file_put_contents('temp/component-assets-build/assets-' . $packageClass . '.json', json_encode($out));
+            $processedClasses = array_merge($processedClasses, $classes);
         }
-        file_put_contents('temp/component-assets-build/assets.json', json_encode($out));
 
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             $config = Kwc_Admin::getInstance($class)->getScssConfig();
