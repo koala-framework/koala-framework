@@ -119,6 +119,13 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Sql) {
             return $expr;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Child_Contains) {
+            $depRules = array_keys($targetModel->getDependentModels());
+            if (in_array($expr->getChild(), $depRules)) {
+                return $expr;
+            } else {
+                return null;
+            }
         } else {
             throw new Kwf_Exception_NotYetImplemented();
         }
