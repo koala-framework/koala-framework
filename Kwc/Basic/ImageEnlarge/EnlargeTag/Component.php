@@ -201,13 +201,28 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         if (!$this->getData()->hasContent()) {
             return null;
         }
-        return array(
+        $ret = array(
             'aspectRatio' => $image['aspectRatio'],
             'widthSteps' => $image['widthSteps'],
             'baseUrl' => $this->_getAbsoluteUrl($this->getBaseImageUrl()),
             'url' => $this->_getAbsoluteUrl($this->getImageUrl()),
             'maxResolutionUrl' => $this->_getAbsoluteUrl($this->getMaxResolutionImageUrl()),
         );
+        $baseImageComponentData = $this->_getImageEnlargeComponent()->getApiData();
+        if (isset($baseImageComponentData['caption']) && $baseImageComponentData['caption']) {
+            $ret['caption'] = $baseImageComponentData['caption'];
+        }
+        if (isset($baseImageComponentData['alt']) && $baseImageComponentData['alt']) {
+            $ret['alt'] = $baseImageComponentData['alt'];
+        }
+        if ($this->_getSetting('imageTitle')) {
+            if ($this->getRow()->title) {
+                $ret['title'] = $this->getRow()->title;
+            } else if (isset($baseImageComponentData['title'])) {
+                $ret['title'] = $baseImageComponentData['title'];
+            }
+        }
+        return $ret;
     }
 
     private function _getImageOutputData()
