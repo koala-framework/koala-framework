@@ -126,6 +126,18 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             } else {
                 return null;
             }
+        } else if ($expr instanceof Kwf_Model_Select_Expr_If) {
+            if ($expr->getIf() instanceof Kwf_Model_Select_Expr_StartsWith
+                && $expr->getIf()->getField() == $this->getPrimaryKey()
+            ) {
+                if ($expr->getIf()->getValue() == $modelKey) {
+                    return $expr->getThen();
+                } else {
+                    return $expr->getElse();
+                }
+            } else {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
         } else {
             throw new Kwf_Exception_NotYetImplemented();
         }
