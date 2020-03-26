@@ -729,12 +729,23 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $col1 = $dbDepOf->_formatField($ref['column'], $dbSelect, $tableNameAlias);
             if ($dbRefM instanceof Kwf_Model_Union) {
                 $ret = "CASE\n";
-                foreach ($dbRefM->getDbSelects($refSelect, array($expr->getField())) AS $modelKey=>$dbSelect) {
-                    $unionModels = $dbRefM->getUnionModels();
-                    $m = self::_getInnerDbModel($unionModels[$modelKey]);
-                    $idCol = $m->_formatField($m->getPrimaryKey(), $dbSelect);
-                    $dbSelect->where("$idCol=SUBSTR($col1, ".(strlen($modelKey)+1).")");
-                    $ret .= "  WHEN SUBSTR($col1, 1, ".strlen($modelKey).")='$modelKey' THEN ($dbSelect)\n";
+                $f = $expr->getField();
+                $unionModels = $dbRefM->getUnionModels();
+                if (is_string($f)) {
+                    foreach ($dbRefM->getDbSelects($refSelect, array($expr->getField())) AS $modelKey=>$dbSelect) {
+                        $m = self::_getInnerDbModel($unionModels[$modelKey]);
+                        $idCol = $m->_formatField($m->getPrimaryKey(), $dbSelect);
+                        $dbSelect->where("$idCol=SUBSTR($col1, ".(strlen($modelKey)+1).")");
+                        $ret .= "  WHEN SUBSTR($col1, 1, ".strlen($modelKey).")='$modelKey' THEN ($dbSelect)\n";
+                    }
+                } else {
+                    $refSelect->where($f);
+                    foreach ($dbRefM->getDbSelects($refSelect) as $modelKey=>$dbSelect) {
+                        $m = self::_getInnerDbModel($unionModels[$modelKey]);
+                        $idCol = $m->_formatField($m->getPrimaryKey(), $dbSelect);
+                        $dbSelect->where("$idCol=SUBSTR($col1, ".(strlen($modelKey)+1).")");
+                        $ret .= "  WHEN SUBSTR($col1, 1, ".strlen($modelKey).")='$modelKey' THEN ($dbSelect)=$col1\n";
+                    }
                 }
                 $ret .= "END";
                 return "$ret";
