@@ -58,6 +58,7 @@ var File = kwfExtend(Field, {
         var xhr = new XMLHttpRequest();
         var url = '/kwf/media/upload/json-upload';
         xhr.open('POST', url);
+        xhr.setRequestHeader('X-Requested-With', "XMLHttpRequest");
         xhr.setRequestHeader('X-Upload-Name', encodeURIComponent(file.name));
         xhr.setRequestHeader('X-Upload-Size', file.size);
         xhr.setRequestHeader('X-Upload-Type', file.type);
