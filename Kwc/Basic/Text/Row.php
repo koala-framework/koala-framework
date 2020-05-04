@@ -200,11 +200,6 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
         $html = str_replace(chr(0xEF).chr(0xBB).chr(0xBF), '', $html);
 
         $enableTidy = Kwc_Abstract::getSetting($this->_componentClass, 'enableTidy');
-        $enableFontSize = Kwc_Abstract::getSetting($this->_componentClass, 'enableFontSize');
-        $config = array();
-        if (!$enableFontSize){
-            $config['drop-font-tags'] = true;
-        }
         if ($enableTidy) {
 
             //woraround für tidy bug wo er zwei class-attribute in einen
@@ -219,7 +214,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             $html = str_replace('data-mce-type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
 
-            $html = Kwf_Util_Tidy::repairHtml($html, $config);
+            $html = Kwf_Util_Tidy::repairHtml($html);
             if (!$parser) {
                 $parser = new Kwc_Basic_Text_Parser($this->componentId, $this->getModel());
                 $parser->setMasterStyles(Kwc_Basic_Text_StylesModel::getMasterStyles());
@@ -228,7 +223,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             $parser->setEnableTagsWhitelist(Kwc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
             $parser->setEnableStyles(Kwc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
             $html = $parser->parse($html);
-            $html = Kwf_Util_Tidy::repairHtml($html, $config);
+            $html = Kwf_Util_Tidy::repairHtml($html);
             $html = str_replace('class="_mce_type-bookmark"', 'data-mce-type="bookmark"', $html);
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }

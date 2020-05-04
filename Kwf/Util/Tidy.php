@@ -12,7 +12,6 @@ class Kwf_Util_Tidy
                 'wrap'           => '86',
                 'doctype'        => 'omit',
                 'drop-proprietary-attributes' => true,
-                'drop-font-tags' => false,
                 'word-2000'      => true,
                 'show-body-only' => true,
                 'bare'           => true,
