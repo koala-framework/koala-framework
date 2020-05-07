@@ -59,8 +59,13 @@ class Kwf_Form_Field_Image_UploadField extends Kwf_Form_Container_Abstract
     {
         if ($showHelptext) {
             $dimensionsArray = array_values($this->_dimensions);
-            $helptext = trlKwf('Size of Target Image') . ': ' . $dimensionsArray[0]['width'] . 'x' . $dimensionsArray[0]['height'] . 'px';
-            $helptext .= "<br />" . trlKwf('Size of Target Image to support High Resolution Displays ("Retina")') . ': ' . ($dimensionsArray[0]['width'] * 2) . 'x' . ($dimensionsArray[0]['height'] * 2) . 'px';
+            $requiredWidth = $dimensionsArray[0]['width'] == 'contentWidth' ? trlKwf('Content Width') : $dimensionsArray[0]['width'];
+            $requiredRetinaWidth = $dimensionsArray[0]['width'] == 'contentWidth' ? trlKwf('Double Content Width') : $dimensionsArray[0]['width'] * 2;
+            $requiredHeight = $dimensionsArray[0]['height'];
+            $requiredRetinaHeight = $dimensionsArray[0]['height'] * 2;
+
+            $helptext = trlKwf('Size of Target Image') . ': ' . $requiredWidth . 'x' . $requiredHeight . 'px';
+            $helptext .= "<br />" . trlKwf('Size of Target Image to support High Resolution Displays ("Retina")') . ': ' . $requiredRetinaWidth . 'x' . $requiredRetinaHeight . 'px';
             $helptext .= "<br />" . trlKwf('or larger');
 
             $scaleMethod = trlKwf('don\'t Crop');
