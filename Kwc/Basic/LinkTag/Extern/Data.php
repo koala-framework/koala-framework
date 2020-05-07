@@ -40,7 +40,7 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwc_Basic_LinkTag_Abstract_Data
             }
         }
         $row = $this->_getLinkRow();
-        if (!isset($row->open_type) || !$row->open_type) return '';
+        if (!isset($row->open_type) || !$row->open_type) return array();
         if ($row->open_type == 'popup') {
             $pop = array();
             if ($row->width) $pop[] = 'width='.$row->width;
