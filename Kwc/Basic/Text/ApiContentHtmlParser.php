@@ -53,7 +53,7 @@ class Kwc_Basic_Text_ApiContentHtmlParser
         $current = $this->_stack[count($this->_stack)-1];
         $newBlock = null;
         if (strtolower($element) == 'a') {
-            if (isset($this->_childComponents[$attributes['HREF']])) {
+            if (isset($attributes['HREF']) && isset($this->_childComponents[$attributes['HREF']])) {
                 $newBlock['element'] = 'component';
                 $cmp = $this->_childComponents[$attributes['HREF']];
                 if (is_instance_of($cmp->componentClass, 'Kwc_Basic_LinkTag_Abstract_Component') // support all link-tags
