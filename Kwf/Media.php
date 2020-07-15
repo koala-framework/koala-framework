@@ -247,7 +247,10 @@ class Kwf_Media
         foreach ($mediaClasses as $mediaClass) {
             if (is_file($cacheFolder.'/'.$mediaClass)) continue;
 
-            if (!class_exists($mediaClass)) {
+            // Classname without dot
+            $class = strpos($mediaClass, '.') ? substr($mediaClass, 0, strpos($mediaClass, '.')) : $mediaClass;
+
+            if (!class_exists($class)) {
                 self::_deleteFolder($cacheFolder.'/'.$mediaClass);
                 continue;
             }
@@ -266,7 +269,7 @@ class Kwf_Media
                     $idFolder = $groupFolder . '/' . $id;
                     if (is_file($idFolder)) continue; // something old...
 
-                    $canCacheBeDeleted = call_user_func(array($mediaClass, 'canCacheBeDeleted'), $id);
+                    $canCacheBeDeleted = call_user_func(array($class, 'canCacheBeDeleted'), $id);
                     if (!$canCacheBeDeleted) continue;
 
                     $types = array_slice(scandir($idFolder), 2);
