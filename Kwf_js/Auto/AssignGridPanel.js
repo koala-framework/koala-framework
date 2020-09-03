@@ -3,6 +3,7 @@ Kwf.Auto.AssignGridPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
     gridAssignedControllerUrl: '',
     gridDataControllerUrl: '',
     textAssignActionUrl: null,
+    assignAllLimit: 100,
 
     gridDataHeight: 410,
 
@@ -21,6 +22,13 @@ Kwf.Auto.AssignGridPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
             cls     : 'x2-btn-text-icon',
             disabled: true,
             handler : this.onAssign,
+            scope   : this
+        });
+        this.actions.assignAll = new Ext2.Action({
+            text: trlKwf('Assign all'),
+            icon: '/assets/silkicons/table_go.png',
+            cls     : 'x2-btn-text-icon',
+            handler : this.onAssignAll,
             scope   : this
         });
 
@@ -44,7 +52,7 @@ Kwf.Auto.AssignGridPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
             height: this.gridDataHeight,
             controllerUrl: this.gridDataControllerUrl,
             gridConfig: {
-                tbar: [ this.getAction('assign'), '-' ],
+                tbar: [ this.getAction('assign'), this.getAction('assignAll'), '-' ],
                 selModel: new Ext2.grid.CheckboxSelectionModel()
             },
             autoLoad: this.autoLoad
@@ -83,18 +91,26 @@ Kwf.Auto.AssignGridPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
     onAssign : function()
     {
         if (!this.gridData.getSelectionModel().getSelections()) return;
-        var params = this.gridAssigned.getBaseParams();
-        params[this.gridDataParamName] = [];
 
         var selections = this.gridData.getSelectionModel().getSelections();
+        var ids = [];
         for (var i in selections) {
             if (selections[i].id) {
-                params[this.gridDataParamName].push(selections[i].id);
+                ids.push(selections[i].id);
             }
         }
-        params[this.gridDataParamName] = Ext2.encode(params[this.gridDataParamName]);
+        this._assignIds(ids);
+    },
 
+    _assignIds: function(ids) {
+        var params = this.gridAssigned.getBaseParams();
+        params[this.gridDataParamName] = [];
+        for (var i = 0; i < ids.length; i++) {
+            params[this.gridDataParamName].push(ids[i]);
+        }
+        params[this.gridDataParamName] = Ext2.encode(params[this.gridDataParamName]);
         Ext2.Ajax.request({
+            mask: true,
             url: this.assignActionUrl,
             params: params,
             success: function() {
@@ -105,6 +121,23 @@ Kwf.Auto.AssignGridPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
             },
             scope: this
         });
+    },
+
+    onAssignAll: function() {
+        var ids = [];
+        var collectIds = function(store, start, previousIds) {
+            store.load({params: {start: start, limit: this.assignAllLimit}, callback: function(records, options, success) {
+                for (var i = 0; i < records.length; i++) {
+                    previousIds.push(records[i].id);
+                }
+                if (records.length < this.assignAllLimit) {
+                    this._assignIds(previousIds);
+                } else {
+                    collectIds(store, start+this.assignAllLimit, previousIds);
+                }
+            }, scope: this});
+        }.bind(this);
+        collectIds(this.gridData.getStore(), 0, []);
     },
 
     reloadDataGrid: function() {
