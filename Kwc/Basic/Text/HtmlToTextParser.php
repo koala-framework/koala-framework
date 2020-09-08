@@ -160,10 +160,9 @@ class Kwc_Basic_Text_HtmlToTextParser
         //replace spaces in links (otherwise there would be a linebreak inside the link after wordwrap)
         $this->_ret = preg_replace_callback(
                 '/{kwc[^}]+}/',
-                create_function(
-                      '$data',
-                     'return str_replace(" ", "*kwfSpace*", $data[0]);'
-                ),
+                function($data) {
+                    return str_replace(" ", "*kwfSpace*", $data[0]);
+                },
                 $this->_ret
         );
 
@@ -172,10 +171,9 @@ class Kwc_Basic_Text_HtmlToTextParser
         //reconstruct spaces inside links
         $this->_ret = preg_replace_callback(
                 '/{kwc[^}]+}/',
-                create_function(
-                        '$data',
-                        'return str_replace("*kwfSpace*", " ", $data[0]);'
-                ),
+                function($data) {
+                    return str_replace("*kwfSpace*", " ", $data[0]);
+                },
                 $this->_ret
         );
 
