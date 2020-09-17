@@ -207,7 +207,7 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
 
     public function hasChildren()
     {
-        return count($this->_fields) > 0;
+        return ($this->_fields instanceof Countable) ? count($this->_fields) > 0 : false;
     }
     public function getChildren()
     {
