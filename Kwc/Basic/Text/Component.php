@@ -12,7 +12,6 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
             'enableAlignments'  => false,
             'enableColors'      => false,
             'enableFont'        => false,
-            'enableFontSize'    => false,
             'enableFormat'      => true,
             'enableLists'       => true,
             'enableSourceEdit'  => true,

@@ -64,7 +64,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         if ($fileRow) {
             $return = $fileRow->getFileInfo();
         } else {
-            $return = '';
+            $return = array();
         }
         return array($this->getFieldName() => $return);
     }
