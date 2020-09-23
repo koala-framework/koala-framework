@@ -225,7 +225,11 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $sourceCls = $s->componentClass;
             $sourceCls = strpos($sourceCls, '.') ? substr($sourceCls, 0, strpos($sourceCls, '.')) : $sourceCls;
             $targetCls = strpos($targetCls, '.') ? substr($targetCls, 0, strpos($targetCls, '.')) : $targetCls;
-            if ($sourceCls != $targetCls) {
+
+            //set setting similarComponent to mark target component as copiable
+            if ($sourceCls != $targetCls
+                && (!Kwc_Abstract::hasSetting($targetCls, 'similarComponent') || Kwc_Abstract::getSetting($targetCls, 'similarComponent') != $s->componentClass)
+            ) {
                 if (Kwc_Abstract::hasSetting($s->componentClass, 'componentName')) {
                     $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($s->componentClass, 'componentName'));
                     $errorMsg = trlKwf("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
