@@ -8,7 +8,7 @@ class Kwc_Articles_Detail_Trl_Component extends Kwc_Directories_Item_Detail_Trl_
         return $ret;
     }
 
-    public static function modifyItemData($item)
+    public static function modifyItemData(Kwf_Component_Data $item)
     {
         parent::modifyItemData($item);
         $item->title = $item->row->title;
