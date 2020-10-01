@@ -226,17 +226,22 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $sourceCls = strpos($sourceCls, '.') ? substr($sourceCls, 0, strpos($sourceCls, '.')) : $sourceCls;
             $targetCls = strpos($targetCls, '.') ? substr($targetCls, 0, strpos($targetCls, '.')) : $targetCls;
 
-            //set setting similarComponent to mark target component as copiable
-            if ($sourceCls != $targetCls
-                && (!Kwc_Abstract::hasSetting($targetCls, 'similarComponent') || Kwc_Abstract::getSetting($targetCls, 'similarComponent') != $s->componentClass)
-            ) {
-                if (Kwc_Abstract::hasSetting($s->componentClass, 'componentName')) {
-                    $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($s->componentClass, 'componentName'));
-                    $errorMsg = trlKwf("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
-                } else {
-                    $errorMsg = trlKwf('Source and target paragraphs are not compatible.');
+            //set setting copyableComponent to mark target component as copiable
+            //check setting in both ways to enable copy in every direction
+            if ($sourceCls != $targetCls) {
+                if (!$targetCls
+                    || ((!Kwc_Abstract::hasSetting($targetCls, 'copyableComponent') || !in_array($sourceCls, Kwc_Abstract::getSetting($targetCls, 'copyableComponent')))
+                        && (!Kwc_Abstract::hasSetting($sourceCls, 'copyableComponent') || !in_array($targetCls, Kwc_Abstract::getSetting($sourceCls, 'copyableComponent')))
+                    )
+                ) {
+                    if (Kwc_Abstract::hasSetting($s->componentClass, 'componentName')) {
+                        $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($s->componentClass, 'componentName'));
+                        $errorMsg = trlKwf("Can't paste paragraph type '{0}', as it is not avaliable here.", $name);
+                    } else {
+                        $errorMsg = trlKwf('Source and target paragraphs are not compatible.');
+                    }
+                    continue; //skip this one
                 }
-                continue; //skip this one
             }
 
             try {
