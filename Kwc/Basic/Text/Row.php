@@ -419,9 +419,9 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                     } else {
                         preg_match('#^mailto:(.*)\\??(.*)#', $part['href'], $m);
                         $row->mail = $m[1];
-                        $m = parse_str($m[2]);
-                        $row->subject = isset($m['subject']) ? $m['subject'] : '';
-                        $row->text = isset($m['body']) ? $m['body'] : '';
+                        parse_str($m[2], $output);
+                        $row->subject = isset($output['subject']) ? $output['subject'] : '';
+                        $row->text = isset($output['body']) ? $output['body'] : '';
                     }
                     $row->save();
                 } else if (is_instance_of($classes['link'], 'Kwc_Basic_LinkTag_Extern_Component')) {
