@@ -71,6 +71,11 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
             secondMenu.css({left: '100%'}).animate({left: 0});
             $('html, body').stop().animate({scrollTop: 0}, 300);
 
+            //scroll menu to top on jump to subMenu level
+            if (el.css('overflow') == "auto") {
+                el.stop().animate({scrollTop: 0}, 300);
+            }
+
         } else if (direction == 'right') {
             menuHtml.splice(-1);
             var html = _.last(menuHtml);
