@@ -134,7 +134,7 @@ class Kwf_Media_Output
                 $ret['headers'][] = 'Accept-Ranges: bytes';
                 if (isset($headers['Range'])) {
                     $ret['responseCode'] = 206;
-                    $ret['headers'][] = array('Partial Content', true, 206);
+                    $ret['headers'][] = "HTTP/1.1 206 Partial Content";
                 } else {
                     $ret['responseCode'] = 200;
                 }
