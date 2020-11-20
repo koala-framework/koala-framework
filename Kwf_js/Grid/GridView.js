@@ -8,7 +8,8 @@ Ext2.grid.GridView.prototype.getColumnStyle = function(col, isHeader){
     if (isHeader && this.cm.config[col].headerIcon) {
         style += String.format('background-image: url({0}); '+
                                'background-repeat: no-repeat; '+
-                               'background-position: 5px 4px;',
+                               'background-position: 5px 4px;'+
+                               'padding: 0 0 0 20px;',
                                this.cm.config[col].headerIcon);
     }
     return style;
