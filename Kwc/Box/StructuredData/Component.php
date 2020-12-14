@@ -27,8 +27,15 @@ class Kwc_Box_StructuredData_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
+    {
+        $ret = parent::getTemplateVars($renderer);
+        $ret['content'] = $this->getRow()->content;
+        return $ret;
+    }
+
     public function getIncludeCode()
     {
-        return '<script type="application/ld+json">' . $this->getRow()->content . '</script>';
+        return $this->getData();
     }
 }
