@@ -1,0 +1,1 @@
+ALTER TABLE `kwf_sessions` CHANGE `sessionId` `sessionId` VARCHAR(64) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
