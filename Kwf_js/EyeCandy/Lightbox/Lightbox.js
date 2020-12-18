@@ -11,6 +11,7 @@ var StylesRegistry = require('kwf/lightbox/styles-registry');
 StylesRegistry.register('CenterBox', require('kwf/lightbox/style/center-box'));
 
 var statistics = require('kwf/statistics');
+var dataLayer = require('kwf/data-layer');
 var escapeHandlerInstalled = false;
 var allByUrl = {};
 var onlyCloseOnPopstate;
@@ -279,6 +280,13 @@ Lightbox.prototype = {
         }).done(function(response) {
 
             injectAssets(response.assets, (function() {
+                this.closeTitle = document.title;
+                this.title = response.title ? response.title : document.title;
+                dataLayer.push({
+                    event: 'pageview',
+                    pagePath: this.href,
+                    pageTitle: this.title
+                });
                 this._renderContent(response.content);
             }).bind(this));
 
@@ -366,6 +374,12 @@ Lightbox.prototype = {
         this.showOptions = options;
         if (!this.fetched) {
             this.fetchContent();
+        } else {
+            dataLayer.push({
+                event: 'pageview',
+                pagePath: this.href,
+                pageTitle: this.title
+            });
         }
         if (!this.lightboxEl.is(':visible')) {
             this.lightboxEl.show();
@@ -392,6 +406,7 @@ Lightbox.prototype = {
             } else {
                 onReady.callOnContentReady(this.lightboxEl, {action: 'show'});
             }
+       
         }
         this.lightboxEl.addClass('kwfUp-kwfLightboxOpen');
         this.style.afterShow(options);
@@ -424,6 +439,7 @@ Lightbox.prototype = {
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
             this.innerLightboxEl.css(transformName, newMatrix);
         }
+
     },
     closeAndPushState: function() {
         if (this._isClosing) return; //prevent double-click on close button
@@ -456,6 +472,12 @@ Lightbox.prototype = {
             //location.replace(this.closeHref);
             this.close();
         }
+        document.title = this.closeTitle;
+        dataLayer.push({
+            event: 'pageview',
+            pagePath: location.pathname.substr(0, location.pathname.lastIndexOf('/')),
+            pageTitle: this.closeTitle
+        });
     },
     initialize: function()
     {
