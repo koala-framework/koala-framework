@@ -115,11 +115,18 @@ class Kwf_Util_Component
         unset($content['content']);
         if (!isset($content['lifetime'])) $content['lifetime'] = false;
 
+        $title = null;
+        $titleComponent = $data->getChildComponent('-title');
+        if ($titleComponent && is_instance_of($titleComponent->componentClass, 'Kwc_Box_Title_Component')) {
+            $title = $titleComponent->getComponent()->getTitle();
+        }
+
         if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'json') {
             $content['contents'] = json_encode(array(
                 'mimeType' => $content['mimeType'],
                 'content' => $content['contents'],
-                'assets' => $content['assets']
+                'assets' => $content['assets'],
+                'title' => $title
             ));
             $content['mimeType'] = 'application/json';
         }
