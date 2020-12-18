@@ -3,6 +3,7 @@ var onReady = require('kwf/commonjs/on-ready');
 var youtubeLoader = require('kwf/commonjs/youtube/loader');
 var $ = require('jquery');
 var statistics = require('kwf/commonjs/statistics');
+var dataLayer = require('kwf/commonjs/data-layer');
 
 onReady.onHide('.kwcClass .kwcBem__youtubePlayer', function(el) {
     var kwcAdvancedYoutube = el.closest('.kwcClass');
@@ -42,6 +43,10 @@ onReady.onRender('.kwcClass .kwcBem__youtubePlayer', function(el) {
                     'onStateChange': function(event, target) {
                         if (event.data == -1) {
                             statistics.trackEvent('Play Video', location.pathname, event.target.getVideoData().title);
+                            dataLayer.push({
+                                event: "youtube-play",
+                                youtube_video_title: event.target.getVideoData().title
+                            });
                         }
                     }
                 }

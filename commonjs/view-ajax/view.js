@@ -3,6 +3,7 @@ var onReady = require('kwf/commonjs/on-ready');
 var historyState = require('kwf/commonjs/history-state');
 var getKwcRenderUrl = require('kwf/commonjs/get-kwc-render-url');
 var statistics = require('kwf/commonjs/statistics');
+var dataLayer = require('kwf/commonjs/data-layer');
 var formRegistry = require('kwf/commonjs/frontend-form/form-registry');
 var injectAssets = require('kwf/commonjs/inject-assets');
 
@@ -375,6 +376,12 @@ ViewAjax.prototype = {
             this.detailEl.removeClass('kwfUp-loadingContent '+classNames);
             this.detailEl.html(response.content);
             statistics.trackView(href);
+            this.viewTitle = document.title;
+            dataLayer.push({
+                event: 'pageview',
+                pagePath: location.pathname,
+                pageTitle: response.title
+            });
 
             var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
             this.detailEl.find('a').each((function(index, el) {
@@ -389,6 +396,11 @@ ViewAjax.prototype = {
                         } else {
                             this.showView();
                         }
+                        dataLayer.push({
+                            event: 'pageview',
+                            pagePath: directoryUrl,
+                            pageTitle: this.viewTitle
+                        });
                     }).bind(this));
                 }
             }).bind(this));
