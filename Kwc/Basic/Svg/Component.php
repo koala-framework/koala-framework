@@ -25,7 +25,10 @@ class Kwc_Basic_Svg_Component extends Kwc_Abstract
                 $ret['fileSource'] = file_get_contents($uploadRow->getFileSource());
             } else if ($ret['outputType'] === 'url') {
                 $filename = $uploadRow->filename . '.' . $uploadRow->extension;
-                $ret['fileUrl'] = Kwf_Media::getUrl($this->getData()->componentClass, $this->getData()->componentId, 'default', $filename);
+                $url = Kwf_Media::getUrl($this->getData()->componentClass, $this->getData()->componentId, 'default', $filename);
+                $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $url);
+                Kwf_Events_Dispatcher::fireEvent($ev);
+                $ret['fileUrl'] = $ev->url;
             }
         }
 
