@@ -87,7 +87,11 @@ class Kwf_Util_Apc
 
         foreach ($domains as $d) {
             $s = microtime(true);
-            $urlPart = "http://";
+            if (Kwf_Util_Https::domainSupportsHttps($d['domain'])) {
+                $urlPart = "https://";
+            } else {
+                $urlPart = "http://";
+            }
             $baseUrl = Kwf_Setup::getBaseUrl();
             $url = "$urlPart$d[domain]$baseUrl/kwf/util/apc/$method";
 
