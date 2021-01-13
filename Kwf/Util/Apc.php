@@ -91,7 +91,11 @@ class Kwf_Util_Apc
 
         foreach ($domains as $d) {
             $s = microtime(true);
-            $urlPart = "http://";
+            if (Kwf_Util_Https::domainSupportsHttps($d['domain'])) {
+                $urlPart = "https://";
+            } else {
+                $urlPart = "http://";
+            }
             $url = "$urlPart$d[domain]/kwf/util/apc/$method";
 
             $client = new Zend_Http_Client();
