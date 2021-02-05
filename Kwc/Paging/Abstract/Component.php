@@ -292,9 +292,12 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
 
     public function getViewCacheSettings()
     {
-        return array_merge(
-            parent::getViewCacheSettings(),
-            $this->getData()->parent->getComponent()->getViewCacheSettings()
-        );
+        $ret = parent::getViewCacheSettings();
+
+        if ($parentViewCacheSettings = $this->getData()->parent->getComponent()->getViewCacheSettings()) {
+            $ret = array_merge($ret, $parentViewCacheSettings);
+        }
+
+        return $ret;
     }
 }
