@@ -236,10 +236,14 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         if (!$path) {
             throw new Kwf_Exception_Client("Solr is not ment to be started manually from cli on this section.");
         }
+        $port = Kwf_Config::getValue('fulltext.solr.port');
+        if (!$port) {
+            $port = 8983;
+        }
 
         $solrHome = getcwd().'/solr';
         chdir($path);
-        $cmd = "java -Dsolr.solr.home=$solrHome -jar start.jar";
+        $cmd = "java -Dsolr.solr.home=$solrHome -Djetty.port=$port -jar start.jar";
         passthru($cmd, $ret);
         exit($ret);
     }
