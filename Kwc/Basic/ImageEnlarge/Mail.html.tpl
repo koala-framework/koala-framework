@@ -1,6 +1,6 @@
 <?php if ($this->baseUrl) { ?>
     <?=$this->component($this->linkTag)?>
-        <?=$this->image($this->data, '', array('class' => $this->imgCssClass, 'border' => '0', 'style' => 'display: block;'))?>
+        <?=$this->image($this->data, '', array('class' => $this->imgCssClass, 'border' => '0', 'style' => 'display: inline-block;vertical-align: top'))?>
     <?php if ($this->hasContent($this->linkTag)) { ?>
         </a>
     <?php } ?>
