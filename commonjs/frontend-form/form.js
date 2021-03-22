@@ -239,9 +239,11 @@ FormComponent.prototype = {
                 if (r.successContent) {
                     this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
                     statistics.trackEvent(t.trlKwf('Form Submission'), location.pathname, button.find('span').text());
-                    dataLayer.push({
-                        event: "form-submit"
-                    });
+                    var dataLayerEntry = this.config.submitDataLayer ? this.config.submitDataLayer : {};
+                    if (!dataLayerEntry.event) {
+                        dataLayerEntry.event = "form-submit";
+                    }
+                    dataLayer.push(dataLayerEntry);
                     var el = $(r.successContent).appendTo(this.el.parent());
                     if (this.config.hideFormOnSuccess) {
                         this.el.hide();
@@ -255,9 +257,11 @@ FormComponent.prototype = {
                 } else if (r.successUrl) {
                     this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
                     statistics.trackEvent(t.trlKwf('Form Submission'), location.pathname, button.find('span').text());
-                    dataLayer.push({
-                        event: "form-submit"
-                    });
+                    var dataLayerEntry = this.config.submitDataLayer ? this.config.submitDataLayer : {};
+                    if (!dataLayerEntry.event) {
+                        dataLayerEntry.event = "form-submit";
+                    }
+                    dataLayer.push(dataLayerEntry);
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize

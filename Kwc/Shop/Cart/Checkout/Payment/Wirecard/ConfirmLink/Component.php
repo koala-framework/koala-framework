@@ -58,7 +58,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
         $requestFingerprintSeed  .= $params['requestFingerprintOrder'];
         $params['requestFingerprint'] = md5($requestFingerprintSeed);
 
-        $initURL = "https://checkout.wirecard.com/page/init.php";
+        $initURL = "https://api.qenta.com/page/init.php";
         $ret = "<form action=\"$initURL\" method=\"post\" name=\"form\">\n";
         foreach ($params as $k=>$i) {
         if ($k == 'secret') continue;
