@@ -45,6 +45,11 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
+    public function getSubmitDataLayer()
+    {
+        return array();
+    }
+
     public static function validateSettings($settings, $componentClass)
     {
         parent::validateSettings($settings, $componentClass);
@@ -372,7 +377,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             'hideForValue' => $hideForValue,
             'fieldConfig' => (object)$fieldConfig,
             'errorStyle' => $errorStyle,
-            'baseParams' => $baseParams
+            'baseParams' => $baseParams,
+            'submitDataLayer' => $this->getSubmitDataLayer()
         );
 
         $ret['uniquePrefix'] = Kwf_Config::getValue('application.uniquePrefix');
