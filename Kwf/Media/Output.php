@@ -76,7 +76,7 @@ class Kwf_Media_Output
         if (isset($file['mtime'])) {
             $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", $file['mtime']);
         }
-        $lifetime = (24*60*60*7*4);
+        $lifetime = Kwf_Config::getValue('defaultMediaOutputLifetimeInDays')*24*60*60;
         if (isset($file['lifetime'])) {
             if ($file['lifetime'] === false) {
                 $lifetime = false;
