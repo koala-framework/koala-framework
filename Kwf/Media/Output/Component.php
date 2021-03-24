@@ -123,6 +123,9 @@ class Kwf_Media_Output_Component
             $file = $data['file'];
         }
         $ret['mtime'] = filemtime($file);
+        if (isset($data['lifetime'])) {
+            $ret['lifetime'] = $data['lifetime'];
+        }
         return $ret;
     }
 

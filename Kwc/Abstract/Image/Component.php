@@ -445,6 +445,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
 
         $dim = $component->getComponent()->getImageDimensions();
+        $data['lifetime'] = Kwf_Config::getValue('imageComponentMediaLifetimeInDays')*24*60*60;
 
         return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dim, $type);
     }
