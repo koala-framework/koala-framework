@@ -3,10 +3,20 @@ class Kwf_Component_Sitemap
 {
     public static function output(Kwf_Component_Data $domain)
     {
+        self::_outputHead();
+        self::_outputContent($domain);
+        self::_outputFooter();
+
+        exit;
+    }
+
+    protected static function _outputHead () {
         header('Content-Type: text/xml; charset=utf-8');
         echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         echo "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
+    }
 
+    protected static function _outputContent (Kwf_Component_Data $domain) {
         $stmt = Kwf_Registry::get('db')->query(
             "SELECT url, changed_date, sitemap_changefreq, sitemap_priority
                 FROM kwf_pages_meta
@@ -21,7 +31,9 @@ class Kwf_Component_Sitemap
             echo " <priority>".$row['sitemap_priority']."</priority>\n";
             echo "</url>\n";
         }
+    }
+
+    protected static function _outputFooter () {
         echo "</urlset>\n";
-        exit;
     }
 }
