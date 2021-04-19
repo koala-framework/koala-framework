@@ -154,7 +154,8 @@ class Kwf_Setup
             }
 
             if ($uri == 'sitemap.xml') {
-                Kwf_Component_Sitemap::output($data->getDomainComponent());
+                $sitemapClass = Kwf_Config::getValue('sitemapClass');
+                $sitemapClass::output($data->getDomainComponent());
             }
         }
 
