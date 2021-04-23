@@ -18,16 +18,19 @@ class Kwf_Util_PayPal_Ipn
 
             // post back to PayPal system to validate
             if (isset($_POST['test_ipn']) && $_POST['test_ipn']) {
-                $domain = 'www.sandbox.paypal.com';
+                $domain = 'ipnpb.sandbox.paypal.com';
             } else {
-                $domain = 'www.paypal.com';
+                $domain = 'ipnpb.paypal.com';
             }
+
             // post back to PayPal system to validate
             $client = new Zend_Http_Client('https://'.$domain.'/cgi-bin/webscr');
-            $client->setParameterPost('cmd', '_notify-validate');
-            $client->setParameterPost($_POST);
+            $rawBody = 'cmd=_notify-validate';
+            foreach ($_POST as $key => $value) {
+                $rawBody .= "&$key=" . $value;
+            }
+            $client->setRawData($rawBody);
             $response = $client->request(Zend_Http_Client::POST);
-
             $res = trim($response->getBody());
 
         } else {
