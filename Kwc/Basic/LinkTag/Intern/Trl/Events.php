@@ -56,7 +56,8 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
         $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
             Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
             $childPageIds,
-            true
+            true,
+            $event->component->getSubroot()
         );
         foreach ($masterDatas as $c) {
             $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
@@ -78,7 +79,8 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
         $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
             Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
             $childPageIds,
-            true
+            true,
+            $event->component->getSubroot()
         );
         foreach ($masterDatas as $c) {
             $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
@@ -99,7 +101,8 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
         $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
             Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
             array((string)$event->component->chained->dbId),
-            false
+            false,
+            $event->component->getSubroot()
         );
         foreach ($masterDatas as $c) {
             $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
