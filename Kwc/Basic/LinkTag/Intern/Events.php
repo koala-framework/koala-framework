@@ -86,7 +86,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
             $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $subroot));
             return;
         }
-        $dbIds = self::_getComponentDbIdsForTarget($this->_class, $targetIds, $includeSubpages);
+        $dbIds = self::_getComponentDbIdsForTarget($this->_class, $targetIds, $includeSubpages, $subroot);
         if (count($dbIds) > 1000) {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
             $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $subroot));
@@ -104,17 +104,25 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
 
     private function _changeHasContentForTarget($targetIds, $includeSubpages, $subroot)
     {
-        foreach (self::getComponentsForTarget($this->_class, $targetIds, $includeSubpages) as $c) {
+        foreach (self::getComponentsForTarget($this->_class, $targetIds, $includeSubpages, $subroot) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c));
         }
     }
 
-    private static function _getComponentDbIdsForTarget($componentClass, $targetIds, $includeSubpages)
+    private static function _getComponentDbIdsForTarget($componentClass, $targetIds, $includeSubpages, $subroot)
     {
         if (!isset(self::$_pageIds[$componentClass])) {
+            $dbId = $subroot->getDomainComponent() ? $subroot->getDomainComponent()->dbId : $subroot->dbId;
+            $select = new Kwf_Model_Select();
+            $select->where(new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Equal('parent_subroot_id', $dbId),
+                new Kwf_Model_Select_Expr_Like('parent_subroot_id', $dbId . '-%')
+            )));
+            $possibleTargets = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel')->getIds($select);
             $ids = array();
             $model = Kwc_Abstract::createOwnModel($componentClass);
-            foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY) as $row) {
+            $select = $model->select()->whereEquals('target', $possibleTargets);
+            foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $row) {
                 $target = $row['target'];
                 if (!isset($ids[$target])) $ids[$target] = array();
                 $ids[$target][] = $row['component_id'];
@@ -144,10 +152,10 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     }
 
     //used in trl
-    public static function getComponentsForTarget($componentClass, $targetIds, $includeSubpages)
+    public static function getComponentsForTarget($componentClass, $targetIds, $includeSubpages, $subroot)
     {
         $ret = array();
-        foreach (self::_getComponentDbIdsForTarget($componentClass, $targetIds, $includeSubpages) as $dbId) {
+        foreach (self::_getComponentDbIdsForTarget($componentClass, $targetIds, $includeSubpages, $subroot) as $dbId) {
             $ret = array_merge($ret, Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId));
         }
         return $ret;
