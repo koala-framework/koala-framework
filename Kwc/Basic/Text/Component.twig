@@ -1,9 +1,9 @@
 <div class="{{ rootElementClass }}">
     {% for part in contentParts  %}
-        {% if part is iterable %}
-            {{ renderer.component(part.component) }}
+        {%- if part is iterable %}
+            {{- renderer.component(part.component) -}}
         {% else %}
-            {{ part|mailEncodeText|raw }}
-        {% endif %}
-    {% endfor %}
+            {{- part|mailEncodeText|raw -}}
+        {% endif -%}
+    {% endfor -%}
 </div>
