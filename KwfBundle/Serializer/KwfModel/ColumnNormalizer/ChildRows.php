@@ -24,7 +24,8 @@ class ChildRows implements ColumnNormalizerInterface, SerializerAwareInterface
         if (!isset($settings['rule'])) {
             throw new \Exception("rule setting is required");
         }
-        $rows = $row->getChildRows($settings['rule']);
+        $select = new \Kwf_Model_Select(isset($settings['where']) ? $settings['where'] : array());
+        $rows = $row->getChildRows($settings['rule'], $select);
         if (isset($settings['child_groups'])) {
             $context['groups'] = $settings['child_groups'];
         } else if (isset($settings['groups'])) {
