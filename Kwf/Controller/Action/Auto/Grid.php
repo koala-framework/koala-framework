@@ -15,6 +15,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
     protected $_sortable = true; //ob felder vom user sortiert werden können
     protected $_position;
     protected $_csvExportCharset = 'UTF-8';
+    protected $_csvExportDelimiter = ';';
 
     protected $_primaryKey;
     /**
@@ -870,7 +871,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                 } else {
                     $importCols = $cols;
                 }
-                $csvRows[] = '"'. implode('";"', $importCols) .'"';
+                $csvRows[] = '"'. implode('"' . $this->_csvExportDelimiter . '"', $importCols) .'"';
                 $this->_progressBar->next(1, trlKwf('Writing data'));
             }
 
