@@ -2,7 +2,11 @@
     <?php if ($this->position == 'center') { ?>
         <?php if ($this->image) { ?>
             <tr>
-                <td valign="top"><?=$this->component($this->image);?></td>
+                <td valign="top" align="center" style="text-align: center">
+                    <div style="display: inline-block">
+                        <?=$this->component($this->image);?>
+                    </div>
+                </td>
             </tr>
             <tr><td height="10" style="font-size: 10px; line-height: 10px">&nbsp;</td></tr>
         <?php } ?>
