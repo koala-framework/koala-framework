@@ -195,20 +195,26 @@ class Kwf_Media_Output_Component
                 }
             }
             //$ret can be VALID or VALID_DONT_CACHE at this point
-
             $plugins = array();
             $onlyInherit = false;
             while ($c) {
                 $p = Kwc_Abstract::getSetting($c->componentClass, 'pluginsInherit');
-                if (!$onlyInherit) {
-                    $p = array_merge($p, Kwc_Abstract::getSetting($c->componentClass, 'plugins'));
-                }
                 foreach ($p as $plugin) {
                     if (is_instance_of($plugin, 'Kwf_Component_Plugin_Interface_Login')) {
                         $plugins[] = array(
                             'plugin' => $plugin,
-                            'id' => $c->componentId
+                            'id' => $id
                         );
+                    }
+                }
+                if (!$onlyInherit) {
+                    foreach ($p as $plugin) {
+                        if (is_instance_of($plugin, 'Kwf_Component_Plugin_Interface_Login')) {
+                            $plugins[] = array(
+                                'plugin' => $plugin,
+                                'id' => $c->componentId
+                            );
+                        }
                     }
                 }
                 if ($c->isPage) {
