@@ -238,7 +238,7 @@ class Kwf_Component_Data
             if (!$this->isPage) {
                 $page = $this->getPage();
                 if (!$page) return '';
-                return $page->url;
+                return $page->ownUrl;
             }
             return $this->_getPseudoPageUrl();
         } else if ($var == 'rel') {
