@@ -234,6 +234,13 @@ class Kwf_Component_Data
                 return $page->url;
             }
             return $this->_getPseudoPageUrl();
+        } else if ($var == 'ownUrl') {
+            if (!$this->isPage) {
+                $page = $this->getPage();
+                if (!$page) return '';
+                return $page->ownUrl;
+            }
+            return $this->_getPseudoPageUrl();
         } else if ($var == 'rel') {
             /*
             $childs = $this->getPage()->getRecursiveChildComponents(array(
