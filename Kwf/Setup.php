@@ -150,7 +150,8 @@ class Kwf_Setup
             $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', null);
 
             if ($uri == 'robots.txt') {
-                Kwf_Util_RobotsTxt::output($data);
+                $robotsTxtClass = Kwf_Config::getValue('robotsTxtClass');
+                $robotsTxtClass::output($data);
             }
 
             if ($uri == 'sitemap.xml') {
