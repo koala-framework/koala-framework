@@ -41,5 +41,10 @@ class Kwc_Basic_LinkTag_Extern_Form extends Kwc_Abstract_Form
                 $card->add(new Kwf_Form_Field_Checkbox('scrollbars', 'Scrollbars'));
                 $card->add(new Kwf_Form_Field_Checkbox('resizable', 'Resizable'));
         }
+
+        $rel = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('Relationship attribute')));
+        $rel->add(new Kwf_Form_Field_Checkbox('rel_nofollow', trlKwf('no-follow')));
+        $rel->add(new Kwf_Form_Field_Checkbox('rel_noopener', trlKwf('no-opener')));
+        $rel->add(new Kwf_Form_Field_Checkbox('rel_noreferrer', trlKwf('no-referrer')));
     }
 }
