@@ -22,7 +22,7 @@ class Kwc_Basic_LinkTag_Extern_Component extends Kwc_Basic_LinkTag_Abstract_Comp
         $ret = parent::getTemplateVars($renderer);
 
         $row = $this->_getRow();
-        $rel = $this->getData()->rel ? $this->getData()->rel : array();
+        $rel = $this->getData()->rel ? array($this->getData()->rel) : array();
         if ($row->rel_nofollow) {
             $rel[] = 'nofollow';
         }
