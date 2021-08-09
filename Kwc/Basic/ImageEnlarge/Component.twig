@@ -1,0 +1,22 @@
+<figure class="{{ rootElementClass }} kwfUp-kwcImage" style="{{ style }}">
+    {% if baseUrl %}
+        {% if linkTag.hasContent() %}{{ renderer.component(linkTag) }}{% endif %}
+        {% block image %}
+            <div class="{{ containerClass }}" style="padding-bottom: {{aspectRatio}}%"
+                data-width-steps="{{ widthSteps|json_encode }}"
+                data-src="{{ baseUrl }}">
+                {% if outputImgTag %}
+                    <noscript>
+                        {{ renderer.image(image, altText, imgAttributes) }}
+                    </noscript>
+                {% endif %}
+            </div>
+        {% endblock %}
+        {% if showImageCaption %}
+            {% block caption %}
+                <figcaption class="{{ "imageCaption"|bemClass }} kwfUp-imageCaption" style="{{ captionStyle }}">{{ image_caption }}</figcaption>
+            {% endblock %}
+        {% endif %}
+        {% if linkTag.hasContent() %}</a>{% endif %}
+    {% endif %}
+</figure>
