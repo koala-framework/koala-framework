@@ -17,24 +17,4 @@ class Kwc_Basic_LinkTag_Extern_Component extends Kwc_Basic_LinkTag_Abstract_Comp
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
-    {
-        $ret = parent::getTemplateVars($renderer);
-
-        $row = $this->_getRow();
-        $rel = $this->getData()->rel ? array($this->getData()->rel) : array();
-        if ($row->rel_nofollow) {
-            $rel[] = 'nofollow';
-        }
-        if ($row->rel_noopener) {
-            $rel[] = 'noopener';
-        }
-        if ($row->rel_noreferrer) {
-            $rel[] = 'noreferrer';
-        }
-        $ret['rel'] = implode(' ', array_unique($rel));
-
-        return $ret;
-    }
-
 }

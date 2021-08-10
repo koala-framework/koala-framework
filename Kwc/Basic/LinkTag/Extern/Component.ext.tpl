@@ -5,6 +5,5 @@ if ($this->data->url) {
     if (isset($attrs['kwc-popup']) && $attrs['kwc-popup'] == 'blank') {
         echo " target=\"_blank\"";
     }
-    if($this->rel) { echo ' rel="' . Kwf_Util_HtmlSpecialChars::filter($this->rel) . '"'; }
     echo '>';
 }

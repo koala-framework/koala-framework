@@ -18,6 +18,20 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwc_Basic_LinkTag_Abstract_Data
             $row = $this->_getLinkRow();
             if (!isset($row->target) || !$row->target) return '';
             return $row->target;
+        } else if ($var == 'rel') {
+            $rel = parent::__get($var);
+            $rel = $rel ? array($rel) : array();
+            $row = $this->_getLinkRow();
+            if ($row->rel_nofollow) {
+                $rel[] = 'nofollow';
+            }
+            if ($row->rel_noopener) {
+                $rel[] = 'noopener';
+            }
+            if ($row->rel_noreferrer) {
+                $rel[] = 'noreferrer';
+            }
+            return implode(' ', array_unique($rel));
         } else {
             return parent::__get($var);
         }
