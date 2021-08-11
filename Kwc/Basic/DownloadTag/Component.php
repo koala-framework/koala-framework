@@ -29,18 +29,6 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         $ret['url'] = $this->getDownloadUrl();
         $ret['filename'] = $filename;
 
-        $rel = $this->getData()->rel ? array($this->getData()->rel) : array();
-        if ($row->rel_nofollow) {
-            $rel[] = 'nofollow';
-        }
-        if ($row->rel_noopener) {
-            $rel[] = 'noopener';
-        }
-        if ($row->rel_noreferrer) {
-            $rel[] = 'noreferrer';
-        }
-        $ret['rel'] = implode(' ', array_unique($rel));
-
         return $ret;
     }
 
