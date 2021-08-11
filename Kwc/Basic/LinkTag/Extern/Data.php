@@ -6,7 +6,7 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwc_Basic_LinkTag_Abstract_Data
     {
         if (!isset($this->_linkRow)) {
             $m = Kwc_Abstract::createOwnModel($this->componentClass);
-            $cols = array('target', 'open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable');
+            $cols = array('target', 'open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable', 'rel_nofollow', 'rel_noopener', 'rel_noreferrer');
             $this->_linkRow = (object)$m->fetchColumnsByPrimaryId($cols, $this->dbId);
         }
         return $this->_linkRow;
@@ -19,8 +19,7 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwc_Basic_LinkTag_Abstract_Data
             if (!isset($row->target) || !$row->target) return '';
             return $row->target;
         } else if ($var == 'rel') {
-            $rel = parent::__get($var);
-            $rel = $rel ? array($rel) : array();
+            $rel = array(parent::__get($var));
             $row = $this->_getLinkRow();
             if ($row->rel_nofollow) {
                 $rel[] = 'nofollow';

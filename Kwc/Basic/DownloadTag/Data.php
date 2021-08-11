@@ -19,8 +19,7 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
             Kwf_Events_Dispatcher::fireEvent($ev);
             return $ev->url;
         } else if ($var == 'rel') {
-            $rel = parent::__get($var);
-            $rel = $rel ? array($rel) : array();
+            $rel = array(parent::__get($var));
             $row = $this->_getLinkRow();
             if ($row->rel_nofollow) {
                 $rel[] = 'nofollow';
@@ -42,7 +41,7 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
     {
         if (!isset($this->_linkRow)) {
             $m = Kwc_Abstract::createOwnModel($this->componentClass);
-            $cols = array('open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable');
+            $cols = array('open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable', 'rel_nofollow', 'rel_noopener', 'rel_noreferrer');
             $this->_linkRow = (object)$m->fetchColumnsByPrimaryId($cols, $this->dbId);
         }
         return $this->_linkRow;
