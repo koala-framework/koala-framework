@@ -5,30 +5,7 @@ class Kwf_Controller_Action_User_BackendLostPasswordController extends Kwf_Contr
 
     public function preDispatch()
     {
-        if (Kwf_Config::getValue('blockExternalAdminAccess')) {
-            $currentIp = $_SERVER['REMOTE_ADDR'];
-            $valid = false;
-            foreach (Kwf_Config::getValueArray('allowedAdminIPs') as $ip) {
-                if (substr($ip, -1)=='*') {
-                    $i = substr($ip, 0, -1);
-                    if (substr($currentIp, 0, strlen($i)) == $i){
-                        $valid = true;
-                    }
-                } else if (substr($ip, 0, 1)=='*') {
-                    $i = substr($ip, 1);
-                    if (substr($currentIp, -strlen($i)) == $i){
-                        $valid = true;
-                    }
-                } else {
-                    if ($currentIp == $ip){
-                        $valid = true;
-                    }
-                }
-            }
-            if (!$valid) {
-                throw new Kwf_Exception_AccessDenied();
-            }
-        }
+        Kwf_Util_BackendLoginRestriction::isAllowed();
 
         $this->getHelper('viewRenderer')->setNoController(true);
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
