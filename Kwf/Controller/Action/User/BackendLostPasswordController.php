@@ -5,6 +5,8 @@ class Kwf_Controller_Action_User_BackendLostPasswordController extends Kwf_Contr
 
     public function preDispatch()
     {
+        Kwf_Util_BackendLoginRestriction::isAllowed();
+
         $this->getHelper('viewRenderer')->setNoController(true);
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
         parent::preDispatch();
