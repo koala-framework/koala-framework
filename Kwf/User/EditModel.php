@@ -39,6 +39,10 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
     {
         parent::_init();
         $this->_exprs['format'] = new Kwf_Model_Select_Expr_String('html');
+        $this->_exprs['activated'] = new Kwf_Model_Select_Expr_And(array(
+            new Kwf_Model_Select_Expr_NotEquals('password', ''),
+            new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_IsNull('password'))
+        ));
     }
 
     // wenn createRow benötigt wird weil man ein anderes userModel (db?) hat,
