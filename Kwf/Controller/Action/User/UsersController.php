@@ -60,7 +60,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
              $this->_columns->add(new Kwf_Grid_Column('language', trlKwf('lang'), 30));
         }
 
-        $this->_columns->add(new Kwf_Grid_Column('password', trlKwf('Activated'), 60))
+        $this->_columns->add(new Kwf_Grid_Column('activated', trlKwf('Activated'), 60))
             ->setRenderer('boolean')
             ->setShowIn(Kwf_Grid_Column::SHOW_IN_ALL ^ Kwf_Grid_Column::SHOW_IN_XLS);
 
