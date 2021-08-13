@@ -194,12 +194,12 @@ class Kwf_User_Model extends Kwf_Model_RowCache
                         }
                     }
                     $auth->sendLostPasswordMail($row, $row);
-                    break;
+                    return true;
                 }
             }
         }
         if (!$row) {
-            throw new Kwf_Exception_Client(trlKwf('User not existent in this web.'));
+            return false;
         }
     }
 
