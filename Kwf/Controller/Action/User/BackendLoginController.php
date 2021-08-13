@@ -5,6 +5,8 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
 
     public function preDispatch()
     {
+        Kwf_Util_BackendLoginRestriction::isAllowed();
+
         $this->getHelper('viewRenderer')->setNoController(true);
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
         parent::preDispatch();
@@ -146,7 +148,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
             $errors = $this->getRequest()->getParam('formErrors');
             foreach ($result->getMessages() as $msg) {
                 $errors[] = array(
-                    'message' => $msg
+                    'message' =>  Kwf_Trl::getInstance()->trlStaticExecute($msg)
                 );
             }
             $this->getRequest()->setParam('formErrors', $errors);

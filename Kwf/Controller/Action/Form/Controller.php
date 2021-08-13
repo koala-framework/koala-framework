@@ -64,7 +64,9 @@ class Kwf_Controller_Action_Form_Controller extends Kwf_Controller_Action
                     );
                 }
             }
-            $this->getRequest()->setParam('formErrors', $errors);
+            if ($errors) {
+                $this->getRequest()->setParam('formErrors', $errors);
+            }
         }
 
         $this->_showForm();
