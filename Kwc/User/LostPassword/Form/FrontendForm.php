@@ -6,7 +6,7 @@ class Kwc_User_LostPassword_Form_FrontendForm extends Kwf_Form
         parent::_init();
         $this->setModel(new Kwf_Model_FnF());
 
-        $this->add(new Kwc_User_LostPassword_Form_UserEMail('email', trlKwfStatic('E-Mail')))
+        $this->add(new Kwf_Form_Field_EMailField('email', trlKwfStatic('E-Mail')))
             ->setAllowBlank(false)
             ->setLabelWidth(50);
     }
