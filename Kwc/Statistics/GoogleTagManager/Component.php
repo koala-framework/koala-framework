@@ -17,7 +17,7 @@ class Kwc_Statistics_GoogleTagManager_Component extends Kwc_Abstract_Composite_C
         while ($data) {
             $data = $data->parent;
             if ($data && Kwc_Abstract::getFlag($data->componentClass, 'hasDataLayer')) {
-                $ret = array_merge($ret, $data->getComponent()->getDataLayer());
+                $ret = array_merge($data->getComponent()->getDataLayer(), $ret);
             }
         }
 
