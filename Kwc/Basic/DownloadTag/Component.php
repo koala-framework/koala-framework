@@ -88,7 +88,7 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         );
         if ($row->content_disposition === 'attachment') {
             $ret['downloadFilename'] = $filename;
-        } else if($row->content_disposition === 'inline') {
+        } else if ($row->content_disposition === 'inline') {
             $ret['filename'] = $filename;
         }
 
