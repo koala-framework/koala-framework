@@ -18,6 +18,18 @@ abstract class Kwf_Controller_Action_Component_PagesAbstractController extends K
         $this->view->xtype = 'kwf.component.pages';
     }
 
+    protected function _getUserActionsLogConfig()
+    {
+        $ret = parent::_getUserActionsLogConfig();
+        $ret['componentId'] = $this->_getParam('id');
+        $action = $this->getRequest()->getActionName();
+        if ($action == 'json-move') {
+            $ret['componentId'] = $this->_getParam('source');
+        }
+        $ret['details'] = trlKwf('Page properties');
+        return $ret;
+    }
+
     protected function _formatNode($row)
     {
         $component = $row->getData();

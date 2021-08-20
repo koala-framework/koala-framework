@@ -48,6 +48,8 @@ class Kwf_Acl_Component extends Kwf_Acl
                 $this->add(new Zend_Acl_Resource('kwf_user_user'), 'kwf_user_users');
                 $this->add(new Zend_Acl_Resource('kwf_user_log'), 'kwf_user_users');
                 $this->add(new Zend_Acl_Resource('kwf_user_comments'), 'kwf_user_users');
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_user_actions-log',
+                array('text'=>trlKwfStatic('User Actions-Log'), 'icon'=>'report_user.png')), 'settings');
             $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_clear-cache',
                     array('text'=>trlKwfStatic('Clear Cache'), 'icon'=>'database.png')), 'settings');
             $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_redirects_redirects',

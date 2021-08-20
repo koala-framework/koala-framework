@@ -60,6 +60,16 @@ class Kwc_Directories_Item_Directory_FormController extends Kwf_Controller_Actio
         }
     }
 
+    protected function _getUserActionsLogConfig()
+    {
+        $ret = parent::_getUserActionsLogConfig();
+        $generator = Kwf_Component_Generator_Abstract::getInstance($this->_getParam('class'), 'detail');
+        if ($generator) {
+            $ret['componentId'] = $this->_getParam('componentId') . $generator->getIdSeparator() . $this->_getParam('id');
+        }
+        return $ret;
+    }
+
     protected function _hasPermissions($row, $action)
     {
         if (isset($row->component_id) && $row->component_id != $this->_getParam('componentId')) {
