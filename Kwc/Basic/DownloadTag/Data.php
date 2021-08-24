@@ -13,18 +13,79 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
             if (!$filename) {
                 $filename = $fRow->filename;
             }
-            $filename .= '.'.$fRow->extension;
+            $filename .= '.' . $fRow->extension;
             $ret = Kwf_Media::getUrl($this->componentClass, $this->componentId, 'default', $filename);
             $ev = new Kwf_Component_Event_CreateMediaUrl($this->componentClass, $this, $ret);
             Kwf_Events_Dispatcher::fireEvent($ev);
             return $ev->url;
+        } else if ($var == 'rel') {
+            $rel = array(parent::__get($var));
+            $row = $this->_getLinkRow();
+            if ($row->rel_nofollow) {
+                $rel[] = 'nofollow';
+            }
+            if ($row->rel_noopener) {
+                $rel[] = 'noopener';
+            }
+            if ($row->rel_noreferrer) {
+                $rel[] = 'noreferrer';
+            }
+            return implode(' ', array_unique($rel));
         } else {
             return parent::__get($var);
         }
     }
 
+    private $_linkRow;
+    private function _getLinkRow()
+    {
+        if (!isset($this->_linkRow)) {
+            $m = Kwc_Abstract::createOwnModel($this->componentClass);
+            $cols = array('open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable', 'rel_nofollow', 'rel_noopener', 'rel_noreferrer');
+            $this->_linkRow = (object)$m->fetchColumnsByPrimaryId($cols, $this->dbId);
+        }
+        return $this->_linkRow;
+    }
+
+
     public function getAbsoluteUrl()
     {
         return $this->url;
+    }
+
+    //this is the copy from Kwc_Basic_LinkTag_Extern_Data
+    public function getLinkDataAttributes()
+    {
+        $ret = parent::getLinkDataAttributes();
+        if (!Kwc_Abstract::getSetting($this->componentClass, 'hasPopup')) {
+            $type = Kwc_Abstract::getSetting($this->componentClass, 'openType');
+            if ($type == 'blank') {
+                $ret['kwc-popup'] = 'blank';
+            } else {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
+        }
+        $row = $this->_getLinkRow();
+        if (!isset($row->open_type) || !$row->open_type) return '';
+        if ($row->open_type == 'popup') {
+            $pop = array();
+            if ($row->width) $pop[] = 'width='.$row->width;
+            if ($row->height) $pop[] = 'height='.$row->height;
+            $pop[] = 'menubar='.($row->menubar ? 'yes' : 'no');
+            $pop[] = 'toolbar='.($row->toolbar ? 'yes' : 'no');
+            $pop[] = 'location='.($row->locationbar ? 'yes' : 'no');
+            $pop[] = 'status='.($row->statusbar ? 'yes' : 'no');
+            $pop[] = 'scrollbars='.($row->scrollbars ? 'yes' : 'no');
+            $pop[] = 'resizable='.($row->resizable ? 'yes' : 'no');
+            $ret['kwc-popup'] = implode(',', $pop);
+        } else if ($row->open_type == 'blank') {
+            $ret['kwc-popup'] = 'blank';
+        }
+        return $ret;
+    }
+
+    public function getLinkClass()
+    {
+        return parent::getLinkClass().' kwfUp-kwcPopup';
     }
 }

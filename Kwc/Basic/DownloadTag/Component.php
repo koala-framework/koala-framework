@@ -8,6 +8,8 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
             'ownModel'     => 'Kwc_Basic_DownloadTag_Model',
             'componentName' => trlKwfStatic('Download'),
             'componentIcon' => 'folder_link',
+            'hasPopup'      => true,
+            'openType'      => null, //wenn hasPopup auf false
         ));
         $ret['dataClass'] = 'Kwc_Basic_DownloadTag_Data';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
@@ -25,10 +27,10 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         $row = $this->_getRow();
         $filename = $row->filename != '' ? $row->filename : 'unnamed';
 
-
         $ret['filesize'] = $this->getFilesize();
         $ret['url'] = $this->getDownloadUrl();
         $ret['filename'] = $filename;
+
         return $ret;
     }
 
@@ -81,11 +83,20 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
 
         $filename = $row->filename != '' ? $row->filename : 'unnamed';
         $filename .= '.'.$fileRow->extension;
-        return array(
+
+        $ret = array(
             'file' => $file,
             'mimeType' => $mimeType,
-            'downloadFilename' => $filename
         );
+        if ($row->content_disposition === 'attachment') {
+            $ret['downloadFilename'] = $filename;
+        } else if ($row->content_disposition === 'inline') {
+            $ret['filename'] = $filename;
+        }
+
+        if ($row->rel_nofollow === "1") header("X-Robots-Tag: \"noindex\"");
+
+        return $ret;
     }
 
     public static function canCacheBeDeleted($id)
