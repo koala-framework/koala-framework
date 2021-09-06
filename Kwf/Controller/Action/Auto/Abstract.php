@@ -74,7 +74,6 @@ abstract class Kwf_Controller_Action_Auto_Abstract extends Kwf_Controller_Action
     private function _logUserAction($componentId, $details)
     {
         $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($componentId, array('ignoreVisible' => true));
-        if (!$component) return;
 
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
         if (!$user) return;
@@ -83,20 +82,19 @@ abstract class Kwf_Controller_Action_Auto_Abstract extends Kwf_Controller_Action
             'user_name' => $user->name,
             'user_email' => $user->email,
             'url' => '',
-            'domain' => $component->getDomainComponent()->name,
+            'domain' => $component ? $component->getDomainComponent()->name : Kwf_Component_Data_Root::getInstance()->name,
             'details' => $details,
         );
-        $page = $component->getPage();
-        if ($page) {
-            $data['url'] = $page->ownUrl;
+        if ($component && $component->getPage()) {
+            $data['url'] = $component->getPage()->ownUrl;
         }
-        if (!$data['details']) {
+        if ($component && !$data['details']) {
             $componentForDetails = $component;
             while ($componentForDetails && (!isset($componentForDetails->generator) || !$componentForDetails->generator->getGeneratorFlag('box'))) {
                 $componentForDetails = $componentForDetails->parent;
             }
             if (!$componentForDetails) {
-                $componentForDetails = $page;
+                $componentForDetails = $component->getPage();
             }
             if (!$componentForDetails) {
                 $componentForDetails = $component;
@@ -104,6 +102,21 @@ abstract class Kwf_Controller_Action_Auto_Abstract extends Kwf_Controller_Action
             if (Kwc_Abstract::hasSetting($componentForDetails->componentClass, 'componentName')) {
                 $data['details'] = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($componentForDetails->componentClass, 'componentName'));
             }
+        }
+
+        if (!$component && !$data['details']) {
+            $resource = $this->_getAcl()->get($this->getRequest()->getResourceName());
+            while ($resource && get_class($resource) !== 'Kwf_Acl_Resource_MenuUrl') {
+                $resource = $this->_getAcl()->getParentResource($resource);
+            }
+            if ($resource) {
+                $menuConfig = $resource->getMenuConfig();
+                $data['details'] = Kwf_Trl::getInstance()->trlStaticExecute($menuConfig['text']);
+            }
+        }
+
+        if (!$component && !$data['details']) {
+            return;
         }
 
         $model = Kwf_Model_Abstract::getInstance('Kwf_User_ActionsLogModel');
