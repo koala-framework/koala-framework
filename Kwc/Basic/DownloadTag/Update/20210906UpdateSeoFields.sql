@@ -1,0 +1,13 @@
+ALTER TABLE `kwc_basic_downloadtag` CHANGE `open_type` `open_type` ENUM('self','blank') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'self';
+ALTER TABLE `kwc_basic_downloadtag` DROP `width`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `height`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `menubar`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `toolbar`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `locationbar`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `statusbar`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `scrollbars`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `resizable`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `rel_nofollow`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `rel_noopener`;
+ALTER TABLE `kwc_basic_downloadtag` DROP `rel_noreferrer`;
+ALTER TABLE `kwc_basic_downloadtag` ADD `rel_noindex` TINYINT NOT NULL ;
