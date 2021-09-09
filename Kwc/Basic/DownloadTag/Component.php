@@ -94,7 +94,7 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
             $ret['filename'] = $filename;
         }
 
-        if ($row->rel_nofollow === "1") header("X-Robots-Tag: \"noindex\"");
+        if ($row->rel_noindex) header("X-Robots-Tag: \"noindex\"");
 
         return $ret;
     }

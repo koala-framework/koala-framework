@@ -21,14 +21,8 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
         } else if ($var == 'rel') {
             $rel = array(parent::__get($var));
             $row = $this->_getLinkRow();
-            if ($row->rel_nofollow) {
+            if ($row->rel_noindex) {
                 $rel[] = 'nofollow';
-            }
-            if ($row->rel_noopener) {
-                $rel[] = 'noopener';
-            }
-            if ($row->rel_noreferrer) {
-                $rel[] = 'noreferrer';
             }
             return implode(' ', array_unique($rel));
         } else {
@@ -41,7 +35,7 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
     {
         if (!isset($this->_linkRow)) {
             $m = Kwc_Abstract::createOwnModel($this->componentClass);
-            $cols = array('open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable', 'rel_nofollow', 'rel_noopener', 'rel_noreferrer');
+            $cols = array('open_type', 'rel_noindex');
             $this->_linkRow = (object)$m->fetchColumnsByPrimaryId($cols, $this->dbId);
         }
         return $this->_linkRow;
@@ -53,32 +47,12 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
         return $this->url;
     }
 
-    //this is the copy from Kwc_Basic_LinkTag_Extern_Data
     public function getLinkDataAttributes()
     {
         $ret = parent::getLinkDataAttributes();
-        if (!Kwc_Abstract::getSetting($this->componentClass, 'hasPopup')) {
-            $type = Kwc_Abstract::getSetting($this->componentClass, 'openType');
-            if ($type == 'blank') {
-                $ret['kwc-popup'] = 'blank';
-            } else {
-                throw new Kwf_Exception_NotYetImplemented();
-            }
-        }
         $row = $this->_getLinkRow();
         if (!isset($row->open_type) || !$row->open_type) return '';
-        if ($row->open_type == 'popup') {
-            $pop = array();
-            if ($row->width) $pop[] = 'width='.$row->width;
-            if ($row->height) $pop[] = 'height='.$row->height;
-            $pop[] = 'menubar='.($row->menubar ? 'yes' : 'no');
-            $pop[] = 'toolbar='.($row->toolbar ? 'yes' : 'no');
-            $pop[] = 'location='.($row->locationbar ? 'yes' : 'no');
-            $pop[] = 'status='.($row->statusbar ? 'yes' : 'no');
-            $pop[] = 'scrollbars='.($row->scrollbars ? 'yes' : 'no');
-            $pop[] = 'resizable='.($row->resizable ? 'yes' : 'no');
-            $ret['kwc-popup'] = implode(',', $pop);
-        } else if ($row->open_type == 'blank') {
+        if ($row->open_type == 'blank') {
             $ret['kwc-popup'] = 'blank';
         }
         return $ret;
