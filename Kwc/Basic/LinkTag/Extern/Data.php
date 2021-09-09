@@ -6,7 +6,7 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwc_Basic_LinkTag_Abstract_Data
     {
         if (!isset($this->_linkRow)) {
             $m = Kwc_Abstract::createOwnModel($this->componentClass);
-            $cols = array('target', 'open_type', 'width', 'height', 'menubar', 'toolbar', 'locationbar', 'statusbar', 'scrollbars', 'resizable', 'rel_noindex');
+            $cols = array('target', 'open_type', 'width', 'height', 'rel_noindex');
             $this->_linkRow = (object)$m->fetchColumnsByPrimaryId($cols, $this->dbId);
         }
         return $this->_linkRow;
@@ -52,12 +52,6 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwc_Basic_LinkTag_Abstract_Data
             $pop = array();
             if ($row->width) $pop[] = 'width='.$row->width;
             if ($row->height) $pop[] = 'height='.$row->height;
-            $pop[] = 'menubar='.($row->menubar ? 'yes' : 'no');
-            $pop[] = 'toolbar='.($row->toolbar ? 'yes' : 'no');
-            $pop[] = 'location='.($row->locationbar ? 'yes' : 'no');
-            $pop[] = 'status='.($row->statusbar ? 'yes' : 'no');
-            $pop[] = 'scrollbars='.($row->scrollbars ? 'yes' : 'no');
-            $pop[] = 'resizable='.($row->resizable ? 'yes' : 'no');
             $ret['kwc-popup'] = implode(',', $pop);
         } else if ($row->open_type == 'blank') {
             $ret['kwc-popup'] = 'blank';

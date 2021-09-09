@@ -23,7 +23,7 @@ class Kwc_Basic_LinkTagExtern_Test extends Kwc_TestAbstract
         $this->assertEquals('http://example.com', $c->url);
         $this->assertEquals('', $c->rel);
         $attrs = $c->getLinkDataAttributes();
-        $this->assertEquals('width=200,height=300,menubar=yes,toolbar=yes,location=no,status=no,scrollbars=no,resizable=yes', $attrs['kwc-popup']);
+        $this->assertEquals('width=200,height=300', $attrs['kwc-popup']);
     }
 
     public function testHtml()
