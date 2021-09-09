@@ -1,3 +1,4 @@
+UPDATE `kwc_basic_downloadtag` SET `open_type` = 'blank' WHERE `open_type` = 'popup';
 ALTER TABLE `kwc_basic_downloadtag` CHANGE `open_type` `open_type` ENUM('self','blank') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'self';
 ALTER TABLE `kwc_basic_downloadtag` DROP `width`;
 ALTER TABLE `kwc_basic_downloadtag` DROP `height`;
