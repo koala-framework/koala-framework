@@ -156,6 +156,7 @@ class Kwf_Media_Output
             if (isset($file['filename']) && $file['filename']) {
                 $ret['headers'][] = 'Content-Disposition: inline; filename="' . $file['filename'] . '"';
             }
+            if (isset($file['noindex']) && $file['noindex']) $ret['headers'][] = 'X-Robots-Tag: noindex';
             $encoding = self::ENCODING_NONE;
             if (isset($file['encoding'])) {
                 $encoding = $file['encoding'];
