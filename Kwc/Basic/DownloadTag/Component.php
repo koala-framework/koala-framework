@@ -87,14 +87,13 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         $ret = array(
             'file' => $file,
             'mimeType' => $mimeType,
+            'noindex' => !!$row->rel_noindex
         );
         if ($row->content_disposition === 'attachment') {
             $ret['downloadFilename'] = $filename;
         } else if ($row->content_disposition === 'inline') {
             $ret['filename'] = $filename;
         }
-
-        if ($row->rel_noindex) header("X-Robots-Tag: \"noindex\"");
 
         return $ret;
     }
