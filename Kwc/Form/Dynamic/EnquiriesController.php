@@ -31,6 +31,7 @@ class Kwc_Form_Dynamic_EnquiriesController extends Kwf_Controller_Action_Auto_Gr
     protected function _getColumnsFromField($f, $containerName = false)
     {
         $ret = array();
+        $f->trlStaticExecute();
         $columnHeader = $containerName ? $containerName . ' - '.$f->getFieldLabel() : $f->getFieldLabel();
         if ($f instanceof Kwf_Form_Field_SimpleAbstract) {
             $c = new Kwf_Grid_Column($f->getFieldName(), $columnHeader);
