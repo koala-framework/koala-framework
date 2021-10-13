@@ -4,6 +4,7 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
     protected $_defaultOrder = array('field' => 'date', 'direction' => 'DESC');
     protected $_model = 'Kwf_User_ActionsLogModel';
     protected $_buttons = array();
+    protected $_paging = 200;
 
     public function preDispatch()
     {
