@@ -59,7 +59,7 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
             foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {
                 $file = KWF_PATH.'/setup/'.$tag.'.sql';
                 if (file_exists($file)) {
-                    $update = new Kwf_Update_Sql(0, null);
+                    $update = new Kwf_Update_Sql($file, null);
                     $update->sql = file_get_contents($file);
                     $updates[] = $update;
                 }
@@ -67,8 +67,8 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
 
             $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates());
 
-            $updates[] = new Kwf_Update_Setup_InitialDb('setup/setup.sql');
-            $updates[] = new Kwf_Update_Setup_InitialUploads('setup/uploads');
+            if (file_exists('setup/setup.sql')) $updates[] = new Kwf_Update_Setup_InitialDb('setup/setup.sql');
+            if (file_exists('setup/uploads')) $updates[] = new Kwf_Update_Setup_InitialUploads('setup/uploads');
         }
 
         $c = new Zend_ProgressBar_Adapter_Console();
