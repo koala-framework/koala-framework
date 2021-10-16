@@ -77,6 +77,7 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
         $c->setTextWidth(50);
 
+        file_put_contents("update", serialize([]));
         $runner = new Kwf_Util_Update_Runner($updates);
         $progress = new Zend_ProgressBar($c, 0, $runner->getProgressSteps());
         $runner->setProgressBar($progress);
@@ -99,6 +100,7 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
         } else {
             echo "\n\nSetup finished.\nThank you for using Koala Framework.\n";
         }
+        unlink("update");
         exit;
     }
 }
