@@ -20,7 +20,6 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->add(new Zend_Acl_Resource('kwf_component_media'));
         $this->add(new Zend_Acl_Resource('kwf_component_benchmark'));
         $this->add(new Zend_Acl_Resource('kwf_component_show-component'));
-        $this->add(new Kwf_Acl_Resource_MediaUpload_Any('kwf_media_upload_any'));
         $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_pages',
             array('text'=>trlKwfStatic('Page tree'), 'icon'=>'application_side_tree.png')));
             $this->add(new Zend_Acl_Resource('kwf_component_page'), 'kwf_component_pages');
@@ -96,7 +95,7 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->deny('guest', 'kwf_welcome_welcome');
         $this->deny('guest', 'kwf_component_pages');
 
-        $this->allow('superuser', 'kwf_media_upload_any');
+        $this->allow('superuser', 'kwf_media_upload');
 
         // Kwf_Component_Acl nicht vergessen für Komponentenrechte!
     }
