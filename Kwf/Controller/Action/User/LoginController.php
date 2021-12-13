@@ -151,6 +151,12 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
                     Kwf_Util_Redirect::redirect($redirect);
                 }
             }
+            if (count($state) == 4 && strpos($state[0], 'login') === 0) {
+                $redirect = urldecode(str_replace('kwfdot', '.', $state[3]));
+                if ($redirect !== 'jsCallback') {
+                    Kwf_Util_Redirect::redirect($redirect);
+                }
+            }
             throw new Kwf_Exception("Invalid state");
         }
 
