@@ -19,6 +19,7 @@ class Kwc_Basic_DownloadTag_Form extends Kwc_Abstract_Form
         // cards container erstellen und zu form hinzufügen
         $cards = $this->add(new Kwf_Form_Container_Cards('open_type', trlKwf('Open in')));
         $cards->getCombobox()->setAllowBlank(false);
+        $cards->getCombobox()->setDefaultValue('self');
         $card = $cards->add();
             $card->setTitle(trlKwf('Same window'));
             $card->setName('self');
