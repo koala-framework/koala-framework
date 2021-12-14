@@ -129,13 +129,16 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     public function search(Kwf_Component_Data $subroot, $query)
     {
         $ret = array();
-        foreach ($this->_getSolrService($subroot)->search($query)->response->docs as $doc) {
+
+        $service = $this->_getSolrService($subroot);
+        foreach ($service->search($service->escape($query))->response->docs as $doc) {
             $ret[] = array(
                 'componentId' => $doc->componentId,
                 'title' => $doc->title,
                 'content' => $doc->content,
             );
         }
+
         return $ret;
     }
 
@@ -148,7 +151,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
             $service->setSearchRequestHandler($params['type']);
             unset($params['type']);
         }
-        $res = $service->search($queryString, $offset, $limit, $params);
+        $res = $service->search($service->escape($queryString), $offset, $limit, $params);
         foreach ($res->response->docs as $doc) {
             $data = Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId);
             if ($data) {
