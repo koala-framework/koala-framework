@@ -600,7 +600,7 @@ class Kwf_Acl extends Zend_Acl
             ),
             'jpg' => array(
                 'mimeTypePattern' => '^image\/jpeg$',
-                'fileNamePattern' => '\.(jpe?g|JPE?G)'
+                'fileNamePattern' => '\.(jpe?g|JPE?G)$'
             ),
             'doc' => array(
                 'mimeTypePattern' => '^application\/msword$',
