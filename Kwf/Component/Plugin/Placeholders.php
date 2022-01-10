@@ -4,7 +4,7 @@ class Kwf_Component_Plugin_Placeholders extends Kwf_Component_Plugin_Abstract
 {
     protected function _getPlaceholders()
     {
-        return Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)
+        return Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId, array('ignoreVisible' => true))
             ->getComponent()->getPlaceholders();
     }
 
