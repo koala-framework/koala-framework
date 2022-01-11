@@ -19,7 +19,7 @@ class Kwc_Mail_PlaceholdersPlugin extends Kwf_Component_Plugin_Placeholders
     {
         $output = parent::processOutput($output, $renderer);
 
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId);
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId, array('ignoreVisible' => true));
         $recipient = $c->getComponent()->getRecipient();
         $redirectComponent = $c->getChildComponent('_redirect');
         if ($redirectComponent && $recipient) {
