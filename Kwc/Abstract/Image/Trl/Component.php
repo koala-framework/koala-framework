@@ -145,8 +145,6 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
             $c->chained->componentId, $type, $c->chained->componentClass
         );
     }
-
-
     private function _getAbsoluteUrl($url)
     {
         if ($url && substr($url, 0, 1) == '/' && substr($url, 0, 2) != '//') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
