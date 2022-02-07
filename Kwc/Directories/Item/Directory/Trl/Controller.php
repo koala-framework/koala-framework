@@ -46,7 +46,7 @@ class Kwc_Directories_Item_Directory_Trl_Controller extends Kwf_Controller_Actio
         $extConfig = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->_getParam('class'), $extConfigType)
                     ->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
         $extConfig = $extConfig['items'];
-        if (count($extConfig['countDetailClasses']) > 1 && !$this->_getModel()->hasColumn('component')) {
+        if (is_array($extConfig['countDetailClasses']) && count($extConfig['countDetailClasses']) > 1 && !$this->_getModel()->hasColumn('component')) {
             throw new Kwf_Exception('If you have more than one detail-component your table has to have a column named "component"');
         }
 
