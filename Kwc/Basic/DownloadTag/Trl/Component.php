@@ -27,6 +27,22 @@ class Kwc_Basic_DownloadTag_Trl_Component extends Kwc_Basic_LinkTag_Abstract_Trl
         return $this->getData()->url;
     }
 
+    public function getFilesize()
+    {
+        $fRow = $this->getFileRow()->getParentRow('File');
+        if (!$fRow) return null;
+        return $fRow->getFileSize();
+    }
+
+    public function getFileRow()
+    {
+        if ($this->getRow()->own_download) {
+            return $this->getData()->getChildComponent('-download')->getComponent()->getFileRow();
+        } else {
+            return $this->getData()->chained->getComponent()->getFileRow();
+        }
+    }
+
     public static function isValidMediaOutput($id, $type, $className)
     {
         return Kwf_Media_Output_Component::isValid($id);
