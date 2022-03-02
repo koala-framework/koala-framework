@@ -20,6 +20,15 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         return $this->getData()->chained->getComponent()->getBaseType();
     }
 
+    public function getApiData()
+    {
+        if ($this->getRow()->own_image) {
+            return $this->getData()->getChildComponent("-image")->getComponent()->getApiData();
+        } else {
+            return $this->getData()->chained->getComponent()->getApiData();
+        }
+    }
+
     public function getBaseImageUrl()
     {
         if ($this->getRow()->own_image) {
