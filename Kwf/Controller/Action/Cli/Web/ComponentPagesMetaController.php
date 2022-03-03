@@ -5,7 +5,6 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
     public function rebuildWorkerAction()
     {
         set_time_limit(0);
-        Kwf_Util_MemoryLimit::set(512);
 
         $queueFile = 'temp/pagemetaRebuildQueue';
         $statsFile = 'temp/pagemetaRebuildStats';
@@ -97,8 +96,6 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
     public function rebuildAction()
     {
-        Kwf_Util_MemoryLimit::set(512);
-
         $m = Kwf_Component_PagesMetaModel::getInstance();
         $s = $m->select();
         $m->updateRows(array('rebuilt'=>0), $s);
@@ -157,7 +154,6 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
     public function updateChangedJobAction()
     {
-        Kwf_Util_MemoryLimit::set(512);
         $start = microtime(true);
         $m = Kwf_Component_PagesMetaModel::getInstance();
         $s = $m->select();
