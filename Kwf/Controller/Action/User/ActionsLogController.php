@@ -80,10 +80,10 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
         $currentUser = Kwf_Registry::get('userModel')->getAuthedUser();
         if ($currentUser->role == 'admin') return $select;
 
-        foreach (explode(',', $currentUser->domain_list) as $domain ) {
-            $domainName = $this->_getAllowedDomain($domain);
+        foreach ($this->_getAllowedDomains($currentUser) as $domainName) {
             $select->orWhere('domain = ?', $domainName);
         }
+
         return $select;
     }
 
@@ -92,18 +92,20 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
         if ($currentUser->role == 'admin') return $select;
         $orExpr = new Kwf_Model_Select_Expr_Or(array());
 
-        foreach (explode(',', $currentUser->domain_list) as $domain ) {
-            $domainName = $this->_getAllowedDomain($domain);
+        foreach ($this->_getAllowedDomains($currentUser) as $domainName) {
             $orExpr->addExpression(new Kwf_Model_Select_Expr_Equal('domain', $domainName));
         }
-        $select->where($orExpr);
-        return $select;
+
+        return $select->where($orExpr);
     }
 
-    private function _getAllowedDomain($domain) {
-        $domainComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId('root-'.$domain);
-        $domainName = $domainComponent ? $domainComponent->getRow()->name : null;
+    private function _getAllowedDomains($currentUser) {
+        $domainNames = array();
 
-        return $domainName;
+        foreach (explode(',', $currentUser->domain_list) as $domain ) {
+            $domainComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId('root-'.$domain);
+            $domainNames[] = $domainComponent ? $domainComponent->getRow()->name : null;
+        }
+        return $domainNames;
     }
 }
