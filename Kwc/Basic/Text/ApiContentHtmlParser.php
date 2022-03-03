@@ -72,8 +72,11 @@ class Kwc_Basic_Text_ApiContentHtmlParser
             }
         } else {
             $newBlock = array(
-                'element' => strtolower($element),
+                'element' => strtolower($element)
             );
+            if (!empty($attributes)) {
+                $newBlock['attributes'] = array_change_key_case($attributes);
+            }
         }
         if ($newBlock) {
             $newBlock = (object)$newBlock;
@@ -120,6 +123,9 @@ class Kwc_Basic_Text_ApiContentHtmlParser
                     'element' => 'text',
                     'text' => $cdata
                 );
+                if (isset($current->attributes)) {
+                    $element->attributes = $current->attributes;
+                }
                 if ($current->element == 'component') {
                     $this->addElementToComponent($current, $element);
                 } else {

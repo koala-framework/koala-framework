@@ -5,7 +5,7 @@ class Kwf_Update_Setup_InitialDb extends Kwf_Update_Sql
     public function __construct($dumpFile)
     {
         $this->_dumpFile = $dumpFile;
-        parent::__construct(null, null);
+        parent::__construct($dumpFile, null);
     }
 
     public function update()

@@ -170,7 +170,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function checkContentsSubrootAction()
     {
-        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'), array('ignoreVisible'=>true));
         if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
         $i = 0;
 

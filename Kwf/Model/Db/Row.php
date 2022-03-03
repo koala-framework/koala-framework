@@ -63,7 +63,11 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
 
             // scheis php... bei $this->$name sucht er nur nach einem property
             // und vergisst, dass es __get() auch gibt
-            if ($this->__get($name) !== $value) {
+            $currentValue = $this->__get($name);
+            if (is_array($currentValue) || is_object($currentValue)) {
+                $currentValue = 'kwfSerialized'.serialize($currentValue);
+            }
+            if ($currentValue !== $value) {
                 $this->_setDirty($name);
             }
             $this->_row->$n = $value;

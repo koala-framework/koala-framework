@@ -34,12 +34,8 @@ class Kwc_Basic_LinkTag_Extern_Form extends Kwc_Abstract_Form
                     ->setDefaultValue(400)
                     ->setAllowBlank(false)
                     ->setVtype('alphanum');
-                $card->add(new Kwf_Form_Field_Checkbox('menubar', 'Menubar'));
-                $card->add(new Kwf_Form_Field_Checkbox('toolbar', 'Toolbar'));
-                $card->add(new Kwf_Form_Field_Checkbox('locationbar', 'Locationbar'));
-                $card->add(new Kwf_Form_Field_Checkbox('statusbar', 'Statusbar'));
-                $card->add(new Kwf_Form_Field_Checkbox('scrollbars', 'Scrollbars'));
-                $card->add(new Kwf_Form_Field_Checkbox('resizable', 'Resizable'));
         }
+
+        $this->add(new Kwf_Form_Field_Checkbox('rel_noindex', trlKwf('no-index')));
     }
 }

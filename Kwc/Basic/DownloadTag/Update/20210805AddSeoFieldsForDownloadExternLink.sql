@@ -1,0 +1,16 @@
+ALTER TABLE `kwc_basic_downloadtag` ADD `open_type` ENUM('self', 'popup', 'blank') NOT NULL DEFAULT 'self' ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `width` MEDIUMINT NULL DEFAULT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `height` MEDIUMINT NULL DEFAULT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `menubar` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `toolbar` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `locationbar` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `statusbar` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `scrollbars` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `resizable` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `rel_nofollow` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `rel_noopener` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `rel_noreferrer` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_downloadtag` ADD `content_disposition` VARCHAR(255) NOT NULL DEFAULT 'attachment' AFTER `open_type`;
+ALTER TABLE `kwc_basic_link_extern` ADD `rel_nofollow` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_link_extern` ADD `rel_noopener` TINYINT NOT NULL ;
+ALTER TABLE `kwc_basic_link_extern` ADD `rel_noreferrer` TINYINT NOT NULL ;
