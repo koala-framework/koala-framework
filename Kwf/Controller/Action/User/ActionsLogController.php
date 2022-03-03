@@ -16,6 +16,7 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
         $data = array();
         $db = Kwf_Registry::get('db');
         $select = new Zend_Db_Select($db);
+        $select = $this->_createSelectToShowOnlyPermittedEntriesZendExpression($select);
         $select->from(
             array('kwf_user_actionslog'),
             array(new Zend_Db_Expr('distinct(user_name)'))
@@ -33,6 +34,7 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
         $data = array();
         $db = Kwf_Registry::get('db');
         $select = new Zend_Db_Select($db);
+        $select = $this->_createSelectToShowOnlyPermittedEntriesZendExpression($select);
         $select->from(
             array('kwf_user_actionslog'),
             array(new Zend_Db_Expr('distinct(domain)'))
@@ -70,6 +72,38 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
+        $ret = $this->_createSelectToShowOnlyPermittedEntriesKwfExpression($ret);
         return $ret;
+    }
+
+    private function _createSelectToShowOnlyPermittedEntriesZendExpression($select) {
+        $currentUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        if ($currentUser->role == 'admin') return $select;
+
+        foreach (explode(',', $currentUser->domain_list) as $domain ) {
+            $domainName = $this->_getAllowedDomain($domain);
+            $select->orWhere('domain = ?', $domainName);
+        }
+        return $select;
+    }
+
+    private function _createSelectToShowOnlyPermittedEntriesKwfExpression($select) {
+        $currentUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        if ($currentUser->role == 'admin') return $select;
+        $orExpr = new Kwf_Model_Select_Expr_Or(array());
+
+        foreach (explode(',', $currentUser->domain_list) as $domain ) {
+            $domainName = $this->_getAllowedDomain($domain);
+            $orExpr->addExpression(new Kwf_Model_Select_Expr_Equal('domain', $domainName));
+        }
+        $select->where($orExpr);
+        return $select;
+    }
+
+    private function _getAllowedDomain($domain) {
+        $domainComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId('root-'.$domain);
+        $domainName = $domainComponent ? $domainComponent->getRow()->name : null;
+
+        return $domainName;
     }
 }
