@@ -8,7 +8,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function optimizeAction()
     {
-        Kwf_Util_MemoryLimit::set(512);
         if ($this->_getParam('debug')) echo "\noptimize index...\n";
         Kwf_Util_Fulltext_Backend_Abstract::getInstance()->optimize($this->_getParam('debug'));
         if ($this->_getParam('debug')) echo "done.\n";
@@ -171,8 +170,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function checkContentsSubrootAction()
     {
-        Kwf_Util_MemoryLimit::set(256);
-
         $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'), array('ignoreVisible'=>true));
         if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
         $i = 0;
