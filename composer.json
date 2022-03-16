@@ -31,7 +31,7 @@
             "uglify-js": "2.4.13",
             "node-sass": "3.4.2",
             "amdlc": "0.1.5",
-            "modernizr": "git://github.com/Modernizr/Modernizr.git#eb211bbcb"
+            "modernizr": "git@github.com:Modernizr/Modernizr.git#eb211bbcb"
         },
         "require-dev-bower": {
             "qunit": "1.18.0",
