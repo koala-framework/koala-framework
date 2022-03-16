@@ -35,7 +35,7 @@
             "browser-pack": "5.0.1",
             "module-deps": "3.8.0",
             "JSONStream": "1.0.4",
-            "modernizr": "git://github.com/Modernizr/Modernizr.git#eb211bbcb",
+            "modernizr": "git@github.com:Modernizr/Modernizr.git#eb211bbcb",
             "postcss": "5.0.13",
             "es6-promise": "3.0.2",
             "css-selectors-count": "1.0.1",
