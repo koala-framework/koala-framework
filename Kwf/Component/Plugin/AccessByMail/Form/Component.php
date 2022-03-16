@@ -9,12 +9,12 @@ class Kwf_Component_Plugin_AccessByMail_Form_Component extends Kwc_Form_Componen
         $ret['placeholder']['subject'] = trlKwfStatic('Temporary access');
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
         unset($ret['plugins']['useViewCache']);
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
     public function processInput(array $postData)
     {
-        parent::processInput($postData);
         $this->_accessByMailRow = false;
         if (isset($postData['key'])) {
             $s = new Kwf_Model_Select();
