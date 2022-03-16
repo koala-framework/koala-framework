@@ -1,5 +1,5 @@
 <?php
-class Kwc_FulltextSearch_Search_ViewAjax_SearchForm_FrontendForm extends Kwf_Form
+class Kwc_FulltextSearch_Search_SearchForm_FrontendForm extends Kwf_Form
 {
     protected function _initFields()
     {

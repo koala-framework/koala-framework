@@ -2,6 +2,45 @@
 class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
 {
     /**
+     * @return Apache_Solr_Service[]
+     */
+    protected function _getRemoteSolrServices($subroot)
+    {
+        static $i = array();
+
+        $ret = array();
+
+        if (is_string($subroot) && $subroot) {
+            $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($subroot, array('ignoreVisible' => true));
+        }
+
+        // checking if there are fully configured remote solr services for this subroot
+        $remoteSolrServices = $subroot->getBaseProperty('fulltext.remoteSolrServices');
+        if (!is_array($remoteSolrServices) || !count($remoteSolrServices)) {
+            return $ret;
+        }
+        foreach ($remoteSolrServices as $remoteSolrServiceLabel => $remoteSolrService) {
+            if (
+                !isset($remoteSolrService['host']) || !$remoteSolrService['host'] &&
+                !isset($remoteSolrService['port']) || !$remoteSolrService['port'] &&
+                !isset($remoteSolrService['path']) || !$remoteSolrService['path']
+            ) {
+                continue;
+            }
+
+            // creating service
+            $remoteSolrConfigId = $remoteSolrService['host'] . ':' . $remoteSolrService['port'] . $remoteSolrService['path'];
+            if (!isset($i[$remoteSolrConfigId])) {
+                $i[$remoteSolrConfigId] =
+                    new Kwf_Util_Fulltext_Solr_Service($remoteSolrService['host'], $remoteSolrService['port'], $remoteSolrService['path']);
+            }
+            $ret[] = $i[$remoteSolrConfigId];
+        }
+
+        return $ret;
+    }
+
+    /**
      * @return Apache_Solr_Service
      */
     protected function _getSolrService($subroot)
@@ -58,6 +97,9 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     {
         foreach ($this->getSubroots() as $sr) {
             $this->_getSolrService($sr)->optimize();
+            foreach ($this->_getRemoteSolrServices($sr) as $remoteSolrService) {
+                $remoteSolrService->optimize();
+            }
         }
     }
 
@@ -65,12 +107,20 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     {
         $this->_getSolrService($subroot)->deleteById($componentId);
         $this->_getSolrService($subroot)->commit();
+        foreach ($this->_getRemoteSolrServices($subroot) as $remoteSolrService) {
+            $remoteSolrService->deleteById(sprintf('external_url-%s', $componentId));
+            $remoteSolrService->commit();
+        }
     }
 
     public function deleteAll(Kwf_Component_Data $subroot)
     {
         $this->_getSolrService($subroot)->deleteByQuery('*:*');
         $this->_getSolrService($subroot)->commit();
+        foreach ($this->_getRemoteSolrServices($subroot) as $remoteSolrService) {
+            $remoteSolrService->deleteByQuery(sprintf('componentId:external_url-*'));
+            $remoteSolrService->commit();
+        }
     }
 
 
@@ -104,9 +154,20 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         return $ret;
     }
 
+    /**
+     * Filtering out external documents' ids to avoid them being used in checkForInvalidSubrootAction
+     *
+     * @param Kwf_Component_Data $subroot
+     * @return array|int[]|string[]
+     */
     public function getAllDocumentIds(Kwf_Component_Data $subroot)
     {
-        return $this->_getSolrService($subroot)->getAllDocumentIds();
+        return array_filter(
+            $this->_getSolrService($subroot)->getAllDocumentIds(),
+            function ($documentId) {
+                return substr($documentId, 0, 13) != 'external_url-';
+            }
+        );
     }
 
     public function getAllDocuments(Kwf_Component_Data $subroot)
@@ -143,6 +204,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
                 throw new Kwf_Exception("addDocument failed");
             }
             $this->_getSolrService($page)->commit();
+            $this->_indexPageRemotely($page, $doc);
 
             $this->_afterIndex($page);
 
@@ -151,10 +213,40 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         return false;
     }
 
+    protected function _indexPageRemotely(Kwf_Component_Data $page, Apache_Solr_Document $document)
+    {
+        // calling remote solr services if defined
+        foreach ($this->_getRemoteSolrServices($page) as $remoteSolrService) {
+            // addig new field to external document
+            if (!$document->getField('externalUrl')) {
+                $document->addField('externalUrl', $page->getAbsoluteUrl());
+            }
+            $document->setField('componentId', sprintf('external_url-%s', $page->componentId));
+            try {
+                $response = $remoteSolrService->addDocument($document);
+                if (($responseHttpStatus = $response->getHttpStatus()) != 200) {
+                    throw new Kwf_Exception(sprintf(
+                        "Unexpected response from remote Solr with status: %d",
+                        $responseHttpStatus
+                    ));
+                }
+                $remoteSolrService->commit();
+            } catch (Exception $e) {
+                throw new Kwf_Exception(sprintf(
+                    "Remote Solr service addDocument failed: %s:%d:%s, %s",
+                    $remoteSolrService->getHost(),
+                    $remoteSolrService->getPort(),
+                    $remoteSolrService->getPath(),
+                    $e->getMessage()
+                ));
+            }
+        }
+    }
+    
     public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit, $params = array())
     {
         $ret = array();
-        $params['fl'] = 'componentId,content';
+        $params['fl'] = 'componentId,content,externalUrl,title,imageUrl,price';
         $service = $this->_getSolrService($subroot);
         if (isset($params['type'])) {
             $service->setSearchRequestHandler($params['type']);
@@ -163,19 +255,36 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         $res = $service->search($service->escape($queryString), $offset, $limit, $params);
         $numHits = $res->response->numFound;
         foreach ($res->response->docs as $doc) {
-            $data = Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId);
-            if (!$data) {
-                //if page was removed/hidden and index is not yet updated delete the document now
-                $this->deleteDocument($subroot, $doc->componentId);
-                $numHits--;
-            } else {
+            if (strpos($doc->componentId, 'external_url-') === 0) {
+                $fakeData = new stdClass();
+                $fakeData->componentId = $doc->componentId;
+                $fakeData->externalUrl = $doc->externalUrl;
+                $fakeData->imageUrl = $doc->imageUrl;
+                $fakeData->price = $doc->price;
                 $ret[] = array(
-                    'data' => $data,
+                    'data' => $fakeData,
+                    'externalUrl' => $doc->externalUrl,
+                    'fakeComponentId' => $doc->componentId,
                     'content' => $doc->content,
+                    'title' => $doc->title,
+                    'imageUrl' => $doc->imageUrl,
+                    'price' => $doc->price,
                 );
+            } else {
+                $data = Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId);
+                if (!$data) {
+                    //if page was removed/hidden and index is not yet updated delete the document now
+                    $this->deleteDocument($subroot, $doc->componentId);
+                    $numHits--;
+                } else {
+                    $ret[] = array(
+                        'data' => $data,
+                        'content' => $doc->content,
+                    );
+                }
             }
         }
-        //TODO: error handling
+
         return array(
             'hits' => $ret,
             'numHits' => $numHits,
