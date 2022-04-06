@@ -70,11 +70,22 @@ class Kwf_View_Twig_Environment extends Twig_Environment
 
     public static function money($context, $amount)
     {
-        $helper = new Kwf_View_Helper_Money();
+        $data = null;
         if (isset($context['data']) && $context['data'] instanceof Kwf_Component_Data) {
-            $helper->setData($context['data']);
+            $data = $context['data'];
         } else if (isset($context['item']) && $context['item'] instanceof Kwf_Component_Data) {
-            $helper->setData($context['item']);
+            $data = $context['item'];
+        }
+
+        if ($data) {
+            $helperClass = $data->getBaseProperty('money.helperClass');
+        } else {
+            $helperClass = Kwf_Config::getValue('money.helperClass');
+        }
+
+        $helper = new $helperClass();
+        if ($data) {
+            $helper->setData($data);
         }
         return new Twig_Markup($helper->money($amount), 'utf-8');
     }
