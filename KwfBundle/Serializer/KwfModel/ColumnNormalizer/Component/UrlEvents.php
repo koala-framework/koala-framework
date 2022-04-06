@@ -1,6 +1,8 @@
 <?php
 namespace KwfBundle\Serializer\KwfModel\ColumnNormalizer\Component;
 
+use Kwf_Events_Event_Model_Serialization_ColumnChanged;
+
 class UrlEvents extends \Kwf_Events_Subscriber
 {
     public function getListeners()
@@ -51,6 +53,7 @@ class UrlEvents extends \Kwf_Events_Subscriber
         }
         $cacheId =  'normalizer__'.$model->getUniqueIdentifier().'__'.$this->_config['column'].'__'.$row->id;
         \Kwf_Cache_Simple::delete($cacheId);
+        self::fireEvent(new Kwf_Events_Event_Model_Serialization_ColumnChanged($row, $this->_config['column']));
     }
 }
 
