@@ -24,12 +24,21 @@ class Url implements ColumnNormalizerInterface, CacheableInterface
         return $c->getAbsoluteUrl();
     }
 
+    protected function getComponentId($row, $settings)
+    {
+        if (isset($settings['idTemplate'])) {
+            return str_replace('{0}', $row->id, $settings['idTemplate']);
+        } else {
+            return str_replace('{0}', $row->id, $settings['dbIdTemplate']);
+        }
+    }
+
     protected function getComponent($row, $settings)
     {
         if (isset($settings['idTemplate'])) {
-            return Kwf_Component_Data_Root::getInstance()->getComponentById(str_replace('{0}', $row->id, $settings['idTemplate']));
+            return Kwf_Component_Data_Root::getInstance()->getComponentById($this->getComponentId($row, $settings));
         } else if (isset($settings['dbIdTemplate'])) {
-            return Kwf_Component_Data_Root::getInstance()->getComponentByDbId(str_replace('{0}', $row->id, $settings['dbIdTemplate']), array('limit'=>1));
+            return Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->getComponentId($row, $settings), array('limit'=>1));
         } else {
             throw new Kwf_Exception("idTemplate or dbIdTemplate is required");
         }
