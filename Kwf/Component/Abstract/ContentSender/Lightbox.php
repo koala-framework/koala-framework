@@ -69,6 +69,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($parent);
             $parentContent = $parentContentSender->_render($includeMaster, $hasDynamicParts);
+            $title = preg_match('/<title[^>]*>(.*?)<\/title>/ims', $parentContent, $match) ? $match[1] : null;
 
             //remove main content to avoid duplicate content for search engines
             //content will be loaded using ajax
@@ -103,7 +104,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
             $options = Kwf_Util_HtmlSpecialChars::filter(json_encode($options));
             $lightboxContent =
-                "<div class=\"$class ".$kwfUniquePrefix."kwfLightboxOpen\">\n".
+                "<div class=\"$class ".$kwfUniquePrefix."kwfLightboxOpen\" data-parent-title=\"$title\">\n".
                 "    <div class=\"".$kwfUniquePrefix."kwfLightboxScrollOuter\">\n".
                 "        <div class=\"".$kwfUniquePrefix."kwfLightboxScroll\">\n".
                 "            <div class=\"".$kwfUniquePrefix."kwfLightboxBetween\">\n".
