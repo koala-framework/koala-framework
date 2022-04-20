@@ -602,6 +602,10 @@ class Kwf_Acl extends Zend_Acl
                 'mimeTypePattern' => '^image\/jpeg$',
                 'fileNamePattern' => '\.(jpe?g|JPE?G)$'
             ),
+            'msOffice' => array(
+                'mimeTypePattern' => '^application\/vnd\.ms\-office$',
+                'fileNamePattern' => '\.(doc|DOC|docx|DOCX|xls|xlsx|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|ppsx|PPSX)$'
+            ),
             'doc' => array(
                 'mimeTypePattern' => '^application\/msword$',
                 'fileNamePattern' => '\.(doc|DOC)$'
