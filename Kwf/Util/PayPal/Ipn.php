@@ -15,9 +15,11 @@ class Kwf_Util_PayPal_Ipn
     public static function process($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
     {
         if (Kwf_Setup::getConfigSection()=='production' || !isset($_GET['dontValidate'])) {
+            $rawEntityBody = file_get_contents('php://input'); // $_POST is empty, read entityBody instead
+            parse_str($rawEntityBody, $postData);
 
             // post back to PayPal system to validate
-            if (isset($_POST['test_ipn']) && $_POST['test_ipn']) {
+            if (isset($postData['test_ipn']) && $postData['test_ipn']) {
                 $domain = 'ipnpb.sandbox.paypal.com';
             } else {
                 $domain = 'ipnpb.paypal.com';
@@ -25,11 +27,7 @@ class Kwf_Util_PayPal_Ipn
 
             // post back to PayPal system to validate
             $client = new Zend_Http_Client('https://'.$domain.'/cgi-bin/webscr');
-            $rawBody = 'cmd=_notify-validate';
-            foreach ($_POST as $key => $value) {
-                $rawBody .= "&$key=" . $value;
-            }
-            $client->setRawData($rawBody);
+            $client->setRawData('cmd=_notify-validate&'.$rawEntityBody);
             $response = $client->request(Zend_Http_Client::POST);
             $res = trim($response->getBody());
 
