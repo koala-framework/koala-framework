@@ -11,6 +11,9 @@ class Image extends Url
     {
         $data = $this->getComponent($row, $settings);
         if (!$data || !$data->hasContent()) return null;
-        return $data->getComponent()->getApiData();
+
+        $ret = $data->getComponent()->getApiData();
+        $ret['id'] = $this->getComponentId($row, $settings);
+        return $ret;
     }
 }

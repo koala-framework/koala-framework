@@ -277,8 +277,8 @@ Lightbox.prototype = {
         }).done(function(response) {
 
             injectAssets(response.assets, (function() {
-                this.closeTitle = document.title;
                 this.title = response.title ? response.title : document.title;
+                document.title = this.title; //set page-title from lightbox
                 dataLayer.push({
                     event: 'pageview',
                     pagePath: this.href,
@@ -438,6 +438,7 @@ Lightbox.prototype = {
     closeAndPushState: function() {
         if (this._isClosing) return; //prevent double-click on close button
         this._isClosing = true;
+
         if (historyState.entries > 0) {
             onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
             var previousEntries = historyState.entries;
@@ -466,11 +467,11 @@ Lightbox.prototype = {
             //location.replace(this.closeHref);
             this.close();
         }
-        document.title = this.closeTitle;
+        document.title = this.lightboxEl.attr("data-parent-title"); //set page-title back from lightbox to parent-page
         dataLayer.push({
             event: 'pageview',
             pagePath: location.pathname.substr(0, location.pathname.lastIndexOf('/')),
-            pageTitle: this.closeTitle
+            pageTitle: document.title
         });
     },
     initialize: function()
