@@ -5,7 +5,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
      * @var Kwf_Collection
      **/
     protected $_columns = null;
-    protected $_buttons = array('save', 'add', 'delete');
+    protected $_buttons = array('save', 'add', 'delete'); // deleteAllFiltered
     protected $_editDialog = null;
     protected $_paging = 0;
     protected $_defaultOrder;
@@ -590,6 +590,21 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             $this->_deleteRow($row);
             $this->_afterDelete();
         }
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
+    }
+
+
+    public function jsonDeleteAllFilteredAction()
+    {
+        if (!isset($this->_permissions['deleteAllFiltered']) || !$this->_permissions['deleteAllFiltered']) {
+            throw new Kwf_Exception("Delete all filtered is not allowed.");
+        }
+        $select = $this->_getSelect();
+        if (is_null($select)) return null; //wenn _getSelect null zurückliefert nichts laden
+
+        ignore_user_abort(true);
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
+        $this->_getModel()->deleteRows($select);
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
     }
 

@@ -53,6 +53,13 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
             scope: this,
             needsSelection: true
         });
+        this.actions['deleteAllFiltered'] = new Ext2.Action({
+            text    : trlKwf('Delete all filtered'),
+            icon    : '/assets/silkicons/bin.png',
+            cls     : 'x2-btn-text-icon',
+            handler : this.onDeleteAllFiltered,
+            scope: this
+        });
         this.actions.edit = new Ext2.Action({
             text    : trlKwf('Edit'),
             icon    : '/assets/silkicons/table_edit.png',
@@ -441,6 +448,12 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
             }
             delete meta.buttons['delete'];
         }
+        if (meta.buttons['deleteAllFiltered']) {
+            if (!existingActions['deleteAllFiltered']) {
+                gridConfig.tbar.add(this.getAction('deleteAllFiltered'));
+            }
+            delete meta.buttons['deleteAllFiltered'];
+        }
         if (meta.buttons.duplicate) {
             if (!existingActions.duplicate) {
                 gridConfig.tbar.add(this.getAction('duplicate'));
@@ -790,6 +803,32 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         this.fireEvent('addaction', this);
     },
 
+    _deleteAllFilteredRows : function() {
+        this.el.mask(trlKwf('Deleting...'));
+        var params = Ext2.apply({}, this.getBaseParams());
+        Ext2.Ajax.request({
+            url: this.controllerUrl+'/json-delete-all-filtered',
+            params: params,
+            success: function(response, options, r) {
+                this.activeId = null;
+                //wenn gelöscht alle anderen disablen
+                this.bindings.each(function(i) {
+                    i.item.disable();
+                    i.item.reset();
+                }, this);
+
+                this.reload();
+                this.fireEvent('deleterow', this.grid);
+                this.fireEvent('datachange', r);
+
+            },
+            callback: function() {
+                this.el.unmask();
+            },
+            scope : this
+        });
+    },
+
     _deleteSelectedRows : function() {
         var selectedRows = this.getGrid().getSelectionModel().getSelections();
         if (!selectedRows.length) return;
@@ -847,6 +886,19 @@ Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
             fn: function(button) {
                 if (button == 'yes') {
                     this._deleteSelectedRows();
+                }
+            }
+        });
+    },
+    onDeleteAllFiltered : function() {
+        Ext2.Msg.show({
+            title: trlKwf('Delete'),
+            msg: trlKwf('Do you really wish to remove this entry / these entries?'),
+            buttons: Ext2.Msg.YESNO,
+            scope: this,
+            fn: function(button) {
+                if (button == 'yes') {
+                    this._deleteAllFilteredRows();
                 }
             }
         });
