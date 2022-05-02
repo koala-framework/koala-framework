@@ -56,6 +56,9 @@ class Kwc_Root_TrlRoot_Chained_Admin extends Kwc_Abstract_Admin
             if (!$sourceChained || $source->componentId==$sourceChained->componentId) {
                 continue; //wenn sourceChained nicht gefunden handelt es sich zB um ein MasterAsChild - was ignoriert werden muss
             }
+            if (!$newChained && $c['sourceChained']->componentId == $c['targetChained']->componentId) {
+                continue;
+            }
             if (!$newChained) {
                 throw new Kwf_Exception("can't find chained components");
             }
