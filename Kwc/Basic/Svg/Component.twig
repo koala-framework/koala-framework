@@ -1,5 +1,5 @@
 <div class="{{ rootElementClass }}">
-    {% if outputType == 'source' %}
+    {% if outputType == 'source' and fileSource %}
         {{ fileSource|raw }}
     {% elseif outputType == 'url' %}
         <img src="{{ fileUrl }}" />
