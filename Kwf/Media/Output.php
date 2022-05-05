@@ -123,9 +123,6 @@ class Kwf_Media_Output
 
             if (isset($file['etag'])) {
                 $ret['headers'][] = 'ETag: ' . $file['etag'];
-            } else {
-                //wird benötigt für IE der sonst den download verweigert
-                $ret['headers'][] = 'ETag: tag';
             }
             if (isset($file['mtime'] )) $ret['headers'][] = 'Last-Modified: ' . $lastModifiedString;
             if (isset($file['downloadFilename']) && $file['downloadFilename'] &&
