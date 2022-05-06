@@ -17,7 +17,7 @@ class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
         return $this->setProperty('ruleKey', $ruleKey);
     }
 
-    public function load($row)
+    public function load($row, $postData = array())
     {
         $data = array(
             'imageUrl' => false,
