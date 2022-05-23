@@ -155,4 +155,12 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
             $row->writeLog($messageType);
         }
     }
+    public function getDomains()
+    {
+        $domains = array();
+        foreach (Kwf_Model_Abstract::getInstance('Kwc_Root_DomainRoot_Model')->getRows() as $domainRow) {
+            $domains[$domainRow->id] = true;
+        }
+        return $domains;
+    }
 }
