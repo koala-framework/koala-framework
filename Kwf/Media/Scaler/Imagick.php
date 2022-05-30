@@ -58,10 +58,10 @@ class Kwf_Media_Scaler_Imagick extends Kwf_Media_Scaler_Abstract
             $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         }
 
-        if (method_exists($im, 'setColorspace')) {
-            $im->setColorspace(Imagick::COLORSPACE_RGB);
-        } else {
-            $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        if (method_exists($im, 'setImageChannelDepth')) {
+            $im->setImageChannelDepth(Imagick::CHANNEL_RED, 8);
+            $im->setImageChannelDepth(Imagick::CHANNEL_GREEN, 8);
+            $im->setImageChannelDepth(Imagick::CHANNEL_BLUE, 8);
         }
 
         $im->stripImage();
