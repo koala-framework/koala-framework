@@ -59,9 +59,7 @@ class Kwf_Media_Scaler_Imagick extends Kwf_Media_Scaler_Abstract
         }
 
         if (method_exists($im, 'setImageChannelDepth')) {
-            $im->setImageChannelDepth(Imagick::CHANNEL_RED, 8);
-            $im->setImageChannelDepth(Imagick::CHANNEL_GREEN, 8);
-            $im->setImageChannelDepth(Imagick::CHANNEL_BLUE, 8);
+            $im->setImageChannelDepth(Imagick::CHANNEL_ALL, 8);
         }
 
         $im->stripImage();
