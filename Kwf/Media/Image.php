@@ -550,34 +550,13 @@ class Kwf_Media_Image
             $scaler = Kwf_Media_Scaler_Abstract::getInstance();
         }
 
-        if ($source instanceof Imagick) {
-            $im = $source;
-        } else {
-            $blob = file_get_contents($source);
-            Kwf_Util_Upload::onFileRead($source);
-            if (!strlen($blob)) throw new Kwf_Exception("File is empty");
-            $im = self::_createImagickFromBlob($blob, $mimeType);
-        }
-
-        if (method_exists($im, 'setImageChannelDepth') && $im->getImageChannelDepth(Imagick::CHANNEL_ALL) >= 16) {
-            $skipCleanup = false;
-        } else {
-            $skipCleanup = $preScale['factor'] > 0;  //preScale does this already
+        $skipCleanup = $preScale['factor'] > 0;
+        if ($skipCleanup) {
+            $skipCleanup = $scaler->isSkipCleanup($source, $mimeType);
         }
 
         return $scaler->scale($source, $size, $mimeType, array(
             'skipCleanup' => $skipCleanup
         ));
-    }
-
-    private static function _createImagickFromBlob($blob, $mime)
-    {
-        $im = new Imagick();
-        $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $mime)); //add fake filename to help imagick with format detection
-        if (method_exists($im, 'setColorspace')) {
-            $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
-            $im->setColorspace($im->getImageColorspace());
-        }
-        return $im;
     }
 }

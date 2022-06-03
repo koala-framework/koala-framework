@@ -9,7 +9,7 @@ class Kwf_Media_Scaler_Imagick extends Kwf_Media_Scaler_Abstract
             $blob = file_get_contents($source);
             Kwf_Util_Upload::onFileRead($source);
             if (!strlen($blob)) throw new Kwf_Exception("File is empty");
-            $im = self::_createImagickFromBlob($blob, $mimeType);
+            $im = self::createImagickFromBlob($blob, $mimeType);
         }
         if (!$options['skipCleanup']) {
             $im = self::_processCommonImagickSettings($im);
@@ -34,6 +34,24 @@ class Kwf_Media_Scaler_Imagick extends Kwf_Media_Scaler_Abstract
         $im->destroy();
 
         return $ret;
+    }
+
+    public function isSkipCleanup($source, $mimeType)
+    {
+        if ($source instanceof Imagick) {
+            $im = $source;
+        } else {
+            $blob = file_get_contents($source);
+            Kwf_Util_Upload::onFileRead($source);
+            if (!strlen($blob)) throw new Kwf_Exception("File is empty");
+            $im = self::createImagickFromBlob($blob, $mimeType);
+        }
+
+        if (method_exists($im, 'setImageChannelDepth') && $im->getImageChannelDepth(Imagick::CHANNEL_ALL) >= 16) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private static function _processCommonImagickSettings($im)
@@ -84,7 +102,7 @@ class Kwf_Media_Scaler_Imagick extends Kwf_Media_Scaler_Abstract
         return $im;
     }
 
-    private static function _createImagickFromBlob($blob, $mime)
+    public function createImagickFromBlob($blob, $mime)
     {
         $im = new Imagick();
         $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $mime)); //add fake filename to help imagick with format detection
