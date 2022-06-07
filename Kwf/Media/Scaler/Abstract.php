@@ -19,4 +19,9 @@ abstract class Kwf_Media_Scaler_Abstract
     }
 
     abstract public function scale($source, $size, $mimeType, array $options);
+
+    public function isSkipCleanup($source, $mimeType)
+    {
+        return true;
+    }
 }

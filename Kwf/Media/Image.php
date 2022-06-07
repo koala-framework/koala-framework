@@ -550,8 +550,13 @@ class Kwf_Media_Image
             $scaler = Kwf_Media_Scaler_Abstract::getInstance();
         }
 
+        $skipCleanup = $preScale['factor'] > 0;
+        if ($skipCleanup) {
+            $skipCleanup = $scaler->isSkipCleanup($source, $mimeType);
+        }
+
         return $scaler->scale($source, $size, $mimeType, array(
-            'skipCleanup' => $preScale['factor'] > 0  //preScale does this already
+            'skipCleanup' => $skipCleanup
         ));
     }
 }

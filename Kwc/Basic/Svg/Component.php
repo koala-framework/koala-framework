@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Svg_Component extends Kwc_Abstract
+class Kwc_Basic_Svg_Component extends Kwc_Abstract_Composite_Component
     implements Kwf_Media_Output_Interface
 {
     public static function getSettings($param = null)
@@ -22,7 +22,10 @@ class Kwc_Basic_Svg_Component extends Kwc_Abstract
 
         if ($uploadRow) {
             if ($ret['outputType'] === 'source') {
-                $ret['fileSource'] = file_get_contents($uploadRow->getFileSource());
+                $fileSource = $uploadRow->getFileSource();
+                if (file_exists($fileSource)) {
+                    $ret['fileSource'] = file_get_contents($fileSource);
+                }
             } else if ($ret['outputType'] === 'url') {
                 $filename = $uploadRow->filename . '.' . $uploadRow->extension;
                 $url = Kwf_Media::getUrl($this->getData()->componentClass, $this->getData()->componentId, 'default', $filename);

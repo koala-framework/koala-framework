@@ -17,12 +17,16 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
         $db = Kwf_Registry::get('db');
         $select = new Zend_Db_Select($db);
         $select = $this->_createSelectToShowOnlyPermittedEntriesZendExpression($select);
-        $select->from(
-            array('kwf_user_actionslog'),
-            array(new Zend_Db_Expr('distinct(user_name)'))
-        );
-        foreach ($db->fetchAll($select) as $r) {
-            $data[] = array($r['user_name'], $r['user_name']);
+        $currentUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        $allowedDomains = $this->_getAllowedDomains($currentUser);
+        if (!empty($allowedDomains)) {
+            $select->from(
+                array('kwf_user_actionslog'),
+                array(new Zend_Db_Expr('distinct(user_name)'))
+            );
+            foreach ($db->fetchAll($select) as $r) {
+                $data[] = array($r['user_name'], $r['user_name']);
+            }
         }
         $this->_filters['user_name'] = array(
             'type' => 'ComboBox',
@@ -35,12 +39,14 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
         $db = Kwf_Registry::get('db');
         $select = new Zend_Db_Select($db);
         $select = $this->_createSelectToShowOnlyPermittedEntriesZendExpression($select);
-        $select->from(
-            array('kwf_user_actionslog'),
-            array(new Zend_Db_Expr('distinct(domain)'))
-        );
-        foreach ($db->fetchAll($select) as $r) {
-            $data[] = array($r['domain'], $r['domain']);
+        if (!empty($allowedDomains)) {
+            $select->from(
+                array('kwf_user_actionslog'),
+                array(new Zend_Db_Expr('distinct(domain)'))
+            );
+            foreach ($db->fetchAll($select) as $r) {
+                $data[] = array($r['domain'], $r['domain']);
+            }
         }
         $this->_filters['domain'] = array(
             'type' => 'ComboBox',
@@ -72,7 +78,13 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        $ret = $this->_createSelectToShowOnlyPermittedEntriesKwfExpression($ret);
+        $currentUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        if ($this->_getAllowedDomains($currentUser)) {
+            $ret = $this->_createSelectToShowOnlyPermittedEntriesKwfExpression($ret);
+        } else {
+            // Return no result (id is Auto_Increment and can't be -1)
+            $ret = $ret->where(new Kwf_Model_Select_Expr_Equal('id', '-1'));
+        }
         return $ret;
     }
 
@@ -101,8 +113,7 @@ class Kwf_Controller_Action_User_ActionsLogController extends Kwf_Controller_Act
 
     private function _getAllowedDomains($currentUser) {
         $domainNames = array();
-
-        foreach (explode(',', $currentUser->domain_list) as $domain ) {
+        foreach ($currentUser->getDomains() as $domain => $value ) {
             $domainComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId('root-'.$domain);
             $domainNames[] = $domainComponent ? $domainComponent->getRow()->name : null;
         }
