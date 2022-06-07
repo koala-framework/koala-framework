@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Svg_Component extends Kwc_Abstract
+class Kwc_Basic_Svg_Component extends Kwc_Abstract_Composite_Component
     implements Kwf_Media_Output_Interface
 {
     public static function getSettings($param = null)
