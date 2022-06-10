@@ -14,7 +14,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             //child process
 
             //echo "memory_usage (child): ".(memory_get_usage()/(1024*1024))."MB\n";
-            if (memory_get_usage() > 128*1024*1024) {
+            if (memory_get_usage() > 120*1024*1024) {
                 if ($this->_getParam('debug')) echo "new process...\n";
                 break;
             }
@@ -178,7 +178,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
     private function _processRecursive(Kwf_Component_Data $page)
     {
-        if (memory_get_usage() > 128*1024*1024) {
+        if (memory_get_usage() > 120*1024*1024) {
             if ($this->_getParam('debug')) echo "Collect garbage...\n";;
             Kwf_Component_Data_Root::getInstance()->freeMemory();
         }
