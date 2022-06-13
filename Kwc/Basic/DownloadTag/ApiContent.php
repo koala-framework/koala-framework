@@ -11,6 +11,8 @@ class Kwc_Basic_DownloadTag_ApiContent implements Kwf_Component_ApiContent_Inter
         $ret = array();
         $ret['downloadUrl'] = $component->getDownloadUrl();
         $ret['rel'] = $data->rel;
+        $ret['open_type'] = $fileRow->open_type;
+        $ret['content_disposition'] = $fileRow->content_disposition;
         if ($fileRow->filename != '') {
             $ret['filename'] = $fileRow->filename;
         }
