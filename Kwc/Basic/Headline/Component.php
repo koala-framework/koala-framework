@@ -57,8 +57,9 @@ class Kwc_Basic_Headline_Component extends Kwc_Abstract
         $ret['headline1'] = $this->_getRow()->headline1;
         $ret['headline2'] = $this->_getRow()->headline2;
 
-        $ret['headline1'] = str_replace('[-]', '&shy;', $ret['headline1']);
-        $ret['headline2'] = str_replace('[-]', '&shy;', $ret['headline2']);
+        // decode before encode to support manually encoded strings
+        $ret['headline1'] = str_replace('[-]', '&shy;', htmlspecialchars(htmlspecialchars_decode($ret['headline1'])));
+        $ret['headline2'] = str_replace('[-]', '&shy;', htmlspecialchars(htmlspecialchars_decode($ret['headline2'])));
 
         $headlines = $this->_getSetting('headlines');
         if ($this->getRow()->headline_type && isset($headlines[$this->getRow()->headline_type])) {
