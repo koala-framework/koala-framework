@@ -14,7 +14,9 @@ class Kwc_Basic_LinkTag_Intern_ApiContent implements Kwf_Component_ApiContent_In
 
     public function getTargetLinkContent($targetData)
     {
-        if (!$targetData) return array();
+        if (!$targetData || !Kwc_Abstract::hasSetting($targetData->componentClass, 'apiContentType')) {
+            return array();
+        }
         $targetContentType = Kwc_Abstract::getSetting($targetData->componentClass, 'apiContentType');
         if (is_instance_of (Kwc_Abstract::getSetting($targetData->componentClass, 'contentSender'), 'Kwf_Component_Abstract_ContentSender_Lightbox')) {
             $targetContentType = 'lightbox';

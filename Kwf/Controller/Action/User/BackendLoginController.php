@@ -49,7 +49,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
                 $this->view->untagged = true;
             }
         }
-        
+
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('login');
         $this->view->lostPasswordLink = $this->getFrontController()->getRouter()->assemble(array(
             'controller' => 'login',
@@ -58,8 +58,8 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
 
 
         $this->view->redirects = array();
-        $users = Zend_Registry::get('userModel');
-        foreach ($users->getAuthMethods() as $k=>$auth) {
+        $authMethods = Zend_Registry::get('userModel')->getAuthMethods();
+        foreach ($authMethods as $k=>$auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInBackend()) {
                 $url = $this->getFrontController()->getRouter()->assemble(array(
                     'controller' => 'backend-login',
@@ -75,6 +75,14 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
                     'formOptionsHtml' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
                 );
             }
+        }
+
+        if (count($authMethods) == 1 && count($this->view->redirects) == 1) {
+            $r = $this->view->redirects[0];
+            $url = $r['url'];
+            $url .= '?authMethod=' . Kwf_Util_HtmlSpecialChars::filter($r['authMethod']);
+            $url .= '&redirect=' . Kwf_Util_HtmlSpecialChars::filter($r['redirect']);
+            Kwf_Util_Redirect::redirect($url);
         }
 
         parent::indexAction();
@@ -140,7 +148,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $adapter->setCredential($row->password);
         $result = $auth->authenticate($adapter);
         if ($result->isValid()) {
-            $redirectUrl = '/'.ltrim($this->getRequest()->getPathInfo(), '/');
+            $redirectUrl = '/'.ltrim($this->getRequest()->getRequestUri(), '/');
             if ($this->_getParam('redirect') && substr($this->_getParam('redirect'), 0, 1) == '/') {
                 $redirectUrl = $this->_getParam('redirect');
             }
