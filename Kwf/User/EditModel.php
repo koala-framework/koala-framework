@@ -152,6 +152,7 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
 
     public function getAuthMethods()
     {
+        if (Kwf_Config::getValue('disableKoalaLogin')) return array();
         return array(
             'password' => new Kwf_User_Auth_PasswordFields(
                 $this
