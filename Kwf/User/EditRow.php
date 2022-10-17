@@ -139,7 +139,9 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         }
 
         $authMethods = $this->getModel()->getAuthMethods();
-        $authMethods['password']->generatePasswordSalt($this);
+        if (isset($authMethods['password'])) {
+            $authMethods['password']->generatePasswordSalt($this);
+        }
 
         if (!$this->gender) $this->gender = '';
     }
