@@ -30,7 +30,8 @@ abstract class Kwf_Controller_Action_Auto_Import extends Kwf_Controller_Action_A
 
     protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
-        $model = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
+        $uploadsModelClass = Kwf_Config::getValue('uploadsModelClass');
+        $model = Kwf_Model_Abstract::getInstance($uploadsModelClass);
         $uploadsRow = $model->getRow($row->upload_id);
         if (!$uploadsRow) throw new Kwf_Exception_Client(trlKwf('File not found.'));
 

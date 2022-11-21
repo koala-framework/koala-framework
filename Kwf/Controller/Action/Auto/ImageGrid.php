@@ -57,7 +57,8 @@ abstract class Kwf_Controller_Action_Auto_ImageGrid extends Kwf_Controller_Actio
             );
         }
         if (!$this->_imageRule) {
-            $this->_imageRule = $this->_model->getReferenceRuleByModelClass('Kwf_Uploads_Model');
+            $uploadsModelClass = Kwf_Config::getValue('uploadsModelClass');
+            $this->_imageRule = $this->_model->getReferenceRuleByModelClass($uploadsModelClass);
         }
     }
 

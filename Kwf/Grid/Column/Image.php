@@ -83,7 +83,8 @@ class Kwf_Grid_Column_Image extends Kwf_Grid_Column
 
     public static function getMediaOutput($uploadId, $type, $className)
     {
-        $uploadRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($uploadId);
+        $uploadsModelClass = Kwf_Config::getValue('uploadsModelClass');
+        $uploadRow = Kwf_Model_Abstract::getInstance($uploadsModelClass)->getRow($uploadId);
         if (preg_match('#^preview-(\d+)-(\d+)$#', $type, $m)) {
             $size = array(
                 'width' => $m[1],

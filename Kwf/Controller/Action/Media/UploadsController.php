@@ -1,7 +1,13 @@
 <?php
 class Kwf_Controller_Action_Media_UploadsController extends Kwf_Rest_Controller_Model
 {
-    protected $_model = 'Kwf_Uploads_Model';
+    protected $_model;
+
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
+    {
+        $this->_model = Kwf_Config::getValue('uploadsModelClass');
+        parent::__construct($request, $response, $invokeArgs);
+    }
 
     public function indexAction()
     {

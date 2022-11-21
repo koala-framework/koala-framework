@@ -53,7 +53,8 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
 
     public function uploadFile($filedata)
     {
-        Kwf_Uploads_Model::verifyUpload($filedata);
+        $uploadsModelClass = Kwf_Config::getValue('uploadsModelClass');
+        call_user_func(array($uploadsModelClass, 'verifyUpload'), $filedata);
 
         $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $extension = substr(strrchr($filedata['name'], '.'), 1);
@@ -66,7 +67,8 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
      */
     public function verifyUpload($filedata)
     {
-        return Kwf_Uploads_Model::verifyUpload($filedata);
+        $uploadsModelClass = Kwf_Config::getValue('uploadsModelClass');
+        return call_user_func(array($uploadsModelClass, 'verifyUpload'), $filedata);
     }
 
     public static function detectMimeType($mimeType, $contents)

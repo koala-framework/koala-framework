@@ -33,7 +33,8 @@ class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
 
     public static function getMediaOutput($uploadId, $type, $className)
     {
-        $uploadRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($uploadId);
+        $uploadsModelClass = Kwf_Config::getValue('uploadsModelClass');
+        $uploadRow = Kwf_Model_Abstract::getInstance($uploadsModelClass)->getRow($uploadId);
         if ($type == 'original') {
             return array(
                 'file' => $uploadRow->getFileSource(),

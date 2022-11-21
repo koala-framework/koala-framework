@@ -58,7 +58,8 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         }
 
         foreach ($uploadIds as $uploadId) {
-            $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($uploadId);
+            $uploadsModelClass = Kwf_Config::getValue('uploadsModelClass');
+            $fileRow = Kwf_Model_Abstract::getInstance($uploadsModelClass)->getRow($uploadId);
             $row = $this->_model->createRow();
             $this->_beforeInsert($row, null);
             $this->_beforeSave($row, null);

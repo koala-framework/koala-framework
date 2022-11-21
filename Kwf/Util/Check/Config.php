@@ -401,7 +401,8 @@ class Kwf_Util_Check_Config
 
     private static function _uploads()
     {
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
+        $uploadsModelClass = Kwf_Config::getValue('uploadsModelClass');
+        $m = Kwf_Model_Abstract::getInstance($uploadsModelClass);
         $dir = $m->getUploadDir();
         if (!file_exists($dir)) {
             return array(

@@ -13,6 +13,17 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
     {
     }
 
+    protected function _getUploadsModelClass()
+    {
+        return Kwf_Config::getValue('uploadsModelClass');
+    }
+
+    protected function _getUploadsModel()
+    {
+        $class = $this->_getUploadsModelClass();
+        return Kwf_Model_Abstract::getInstance($class);
+    }
+
     private function _isUploadAllowed($mimeType, $filename, $filesize)
     {
         $acl = Kwf_Acl::getInstance();
@@ -64,7 +75,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
     public function jsonUploadAction()
     {
         Kwf_Util_MemoryLimit::set(1024);
-        $uploadModel = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
+        $uploadsModel = $this->_getUploadsModel();
 
         $uploadedFile = array(
             'filename' => '',
@@ -108,10 +119,11 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             }
             if ($maxResolution > 0) {
                 $fileData = Kwf_Media_Image::scale($file['tmp_name'], array('width' => $maxResolution, 'height' => $maxResolution, 'cover' => false));
-                Kwf_Uploads_Model::verifyUpload($file);
-                $fileRow = $uploadModel->writeFile($fileData, $filename, $extension, $file['type']);
+                $uploadsModelClass = $this->_getUploadsModelClass();
+                call_user_func(array($uploadsModelClass, 'verifyUpload'), $file);
+                $fileRow = $uploadsModel->writeFile($fileData, $filename, $extension, $file['type']);
             } else {
-                $fileRow = $uploadModel->uploadFile($file);
+                $fileRow = $uploadsModel->uploadFile($file);
             }
         } else if (isset($_SERVER['HTTP_X_UPLOAD_NAME'])) {
             $fileData = file_get_contents("php://input");
@@ -152,9 +164,9 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             if (isset($_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION']) && $_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION'] > 0) {
                 $maxResolution = $_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION'];
                 $fileData = Kwf_Media_Image::scale($tempFile, array('width' => $maxResolution, 'height' => $maxResolution, 'cover' => false));
-                $fileRow = $uploadModel->writeFile($fileData, $filename, $extension, $mimeType);
+                $fileRow = $uploadsModel->writeFile($fileData, $filename, $extension, $mimeType);
             } else {
-                $fileRow = $uploadModel->writeFile($fileData, $filename, $extension, $mimeType);
+                $fileRow = $uploadsModel->writeFile($fileData, $filename, $extension, $mimeType);
             }
             unlink($tempFile);
         } else {
@@ -173,8 +185,8 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         if (!$this->_getParam('uploadId')) {
             throw new Kwf_Exception_NotFound();
         }
-        $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
-            ->getRow($this->_getParam('uploadId'));
+        $uploadsModel = $this->_getUploadsModel();
+        $fileRow = $uploadsModel->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Kwf_Exception_NotFound();
 
         if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
@@ -210,8 +222,8 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
     {
         $previewWidth = 390;
         $previewHeight = 184;
-        $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
-            ->getRow($this->_getParam('uploadId'));
+        $uploadModel = $this->_getUploadsModel();
+        $fileRow = $uploadModel->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Kwf_Exception("Can't find upload");
 
         if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
@@ -353,8 +365,8 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
     public function downloadAction()
     {
-        $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
-            ->getRow($this->_getParam('uploadId'));
+        $uploadModel = $this->_getUploadsModel();
+        $fileRow = $uploadModel->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Kwf_Exception("Can't find upload");
 
         if (!$this->_isDownloadAllowed($fileRow->mime_type, $fileRow->filename . '.' . $fileRow->extension, $fileRow->getFileSize())) {
@@ -375,8 +387,8 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
     public function downloadHandyAction()
     {
-        $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
-            ->getRow($this->_getParam('uploadId'));
+        $uploadModel = $this->_getUploadsModel();
+        $fileRow = $uploadModel->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Kwf_Exception("Can't find upload");
 
         if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
