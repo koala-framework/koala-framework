@@ -340,7 +340,9 @@ class Kwf_Setup
             || $authPW != $requiredPassword
         ) {
             header('WWW-Authenticate: Basic realm="Page locked by preLogin"');
-            throw new Kwf_Exception_Unauthorized('PreLogin required');
+            $exception = new Kwf_Exception_Unauthorized('PreLogin required');
+            $exception->setPasswordToMask($requiredPassword);
+            throw $exception;
         }
     }
 
