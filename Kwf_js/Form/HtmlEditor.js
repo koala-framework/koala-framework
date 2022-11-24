@@ -100,6 +100,7 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
         });
 
         var mceSettings = {
+            fix_list_elements: true, // indenting bullet lists causes invalid ul/li sequence, with this setting the lists get repaired
             forced_root_block: 'p',
             browser_spellcheck: true
         };
