@@ -1,14 +1,29 @@
 <?php
 class Kwf_User_MessageRow extends Kwf_Model_Db_Row
 {
+    private function getEditorUserNameIgnoreDeleted()
+    {
+        $userModel = $this->getModel()->getReferencedModel('ByUser');
+        $s = new Kwf_Model_Select();
+        $s->ignoreDeleted();
+        $s->whereId($this->by_user_id);
+        $user = $userModel->getRow($s);
+
+        if ($user) {
+            return $user . ($user->deleted ? ' (' . trlKwf('User deleted.') . ')' : '');
+        } else {
+            return trlKwf('User deleted.');
+        }
+    }
+
     public function __toString()
     {
         if ($this->create_type == 'auto') {
             switch ($this->message_type) {
                 case 'user_created':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Account created by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Account created by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Account created by {0}.', 'System');
                     } else if ($this->ip) {
@@ -20,8 +35,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_edited':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Account edited by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Account edited by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Account edited by {0}.', 'System');
                     } else if ($this->ip) {
@@ -33,8 +48,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_activate':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Account activated by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Account activated by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Account activated by {0}.', 'System');
                     } else if ($this->ip) {
@@ -46,8 +61,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_password_set':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Password set by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Password set by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Password set by {0}.', 'System');
                     } else if ($this->ip) {
@@ -59,8 +74,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_mail_UserDeleted':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Account deleted e-mail sent by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Account deleted e-mail sent by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Account deleted e-mail sent by {0}.', 'System');
                     } else if ($this->ip) {
@@ -72,8 +87,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_mail_UserChangedMail':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Changed mail address e-mail sent by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Changed mail address e-mail sent by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Changed mail address e-mail sent by {0}.', 'System');
                     } else if ($this->ip) {
@@ -85,8 +100,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_mail_UserLostPassword':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Lost password e-mail sent by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Lost password e-mail sent by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Lost password e-mail sent by {0}.', 'System');
                     } else if ($this->ip) {
@@ -98,8 +113,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_mail_UserActivation':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Activation e-mail sent by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Activation e-mail sent by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Activation e-mail sent by {0}.', 'System');
                     } else if ($this->ip) {
@@ -111,8 +126,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_mail_GlobalUserActivation':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Global user activation e-mail sent by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Global user activation e-mail sent by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Global user activation e-mail sent by {0}.', 'System');
                     } else if ($this->ip) {
@@ -124,8 +139,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'user_deleted':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('User deleted by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('User deleted by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('User deleted by {0}.', 'System');
                     } else if ($this->ip) {
@@ -137,8 +152,8 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     break;
                 case 'wrong_login_password':
                     if ($this->by_user_id) {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('Wrong login password used by {0}.', array($user->__toString()));
+                        $username = $this->getEditorUserNameIgnoreDeleted();
+                        $ret = trlKwf('Wrong login password used by {0}.', $username);
                     } else if ($this->ip === 'cli') {
                         $ret = trlKwf('Wrong login password used by {0}.', 'System');
                     } else if ($this->ip) {
