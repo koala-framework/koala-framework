@@ -131,14 +131,7 @@ abstract class Kwf_Exception_Abstract extends Exception
     {
         try {
             $exception = $this->getException();
-            $msg = $exception->__toString();
-            if ($exception instanceof Zend_Db_Adapter_Exception) {
-                try {
-                    foreach (Kwf_Registry::get('config')->database as $db) {
-                        $msg = str_replace($db->password, 'xxxxxx', $msg);
-                    }
-                } catch (Exception $e) {}
-            }
+            $msg = $this->_getSafeExceptionString($exception);
 
             if (!$ignoreCli && PHP_SAPI == 'cli') {
                 $this->log();
@@ -178,9 +171,9 @@ abstract class Kwf_Exception_Abstract extends Exception
         } catch (Exception $e) {
             if (Kwf_Exception::isDebug()) {
                 echo '<pre>';
-                echo $this->getException()->__toString();
+                echo $this->_getSafeExceptionString($e);
                 echo "\n\n\nError happened while handling exception:";
-                echo $e->__toString();
+                echo $this->_getSafeExceptionString($exception);
                 echo '</pre>';
             } else {
                 if (!headers_sent()) {
@@ -191,6 +184,27 @@ abstract class Kwf_Exception_Abstract extends Exception
                 echo '<p>An Error ocurred. Please try again later.</p>';
             }
         }
+    }
+
+    private function _getSafeExceptionString($exception)
+    {
+        $ret = $exception->__toString();
+        if ($exception instanceof Zend_Db_Adapter_Exception) {
+            try {
+                foreach (Kwf_Registry::get('config')->database as $db) {
+                    $ret = str_replace($db->password, 'xxxxxx', $ret);
+                }
+            } catch (Exception $e) {}
+        }
+        if ($exception instanceof Kwf_Exception_Unauthorized) {
+            try {
+                $passwordToMask = $exception->getPasswordToMask();
+                if ($passwordToMask) {
+                    $ret = str_replace($passwordToMask, 'xxxxxx', $ret);
+                }
+            } catch (Exception $e) {}
+        }
+        return $ret;
     }
 
     protected function _renderJson($exception, $msg)

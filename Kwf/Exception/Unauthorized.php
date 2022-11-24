@@ -1,6 +1,8 @@
 <?php
 class Kwf_Exception_Unauthorized extends Kwf_Exception_Abstract
 {
+    private $_passwordToMask;
+
     public function __construct($message = "Unauthorized")
     {
         parent::__construct($message, 401);
@@ -30,5 +32,15 @@ class Kwf_Exception_Unauthorized extends Kwf_Exception_Abstract
         $body .= $this->_format('_POST', print_r($_POST, true));
 
         Kwf_Exception_Logger_Abstract::getInstance()->log($this, 'accessdenied', $body);
+    }
+
+    public function setPasswordToMask($password)
+    {
+        $this->_passwordToMask = $password;
+    }
+
+    public function getPasswordToMask()
+    {
+        return $this->_passwordToMask;
     }
 }
