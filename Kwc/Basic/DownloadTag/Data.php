@@ -21,7 +21,7 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
         } else if ($var == 'rel') {
             $rel = array(parent::__get($var));
             $row = $this->_getLinkRow();
-            if ($row && $row->rel_noindex) {
+            if ($row && isset($row->rel_noindex) && $row->rel_noindex) {
                 $rel[] = 'nofollow';
             }
             return implode(' ', array_unique($rel));
