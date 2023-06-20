@@ -21,7 +21,7 @@ class Kwc_Basic_LinkTag_Extern_Data extends Kwc_Basic_LinkTag_Abstract_Data
         } else if ($var == 'rel') {
             $rel = array(parent::__get($var));
             $row = $this->_getLinkRow();
-            if ($row->rel_noindex) {
+            if (isset($row->rel_noindex) && $row->rel_noindex) {
                 $rel[] = 'nofollow';
             }
             return implode(' ', array_unique($rel));
