@@ -84,18 +84,6 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
         exit;
     }
 
-    public function writeMaintenanceAction()
-    {
-        Kwf_Util_Maintenance::writeMaintenanceBootstrapSelf();
-        exit;
-    }
-
-    public function restoreMaintenanceAction()
-    {
-        Kwf_Util_Maintenance::restoreMaintenanceBootstrapSelf();
-        exit;
-    }
-
     public static function getHelpOptions()
     {
         $types = array();
