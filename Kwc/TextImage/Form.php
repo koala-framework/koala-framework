@@ -32,7 +32,7 @@ class Kwc_TextImage_Form extends Kwc_Abstract_Form
                 'right' => trlKwf('Right'),
                 'center' => trlKwf('Center')
             ))
-            ->setWidth(210);
+            ->setWidth(390); // drop-region of image is same width
         $fs->add(new Kwf_Form_Field_Checkbox('flow', trlKwf('Text flows around Image')));
     }
 }
