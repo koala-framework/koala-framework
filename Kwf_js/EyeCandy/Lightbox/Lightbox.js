@@ -277,6 +277,7 @@ Lightbox.prototype = {
         }).done(function(response) {
 
             injectAssets(response.assets, (function() {
+                this.closeTitle = document.title;
                 this.title = response.title ? response.title : document.title;
                 document.title = this.title; //set page-title from lightbox
                 dataLayer.push({
@@ -467,7 +468,11 @@ Lightbox.prototype = {
             //location.replace(this.closeHref);
             this.close();
         }
-        document.title = this.lightboxEl.attr("data-parent-title"); //set page-title back from lightbox to parent-page
+        if (this.lightboxEl.attr("data-parent-title")) {
+            document.title = this.lightboxEl.attr("data-parent-title"); //set page-title back from lightbox to parent-page
+        } else {
+            document.title = this.closeTitle;
+        }
         dataLayer.push({
             event: 'pageview',
             pagePath: location.pathname.substr(0, location.pathname.lastIndexOf('/')),
