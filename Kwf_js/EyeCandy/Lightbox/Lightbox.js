@@ -192,12 +192,13 @@ Lightbox.prototype = {
     createLightboxEl: function()
     {
         if (this.lightboxEl) return;
+        var title = document.title;
 
         var cls = 'kwfUp-kwfLightbox';
         if (this.options.style) cls += ' kwfUp-kwfLightbox'+this.options.style;
         if (this.options.cssClass) cls += ' '+this.options.cssClass;
         var lightbox = $(
-            '<div class="'+cls+'">'+
+            '<div class="'+cls+'" data-parent-title="'+title+'">'+
                 '<div class="kwfUp-kwfLightboxScrollOuter">'+
                     '<div class="kwfUp-kwfLightboxScroll">'+
                         '<div class="kwfUp-kwfLightboxBetween">'+
@@ -276,6 +277,7 @@ Lightbox.prototype = {
             context: this
         }).done(function(response) {
 
+
             injectAssets(response.assets, (function() {
                 this.closeTitle = document.title;
                 this.title = response.title ? response.title : document.title;
@@ -348,6 +350,9 @@ Lightbox.prototype = {
     },
     show: function(options)
     {
+        if (this.title) {
+            document.title = this.title;
+        }
         this._isClosing = false;
 
         if (!this.closeHref) {
@@ -435,6 +440,9 @@ Lightbox.prototype = {
             this.innerLightboxEl.css('transform', newMatrix);
         }
 
+        if (this.lightboxEl.attr("data-parent-title")) {
+            document.title = this.lightboxEl.attr("data-parent-title"); //set page-title back from lightbox to parent-page
+        }
     },
     closeAndPushState: function() {
         if (this._isClosing) return; //prevent double-click on close button
