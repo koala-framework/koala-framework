@@ -112,12 +112,18 @@ class Kwf_Util_Setup
         //required eg. behind load balancers
         if (Kwf_Config::getValueArray('server.replaceVars.remoteAddr')) {
             $a = Kwf_Config::getValueArray('server.replaceVars.remoteAddr');
-            if (substr($a['if'], -2) == '.*') {
+            if ($a['if'] === '*') {
+                $comparison = null;
+            } else if (substr($a['if'], -2) == '.*') {
                 $comparison = "substr(\$_SERVER['REMOTE_ADDR'], 0, ".(strlen($a['if'])-1).") == '".substr($a['if'], 0, -1)."'";
             } else {
                 $comparison = "\$_SERVER['REMOTE_ADDR'] == '$a[if]'";
             }
-            $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && $comparison && isset(\$_SERVER['$a[replace]'])) {\n";
+            if ($comparison === null) {
+                $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && isset(\$_SERVER['$a[replace]'])) {\n";
+            } else {
+                $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && $comparison && isset(\$_SERVER['$a[replace]'])) {\n";
+            }
             $ret .= "    \$_SERVER['REMOTE_ADDR'] = \$_SERVER['$a[replace]'];\n";
             if (isset($a['removeTrailing'])) {
                 $ret .= "    if (substr(\$_SERVER['REMOTE_ADDR'], -".strlen($a['removeTrailing']).") == '".$a['removeTrailing']."') {\n";
