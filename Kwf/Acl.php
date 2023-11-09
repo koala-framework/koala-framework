@@ -229,6 +229,12 @@ class Kwf_Acl extends Zend_Acl
         return $ret;
     }
 
+    public function getParentResource($resource) {
+        if (!$this->get($resource)) throw new Kwf_Exception('Resource not found: ' . $resource);
+        $parent = $this->_resources[$this->get($resource)->getResourceId()]['parent'];
+        return $parent ? $this->get($parent) : null;
+    }
+
     public function getAllResources()
     {
         $this->loadKwcResources();

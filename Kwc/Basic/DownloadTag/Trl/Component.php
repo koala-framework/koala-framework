@@ -12,6 +12,8 @@ class Kwc_Basic_DownloadTag_Trl_Component extends Kwc_Basic_LinkTag_Abstract_Trl
         $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['dataClass'] = 'Kwc_Basic_DownloadTag_Trl_Data';
+        $ret['apiContent'] = 'Kwc_Basic_DownloadTag_Trl_ApiContent';
+        $ret['apiContentType'] = 'download';
         return $ret;
     }
 
