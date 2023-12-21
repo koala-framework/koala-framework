@@ -18,7 +18,7 @@
             <tr class="<?=$dr['cssClass']; ?>">
                 <?php foreach ($dr['data'] as $dataItem) { ?>
                 <<?=$dr['htmlTag'];?> class="<?= $dataItem['cssClass']; ?>">
-                    <?= $this->toHtmlLink($dataItem['value']); ?>
+                    <?= $this->toHtmlLink(strip_tags($dataItem['value'])); ?>
                 </<?=$dr['htmlTag'];?>>
                 <?php } ?>
             </tr>
