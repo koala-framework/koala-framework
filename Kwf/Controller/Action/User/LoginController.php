@@ -143,8 +143,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
         $state = explode('.', $this->_getParam('state'));
 
-        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
-        if (!$ns->state || $this->_getParam('state') != $ns->state) {
+        if (!isset($_COOKIE['kwf-login-redirect']) || $this->_getParam('state') != $_COOKIE['kwf-login-redirect']) {
             if (count($state) == 5 && strpos($state[0], 'activate') === 0) {
                 $redirect = urldecode(str_replace('kwfdot', '.', $state[4]));
                 if ($redirect !== 'jsCallback') {
