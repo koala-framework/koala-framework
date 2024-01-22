@@ -212,7 +212,11 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
                 echo "</script>\n";
                 exit;
             } else {
-                Kwf_Util_Redirect::redirect($redirect);
+                // Redirect with js to break redirect-chain and allow browser to send session-cookie
+                echo "<script type=\"text/javascript\">\n";
+                echo "window.location.href = \"".$redirect."\";\n";
+                echo "</script>\n";
+                exit;
             }
         } else {
             $label = $authMethods[$authMethod]->getLoginRedirectLabel();
