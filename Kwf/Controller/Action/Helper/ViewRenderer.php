@@ -35,6 +35,10 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             && $this->getRequest()->isDispatched()
             && !$this->getResponse()->isRedirect()) {
 
+            foreach (Kwf_Config::getValueArray("kwf.staticHeaders") as $header) {
+                $splitted = explode(":", $header, 2);
+                $this->getResponse()->setHeader(trim($splitted[0]), trim($splitted[1]));
+            }
             if ($this->isJson()) {
                 $this->getResponse()->setHeader('Content-Type', 'application/json');
             } else {

@@ -237,12 +237,14 @@ FormComponent.prototype = {
                 // show success content
                 if (r.successContent) {
                     this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
-                    statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
-                    var dataLayerEntry = this.config.submitDataLayer ? this.config.submitDataLayer : {};
-                    if (!dataLayerEntry.event) {
-                        dataLayerEntry.event = "form-submit";
+                    if (!this.config.skipTracking) {
+                        statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
+                        var dataLayerEntry = this.config.submitDataLayer ? this.config.submitDataLayer : {};
+                        if (!dataLayerEntry.event) {
+                            dataLayerEntry.event = "form-submit";
+                        }
+                        dataLayer.push(dataLayerEntry);
                     }
-                    dataLayer.push(dataLayerEntry);
                     var el = $(r.successContent).appendTo(this.el.parent());
                     if (this.config.hideFormOnSuccess) {
                         this.el.hide();
@@ -255,12 +257,14 @@ FormComponent.prototype = {
                     onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
                     this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
-                    statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
-                    var dataLayerEntry = this.config.submitDataLayer ? this.config.submitDataLayer : {};
-                    if (!dataLayerEntry.event) {
-                        dataLayerEntry.event = "form-submit";
+                    if (!this.config.skipTracking) {
+                        statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
+                        var dataLayerEntry = this.config.submitDataLayer ? this.config.submitDataLayer : {};
+                        if (!dataLayerEntry.event) {
+                            dataLayerEntry.event = "form-submit";
+                        }
+                        dataLayer.push(dataLayerEntry);
                     }
-                    dataLayer.push(dataLayerEntry);
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize

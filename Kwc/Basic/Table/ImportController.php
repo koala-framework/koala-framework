@@ -36,7 +36,7 @@ class Kwc_Basic_Table_ImportController extends Kwf_Controller_Action_Auto_Import
 
                 for ($c=0; $c<$importColumns; $c++) {
                     $colname = 'column'.($c+1);
-                    $newRow->{$colname} = $xlsRows[$r][$c];
+                    $newRow->{$colname} = htmlentities($xlsRows[$r][$c]);
                 }
                 $newRow->save();
             }

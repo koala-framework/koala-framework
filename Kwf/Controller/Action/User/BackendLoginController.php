@@ -112,9 +112,8 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $f = new Kwf_Filter_StrongRandom();
         $state = 'login.'.$authMethod.'.'.$f->filter(null).'.'.urlencode(str_replace('.', 'kwfdot', $this->_getParam('redirect')));
 
-        //save state in namespace to validate it later
-        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
-        $ns->state = $state;
+        //save state in cookie to validate it later
+        setcookie("kwf-login-redirect", $state, 0, '/', "", false, true);
 
         $formValues = array();
         foreach ($authMethods[$authMethod]->getLoginRedirectFormOptions() as $option) {

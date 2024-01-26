@@ -265,7 +265,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             'fieldConfig' => (object)$fieldConfig,
             'errorStyle' => $errorStyle,
             'baseParams' => $baseParams,
-            'submitDataLayer' => $this->getSubmitDataLayer()
+            'submitDataLayer' => $this->getSubmitDataLayer(),
+            'skipTracking' => false,
         );
 
         $ret['uniquePrefix'] = Kwf_Config::getValue('application.uniquePrefix');

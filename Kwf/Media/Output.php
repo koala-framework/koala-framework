@@ -60,6 +60,7 @@ class Kwf_Media_Output
     public static function getOutputData($file, array $headers)
     {
         $ret = array('headers' => array());
+        $ret['headers'] = array_merge($ret['headers'], Kwf_Config::getValueArray("kwc.staticHeaders"));
 
         if (!isset($file['contents'])) {
             if (isset($file['file'])) {
