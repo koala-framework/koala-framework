@@ -6,7 +6,7 @@ class Kwc_Basic_LinkTag_Data extends Kwf_Component_Data
     {
         if ($this->_linkData === null) {
             $this->_linkData = $this->getChildComponent('-child');
-            if (is_instance_of($this->_linkData->componentClass, 'Kwc_Basic_None_Component')) {
+            if (!$this->_linkData || is_instance_of($this->_linkData->componentClass, 'Kwc_Basic_None_Component')) {
                 $this->_linkData = false;
             }
         }
