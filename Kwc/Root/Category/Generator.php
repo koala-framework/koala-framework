@@ -345,6 +345,10 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         $page = $this->_getPageData($id);
 
+        if ($parentData && isset($page['parent_id']) && $page['parent_id'] != $parentData->id) {
+            $parentData = null;
+        }
+
         if (!$parentData || ($parentData->componentClass == $this->_class && $page['parent_id'])) {
             $parentData = $page['parent_id'];
         }
@@ -456,6 +460,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             $ret['iconEffects'][] = 'home';
         } else if (!$component->visible) {
             $ret['iconEffects'][] = 'invisible';
+        }
+        if ($component->generator instanceof Kwc_Root_Category_Generator && $component->row->hide) {
+            $ret['iconEffects'][] = 'hideInMenu';
         }
         foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_IconEffects') as $p) {
             $ret['iconEffects'] = array_merge($ret['iconEffects'], $p->getIconEffects($component));

@@ -3,10 +3,15 @@ use \Symfony\Component\Process\Process;
 
 class Kwf_Util_Maintenance_Dispatcher
 {
-    public static function getAllMaintenanceJobs()
+    public static function getAllMaintenanceJobIdentifiers()
     {
         static $ret;
         if (isset($ret)) return $ret;
+
+        $ret = array();
+        if ($kernel = Kwf_Util_Symfony::getKernel()) {
+            $ret = array_merge($ret, $kernel->getContainer()->get('kwf.maintenance_jobs_locator')->getMaintenanceJobServiceIds());
+        }
 
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (is_instance_of($c, 'Kwf_Util_Maintenance_JobProviderInterface')) {
@@ -24,51 +29,54 @@ class Kwf_Util_Maintenance_Dispatcher
             $jobClasses = array_merge($jobClasses, call_user_func(array($c, 'getMaintenanceJobs')));
         }
         $jobClasses = array_unique($jobClasses);
-        $ret = array();
         foreach ($jobClasses as $i) {
-            $ret[] = new $i();
+            $ret[] = "class:{$i}";
         }
+
         usort($ret, array('Kwf_Util_Maintenance_Dispatcher', '_compareJobsPriority'));
         return $ret;
     }
 
     public static function _compareJobsPriority($a, $b)
     {
-        $a = $a->getPriority();
-        $b = $b->getPriority();
+        $a = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($a)->getPriority();
+        $b = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($b)->getPriority();
         if ($a == $b) return 0;
         return ($a < $b) ? -1 : 1;
     }
 
     public static function executeJobs($jobFrequency, $debug, $output)
     {
-        foreach (self::getAllMaintenanceJobs() as $job) {
+        foreach (self::getAllMaintenanceJobIdentifiers() as $jobIdentifier) {
+            $job = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($jobIdentifier);
+
             if ($job->getFrequency() == $jobFrequency) {
                 if (!$job->hasWorkload()) continue;
                 if ($debug) echo "executing ".get_class($job)."\n";
-                self::executeJob($job, $debug, $output);
+                self::executeJob($jobIdentifier, $debug, $output);
             }
         }
     }
 
-    public static function executeJob($job, $debug, $output)
+    public static function executeJob($jobIdentifier, $debug, $output)
     {
         $runsModel = Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel');
         $runRow = $runsModel->createRow();
-        $runRow->job = get_class($job);
+        $runRow->job = $jobIdentifier;
         $runRow->start = date('Y-m-d H:i:s');
         $runRow->last_process_seen = date('Y-m-d H:i:s');
         $runRow->status = 'starting';
         $runRow->save();
 
+        $job = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($jobIdentifier);
         $maxTime = $job->getMaxTime();
         $t = microtime(true);
         $cmd = "php bootstrap.php maintenance-jobs internal-run-job --runId=".escapeshellarg($runRow->id);
         if ($debug) $cmd .= " --debug";
 
         $process = new Process($cmd);
-        $process->start(function ($type, $buffer) use ($runsModel, $runRow, $debug) {
-            if ($debug) {
+        $process->start(function ($type, $buffer) use ($runsModel, $runRow, $output) {
+            if ($output) {
                 if (Process::ERR === $type) {
                     echo $buffer;
                 } else {
@@ -104,7 +112,7 @@ class Kwf_Util_Maintenance_Dispatcher
         if ($runRow->status != 'killed') {
             if ($process->getExitCode()) {
                 $runRow->status = 'failed';
-                $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code ".$process->getExitCode());
+                $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code ".$process->getExitCode()." and ErrorMessage: ".$process->getErrorOutput());
                 $e->log();
             } else {
                 $runRow->status = 'success';
@@ -112,7 +120,7 @@ class Kwf_Util_Maintenance_Dispatcher
         }
 
         $t = microtime(true)-$t;
-        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
+        if ($debug && $output) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
 
         if ($runRow->status == 'success' && $runRow->runtime > $maxTime) {
             $runRow->status = 'timelimit';
@@ -123,10 +131,10 @@ class Kwf_Util_Maintenance_Dispatcher
                 file_put_contents('php://stderr', $msg."\n");
             }
         }
-        if ($debug) echo "\n";
+        if ($debug && $output) echo "\n";
 
         $runRow->save();
-        if ($runRow->status != 'success') {
+        if ($runRow->status != 'success' && Kwf_Config::getValue('maintenanceJobs.sendFailNotification')) {
             $recipients = $job->getRecipientsForFailNotification();
             if (is_null($recipients)) {
                 $recipients = Kwf_Config::getValue('maintenanceJobs.failNotificationRecipient');

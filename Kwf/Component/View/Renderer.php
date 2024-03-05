@@ -66,7 +66,7 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
 
     public static function replaceHtmlKwfUp($ret)
     {
-        $ret = preg_replace_callback('#((class|id|for)="[^"]*)"#', array('Kwf_Component_View_Renderer', '_replaceKwfUpCb'), $ret);
+        $ret = preg_replace_callback('#((class|id|for|style)="[^"]*)"#', array('Kwf_Component_View_Renderer', '_replaceKwfUpCb'), $ret);
         return $ret;
     }
 

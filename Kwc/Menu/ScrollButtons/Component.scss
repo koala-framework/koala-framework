@@ -37,13 +37,13 @@
         top: 0;
 
         &.arrowLeft {
-            @include background-image-dpr2('/assets/kwf/Kwc/Menu/ScrollButtons/images', 'arrowLeft.png', 62px, 38px, no-repeat left top transparent);
+            @include background-image-dpr2('~kwf/Kwc/Menu/ScrollButtons/images', 'arrowLeft.png', 62px, 38px, no-repeat left top transparent);
             left: 0;
             z-index: 15;
         }
 
         &.arrowRight {
-            @include background-image-dpr2('/assets/kwf/Kwc/Menu/ScrollButtons/images', 'arrowRight.png', 62px, 38px, no-repeat right top transparent);
+            @include background-image-dpr2('~kwf/Kwc/Menu/ScrollButtons/images', 'arrowRight.png', 62px, 38px, no-repeat right top transparent);
             right: 0;
             z-index: 15;
         }

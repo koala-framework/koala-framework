@@ -25,6 +25,19 @@ class Kwf_Util_Build
         $types[] = new Kwf_Util_Build_Types_Events();
         $types[] = new Kwf_Util_Build_Types_Assets();
 
+        $files = array('composer.json');
+        $files = array_merge($files, glob('vendor/*/*/composer.json'));
+        foreach ($files as $file) {
+            $composerJson = json_decode(file_get_contents($file), true);
+            if (isset($composerJson['extra']['koala-framework-build-step'])) {
+                $steps = $composerJson['extra']['koala-framework-build-step'];
+                if (!is_array($steps)) $steps = array($steps);
+                foreach ($steps as $type) {
+                    $types[] = new $type();
+                }
+            }
+        }
+
         return $types;
     }
 

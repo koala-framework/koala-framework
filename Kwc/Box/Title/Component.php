@@ -35,6 +35,10 @@ class Kwc_Box_Title_Component extends Kwc_Abstract
         return $ret;
     }
 
+    public function getTitle() {
+        return $this->_getTitle();
+    }
+
     public function injectIntoRenderedHtml($html)
     {
         return self::injectTitle($html, $this->getData()->render());

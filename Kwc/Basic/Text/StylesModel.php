@@ -21,24 +21,42 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
     public static function parseMasterStyles($masterContent)
     {
         $styles = array();
-        if (strpos($masterContent, '.kwfUp-webStandard')===false) return $styles;
-        preg_match_all('#^ *.kwfUp-webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{([^}]*)} */\\* +(.*?) +\\*/#m', $masterContent, $m);
+        $up = Kwf_Config::getValue('application.uniquePrefix');
+        if ($up) $up .= '-';
+
+        if (strpos($masterContent, ".{$up}webStandard")===false) return $styles;
+        $up = str_replace('-', '\-', $up);
+        preg_match_all("#\.{$up}webStandard\s+(span|p|h[1-6])(\.(.+))?(\s+)?{([^}]+)}\s*\/\*\!(.*)\*\/#mU", $masterContent, $m);
+
         foreach (array_keys($m[1]) as $i) {
-            $tagName = $m[2][$i];
             $styles[] = array(
                 'id' => 'master'.$i,
-                'name' => $m[5][$i],
-                'tagName' => $tagName,
+                'name' => trim($m[6][$i]),
+                'tagName' => $m[1][$i],
                 'className' => $m[3][$i],
-                'styles' => $m[4][$i],
+                'styles' => $m[5][$i],
             );
         }
+
         return $styles;
     }
 
     public static function getMasterStyles()
     {
-        return self::parseMasterStyles(file_get_contents('build/assets/Frontend.css'));
+        if (Kwf_Assets_WebpackConfig::getDevServerUrl()) {
+            $filename = Kwf_Assets_WebpackConfig::getDevServerUrl() . 'assets/build/Frontend.css';
+        } else {
+            $filename = 'build/assets/Frontend.css';
+        }
+        $fileGetContentsContextOptions = array();
+        if (Kwf_Config::getValue('server.https') && Kwf_Config::getValue('debug.webpackDevServer')) {
+            $fileGetContentsContextOptions["ssl"] = array(
+                "verify_peer" => false,
+                "verify_peer_name" => false
+            );
+        }
+
+        return self::parseMasterStyles(file_get_contents($filename, false, stream_context_create($fileGetContentsContextOptions)));
     }
 
     public function getStyles($ownStyles = false)

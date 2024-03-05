@@ -49,7 +49,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
     {
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('activate');
         $this->view->email = $this->_getParam('user')->email;
-        $this->view->isActivate = $this->_getParam('user')->isActivated();
+        $this->view->isActivated = $this->_getParam('user')->isActivated();
 
         $users = Kwf_Registry::get('userModel');
 
@@ -96,13 +96,11 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                     'redirect' => $_SERVER['REQUEST_URI'],
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
-                    'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
+                    'formOptionsHtml' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
                 );
             }
         }
-        if (count($this->view->redirects) == 1 && !$showPassword) {
-            $this->redirect($this->view->redirects[0]['url'], array('prependBase'=>false));
-        } else if (count($this->view->redirects) == 0 && $showPassword) {
+        if (count($this->view->redirects) == 0 && $showPassword) {
             $this->redirect($this->view->passwordUrl, array('prependBase'=>false));
         }
     }
@@ -129,11 +127,10 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         }
 
         $f = new Kwf_Filter_StrongRandom();
-        $state = 'activate.'.$authMethod.'.'.$f->filter(null).'.'.$this->_getParam('code').'.'.Kwf_Setup::getBaseUrl().'/kwf/welcome';
+        $state = 'activate.'.$authMethod.'.'.$f->filter(null).'.'.$this->_getParam('code') . '.' . urlencode('/kwf/welcome');
 
-        //save state in namespace to validate it later
-        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
-        $ns->state = $state;
+        //save state in cookie to validate it later
+        setcookie("kwf-login-redirect", $state, 0, '/', "", false, true);
 
         $formValues = array();
         foreach ($authMethods[$authMethod]->getLoginRedirectFormOptions() as $option) {

@@ -5,6 +5,8 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
 
     public function preDispatch()
     {
+        Kwf_Util_BackendLoginRestriction::isAllowed();
+
         $this->getHelper('viewRenderer')->setNoController(true);
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
         parent::preDispatch();
@@ -21,7 +23,6 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $this->view->brandingKoala = Kwf_Config::getValue('application.branding.koala');
         $this->view->brandingVividPlanet = Kwf_Config::getValue('application.branding.vividPlanet');
         $this->view->pages = Kwf_Registry::get('acl')->has('kwf_component_pages');
-        $this->view->baseUrl = Kwf_Setup::getBaseUrl();
         $this->view->favicon = Kwf_View_Ext::getFavicon();
 
         try {
@@ -48,7 +49,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
                 $this->view->untagged = true;
             }
         }
-        
+
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('login');
         $this->view->lostPasswordLink = $this->getFrontController()->getRouter()->assemble(array(
             'controller' => 'login',
@@ -57,8 +58,8 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
 
 
         $this->view->redirects = array();
-        $users = Zend_Registry::get('userModel');
-        foreach ($users->getAuthMethods() as $k=>$auth) {
+        $authMethods = Zend_Registry::get('userModel')->getAuthMethods();
+        foreach ($authMethods as $k=>$auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInBackend()) {
                 $url = $this->getFrontController()->getRouter()->assemble(array(
                     'controller' => 'backend-login',
@@ -71,9 +72,17 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
                     'redirect' => $_SERVER['REQUEST_URI'],
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
-                    'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
+                    'formOptionsHtml' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
                 );
             }
+        }
+
+        if (count($authMethods) == 1 && count($this->view->redirects) == 1) {
+            $r = $this->view->redirects[0];
+            $url = $r['url'];
+            $url .= '?authMethod=' . Kwf_Util_HtmlSpecialChars::filter($r['authMethod']);
+            $url .= '&redirect=' . Kwf_Util_HtmlSpecialChars::filter($r['redirect']);
+            Kwf_Util_Redirect::redirect($url);
         }
 
         parent::indexAction();
@@ -101,11 +110,10 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         }
 
         $f = new Kwf_Filter_StrongRandom();
-        $state = 'login.'.$authMethod.'.'.$f->filter(null).'.'.str_replace('.', 'kwfdot', $this->_getParam('redirect'));
+        $state = 'login.'.$authMethod.'.'.$f->filter(null).'.'.urlencode(str_replace('.', 'kwfdot', $this->_getParam('redirect')));
 
-        //save state in namespace to validate it later
-        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
-        $ns->state = $state;
+        //save state in cookie to validate it later
+        setcookie("kwf-login-redirect", $state, 0, '/', "", false, true);
 
         $formValues = array();
         foreach ($authMethods[$authMethod]->getLoginRedirectFormOptions() as $option) {
@@ -115,6 +123,11 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         }
 
         $url = $authMethods[$authMethod]->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
+        if (!$url) {
+            $html = $authMethods[$authMethod]->getLoginRedirectHtml($this->_getRedirectBackUrl(), $state, $formValues);
+            echo $html;
+            exit;
+        }
         $this->redirect($url);
     }
 
@@ -134,7 +147,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $adapter->setCredential($row->password);
         $result = $auth->authenticate($adapter);
         if ($result->isValid()) {
-            $redirectUrl = '/'.ltrim($this->getRequest()->getPathInfo(), '/');
+            $redirectUrl = '/'.ltrim($this->getRequest()->getRequestUri(), '/');
             if ($this->_getParam('redirect') && substr($this->_getParam('redirect'), 0, 1) == '/') {
                 $redirectUrl = $this->_getParam('redirect');
             }

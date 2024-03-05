@@ -22,6 +22,6 @@ class Kwf_View_Helper_FileSize
         }
     
         $ret .= ' '.$shortcuts[$i];
-        return $ret;
+        return Kwf_Util_HtmlSpecialChars::filter($ret);
     }
 }

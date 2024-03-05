@@ -1,13 +1,13 @@
 <div class="enquiryReview">
     <div class="headers">
-        <div class="subject"><?= htmlspecialchars($this->subject); ?></div>
+        <div class="subject"><?= Kwf_Util_HtmlSpecialChars::filter($this->subject); ?></div>
         <div class="detail">
             <?php if (!empty($this->from['name']) || !empty($this->from['email'])) { ?>
                 <div>
                     <label><?= trlKwf('From'); ?>:</label>
                     <div>
-                        <?php if (!empty($this->from['name'])) echo $this->from['name']; ?>
-                        <?php if (!empty($this->from['email'])) echo '&lt;'.$this->from['email'].'&gt;'; ?>
+                        <?php if (!empty($this->from['name'])) echo Kwf_Util_HtmlSpecialChars::filter($this->from['name']); ?>
+                        <?php if (!empty($this->from['email'])) echo '&lt;'.Kwf_Util_HtmlSpecialChars::filter($this->from['email']).'&gt;'; ?>
                     </div>
                 </div>
             <?php } ?>
@@ -18,7 +18,7 @@
                     $first = true;
                     foreach ($this->to as $to) {
                         if (!$first) echo '; ';
-                        echo $to['name'].' &lt;'.$to['email'].'&gt;';
+                        echo Kwf_Util_HtmlSpecialChars::filter($to['name']).' &lt;'.Kwf_Util_HtmlSpecialChars::filter($to['email']).'&gt;';
                         $first = false;
                     }
                 ?>
@@ -32,7 +32,7 @@
                         $first = true;
                         foreach ($this->cc as $cc) {
                             if (!$first) echo '; ';
-                            echo $cc['name'].' &lt;'.$cc['email'].'&gt;';
+                            echo Kwf_Util_HtmlSpecialChars::filter($cc['name']).' &lt;'.Kwf_Util_HtmlSpecialChars::filter($cc['email']).'&gt;';
                             $first = false;
                         }
                     ?>
@@ -44,5 +44,5 @@
     </div>
 
 
-    <div class="message"><?= htmlspecialchars($this->mailContent); ?></div>
+    <div class="message"><?= Kwf_Util_HtmlSpecialChars::filter($this->mailContent); ?></div>
 </div>

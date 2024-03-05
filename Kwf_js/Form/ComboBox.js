@@ -134,6 +134,11 @@ Kwf.Form.ComboBox = Ext2.extend(Ext2.form.ComboBox,
             //das funktioniert aber im FF da nicht
             this.listWidth = this.el.getWidth()+this.trigger.getWidth();
         }
+        if (!this.tpl) {
+            var cls = 'x2-combo-list';
+            var renderer = this.allowTagsInOptions == true ? '' : ':htmlEncode';
+            this.tpl = '<tpl for="."><div class="'+cls+'-item">{' + this.displayField + renderer + '}</div></tpl>';
+        }
         Kwf.Form.ComboBox.superclass.initList.call(this);
     },
 

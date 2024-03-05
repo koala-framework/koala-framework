@@ -8,6 +8,8 @@ class Kwc_Basic_Line_Component extends Kwc_Abstract
         ));
         $ret['componentCategory'] = 'content';
         $ret['componentPriority'] = 65;
+        $ret['apiContent'] = 'Kwc_Basic_Line_ApiContent';
+        $ret['apiContentType'] = 'line';
         return $ret;
     }
 }

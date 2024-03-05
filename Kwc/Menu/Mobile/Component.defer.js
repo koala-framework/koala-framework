@@ -4,6 +4,18 @@ var $ = require('jquery');
 var t = require('kwf/commonjs/trl');
 var KwfBaseUrl = require('kwf/commonjs/base-url');
 
+function getActiveRoutes() {
+    var activeRoutes = window.location.pathname.substr(1).split('/').map(function (pathString) {
+        return "/" + pathString;
+    });
+
+    activeRoutes = activeRoutes.map(function (route, index) {
+        return index !== 0 ? activeRoutes[index - 1] + route : route;
+    });
+
+    return activeRoutes;
+}
+
 onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var slideDuration = 400;
     var menuLink = el.children('.kwfUp-showMenu');
@@ -21,7 +33,7 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
             '<% if (isRoot) { %>' +
                 '<% _.each(item.pages, function(page) { %>' +
                     '<% if (!page.hidden) {  %>\n' +
-                    '<li class="<% if (page.hasChildren) {  %>kwfUp-hasChildren<% } else if (page.isParent) { %>kwfUp-parent<% } %>">\n' +
+                    '<li class="<% if (page.hasChildren) {  %>kwfUp-hasChildren<% } else if (page.isParent) { %>kwfUp-parent<% } %> kwfUp-item <%if (activeRoutes.indexOf(page.url) !== -1) { %>kwfUp-item--selected<% } %> ">\n' +
                         '<a href="'+baseUrl+'<%= page.url %>" data-id="<%= page.id %>" data-children="<%= (page.hasChildren || page.children && page.children.length) || false %>"><%= page.name %></a>\n'+
                     '</li>\n'+
                     '<% } %>\n' +
@@ -32,7 +44,7 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
                 '<% } %>'+
                 '<% _.each(item.children, function(child) { %>'+
                     '<% if (!child.hidden) {  %>\n' +
-                    '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %>">\n' +
+                    '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %> kwfUp-item <%if (!child.isParent && (activeRoutes.indexOf(child.url) !== -1)) { %>kwfUp-item--selected<% } %>">\n' +
                         '<a href="'+baseUrl+'<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="kwfUp-overview">('+__trlKwf('Overview')+')</span><% } %></a>\n'+
                     '</li>\n' +
                     '<% } %>\n' +
@@ -46,7 +58,9 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         var slider = el.find('.kwfUp-slider');
 
         if (direction == 'left') {
-            var html = template({item: menuData[id], isRoot: false});
+
+            var html = template({item: menuData[id], activeRoutes: getActiveRoutes(), isRoot: false});
+
             menuHtml.push(html);
             $(html).insertAfter(menu);
             var secondMenu = menu.next();
@@ -56,6 +70,11 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
             slider.animate({height: secondMenu.height()}, slideDuration);
             secondMenu.css({left: '100%'}).animate({left: 0});
             $('html, body').stop().animate({scrollTop: 0}, 300);
+
+            //scroll menu to top on jump to subMenu level
+            if (el.css('overflow') == "auto") {
+                el.stop().animate({scrollTop: 0}, 300);
+            }
 
         } else if (direction == 'right') {
             menuHtml.splice(-1);
@@ -164,6 +183,7 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         componentId: config.componentId,
         pageUrl: location.href
     };
+
     // Inital Request
     $.ajax({
         url: config.controllerUrl + '/json-index',
@@ -177,7 +197,7 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
 
             if (!el.find('.kwfUp-slider').length) el.append('<div class="kwfUp-slider"></div>');
 
-            var html = template({item: res, isRoot: true});
+            var html = template({item: res, activeRoutes: getActiveRoutes(), isRoot: true});
             el.find('.kwfUp-slider').html(html);
             menuHtml.push(html);
             if (el.hasClass('kwfUp-loading')) {

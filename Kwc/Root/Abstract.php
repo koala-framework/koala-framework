@@ -59,11 +59,25 @@ class Kwc_Root_Abstract extends Kwc_Abstract implements Kwf_Util_Maintenance_Job
         if ($path == '') {
             $ret = $component->getChildPage(array('home' => true), array());
         } else {
-            foreach (Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::getFlag($c, 'shortcutUrl')) {
-                    $ret = call_user_func(array($c, 'getDataByShortcutUrl'), $c, $path);
-                    if ($ret) return $ret;
+            $matchChildUrlPageFilenames = Kwf_Cache_SimpleStatic::fetch('matchChildUrlPageFilenames');
+            if ($matchChildUrlPageFilenames === false) {
+                $matchChildUrlPages = $component->getChildComponents(array(
+                    'page' => true,
+                    'static' => true,
+                    'generatorFlags' => array(
+                        'matchChildUrls' => true
+                    )
+                ));
+                $matchChildUrlPageFilenames = array();
+                foreach ($matchChildUrlPages as $p) {
+                    $matchChildUrlPageFilenames[$p->filename] = $p->componentId;
                 }
+                Kwf_Cache_SimpleStatic::add('matchChildUrlPageFilenames', $matchChildUrlPageFilenames);
+            }
+            $firstPath = strpos($path, '/') !== false ? substr($path, 0, strpos($path, '/')) : $path;
+            if (isset($matchChildUrlPageFilenames[$firstPath])) {
+                $ret = Kwf_Component_Data_Root::getInstance()->getComponentById($matchChildUrlPageFilenames[$firstPath]);
+                return $ret;
             }
             $ret = $component->getChildPageByPath($path);
         }
@@ -92,9 +106,11 @@ class Kwc_Root_Abstract extends Kwc_Abstract implements Kwf_Util_Maintenance_Job
     public static function getMaintenanceJobs()
     {
         return array(
+            'Kwc_Root_MaintenanceJobs_DeleteOldEnquiries',
             'Kwc_Root_MaintenanceJobs_PageMetaUpdate',
             'Kwc_Root_MaintenanceJobs_PageMetaRebuild',
-            'Kwc_Root_MaintenanceJobs_CacheCleanup'
+            'Kwc_Root_MaintenanceJobs_CacheCleanup',
+            'Kwf_Media_CollectGarbageMaintenanceJob'
         );
     }
 }

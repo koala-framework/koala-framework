@@ -6,6 +6,9 @@ class Kwc_Abstract_Cards_Trl_Component extends Kwc_Chained_Trl_Component
         $ret = parent::getSettings($masterComponent);
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
+        $ret['apiContent'] = 'Kwc_Abstract_Cards_Trl_ApiContent';
+        $ret['apiContentType'] = 'cards';
         return $ret;
     }
 

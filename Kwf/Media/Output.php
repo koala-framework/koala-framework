@@ -1,7 +1,7 @@
 <?php
 class Kwf_Media_Output
 {
-    const ENCODING_NONE = 'none';
+    const ENCODING_NONE = 'identity';
     const ENCODING_GZIP = 'gzip';
     const ENCODING_DEFLATE = 'deflate';
 
@@ -60,6 +60,7 @@ class Kwf_Media_Output
     public static function getOutputData($file, array $headers)
     {
         $ret = array('headers' => array());
+        $ret['headers'] = array_merge($ret['headers'], Kwf_Config::getValueArray("kwc.staticHeaders"));
 
         if (!isset($file['contents'])) {
             if (isset($file['file'])) {
@@ -134,7 +135,7 @@ class Kwf_Media_Output
                 $ret['headers'][] = 'Accept-Ranges: bytes';
                 if (isset($headers['Range'])) {
                     $ret['responseCode'] = 206;
-                    $ret['headers'][] = array('Partial Content', true, 206);
+                    $ret['headers'][] = "HTTP/1.1 206 Partial Content";
                 } else {
                     $ret['responseCode'] = 200;
                 }
@@ -145,9 +146,6 @@ class Kwf_Media_Output
 
             if (isset($file['etag'])) {
                 $ret['headers'][] = 'ETag: ' . $file['etag'];
-            } else {
-                //wird benötigt für IE der sonst den download verweigert
-                $ret['headers'][] = 'ETag: tag';
             }
             if (isset($file['mtime'] )) $ret['headers'][] = 'Last-Modified: ' . $lastModifiedString;
             if (isset($file['downloadFilename']) && $file['downloadFilename']) {
@@ -156,6 +154,7 @@ class Kwf_Media_Output
             if (isset($file['filename']) && $file['filename']) {
                 $ret['headers'][] = 'Content-Disposition: inline; filename="' . $file['filename'] . '"';
             }
+            if (isset($file['noindex']) && $file['noindex']) $ret['headers'][] = 'X-Robots-Tag: noindex';
             $encoding = self::ENCODING_NONE;
             if (isset($file['encoding'])) {
                 $encoding = $file['encoding'];
@@ -183,7 +182,9 @@ class Kwf_Media_Output
                 }
             }
             $ret['encoding'] = $encoding;
-            $ret['headers'][] = 'Content-Encoding: ' . $encoding;
+            if ($encoding != self::ENCODING_NONE) {
+                $ret['headers'][] = 'Content-Encoding: ' . $encoding;
+            }
             $ret['headers'][] = 'Content-Type: ' . $file['mimeType'];
             if (!isset($file['contents']) && isset($file['contentsCallback'])) {
                 if (isset($file['cache'])) {

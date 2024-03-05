@@ -17,6 +17,7 @@ class Kwc_Basic_LinkTag_Component extends Kwc_Abstract_Cards_Component
             'intern'   => 'Kwc_Basic_LinkTag_Intern_Component',
             'extern'   => 'Kwc_Basic_LinkTag_Extern_Component',
             'mail'     => 'Kwc_Basic_LinkTag_Mail_Component',
+            'phone'    => 'Kwc_Basic_LinkTag_Phone_Component',
             'download' => 'Kwc_Basic_DownloadTag_Component'
         );
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/LinkTag/ComboBox.js';

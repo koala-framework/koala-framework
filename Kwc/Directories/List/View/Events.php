@@ -56,9 +56,14 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                         $ret[] = array(
                             'class' => $directoryClass,
                             'event' => 'Kwc_Directories_List_EventItemsUpdated',
-                            'callback' => 'onDirectoryModelUpdate'
+                            'callback' => 'onDirectoryUpdate'
                         );
                     }
+                    $ret[] = array(
+                        'class' => $class,
+                        'event' => 'Kwc_Directories_List_EventDirectoryChanged',
+                        'callback' => 'onDirectoryUpdate'
+                    );
                 }
             }
         }
@@ -157,11 +162,13 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
     public function onDirectoryRowUpdate(Kwc_Directories_List_EventItemUpdated $event)
     {
         $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
-        $datas = $gen->getChildData(null, array('id' => $event->itemId));
+        $datas = $gen->getChildData(null, array('id' => $event->itemId, 'subroot' => $event->subroot, 'ignoreVisible' => true));
         $directories = array();
         foreach ($datas as $data) {
             $directory = $data->parent;
-            if (!in_array($directory, $directories)) $directories[] = $directory;
+            if ($directory->isVisible()) {
+                if (!in_array($directory, $directories)) $directories[] = $directory;
+            }
         }
         foreach ($directories as $directory) {
             $this->_fireTagEvent('ContentChanged', $directory);
@@ -174,10 +181,10 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         }
     }
 
-    public function onDirectoryModelUpdate(Kwc_Directories_List_EventItemsUpdated $event)
+    public function onDirectoryUpdate(Kwc_Directories_List_EventAbstract $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class));
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $event->subroot));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class, $event->subroot));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $event->subroot));
     }
 }

@@ -1,18 +1,18 @@
 <?php
-class Kwc_Basic_LinkTag_Event_Form extends Kwc_Abstract_Form
+class Kwc_Basic_LinkTag_Event_Form extends Kwc_Basic_LinkTag_News_Form
 {
-    public function __construct($name, $class, $id = null)
+    protected function _createFilteredField()
     {
-        parent::__construct($name, $class, $id);
-
-        $this->add(new Kwf_Form_Field_Select('event_id', trlKwf('Event')))
+        $events = new Kwf_Form_Field_Select('event_id', trlKwf('Event'));
+        $events
             ->setDisplayField('title')
             ->setPageSize(20)
             ->setStoreUrl(
-                Kwc_Admin::getInstance($class)->getControllerUrl('Events').'/json-data'
+                Kwc_Admin::getInstance($this->getClass())->getControllerUrl('Events').'/json-data'
             )
             ->setListWidth(210)
             ->setAllowBlank(false);
+        return $events;
     }
 
     public function getIsCurrentLinkTag($parentRow)

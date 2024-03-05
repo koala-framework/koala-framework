@@ -32,7 +32,7 @@ class Kwc_Form_Dynamic_Trl_Form extends Kwc_Abstract_Form
 
 class Kwc_Form_Dynamic_Trl_Data extends Kwf_Data_Abstract
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
         if ($c) {

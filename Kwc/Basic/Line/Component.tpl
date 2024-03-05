@@ -1,1 +1,0 @@
-<div class="<?=$this->rootElementClass?>"></div>

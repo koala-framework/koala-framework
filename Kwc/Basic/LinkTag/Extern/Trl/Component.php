@@ -6,7 +6,7 @@ class Kwc_Basic_LinkTag_Extern_Trl_Component extends Kwc_Basic_LinkTag_Abstract_
         $ret = parent::getSettings($masterComponent);
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['dataClass'] = 'Kwc_Basic_LinkTag_Extern_Trl_Data';
+        $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
         return $ret;
     }
-
 }

@@ -75,14 +75,19 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 
     private function _onPageChanged($event, Kwf_Component_Data $data, Kwf_Component_Data $parentData)
     {
-        $menuLevel = $this->_level;
-
         if (!$event instanceof Kwf_Component_Event_Page_ShowInMenuChanged
             && !$data->isShownInMenu()
         ) {
             //ignore pages not shown in menu
             return;
         }
+        $this->_fireMenuEvent($data, $parentData);
+    }
+
+    protected function _fireMenuEvent(Kwf_Component_Data $data, Kwf_Component_Data $parentData = null)
+    {
+        $menuLevel = $this->_level;
+        if (!$parentData) $parentData = $data->parent;
 
         //find category + level the changed page is in
         $level = 0;
@@ -114,7 +119,9 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
                 $data = $data->getPageOrRoot();
                 $menus = $data->getRecursiveChildComponents(array('componentClass'=>$this->_class));
                 foreach ($menus as $m) {
-                    $this->_onMenuChanged($event, $m);
+                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                        $this->_class, $m
+                    ));
                 }
             }
         } else {
@@ -148,7 +155,9 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
                         //get menu that changed
                         foreach ($i->getRecursiveChildComponents(array('componentClass'=>$this->_class)) as $m) {
                             //do what needs to be done if menu item changed
-                            $this->_onMenuChanged($event, $m);
+                            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                                $this->_class, $m
+                            ));
                         }
                     }
                 }

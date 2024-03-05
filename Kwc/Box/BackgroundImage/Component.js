@@ -39,26 +39,4 @@ onReady.onRender('.kwcClass', function(el, config) {
 
     var backgroundResizeOriginalWidth = null;
     var backgroundResizeOriginalHeight = null;
-
-    if (!Modernizr.bgsizecover && innerBackground.length) {
-        var bgUrl = innerBackground.css('background-image');
-        bgUrl = bgUrl.replace(/url\("?(.*?)"?\)/, '$1');
-
-        innerBackground.html('<img src="'+bgUrl+'">');
-        innerBackground.css('background', 'none');
-
-        $(window).resize(function() {
-            checkSize();
-        });
-        var image = new Image();
-        image.src = bgUrl;
-
-        image.onload = function() {
-            backgroundResizeOriginalHeight = image.height;
-            backgroundResizeOriginalWidth = image.width;
-            checkSize();
-            innerBackground.addClass('loaded');
-        };
-        if (image.width) image.onload(); //already loaded, call onload manually
-    }
 }, { defer: true });

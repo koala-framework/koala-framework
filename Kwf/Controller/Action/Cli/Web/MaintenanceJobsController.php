@@ -1,6 +1,12 @@
 <?php
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\LineFormatter;
+
 class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Controller_Action_Cli_Abstract
 {
+    const TIME_TO_KEEP_PREVIOUS_RUNS_IN_DAYS = 7;
+
     public static function getHelp()
     {
         return "execute mainteanance commands, should be run by process-control";
@@ -27,10 +33,16 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             if ($debug) echo "last hourly run: ".date('Y-m-d H:i:s', $lastHourlyRun)."\n";
         }
 
+        $lastCustomRun = array();
+        if (file_exists('temp/maintenance-custom-run')) {
+            $lastCustomRun = json_decode(file_get_contents('temp/maintenance-custom-run'), true);
+        }
+
         $dailyMaintenanceWindowStart = "01:00"; //don't set before 00:00
         $dailyMaintenanceWindowEnd = "05:00";
 
         $nextDailyRun = null;
+        $nextCustomRun = array();
         $lastMinutelyRun = null;
         while (true) {
             if (!$nextDailyRun) {
@@ -56,7 +68,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
                 //discard connection to database to reconnect on next job run
                 //avoids problems with auto closed connections due to inactivity
-                if (function_exists('gc_collect_cycles()')) {
+                if (function_exists('gc_collect_cycles')) {
                     Kwf_Model_Abstract::clearAllRows();
                     Kwf_Model_Abstract::clearInstances();
                     gc_collect_cycles();
@@ -83,7 +95,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
                 //delete runs older than a week
                 $s = new Kwf_Model_Select();
-                $s->where(new Kwf_Model_Select_Expr_Lower('start', new Kwf_DateTime(time()-7*24*60*60)));
+                $s->where(new Kwf_Model_Select_Expr_Lower('start', new Kwf_DateTime(time() - self::getTimeToKeepPreviousRunsInSeconds())));
                 Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel')->deleteRows($s);
             }
 
@@ -96,6 +108,30 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
                 $nextDailyRun = null;
                 Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug, $output);
             }
+
+            Kwf_Component_Data_Root::getInstance()->freeMemory();
+
+            foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobIdentifiers() as $jobIdentifier) {
+                $job = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($jobIdentifier);
+
+                if ($job->getFrequency() == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_CUSTOM) {
+                    $jobClass = get_class($job);
+
+                    if (!array_key_exists($jobClass, $lastCustomRun)) $lastCustomRun[$jobClass] = null;
+                    if (!array_key_exists($jobClass, $nextCustomRun)) $nextCustomRun[$jobClass] = $job->getNextRuntime($lastCustomRun[$jobClass]);
+
+                    if (time() <= $nextCustomRun[$jobClass]) continue;
+
+                    $lastCustomRun[$jobClass] = time();
+                    file_put_contents('temp/maintenance-custom-run', json_encode($lastCustomRun));
+                    $nextCustomRun[$jobClass] = $job->getNextRuntime($lastCustomRun[$jobClass]);
+
+                    if (!$job->hasWorkload()) continue;
+                    if ($debug) echo "execute custom job {$jobClass}\n";
+                    Kwf_Util_Maintenance_Dispatcher::executeJob($jobIdentifier, $debug, $output);
+                }
+            }
+
             sleep(10);
         }
     }
@@ -110,8 +146,8 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     public function showJobsAction()
     {
         echo "List of available jobs:\n";
-        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
-            echo "  ".get_class($job)."\n";
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobIdentifiers() as $jobIdentifier) {
+            echo "  {$jobIdentifier}\n";
         }
         exit;
     }
@@ -119,14 +155,14 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     public function runJobAction()
     {
         $debug = $this->_getParam('debug');
-        $jobClassName = $this->_getParam('job');
-        if (!$jobClassName) {
+        $jobIdentifier = $this->_getParam('job');
+        if (!$jobIdentifier) {
             echo "Missing parameter job.\n";
             exit;
         }
         $jobFound = false;
-        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
-            if (get_class($job) === $jobClassName) {
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobIdentifiers() as $identifier) {
+            if ($identifier === $jobIdentifier) {
                 $jobFound = true;
                 break;
             }
@@ -136,12 +172,8 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             exit;
         }
 
-        $t = microtime(true);
-        $job = new $jobClassName();
-        Kwf_Util_Maintenance_Dispatcher::executeJob($job, $debug, true);
+        Kwf_Util_Maintenance_Dispatcher::executeJob($jobIdentifier, $debug, true);
         Kwf_Events_ModelObserver::getInstance()->process();
-        $t = microtime(true)-$t;
-        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
         exit;
     }
 
@@ -150,8 +182,8 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
         $debug = $this->_getParam('debug');
         $runId = $this->_getParam('runId');
         $runRow = Kwf_Model_Abstract::getInstance('Kwf_Util_Maintenance_JobRunsModel')->getRow($runId);
-        $jobClassName = $runRow->job;
-        $job = new $jobClassName();
+        $jobIdentifier = $runRow->job;
+        $job = Kwf_Util_Maintenance_Job_AbstractBase::getInstance($jobIdentifier);
         $job->setDebug($debug);
         $job->setJobRun($runRow);
 
@@ -170,8 +202,28 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             $runRow->save();
             $job->setProgressBar($progressBar);
         }
-        $job->execute($debug);
+        if ($job instanceof KwfBundle\MaintenanceJobs\AbstractJob) {
+            $logger = new Logger('name');
+            $level = Logger::INFO;
+            if ($debug) {
+                $level = Logger::DEBUG;
+            }
+            $handler = new StreamHandler('php://stdout', $level);
+            $handler->setFormatter(new LineFormatter("%message% %context% %extra%\n", null, true, true));
+            $logger->pushHandler($handler);
+            $job->execute($logger);
+        } else {
+            $job->execute($debug);
+        }
+
         Kwf_Events_ModelObserver::getInstance()->process();
         exit;
+    }
+
+    public static function getTimeToKeepPreviousRunsInSeconds()
+    {
+        $daysFromSettings = Kwf_Config::getValue('maintenanceJobs.timeToKeepPreviousRunsInDays');
+        $resolvedDays = (intval($daysFromSettings) >= 1) ? intval($daysFromSettings) : self::TIME_TO_KEEP_PREVIOUS_RUNS_IN_DAYS; // force minimum to be one day
+        return $resolvedDays * 24 * 60 * 60;
     }
 }

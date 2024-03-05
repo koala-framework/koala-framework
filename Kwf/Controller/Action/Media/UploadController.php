@@ -9,7 +9,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         return parent::_isAllowedResource();
     }
 
-    protected function _validateSessionToken()
+    protected function _validateCsrf()
     {
     }
 
@@ -19,6 +19,30 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
         foreach ($acl->getAllResources() as $resource) {
             if ($resource instanceof Kwf_Acl_Resource_MediaUpload && $acl->isAllowed(Kwf_Registry::get('userModel')->getAuthedUserRole(), $resource)) {
+                $allowed = true;
+                if ($resource->getMimeTypePattern() && !preg_match('#'.$resource->getMimeTypePattern().'#', $mimeType)) {
+                    $allowed = false;
+                }
+                if ($resource->getFilenamePattern() && !preg_match('#'.$resource->getFilenamePattern().'#', $filename)) {
+                    $allowed = false;
+                }
+                if ($resource->getMaxFilesize() && $filesize > $resource->getMaxFilesize()) {
+                    $allowed = false;
+                }
+                if ($allowed) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private function _isDownloadAllowed($mimeType, $filename, $filesize)
+    {
+        $acl = Kwf_Acl::getInstance();
+
+        foreach ($acl->getAllResources() as $resource) {
+            if ($resource instanceof Kwf_Acl_Resource_MediaDownload && $acl->isAllowed(Kwf_Registry::get('userModel')->getAuthedUserRole(), $resource)) {
                 $allowed = true;
                 if ($resource->getMimeTypePattern() && !preg_match('#'.$resource->getMimeTypePattern().'#', $mimeType)) {
                     $allowed = false;
@@ -332,6 +356,10 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
             ->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Kwf_Exception("Can't find upload");
+
+        if (!$this->_isDownloadAllowed($fileRow->mime_type, $fileRow->filename . '.' . $fileRow->extension, $fileRow->getFileSize())) {
+            throw new Kwf_Exception_Client(trlKwf("Download not allowed."));
+        }
 
         if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
             throw new Kwf_Exception_AccessDenied();

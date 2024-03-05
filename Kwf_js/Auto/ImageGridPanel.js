@@ -16,9 +16,9 @@ Kwf.Auto.ImageGridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
                 '<tpl for=".">',
                     '<div class="thumb-wrap">',
                         '<table class="thumb" cellpadding="0" cellspacing="3" border="0"><tr><td>',
-                            '<tpl if="src"><img src="{src}" alt="{label}" /></tpl>',
+                            '<tpl if="src"><img src="{src:htmlEncode}" alt="{label:htmlEncode}" /></tpl>',
                         '</td></tr></table>',
-                        '<div class="label">{label_short}</div>',
+                        '<div class="label">{label_short:htmlEncode}</div>',
                     '</div>',
                 '</tpl>',
                 '<div class="x2-clear"></div>'
@@ -28,8 +28,8 @@ Kwf.Auto.ImageGridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         if (!this.bigPreviewTpl) {
             this.bigPreviewTpl = new Ext2.XTemplate(
                 '<div class="big-wrap">',
-                    '<div class="label">{label}</div>',
-                    '<div class="imageBig"><img src="{src_large}" alt="{label}" width="{src_large_width}" height="{src_large_height}" /></div>',
+                    '<div class="label">{label:htmlEncode}</div>',
+                    '<div class="imageBig"><img src="{src_large:htmlEncode}" alt="{label:htmlEncode}" width="{src_large_width:htmlEncode}" height="{src_large_height:htmlEncode}" /></div>',
                 '</div>'
             );
         }

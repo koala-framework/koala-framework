@@ -246,7 +246,8 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
             proxy: new Ext2.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
             reader: reader,
             sortInfo: meta.sortInfo,
-            remoteSort: false
+            remoteSort: false,
+            pruneModifiedRecords: true
         };
         this.store = new Ext2.data.Store(storeConfig);
         if (this.baseParams) {
@@ -409,6 +410,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
                         url: this.controllerUrl+'/json-delete',
                         params: params,
                         success: function(response, options, r) {
+                            this.fireEvent('datachange');
                         },
                         callback: function() {
                             this._hideLoading();

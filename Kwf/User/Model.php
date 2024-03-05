@@ -78,6 +78,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     
     public function loginUserRow($row, $logLogin)
     {
+        $session = Kwf_Auth::getInstance()->getStorage()->read();
+        if (isset($session['userId']) && $session['userId'] == $row->id) return;
+
         Kwf_Session::regenerateId();
         Kwf_Auth::getInstance()->getStorage()->write(array(
             'userId' => $row->id
@@ -105,7 +108,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         return true;
     }
 
-    public function getUserActivationUrl($row)
+    public function getUserActivationUrl($row, $redirectUrl = false)
     {
         $root = Kwf_Component_Data_Root::getInstance();
         $activateComponent = null;
@@ -123,9 +126,15 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
-        $activateUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
+        $activateUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://' . $host . '/kwf/user/login/activate';
         if ($activateComponent) $activateUrl = $activateComponent->getAbsoluteUrl();
-        return $activateUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
+        $params = array(
+            'code' => $row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE)
+        );
+        if ($redirectUrl) {
+            $params['redirect'] = $redirectUrl;
+        }
+        return $activateUrl.'?'.http_build_query($params);
     }
 
     public function getUserLostPasswordUrl($row)
@@ -146,7 +155,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
-        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
+        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://' . $host . '/kwf/user/login/activate';
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl();
         return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_LOSTPASSWORD);
     }
@@ -223,7 +232,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
 
         $loginData = Kwf_Auth::getInstance()->getStorage()->read();
         if (!$loginData || !isset($loginData['userId']) || !$loginData['userId']) {
-            return null;
+            return $this->_authedUser ? $this->_authedUser->id : null;
         }
         return $loginData['userId'];
     }
@@ -241,6 +250,11 @@ class Kwf_User_Model extends Kwf_Model_RowCache
             }
         }
         return $this->_authedUser;
+    }
+
+    public function setAuthedUser($userRow)
+    {
+        $this->_authedUser = $userRow;
     }
 
     public function clearAuthedUser()
@@ -264,6 +278,12 @@ class Kwf_User_Model extends Kwf_Model_RowCache
 
     public function getAuthedChangedUserRole()
     {
+        $user = $this->getAuthedChangedUser();
+        return $user ? $user->role : 'guest';
+    }
+
+    public function getAuthedChangedUser()
+    {
         $storage = Kwf_Auth::getInstance()->getStorage();
         $loginData = $storage->read();
         $userId = false;
@@ -273,11 +293,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache
             $userId = $loginData['userId'];
         }
         if ($userId && ($user = $this->getRow($userId))) {
-            $role = $user->role;
-        } else {
-            $role = 'guest';
+            return $user;
         }
-        return $role;
+        return null;
     }
 
     public function changeUser($user)

@@ -31,19 +31,14 @@ class Kwf_Media
         }
         $class = rawurlencode($class);
         $checksum = self::getChecksum($class, $id, $checksumType, rawurlencode($filename));
-        $prefix = Kwf_Setup::getBaseUrl();
+        $prefix = '';
         if ($r = Kwf_Component_Data_Root::getInstance()) {
             if ($r->filename) {
-                $prefix .= '/'.$r->filename;
+                $prefix = '/'.$r->filename;
             }
         }
         if (is_null($time)) {
-            $cacheId = 'mtime-'.self::createCacheId($class, $id, $type);
-            $time = Kwf_Media_OutputCache::getInstance()->load($cacheId);
-            if (!$time) {
-                $time = time();
-                Kwf_Media_OutputCache::getInstance()->save($time, $cacheId);
-            }
+            $time = Kwf_Media_MtimeCache::getInstance()->loadOrCreate($class, $id, $type);
         }
         return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.rawurlencode($filename);
     }
@@ -135,7 +130,7 @@ class Kwf_Media
         foreach ($types as $type) {
             $cacheId = self::createCacheId($class, $id, $type);
             Kwf_Media_OutputCache::getInstance()->remove($cacheId);
-            Kwf_Media_OutputCache::getInstance()->remove('mtime-'.$cacheId);
+            Kwf_Media_MtimeCache::getInstance()->remove($class, $id, $type);
             //not required to delete cache/media/$cacheId, that will be regenerated if $cacheId is deleted
         }
     }
@@ -196,12 +191,12 @@ class Kwf_Media
                     $output['mtime'] = time();
                 }
             }
-            if ($useCache) {
+            $disableMediaCache = array_key_exists('disableMediaCache', $output) && $output['disableMediaCache'];
+            if (!$disableMediaCache && $useCache) {
                 if (isset($output['contents']) && strlen($output['contents']) > 20*1024) {
                     //don't cache contents larger than 20k in apc, use separate file cache
-                    $groupingFolder = substr(md5($id), 0, 2);
-                    $cacheFileName = Kwf_Config::getValue('mediaCacheDir').'/'.$class.'/'.$groupingFolder.'/'.$id.'/'.$type;
-                    if (!is_dir(dirname($cacheFileName))) @mkdir(dirname($cacheFileName), 0777, true);
+                    $cacheFileName = self::_generateCacheFilePath($class, $id, $type);
+                    if (!is_dir(dirname($cacheFileName))) mkdir(dirname($cacheFileName), 0777, true);
                     file_put_contents($cacheFileName, $output['contents']);
                     $output['file'] = $cacheFileName;
                     unset($output['contents']);
@@ -218,5 +213,69 @@ class Kwf_Media
     public static function createCacheId($class, $id, $type)
     {
         return str_replace(array('.', '>'), array('___', '____'), $class) . '_' . str_replace('-', '__', $id) . '_' . $type;
+    }
+
+    private static function _generateCacheFilePath($class, $id, $type)
+    {
+        $groupingFolder = substr(md5($id), 0, 3);
+        return Kwf_Config::getValue('mediaCacheDir').'/'.$class.'/'.$groupingFolder.'/'.$id.'/'.$type;
+    }
+
+    private static function _deleteFolder($path)
+    {
+        foreach (array_slice(scandir($path), 2) as $fileOrFolder) {
+            $fileOrFolderPath = $path.'/'.$fileOrFolder;
+            if (is_file($fileOrFolderPath)) {
+                unlink($fileOrFolderPath);
+            } else {
+                self::_deleteFolder($fileOrFolderPath);
+            }
+        }
+        rmdir($path);
+    }
+
+    public static function collectGarbage($debug)
+    {
+        $cacheFolder = Kwf_Config::getValue('mediaCacheDir');
+        // get all folders, except . and .. (array_slice)
+        $mediaClasses = array_slice(scandir($cacheFolder), 2);
+        foreach ($mediaClasses as $mediaClass) {
+            if (is_file($cacheFolder.'/'.$mediaClass)) continue;
+
+            // Classname without dot
+            $class = strpos($mediaClass, '.') ? substr($mediaClass, 0, strpos($mediaClass, '.')) : $mediaClass;
+
+            if (!class_exists($class)) {
+                self::_deleteFolder($cacheFolder.'/'.$mediaClass);
+                continue;
+            }
+
+            if (!is_instance_of($mediaClass, 'Kwf_Media_Output_ClearCacheInterface')) continue;
+
+            $classFolder = $cacheFolder.'/'.$mediaClass;
+            $groups = array_slice(scandir($classFolder), 2);
+            foreach ($groups as $group) {
+                // only check randomly one out of ten to improve performance
+                if (rand(0, 9) !== 0) continue;
+
+                $groupFolder = $classFolder . '/' . $group;
+                $ids = array_slice(scandir($groupFolder), 2);
+                foreach ($ids as $id) {
+                    $idFolder = $groupFolder . '/' . $id;
+                    if (is_file($idFolder)) continue; // something old...
+
+                    $canCacheBeDeleted = call_user_func(array($class, 'canCacheBeDeleted'), $id);
+                    if (!$canCacheBeDeleted) continue;
+
+                    $types = array_slice(scandir($idFolder), 2);
+                    foreach ($types as $type) {
+                        unlink(realpath($idFolder . '/' . $type));
+                        $cacheId = self::createCacheId($mediaClass, $id, $type);
+                        Kwf_Media_OutputCache::getInstance()->remove($cacheId);
+                    }
+                    rmdir(realpath($idFolder));
+                }
+            }
+        }
     }
 }

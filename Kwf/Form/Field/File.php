@@ -12,6 +12,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         $this->setFrontendButtonText(trlKwfStatic('Browse').'...');
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
+        $this->setAllowOnlySvg(false);
         $this->setMaxResolution(false);
         $this->setDropText(trlKwfStatic('Drop your file here'));
         $this->setXtype('kwf.file');
@@ -63,7 +64,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         if ($fileRow) {
             $return = $fileRow->getFileInfo();
         } else {
-            $return = '';
+            $return = array();
         }
         return array($this->getFieldName() => $return);
     }
@@ -87,6 +88,11 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
                 if ($this->getAllowOnlyImages() && !$row->getImageDimensions()) {
                     $ret[] = array(
                         'message' => trlKwf('Only png, gif and jpeg supported.'),
+                        'field' => $this
+                    );
+                } else if ($this->getAllowOnlySvg() && $row->mime_type !== 'image/svg+xml') {
+                    $ret[] = array(
+                        'message' => trlKwf('Only svg supported.'),
                         'field' => $this
                     );
                 }
@@ -170,9 +176,9 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         $ret = parent::getTemplateVars($values, $namePostfix, $idPrefix);
         $fileSizeLimit = $this->getFileSizeLimit();
 
-        $name = htmlspecialchars($name);
+        $name = Kwf_Util_HtmlSpecialChars::filter($name);
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
-        $ret['html']  = "<div class=\"kwfFormFieldFileInnerImg\">\n";
+        $ret['html']  = "<div class=\"kwfUp-kwfFormFieldFileInnerImg\">\n";
         if ($value) {
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
                         " value=\"$value[uploadId]_$value[hashKey]\" />";
@@ -182,31 +188,31 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
             }
         }
         $ret['html'] .= '</div>';
-        $ret['html'] .= "<div class=\"kwfFormFieldFileInnerContent\">\n";
-        $ret['html'] .= '<div class="kwfFormFieldFieldDropText">'.$this->getDropText().'</div>';
-        $ret['html'] .= "<div class=\"imagePath kwfFormFieldFileUploadWrapper\">\n";
-            $ret['html'] .= "<input class=\"fileSelector\" type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
+        $ret['html'] .= "<div class=\"kwfUp-kwfFormFieldFileInnerContent\">\n";
+        $ret['html'] .= '<div class="kwfUp-kwfFormFieldFieldDropText">'.$this->getDropText().'</div>';
+        $ret['html'] .= "<div class=\"kwfUp-imagePath kwfUp-kwfFormFieldFileUploadWrapper\">\n";
+            $ret['html'] .= "<input class=\"kwfUp-fileSelector\" type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
                             " data-file-size-limit=\"$fileSizeLimit\" ".
                             " style=\"width: {$this->getWidth()}px\" onchange=\"document.getElementById(this.id+'_underlayText').value = this.value;\" />";
-            $ret['html'] .= '<div class="underlayFileSelector">';
-            $ret['html'] .= '<input type="text" id="'.$ret['id'].'_underlayText" class="kwfFormFieldFileUnderlayText" style="width: '.$this->getWidth().'px;" />';
-            $ret['html'] .= ' <a href="#" class="kwfFormFieldFileUploadButton" onclick="return false;">'.$this->getFrontendButtonText().'</a>';
+            $ret['html'] .= '<div class="kwfUp-underlayFileSelector">';
+            $ret['html'] .= '<input type="text" id="'.$ret['id'].'_underlayText" class="kwfUp-kwfFormFieldFileUnderlayText" style="width: '.$this->getWidth().'px;" />';
+            $ret['html'] .= ' <a href="#" class="kwfUp-kwfFormFieldFileUploadButton" onclick="return false;">'.$this->getFrontendButtonText().'</a>';
             $ret['html'] .= '</div>';
         $ret['html'] .= '</div>';
         if ($value) {
-            $ret['html'] .= "<div class=\"imageTitle\">\n";
+            $ret['html'] .= "<div class=\"kwfUp-imageTitle\">\n";
             $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
             $helper = new Kwf_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
             $ret['html'] .= '</div>';
-            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlKwf("Delete").'</button></div>';
+            $ret['html'] .= '<div class="kwfUp-deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlKwf("Delete").'</button></div>';
             $uploadId = $value['uploadId'];
             $hashKey = '_'.$value['hashKey'];
         } else {
             $uploadId = '0';
             $hashKey = '';
         }
-        $ret['html'] .= "<input type=\"hidden\" class=\"kwfUploadIdField\" name=\"{$name}_upload_id{$namePostfix}\" ".
+        $ret['html'] .= "<input type=\"hidden\" class=\"kwfUp-kwfUploadIdField\" name=\"{$name}_upload_id{$namePostfix}\" ".
                     " value=\"$uploadId$hashKey\" />";
         $ret['html'] .= '</div>';
         return $ret;

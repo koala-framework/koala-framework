@@ -1,10 +1,6 @@
 <?php
 class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
 {
-    protected function _validateSessionToken()
-    {
-    }
-
     public function jsonSaveAction()
     {
         $postData = $this->getRequest()->getParams();
@@ -14,9 +10,7 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
             ->getComponentById((string)$postData['componentId'], array('ignoreVisible' => true));
         if (!$component) throw new Kwf_Exception_Client('component not found');
         $component = $component->getComponent();
-        $postData['doNotRelocate'] = true;
-        $component->preProcessInput($postData);
-        $component->processInput($postData);
+        $component->processAjaxInput($postData);
 
         $errors = $component->getErrors();
         $this->view->errorPlaceholder = $component->getPlaceholder('error');
@@ -28,7 +22,7 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
             }
             $msgs = array();
             foreach ($error['messages'] as $msg) {
-                $msgs[] = htmlspecialchars($msg);
+                $msgs[] = Kwf_Util_HtmlSpecialChars::filter($msg);
             }
             if (isset($error['field'])) {
                 //if message is associated with a specific field show it there

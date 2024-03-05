@@ -22,11 +22,11 @@ Kwf.Form.File = Ext2.extend(Ext2.form.Field, {
         'application/mspowerpoint': 'page_white_powerpoint',
         'default': 'page_white'
     },
-    previewTpl: ['<div class="hover-background"></div><a href="{href}" target="_blank" class="previewImage" ',
+    previewTpl: ['<div class="hover-background"></div><a href="{href:htmlEncode}" target="_blank" class="previewImage" ',
                  'style="width: {previewWidth}px; height: {previewHeight}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
     // also usable in infoTpl: {href} {filename}.{extension}
     infoTpl: ['<div class="filedescription">',
-              '<div class="filesize"><tpl if="image">{imageWidth}x{imageHeight}px, </tpl>',
+              '<div class="filesize"><tpl if="image">{imageWidth:htmlEncode}x{imageHeight:htmlEncode}px, </tpl>',
               '{fileSize:fileSize}</div></div>'],
     emptyTpl: ['<div class="empty" style="height: {previewHeight}px; width: {previewWidth}px; text-align: center;line-height:{previewHeight}px">('+trlKwf('empty')+')</div>'],
 

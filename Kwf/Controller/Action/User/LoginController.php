@@ -1,17 +1,6 @@
 <?php
 class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 {
-    protected function _validateSessionToken()
-    {
-        if ($this->getRequest()->getActionName() != 'json-logout-user'
-            && $this->getRequest()->getActionName() != 'json-login-user'
-            && $this->getRequest()->getActionName() != 'json-get-session-token'
-            && $this->getRequest()->getActionName() != 'json-keep-alive'
-        ) {
-            parent::_validateSessionToken();
-        }
-    }
-
     protected function _isAllowedResource()
     {
         return true;
@@ -91,14 +80,13 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $this->_helper->viewRenderer->setRender('Login');
         $this->view->ext('');
         $this->view->username = '';
-        $this->view->action = Kwf_Setup::getBaseUrl().'/kwf/user/login/show-form';
+        $this->view->action = '/kwf/user/login/show-form';
         if ($this->_getParam('username')) {
             $result = $this->_login();
             $this->view->username = $this->_getParam('username');
             if ($result->isValid()) {
                 $this->view->text  = trlKwf('Login successful');
                 $this->view->text .= '<!--successful-->';
-                $this->view->text .= '<!--sessionToken:'.Kwf_Util_SessionToken::getSessionToken().':-->';
                 $this->view->cssClass = 'kwfLoginResultSuccess';
             } else {
                 if ($result->getCode() == Zend_Auth_Result::FAILURE_UNCATEGORIZED) {
@@ -153,14 +141,23 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             return;
         }
 
-        $state = $this->_getParam('state');
+        $state = explode('.', $this->_getParam('state'));
 
-        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
-        if (!$ns->state || $state != $ns->state) {
+        if (!isset($_COOKIE['kwf-login-redirect']) || $this->_getParam('state') != $_COOKIE['kwf-login-redirect']) {
+            if (count($state) == 5 && strpos($state[0], 'activate') === 0) {
+                $redirect = urldecode(str_replace('kwfdot', '.', $state[4]));
+                if ($redirect !== 'jsCallback') {
+                    Kwf_Util_Redirect::redirect($redirect);
+                }
+            }
+            if (count($state) == 4 && strpos($state[0], 'login') === 0) {
+                $redirect = urldecode(str_replace('kwfdot', '.', $state[3]));
+                if ($redirect !== 'jsCallback') {
+                    Kwf_Util_Redirect::redirect($redirect);
+                }
+            }
             throw new Kwf_Exception("Invalid state");
         }
-
-        $state = explode('.', $state);
 
         if (count($state) < 3) throw new Kwf_Exception_NotFound();
         $action = $state[0]; //login or activate
@@ -175,11 +172,11 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $user = null;
         if ($action == 'login') {
             if (count($state) != 4) throw new Kwf_Exception_NotFound();
-            $redirect = str_replace('kwfdot', '.', $state[3]);
+            $redirect = urldecode(str_replace('kwfdot', '.', $state[3]));
             try {
                 $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
             } catch (Kwf_Exception_Client $e) {
-                $this->getRequest()->setParam('redirect', $redirect);
+                $this->getRequest()->setParam('redirect', urlencode($redirect));
                 $this->getRequest()->setParam('errorMessage', $e->getMessage());
                 $this->forward('error');
                 return;
@@ -192,7 +189,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             }
             $userId = $m[1];
             $code = $m[2];
-            $redirect = str_replace('kwfdot', '.', $state[4]);
+            $redirect = urldecode(str_replace('kwfdot', '.', $state[4]));
             $user = $users->getRow($userId);
             $this->getRequest()->setParam('user', $user);
             if (!$user) {
@@ -216,16 +213,20 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             $users->loginUserRow($user, true);
             if ($redirect == 'jsCallback') {
                 echo "<script type=\"text/javascript\">\n";
-                echo "window.opener.ssoCallback('".Kwf_Util_SessionToken::getSessionToken()."');\n";
+                echo "window.opener.ssoCallback();\n";
                 echo "window.close();\n";
                 echo "</script>\n";
                 exit;
             } else {
-                Kwf_Util_Redirect::redirect($redirect);
+                // Redirect with js to break redirect-chain and allow browser to send session-cookie
+                echo "<script type=\"text/javascript\">\n";
+                echo "window.location.href = \"".$redirect."\";\n";
+                echo "</script>\n";
+                exit;
             }
         } else {
             $label = $authMethods[$authMethod]->getLoginRedirectLabel();
-            $this->getRequest()->setParam('redirect', $redirect);
+            $this->getRequest()->setParam('redirect', urlencode($redirect));
             $this->getRequest()->setParam('errorMessage',
                 trlKwf("Can't login user, {0} account is not associated with {1}.",
                     array(
@@ -263,7 +264,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
                 $user = $user['user'];
             }
             $users->loginUserRow($user, true);
-            if (!$redirect) $redirect = Kwf_Setup::getBaseUrl().'/';
+            if (!$redirect) $redirect = '/';
             Kwf_Util_Redirect::redirect($redirect);
         } else {
             throw new Kwf_Exception_AccessDenied();
@@ -283,7 +284,6 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         if (!$result->isValid()) {
             $this->view->error = implode("<br />", $result->getMessages());
         }
-        $this->view->sessionToken = Kwf_Util_SessionToken::getSessionToken();
     }
 
     public function jsonLogoutUserAction()
@@ -326,11 +326,6 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
     public function jsonKeepAliveAction()
     {
         //do nothing
-    }
-
-    public function jsonGetSessionTokenAction()
-    {
-        $this->view->sessionToken = Kwf_Util_SessionToken::getSessionToken();
     }
 
     public function errorAction()

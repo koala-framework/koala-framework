@@ -39,26 +39,42 @@
     <?php echo $this->debugData() ?>
     <?php echo $this->assets($this->ext['assetsPackage']) ?>
 
+    <div id="<?=$this->uniquePrefix?>extconfig"
+        <?php if (isset($this->ext['user'])) { ?>
+            data-user="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['user']) ?>"
+        <?php } ?>
+        data-user-role="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['userRole']) ?>"
+        <?php if ($this->ext['class']) { ?>
+            data-ext-class="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['class']) ?>"
+        <?php } ?>
+        data-ext-config="<?= Kwf_Util_HtmlSpecialChars::filter(json_encode($this->ext['config'])) ?>"
+        data-ext-viewport="<?= Kwf_Util_HtmlSpecialChars::filter($this->ext['viewport']) ?>"
+    ></div>
+
     <script type="text/javascript">
     (function() {
         <?php /* TODO if ($this->uniquePrefix) { ?>
         var Kwf = <?=$this->uniquePrefix?>.Kwf;
         var Ext2 = <?=$this->uniquePrefix?>.Ext2;
         <?php }*/ ?>
-        <?php if (isset($this->ext['user'])) { ?>
-        Kwf.user = '<?= $this->ext['user'] ?>';
-        <?php } ?>
-        Kwf.userRole = '<?= $this->ext['userRole'] ?>';
-        <?php if (isset($this->sessionToken)) { ?>
-        Kwf.sessionToken = '<?= $this->sessionToken ?>';
-        <?php } ?>
+
+        var configEl = document.getElementById('<?=$this->uniquePrefix?>extconfig');
+        configEl.parentNode.removeChild(configEl);
+
+        Kwf.userRole = configEl.getAttribute('data-user-role');
+        Kwf.user = configEl.getAttribute('data-user');
         Kwf.main = function() {
-            <?php if ($this->ext['class']) { ?>
-            var panel = new <?= $this->ext['class'] ?>(<?= Zend_Json::encode($this->ext['config']) ?>);
-            <?php } else { ?>
-            var panel = <?= Zend_Json::encode($this->ext['config']) ?>;
-            <?php } ?>
-            Kwf.currentViewport = new <?= $this->ext['viewport'] ?>({
+            var extClass = configEl.getAttribute('data-ext-class');
+            var extConfig = JSON.parse(configEl.getAttribute('data-ext-config'));
+            var extViewport = configEl.getAttribute('data-ext-viewport');
+
+            var panel;
+            if (extClass) {
+                panel = new (eval(extClass))(extConfig);
+            } else {
+                panel = extConfig;
+            }
+            Kwf.currentViewport = new (eval(extViewport))({
                 items: [panel]
             });
             if((!Kwf.Connection || Kwf.Connection.masks == 0)  && Ext2.get('loading')) {

@@ -46,34 +46,25 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
     public function getCardForms()
     {
         $ret = array();
-        $news = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_News_Directory_Component', array('ignoreVisible'=>true));
-        foreach ($news as $new) {
-            if (is_instance_of($new->componentClass, 'Kwc_Events_Directory_Component')) continue;
-            $form = Kwc_Abstract_Form::createComponentForm($this->_class, 'child');
-            $form->fields['news_id']->setBaseParams(array('newsComponentId'=>$new->dbId));
-            $form->fields['news_id']->setFieldLabel($new->getPage()->name);
-            $form->fields['news_id']->setData(new Kwc_Basic_LinkTag_News_NewsIdData());
-            $ret[$new->dbId] = array(
-                'form' => $form,
-                'title' => count($news) > 1 ? $new->getTitle() : trlKwf('News')
+
+        foreach ($this->getDirectoryComponentClasses() as $class) {
+            $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($class, 'componentName'));
+            $name = str_replace('.', ' ', $name);
+            $ret[$class] = array(
+                'form' => Kwc_Abstract_Form::createComponentForm($this->_class, 'child'),
+                'title' => $name
             );
         }
+
         return $ret;
     }
 
-    public function getVisibleCardForms($cardDbId)
+    public function getDirectoryComponentClasses()
     {
-        $ret = array();
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($cardDbId, array('ignoreVisible'=>true)) as $card) {
-            $news = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsByClass('Kwc_News_Directory_Component', array('subroot'=>$card, 'ignoreVisible'=>true));
-            foreach ($news as $new) {
-                if (is_instance_of($new->componentClass, 'Kwc_Events_Directory_Component')) continue;
-                if (!in_array($new->dbId, $ret)) {
-                    $ret[] = $new->dbId;
-                }
-            }
+        $classes = Kwc_Abstract::getComponentClassesByParentClass('Kwc_News_Directory_Component');
+        foreach ($classes as $class) {
+            if (is_instance_of($class, 'Kwc_Events_Directory_Component')) continue;
+            $ret[] = $class;
         }
         return $ret;
     }

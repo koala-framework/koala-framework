@@ -1,11 +1,4 @@
-@import "compass/css3/transition";
-@import "compass/css3/box-shadow";
-
 .kwfUtilsStickyHeader {
-   @include transition-property(all);
-   @include transition-duration(0.6s);
-
-   &.stick {
-        @include single-box-shadow;
-    }
+    transition-property: all;
+    transition-duration: 0.6s;
 }

@@ -2,9 +2,9 @@ Kwf.Form.ImageViewer = Ext2.extend(Kwf.Form.ShowField,
 {
     tpl: '<tpl if="previewUrl">'+
             '<tpl if="imageUrl">'+
-                '<a href="{imageUrl}" target="_blank">'+
+                '<a href="{imageUrl:htmlEncode}" target="_blank">'+
             '</tpl>'+
-            '<img src="{previewUrl}" />'+
+            '<img src="{previewUrl:htmlEncode}" />'+
             '<tpl if="imageUrl">'+
                 '</a>'+
             '</tpl>'+

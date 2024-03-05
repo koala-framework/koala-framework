@@ -8,7 +8,7 @@ class Kwf_Acl extends Zend_Acl
      */
     protected $_componentAcl;
     protected $_kwcResourcesLoaded = false;
-
+    protected $_maxUploadFileSizeInMB = 10;
 
     public static function getInstance()
     {
@@ -56,7 +56,6 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('kwf_debug_assets-dependencies'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_benchmark'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_benchmark-counter'));
-        $this->add(new Zend_Acl_Resource('kwf_media_upload'));
         $this->add(new Zend_Acl_Resource('kwf_media_post-back'));
         $this->add(new Zend_Acl_Resource('edit_role'));
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_admin', 'admin'), 'edit_role');
@@ -64,6 +63,8 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Kwf_Acl_Resource_UserSelf('kwf_user_self', '/kwf/user/self'));
 
         $this->add(new Zend_Acl_Resource('kwf_spam_set'));
+
+        $this->_addMediaUploadAllowList();
 
         $this->allow(null, 'default_index');
         $this->deny('guest', 'default_index');
@@ -76,9 +77,7 @@ class Kwf_Acl extends Zend_Acl
         $this->allow(null, 'kwf_user_self');
         $this->deny('guest', 'kwf_user_self');
         $this->allow('admin', 'kwf_debug');
-        $this->allow(null, 'kwf_media_upload');
         $this->allow(null, 'kwf_media_post-back');
-        $this->deny('guest', 'kwf_media_upload');
         $this->deny('guest', 'kwf_media_post-back');
         $this->allow('admin', 'edit_role');
         $this->allow(null, 'kwf_spam_set');
@@ -228,6 +227,12 @@ class Kwf_Acl extends Zend_Acl
             }
         }
         return $ret;
+    }
+
+    public function getParentResource($resource) {
+        if (!$this->get($resource)) throw new Kwf_Exception('Resource not found: ' . $resource);
+        $parent = $this->_resources[$this->get($resource)->getResourceId()]['parent'];
+        return $parent ? $this->get($parent) : null;
     }
 
     public function getAllResources()
@@ -557,5 +562,104 @@ class Kwf_Acl extends Zend_Acl
         $this->_resources[$resourceId]['parent'] = $resourceParent;
 
         return $this;
+    }
+
+    protected function _addMediaUploadAllowList()
+    {
+        $allowedMimeTypePatterns = array();
+        $allowedFileNamePatterns = array();
+        foreach ($this->_getMediaUploadAllowList() as $key => $config) {
+            if (!isset($config['mimeTypePattern']) || !isset($config['fileNamePattern'])) {
+                continue;
+            }
+            // one invalid regex will destroy the entire chain, check for validity
+            $isValidRegex = true;
+            set_error_handler(function() {}, E_WARNING);
+            if (preg_match('/('.$config['mimeTypePattern'].'|'.$config['fileNamePattern'].')/', '') === false)  {
+                $isValidRegex = false;
+            }
+            restore_error_handler();
+            if (!$isValidRegex) {
+                throw new Kwf_Exception("getMediaUploadAllowList() key \"$key\" contains an invalid pattern");
+            }
+            $allowedMimeTypePatterns[] = $config['mimeTypePattern'];
+            $allowedFileNamePatterns[] = $config['fileNamePattern'];
+        }
+        $this->addResource(new Kwf_Acl_Resource_MediaUpload(
+            'kwf_media_upload',
+            '('.implode(')|(', $allowedMimeTypePatterns).')',
+            '('.implode(')|(', $allowedFileNamePatterns).')',
+            $this->_maxUploadFileSizeInMB * 1024 * 1024
+        ));
+    }
+
+    protected function _getMediaUploadAllowList()
+    {
+        return array(
+            'pdf' => array(
+                'mimeTypePattern' => '^application\/pdf$',
+                'fileNamePattern' => '\.(pdf|PDF)$'
+            ),
+            'png' => array(
+                'mimeTypePattern' => '^image\/png$',
+                'fileNamePattern' => '\.(png|PNG)$'
+            ),
+            'jpg' => array(
+                'mimeTypePattern' => '^image\/jpeg$',
+                'fileNamePattern' => '\.(jpe?g|JPE?G)$'
+            ),
+            'msOffice' => array(
+                'mimeTypePattern' => '^application\/vnd\.ms\-office$',
+                'fileNamePattern' => '\.(doc|DOC|docx|DOCX|xls|xlsx|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|ppsx|PPSX)$'
+            ),
+            'doc' => array(
+                'mimeTypePattern' => '^application\/msword$',
+                'fileNamePattern' => '\.(doc|DOC)$'
+            ),
+            'docx' => array(
+                'mimeTypePattern' => '^application\/vnd\.openxmlformats\-officedocument\.wordprocessingml\.document$',
+                'fileNamePattern' => '\.(docx|DOCX)$',
+            ),
+            'xls' => array(
+                'mimeTypePattern' => '^application\/vnd\.ms\-excel$',
+                'fileNamePattern' => '\.(xls|xlsx)$'
+            ),
+            'xlsx' => array(
+                'mimeTypePattern' => '^application\/vnd\.openxmlformats\-officedocument\.spreadsheetml\.sheet$',
+                'fileNamePattern' => '\.(xlsx|XLSX)$'
+            ),
+            'ppt' => array(
+                'mimeTypePattern' => '^application\/vnd\.ms\-powerpoint$',
+                'fileNamePattern' => '\.(ppt|PPT)$'
+            ),
+            'pptx' => array(
+                'mimeTypePattern' => '^application\/vnd\.openxmlformats\-officedocument\.presentationml\.presentation$',
+                'fileNamePattern' => '\.(pptx|PPTX)$'
+            ),
+            'pps' => array(
+                'mimeTypePattern' => '^application\/vnd\.ms\-powerpoint$',
+                'fileNamePattern' => '\.(pps|PPS)$'
+            ),
+            'ppsx' => array(
+                'mimeTypePattern' => '^application\/vnd\.openxmlformats\-officedocument\.presentationml\.slideshow$',
+                'fileNamePattern' => '\.(ppsx|PPSX)$',
+            ),
+            'mp4' => array(
+                'mimeTypePattern' => '^video\/mp4$',
+                'fileNamePattern' => '\.(mp4|MP4)$'
+            ),
+            'mpeg' => array(
+                'mimeTypePattern' => '^video\/mpeg$',
+                'fileNamePattern' => '\.(mpeg|MPEG)$'
+            ),
+            'mov' => array(
+                'mimeTypePattern' => '^video\/quicktime$',
+                'fileNamePattern' => '\.(mov|MOV)$'
+            ),
+            'avi' => array(
+                'mimeTypePattern' => '^video\/x\-msvideo$',
+                'fileNamePattern' => '\.(avi|AVI)$'
+            )
+        );
     }
 }

@@ -1,3 +1,4 @@
+require('./box.scss');
 var $ = require('jquery');
 
 var BenchmarkBox = {};

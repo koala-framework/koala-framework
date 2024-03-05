@@ -10,7 +10,10 @@ class Kwf_Util_Hash
             } else {
                 $hashFile = 'cache/hashprivatepart';
                 if (!file_exists($hashFile)) {
-                    file_put_contents($hashFile, time().rand(100000, 1000000));
+                    if (!function_exists('random_bytes')) {
+                        require 'vendor/paragonie/random_compat/lib/random.php';
+                    }
+                    file_put_contents($hashFile, bin2hex(random_bytes(32)));
                 }
                 $salt = file_get_contents($hashFile);
                 Kwf_Cache_SimpleStatic::add('hashpp-', $salt);

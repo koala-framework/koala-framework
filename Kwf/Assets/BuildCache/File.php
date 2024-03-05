@@ -27,9 +27,7 @@ class Kwf_Assets_BuildCache_File
         if (!Kwf_Assets_BuildCache::getInstance()->building) {
             throw new Kwf_Exception("Can't clear out of build");
         }
-        foreach (glob(self::$_buildDir.'/*') as $f) {
-            unlink($f);
-        }
+        $this->_deleteFiles(self::$_buildDir);
     }
 
     public function remove($cacheIds)
@@ -43,4 +41,15 @@ class Kwf_Assets_BuildCache_File
         }
     }
 
+    protected function _deleteFiles($target)
+    {
+        if (is_dir($target)){
+            $files = glob($target . '*', GLOB_MARK); //GLOB_MARK adds a slash to directories returned
+            foreach ($files as $file) {
+                $this->_deleteFiles($file);
+            }
+        } elseif (is_file($target)) {
+            unlink($target);
+        }
+    }
 }

@@ -1,4 +1,3 @@
-// @require ModernizrNetworkXhr2
 // @require KwfLoading
 
 var $ = require('jquery');
@@ -7,7 +6,7 @@ var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
 var errorStyleRegistry = require('kwf/commonjs/frontend-form/error-style-registry');
 var formRegistry = require('kwf/commonjs/frontend-form/form-registry');
 var statistics = require('kwf/commonjs/statistics');
-var t = require('kwf/commonjs/trl');
+var dataLayer = require('kwf/commonjs/data-layer');
 
 require('kwf/commonjs/frontend-form/error-style/above');
 require('kwf/commonjs/frontend-form/error-style/below-field');
@@ -43,14 +42,6 @@ var FormComponent = function(form)
 
     formRegistry.formsByComponentId[this.config.componentId] = this;
 
-
-    if (this.el.find('form').get(0).enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
-        if (Modernizr.xhr2) {
-            this.el.find('form').get(0).enctype = 'application/x-www-form-urlencoded';
-        }
-        this.config.useAjaxRequest = Modernizr.xhr2;
-    }
-
     this.fields = [];
     var fieldEls = form.find('.kwfUp-kwfField');
     for (var fieldElIndex=0; fieldElIndex<fieldEls.length; fieldElIndex++) {
@@ -69,7 +60,9 @@ var FormComponent = function(form)
         }
     }
 
-    this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
+    if (this.config.errorStyle) {
+        this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
+    }
 
     $.each(this.fields, function(i, f) {
         f.initField();
@@ -95,7 +88,7 @@ var FormComponent = function(form)
 
     var button = form.find('form button.kwfUp-submit');
     if (button) {
-        button.on('click', this.onSubmit.bind(this));
+        button.on('click.kwfUp-commonjsFrontendFormForm', this.onSubmit.bind(this));
     }
 
     $.each(this.fields, (function(i, f) {
@@ -172,20 +165,17 @@ FormComponent.prototype = {
     },
     onSubmit: function(e)
     {
+        e.preventDefault();
         if (this.isSubmitDisabled()) {
-            e.preventDefault();
             return;
         }
 
         //return false to cancel submit
         if (this.el.triggerHandler('kwfUp-form-beforeSubmit', this, e) === false) {
-            e.preventDefault();
             return;
         }
 
-        if (!this.config.useAjaxRequest || this.ajaxRequestSubmitted) return;
         this.submit();
-        e.preventDefault();
     },
 
     submit: function()
@@ -194,7 +184,9 @@ FormComponent.prototype = {
         button.prepend('<div class="kwfUp-saving"></div>');
         button.find('.kwfUp-submit').css('visibility', 'hidden');
 
-        this.errorStyle.hideErrors();
+        if (this.errorStyle) {
+            this.errorStyle.hideErrors();
+        }
 
         var data = this.el.find('form').serialize();
         data += '&'+$.param(this.config.baseParams);
@@ -206,18 +198,24 @@ FormComponent.prototype = {
             data: data,
             dataType: 'json',
             error: (function() {
-                //on failure try a plain old post of the form
-                this.ajaxRequestSubmitted = true; //avoid endless recursion
-                button.find('.kwfUp-submit').get(0).click();
+                if (this.errorStyle) {
+                    this.errorStyle.showErrors({
+                        errorFields: [],
+                        errorMessages: [__trlKwf('The form was not submitted sucessfully')],
+                        errorPlaceholder: __trlKwf('An error has occurred')
+                    });
+                }
+                button.find('.kwfUp-saving').remove();
+                button.find('.kwfUp-submit').css('visibility', 'visible');
             }).bind(this),
             success: (function(r) {
-
-                this.errorStyle.showErrors({
-                    errorFields: r.errorFields,
-                    errorMessages: r.errorMessages,
-                    errorPlaceholder: r.errorPlaceholder
-                });
-
+                if (this.errorStyle) {
+                    this.errorStyle.showErrors({
+                        errorFields: r.errorFields,
+                        errorMessages: r.errorMessages,
+                        errorPlaceholder: r.errorPlaceholder
+                    });
+                }
                 for (var fieldName in r.errorFields) {
                     var field = this.findField(fieldName);
                     field.onError(r.errorFields[fieldName]);
@@ -238,19 +236,35 @@ FormComponent.prototype = {
 
                 // show success content
                 if (r.successContent) {
-                    statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
-                    var el = this.el.parent().append(r.successContent);
+                    this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
+                    if (!this.config.skipTracking) {
+                        statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
+                        var dataLayerEntry = this.config.submitDataLayer ? this.config.submitDataLayer : {};
+                        if (!dataLayerEntry.event) {
+                            dataLayerEntry.event = "form-submit";
+                        }
+                        dataLayer.push(dataLayerEntry);
+                    }
+                    var el = $(r.successContent).appendTo(this.el.parent());
                     if (this.config.hideFormOnSuccess) {
                         this.el.hide();
                     } else {
-                        (function(el) {
+                        setTimeout(function(el) {
                             el.remove();
                             onReady.callOnContentReady(this.el, {newRender: false});
-                        }).defer(5000, this, [el]);
+                        }.bind(this), 5000, el);
                     }
                     onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
-                    statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
+                    this.el.trigger('kwfUp-form-submitSuccessNoError', this, r);
+                    if (!this.config.skipTracking) {
+                        statistics.trackEvent(__trlKwf('Form Submission'), location.pathname, button.find('span').text());
+                        var dataLayerEntry = this.config.submitDataLayer ? this.config.submitDataLayer : {};
+                        if (!dataLayerEntry.event) {
+                            dataLayerEntry.event = "form-submit";
+                        }
+                        dataLayer.push(dataLayerEntry);
+                    }
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize
@@ -258,9 +272,10 @@ FormComponent.prototype = {
                 }
 
                 var scrollTo = null;
+
                 if (!hasErrors) {
                     // Scroll to top of form
-                    scrollTo = this.el.offset().top;
+                    scrollTo = this.el.parent().offset().top;
                 } else {
                     // Scroll to first error. If there are form-errors those are first
                     if (!r.errorMessages.length) { // there are no form-errors
@@ -277,7 +292,7 @@ FormComponent.prototype = {
                     }
                     if (scrollTo == null) { // no field errors found or only form errors
                         // form-errors are shown at the top of the form
-                        scrollTo = this.el.offset().top;
+                        scrollTo = this.el.parent().offset().top;
                     }
                 }
                 if (scrollTo != null) {

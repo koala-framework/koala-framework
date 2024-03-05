@@ -1,1 +1,0 @@
-<div class="<?=$this->rootElementClass?>" style="height: <?= $this->height ?>px;"></div>

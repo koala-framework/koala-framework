@@ -16,6 +16,8 @@ class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'text';
+        $ret['apiContent'] = 'Kwc_Basic_Link_ApiContent';
+        $ret['apiContentType'] = 'textLink';
         return $ret;
     }
 
@@ -23,7 +25,7 @@ class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['text'] = $this->_getRow()->text;
-        if (!$this->hasContent($ret['linkTag'])) $ret['rootElementClass'] .= ' emptyLink';
+        if (!$this->hasContent($ret['linkTag'])) $ret['rootElementClass'] .= ' ' . $this->_getBemClass('emptyLink');
         return $ret;
     }
 

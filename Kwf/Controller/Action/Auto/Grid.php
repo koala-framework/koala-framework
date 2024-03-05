@@ -5,7 +5,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
      * @var Kwf_Collection
      **/
     protected $_columns = null;
-    protected $_buttons = array('save', 'add', 'delete');
+    protected $_buttons = array('save', 'add', 'delete'); // deleteAllFiltered
     protected $_editDialog = null;
     protected $_paging = 0;
     protected $_defaultOrder;
@@ -39,7 +39,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
     public function indexAction()
     {
-        $this->view->controllerUrl = $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/');
+        $this->view->controllerUrl = '/' . ltrim($this->getRequest()->getPathInfo(), '/');
         if ($this->_getParam('componentId')) {
             $this->view->baseParams = array(
                 'componentId' => $this->_getParam('componentId')
@@ -593,6 +593,21 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
     }
 
+
+    public function jsonDeleteAllFilteredAction()
+    {
+        if (!isset($this->_permissions['deleteAllFiltered']) || !$this->_permissions['deleteAllFiltered']) {
+            throw new Kwf_Exception("Delete all filtered is not allowed.");
+        }
+        $select = $this->_getSelect();
+        if (is_null($select)) return null; //wenn _getSelect null zurückliefert nichts laden
+
+        ignore_user_abort(true);
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
+        $this->_getModel()->deleteRows($select);
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
+    }
+
     //kann ueberschrieben werden um zB deleted=1 zu setzen statt echt zu loeschen
     protected function _deleteRow(Kwf_Model_Row_Interface $row)
     {
@@ -987,7 +1002,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                     $text = $helperDateTime->dateTime($text);
                 }
                 $sheet->setCellValueExplicit($cell, $text, $cellType);
-                if ($renderer[$col] == 'clickableLink') {
+                if ($renderer[$col] == 'clickableLink' && $text) {
                     $sheet->getCell($cell)->getHyperlink()->setUrl($text);
                 }
             }

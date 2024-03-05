@@ -11,7 +11,6 @@ before_script:
   - mysql --user=root -e "GRANT ALL PRIVILEGES ON * . * TO 'test'@'localhost';"
   - echo "[production]" > tests/config.local.ini
   - echo "server.domain = localhost:8080" >> tests/config.local.ini
-  - echo 'server.baseUrl = ""' >> tests/config.local.ini
   - chmod a+w tests/cache/*
   - chmod a+w tests/temp
   - composer self-update

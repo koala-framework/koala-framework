@@ -11,7 +11,7 @@
                 <div class="x2-panel-mc" style="padding: 10px; height:100%">
                     <?php if ($this->text) { ?>
                         <div class="x2-form-item kwfLoginResult <?= $this->cssClass; ?>">
-                            <span><?= $this->text ?></span>
+                            <span><?= Kwf_Util_HtmlSpecialChars::filter($this->text) ?></span>
                         </div>
                     <?php } else { ?>
                     <div tabindex="-1" class="x2-form-item">

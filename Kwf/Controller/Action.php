@@ -46,34 +46,25 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         $this->_helper->notifyPostDispatch();
     }
 
-    protected function _validateSessionToken()
+    protected function _validateCsrf()
     {
-        if ($this->_helper->getHelper('viewRenderer')->isJson() && Kwf_Util_SessionToken::getSessionToken()) {
-            if (!$this->_getParam('kwfSessionToken') && !$this->getRequest()->getHeader('X-Kwf-Session-Token')) {
-                throw new Kwf_Exception("Missing sessionToken parameter or X-Kwf-Session-Token header");
+        if ($this->_helper->getHelper('viewRenderer')->isJson()) {
+            if ($this->getRequest()->getHeader('X-Requested-With') != 'XMLHttpRequest') {
+                throw new Kwf_Exception("Missing X-Requested-With header (json urls must be called using XHR only to prevent CSRF)");
             }
-            if (($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken())
-                &&  ($this->getRequest()->getHeader('X-Kwf-Session-Token') != Kwf_Util_SessionToken::getSessionToken())
-            ) {
-                throw new Kwf_Exception("Invalid kwfSessionToken");
+            if (!$this->getRequest()->getHeader('Referer')) {
+                throw new Kwf_Exception("Missing Referer header");
+            }
+            $requiredReferer = (isset($_SERVER['HTTPS']) ? 'https' : 'http').'://'.$this->getRequest()->getHeader('Host').'/';
+            if (substr($this->getRequest()->getHeader('Referer'), 0, strlen($requiredReferer)) != $requiredReferer) {
+                throw new Kwf_Exception("Invalid Referer");
             }
         }
     }
 
     public function preDispatch()
     {
-        /* TODO
-        if ($this->_getParam('applicationAssetsVersion')
-                && $this->getHelper('ViewRenderer')->isJson()) {
-            if (Kwf_Assets_Dispatcher::getInstance()->getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
-                $this->_forward('json-wrong-version', 'error',
-                                    'kwf_controller_action_error');
-                return;
-            }
-        }
-        */
-
-        $this->_validateSessionToken();
+        $this->_validateCsrf();
 
         $t = microtime(true);
         $allowed = $this->_isAllowedResource();
@@ -89,7 +80,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                 $this->_forward('json-login', 'login',
                                     'kwf_controller_action_user', $params);
             } else {
-                $params = array('location' => $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/'));
+                $params = array('location' => '/' . ltrim($this->getRequest()->getPathInfo(), '/'));
                 $this->_forward('index', 'login',
                                     'kwf_controller_action_user', $params);
             }

@@ -1,9 +1,6 @@
 @import "config/default-loading-animation-big";
 @import "config/lightbox-animation";
 @import "kwf/background-image-dpr2";
-@import "compass/css3/box-sizing";
-@import "compass/css3/transition";
-@import "compass/css3/transform";
 
 html.kwfUp-kwfLightboxActive, html.kwfUp-kwfLightboxActive body {
     overflow: hidden;
@@ -23,9 +20,8 @@ body {
         height: 100%;
 
         .kwfUp-kwfLightboxScroll {
-            @include box-sizing(border-box);
+            box-sizing: border-box;
             -webkit-overflow-scrolling: touch;
-            position: absolute;
             overflow-y: auto;
             position: fixed;
             padding: 10px;
@@ -51,7 +47,7 @@ body {
         }
 
         .kwfUp-kwfLightboxInner {
-            @include box-sizing(border-box);
+            box-sizing: border-box;
             display: inline-block;
             position: relative;
             text-align: left;
@@ -88,15 +84,15 @@ body {
 @if $animation-style == fadeIn {
     .kwfUp-kwfLightbox {
         .kwfUp-kwfLightboxInner {
-            @include transition-property(opacity);
-            @include transition-duration(150ms);
-            @include transition-timing-function(linear);
+            transition-property: opacity;
+            transition-duration: 150ms;
+            transition-timing-function: linear;
             opacity: 0;
         }
 
         &.kwfUp-kwfLightboxOpen {
             .kwfUp-kwfLightboxInner {
-                @include transition-duration(150ms);
+                transition-duration: 150ms;
                 opacity: 1;
             }
         }
@@ -104,13 +100,13 @@ body {
 
     body div.kwfUp-kwfLightboxCenterBox {
         .kwfUp-kwfLightboxMask {
-            @include transition-property(opacity);
-            @include transition-duration(150ms);
-            @include transition-timing-function(linear);
+            transition-property: opacity;
+            transition-duration: 150ms;
+            transition-timing-function: linear;
             opacity: 0;
 
             &.kwfUp-kwfLightboxMaskOpen {
-                @include transition-duration(150ms);
+                transition-duration: 150ms;
                 opacity: 0.8;
             }
         }
@@ -118,17 +114,17 @@ body {
 } @else if $animation-style == fadeInSlideUp {
     .kwfUp-kwfLightbox {
         .kwfUp-kwfLightboxInner {
-            @include transform(translateX(0) translateY(100px) scale(1));
-            @include transition(opacity 50ms linear, transform 0ms linear);
-            @include transition-delay(0ms);
+            transform: translateX(0) translateY(100px) scale(1);
+            transition: opacity 50ms linear, transform 0ms linear;
+            transition-delay: 0ms;
             opacity: 0;
         }
 
         &.kwfUp-kwfLightboxOpen {
             .kwfUp-kwfLightboxInner {
-                @include transform(translateX(0) translateY(0) scale(1));
-                @include transition(opacity 500ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 400ms cubic-bezier(0.215, 0.61, 0.355, 1));
-                @include transition-delay(300ms);
+                transform: translateX(0) translateY(0) scale(1);
+                transition: opacity 500ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
+                transition-delay: 300ms;
                 opacity: 1;
             }
         }
@@ -136,11 +132,11 @@ body {
 
     body div.kwfUp-kwfLightboxCenterBox {
         .kwfUp-kwfLightboxMask {
-            @include transition(opacity 50ms linear);
+            transition: opacity 50ms linear;
             opacity: 0;
 
             &.kwfUp-kwfLightboxMaskOpen {
-                @include transition(opacity 1250ms cubic-bezier(0.23, 1, 0.32, 1));
+                transition: opacity 1250ms cubic-bezier(0.23, 1, 0.32, 1);
                 opacity: 0.8;
             }
         }
@@ -148,17 +144,17 @@ body {
 } @else if $animation-style == fadeInSlideInRight {
     .kwfUp-kwfLightbox {
         .kwfUp-kwfLightboxInner {
-            @include transform(translateX(100%) translateY(0) scale(1));
-            @include transition(opacity 0ms linear, transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1));
-            @include transition-delay(0ms);
+            transform: translateX(100%) translateY(0) scale(1);
+            transition: opacity 0ms linear, transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
+            transition-delay: 0ms;
             opacity: 0;
         }
 
         &.kwfUp-kwfLightboxOpen {
             .kwfUp-kwfLightboxInner {
-                @include transform(translateX(0) translateY(0) scale(1));
-                @include transition(opacity 300ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1));
-                @include transition-delay(150ms);
+                transform: translateX(0) translateY(0) scale(1);
+                transition: opacity 300ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
+                transition-delay: 150ms;
                 opacity: 1;
             }
         }
@@ -166,15 +162,15 @@ body {
 
     body div.kwfUp-kwfLightboxCenterBox {
         .kwfUp-kwfLightboxMask {
-            @include transition-property(opacity);
-            @include transition-duration(50ms);
-            @include transition-timing-function(linear);
+            transition-property: opacity;
+            transition-duration: 50ms;
+            transition-timing-function: linear;
             opacity: 0;
 
             &.kwfUp-kwfLightboxMaskOpen {
-                @include transition-property(opacity);
-                @include transition-duration(150ms);
-                @include transition-timing-function(linear);
+                transition-property: opacity;
+                transition-duration: 150ms;
+                transition-timing-function: linear;
                 opacity: 0.8;
             }
         }
@@ -182,17 +178,17 @@ body {
 } @else if $animation-style == fadeInZoom {
     .kwfUp-kwfLightbox {
         .kwfUp-kwfLightboxInner {
-            @include transform(translateX(0) translateY(0) scale(0.9));
-            @include transition(opacity 0ms linear, transform 0ms linear);
-            @include transition-delay(0ms);
+            transform: translateX(0) translateY(0) scale(0.9);
+            transition: opacity 0ms linear, transform 0ms linear;
+            transition-delay: 0ms;
             opacity: 0;
         }
 
         &.kwfUp-kwfLightboxOpen {
             .kwfUp-kwfLightboxInner {
-                @include transform(translateX(0) translateY(0) scale(1));
-                @include transition(opacity 500ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 550ms cubic-bezier(0.215, 0.61, 0.355, 1));
-                @include transition-delay(150ms);
+                transform: translateX(0) translateY(0) scale(1);
+                transition: opacity 500ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 550ms cubic-bezier(0.215, 0.61, 0.355, 1);
+                transition-delay: 150ms;
                 opacity: 1;
             }
         }
@@ -200,11 +196,11 @@ body {
 
     body div.kwfUp-kwfLightboxCenterBox {
         .kwfUp-kwfLightboxMask {
-            @include transition(opacity 50ms linear);
+            transition: opacity 50ms linear;
             opacity: 0;
 
             &.kwfUp-kwfLightboxMaskOpen {
-                @include transition(opacity 300ms linear);
+                transition: opacity 300ms linear;
                 opacity: 0.8;
             }
         }
@@ -232,7 +228,7 @@ body {
 .kwfUp-Lightbox .kwfUp-lightboxHeader { position: relative; z-index: 102; }
 
 .kwfUp-kwfLightbox .kwfUp-closeButton {
-    background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
+    background: url('~kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
     position: absolute;
     display: block;
     height: 42px;
@@ -273,23 +269,23 @@ body {
     top: 0px;
     width: 40%;
     height: 100%;
-    background: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/transparentPixel.gif); /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
+    background: url(~kwf/Kwf_js/EyeCandy/Lightbox/transparentPixel.gif); /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
     background-repeat: repeat;
     background-position: top left;
 }
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn, .kwfUp-kwfLightbox .lightboxBody .kwfUp-nextBtn a { right: 0px; }
-.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn, .kwfUp-kwfLightbox .lightboxBody .kwfUp-prevBtn a { lef: 0px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn, .kwfUp-kwfLightbox .lightboxBody .kwfUp-prevBtn a { left: 0px; }
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn a,
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn a { width: 100%; }
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn a:hover {
-    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/next.png);
+    background-image: url(~kwf/Kwf_js/EyeCandy/Lightbox/next.png);
     background-repeat: no-repeat;
     background-position: right 50%;
 }
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
 
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn a:hover {
-    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/previous.png);
+    background-image: url(~kwf/Kwf_js/EyeCandy/Lightbox/previous.png);
     background-repeat: no-repeat;
     background-position: left 50%;
 }

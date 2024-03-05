@@ -7,6 +7,14 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
 
     private $_componentField;
 
+    protected function _getUserActionsLogConfig()
+    {
+        $ret = parent::_getUserActionsLogConfig();
+        $ret['componentId'] = $this->_getParam('id');
+        $ret['details'] = trlKwf('Page properties');
+        return $ret;
+    }
+
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         $row->parent_id = $this->_getParam('parent_id');

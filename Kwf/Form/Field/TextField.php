@@ -109,7 +109,7 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         if (isset($prop['id'])) $ret['id'] = $prop['id'];
         $ret['html'] = "<input";
         foreach ($prop as $k=>$i) {
-            $ret['html'] .= ' '.htmlspecialchars($k).'="'.htmlspecialchars($i).'"';
+            $ret['html'] .= ' '.Kwf_Util_HtmlSpecialChars::filter($k).'="'.Kwf_Util_HtmlSpecialChars::filter($i).'"';
         }
         $ret['html'] .= " />";
         return $ret;

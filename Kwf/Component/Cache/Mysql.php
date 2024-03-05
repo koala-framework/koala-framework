@@ -396,7 +396,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             ->whereEquals('type', $type);
         $existingTargetIds = array();
         foreach ($m->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('id', 'target_id', 'type'))) as $i) {
-            $existingTargetIds[$i['id']] = $i['target_id'].':'.$i['type'];
+            $existingTargetIds[$i['id']] = $i['target_id'];
         }
         $newTargetIds = array();
         if ($includedComponents) {

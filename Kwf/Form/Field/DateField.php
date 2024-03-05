@@ -96,8 +96,8 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
         $v = strtotime($value);
         if ($v) $value = date(trlKwf('Y-m-d'), $v);
 
-        $value = htmlspecialchars($value);
-        $name = htmlspecialchars($name);
+        $value = Kwf_Util_HtmlSpecialChars::filter($value);
+        $name = Kwf_Util_HtmlSpecialChars::filter($name);
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<input class=\"$class\" type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" ".
             "style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\" ".

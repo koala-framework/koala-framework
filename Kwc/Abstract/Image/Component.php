@@ -1,6 +1,6 @@
 <?php
 class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
-    implements Kwf_Media_Output_IsValidInterface
+    implements Kwf_Media_Output_IsValidInterface, Kwf_Media_Output_ClearCacheInterface
 {
     const USER_SELECT = Kwf_Form_Field_Image_UploadField::USER_SELECT;
     const CONTENT_WIDTH = Kwf_Form_Field_Image_UploadField::CONTENT_WIDTH;
@@ -59,7 +59,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['defineWidth'] = false;
         $ret['maxWidthImageWidth'] = true;
         $ret['inlineTags'] = false;
-        $ret['imageCompressionQuality'] = 80;
+        $ret['imageCompressionQuality'] = Kwf_Config::getValue('imageCompressionQuality');
         return $ret;
     }
 
@@ -104,10 +104,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['altText'] = $this->_getAltText();
 
-        $imageData = $this->getImageDataOrEmptyImageData();
-        $ret = array_merge($ret,
-            Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['dimensions'])
-        );
+        $ret = array_merge($ret, $this->_getImageOutputData());
 
         $ret['baseUrl'] = $this->getBaseImageUrl();
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
@@ -135,6 +132,29 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['imgAttributes']['title'] = $titleText;
         }
         return $ret;
+    }
+
+    public function getApiData()
+    {
+        $image = $this->_getImageOutputData();
+        return array(
+            'caption' => $this->_getCaptionText(),
+            'alt' => $this->_getAltText(),
+            'title' => $this->_getTitleText(),
+            'aspectRatio' => $image['aspectRatio'],
+            'widthSteps' => $image['widthSteps'],
+            'baseUrl' => $this->_getAbsoluteUrl($this->getBaseImageUrl()),
+            'url' => $this->getAbsoluteImageUrl(),
+            'maxResolutionUrl' => $this->getMaxResolutionAbsoluteImageUrl(),
+        );
+    }
+
+    private function _getImageOutputData()
+    {
+        $imageData = $this->getImageDataOrEmptyImageData();
+        return Kwf_Media_Output_Component::getResponsiveImageVars(
+            $this->getImageDimensions(), $imageData['dimensions']
+        );
     }
 
     public function getDimensionSetting()
@@ -173,6 +193,15 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret = '';
         if ($this->_getSetting('titleText')) {
             $ret = $this->_getRow()->title_text;
+        }
+        return $ret;
+    }
+
+    protected function _getCaptionText()
+    {
+        $ret = '';
+        if ($this->_getSetting('imageCaption')) {
+            $ret = $this->_getRow()->image_caption;
         }
         return $ret;
     }
@@ -416,6 +445,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
 
         $dim = $component->getComponent()->getImageDimensions();
+        $data['lifetime'] = Kwf_Config::getValue('imageComponentMediaLifetimeInDays')*24*60*60;
 
         return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dim, $type);
     }
@@ -457,5 +487,10 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['normalContent'] = $text;
         }
         return $ret;
+    }
+
+    public static function canCacheBeDeleted($id)
+    {
+        return !Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
     }
 }

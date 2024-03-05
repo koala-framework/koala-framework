@@ -76,10 +76,8 @@ class Kwf_Component_Generator_PseudoPage_Table extends Kwf_Component_Generator_T
 
         if (!$this->_settings['uniqueFilename']) {
             $data['filename'] = $this->_getIdFromRow($row).'-';
-            $data['filename'] .= Kwf_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
-            if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
-                $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
-            }
+            $length = $this->_settings['maxFilenameLength'] - strlen($data['filename']);
+            $data['filename'] .= Kwf_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii', array($length));
         } else {
             //wenn uniqueFilename muss er exakt so belassen werden wie er ist
             //(weil danach ja die andere richtung gesucht wird)

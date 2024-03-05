@@ -1,0 +1,12 @@
+<!-- {{ kwfUp }}metaTags -->
+{% for name, content in metaTags %}
+    {% set attribute = name|slice(0, 3) == 'og:' ? 'property' : 'name' %}
+    <meta {{ attribute }}="{{ name }}" content="{{ content }}" />
+{% endfor %}
+{% if canonicalUrl %}
+    <link href="{{ canonicalUrl }}" rel="canonical" />
+{% endif %}
+{% for key in keys %}
+    {{ renderer.component(_context[key]) }}
+{% endfor %}
+<!-- /{{ kwfUp }}metaTags -->

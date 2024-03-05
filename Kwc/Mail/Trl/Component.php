@@ -33,4 +33,9 @@ class Kwc_Mail_Trl_Component extends Kwc_Chained_Trl_Component
     {
         return $this->getData()->chained->getComponent()->getHtmlStyles();
     }
+
+    public function getRecipient()
+    {
+        return $this->getData()->chained->getComponent()->getRecipient();
+    }
 }

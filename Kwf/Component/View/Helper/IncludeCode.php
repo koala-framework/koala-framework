@@ -20,7 +20,7 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
         }
 
         $flag = ($position == 'header') ? 'hasHeaderIncludeCode' : 'hasFooterIncludeCode';
-        $cmps = $data->getPage()->getRecursiveChildComponents(array('flags'=>array($flag=>true)));
+        $cmps = $data->getPage()->getRecursiveChildComponents(array('flags'=>array($flag=>true), 'page' => false));
         if (Kwc_Abstract::getFlag($data->componentClass, $flag)) {
             $cmps[] = $data;
         }
@@ -53,7 +53,6 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
 
         if ($position == 'header') {
             if ($v = Kwf_Config::getValue('kwc.favicon')) {
-                $v = Kwf_Setup::getBaseUrl().$v;
                 $ev = new Kwf_Events_Event_CreateAssetUrl(get_class($this), $v, $data->getSubroot());
                 Kwf_Events_Dispatcher::fireEvent($ev);
                 $v = $ev->url;

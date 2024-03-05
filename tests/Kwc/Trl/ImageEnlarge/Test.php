@@ -332,7 +332,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->assertEquals($smallHeight, $smallSrcSize[1]);
 
         preg_match('#data-kwc-lightbox="([^"]*)"#ms', $html, $matches);
-        $lightboxData = json_decode(htmlspecialchars_decode($matches[1]), true);
+        $lightboxData = json_decode(Kwf_Util_HtmlSpecialChars::decode($matches[1]), true);
 
         $c = Kwf_Component_Data_Root::getInstance()
             ->getPageByUrl('http://'.Kwf_Registry::get('testDomain').str_replace('/kwf/kwctest/'.Kwf_Component_Data_Root::getComponentClass(), '', $lightboxData['lightboxUrl']), '');

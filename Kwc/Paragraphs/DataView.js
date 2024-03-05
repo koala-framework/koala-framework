@@ -164,7 +164,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                 listClass: 'kwc-paragraphs-pos-list',
                 tpl: '<tpl for=".">' +
                     '<div class="x2-combo-list-item<tpl if="visible"> visible</tpl><tpl if="!visible"> invisible</tpl>">'+
-                        '{pos} - {component_name}'+
+                        '{pos:htmlEncode} - {component_name:htmlEncode}'+
                     '</div>'+
                     '</tpl>',
                 displayField: 'pos',

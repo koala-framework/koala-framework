@@ -1,0 +1,58 @@
+<div class="{{ rootElementClass }}{% if isPosted %} kwfUp-kwfImportant{% endif %}" data-width="100%" {% if config %}data-config="{{ config|json_encode }}"{% endif %}>
+    {% if showSuccess %}
+        {{ renderer.component(success) }}
+    {% elseif message %}
+        <div class="kwfUp-webStandard">
+            {{ message }}
+        </div>
+    {% else %}
+        {% if errors %}
+            <div class="kwfUp-webStandard kwfUp-kwcFormError kwfUp-webFormError">
+                <p class="kwfUp-error">{{ placeholder.error }}:</p>
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <div class="kwfUp-webStandard kwfUp-formContainer" data-width="100%">
+            {% block formHeader %}
+                {% if header %}{{ renderer.component(header) }}{% endif %}
+            {% endblock %}
+            {% if form %}
+                <form action="{{ action }}" method="{{ method }}">
+
+                    {% block content %}
+                        {{ renderer.formField(form) }}
+                    {% endblock %}
+
+                    <div class="kwfUp-submitWrapper {{ 'submitWrapper'|bemClass }}">
+                        <div class="kwfUp-button {{ 'button'|bemClass }}">
+                            <button class="kwfUp-submit {{ 'submit'|bemClass }}" type="submit" name="{{ formName }}" value="submit">
+                                <span>{{ submitCaption }}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="kwfUp-clear"></div>
+                    {% if method == 'get' %}
+                        {# IE schickt bei enter-taste den submit-value nicht mit #}
+                        <input type="hidden" name="{{ formName }}" value="submit" />
+                    {% endif %}
+
+                    {# damit wir wissen ob gepostet wurde und ob wir laden sollen #}
+                    <input type="hidden" name="{{ formName }}-post" value="post" />
+
+                    {% if formId %}
+                        {# to pass id's even if we send by ajax #}
+                        <input type="hidden" name="{{ formName }}-id" value="{{ formId }}" />
+                        <input type="hidden" name="{{ formName }}-idHash" value="{{ formIdHash }}" />
+                    {% endif %}
+                </form>
+            {% endif %}
+            {% block formFooter %}
+                {% if footer %}{{ renderer.component(footer) }}{% endif %}
+            {% endblock %}
+        </div>
+    {% endif %}
+</div>

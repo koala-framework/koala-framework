@@ -5,11 +5,16 @@ class Kwf_Util_ModelSync
     protected $_compareColumns;
     protected $_lastSyncStat = null;
     protected $_lastSyncMapping = null;
+    protected $_ignoreDeleted = false;
 
     public function __construct(Kwf_Model_Abstract $model, array $compareColumns)
     {
         $this->_model = $model;
         $this->_compareColumns = $compareColumns;
+    }
+
+    public function setIgnoreDeleted(){
+        $this->_ignoreDeleted = true;
     }
 
     public function syncData(array $data, Kwf_Model_Select $select = null)
@@ -23,6 +28,7 @@ class Kwf_Util_ModelSync
         );
         if (!$select) $select = new Kwf_Model_Select();
         $existingRows = array();
+        $i = 1;
         foreach ($this->_model->getRows($select) as $row) {
             $keyValues = array();
             foreach ($this->_compareColumns as $column) {
@@ -34,8 +40,14 @@ class Kwf_Util_ModelSync
             } else {
                 $row->delete();
             }
+
+            if ($i % 100 == 0) $this->_model->freeMemory();
+            $i++;
         }
+        $this->_model->freeMemory();
+
         $this->_lastSyncStat['check'] = count($existingRows);
+        $i = 1;
         foreach ($data as $id => $d) {
             $keyValues = array();
             foreach ($this->_compareColumns as $column) {
@@ -56,10 +68,19 @@ class Kwf_Util_ModelSync
                 $this->_lastSyncStat['create']++;
                 $row = $this->_model->createRow($d);
                 $row->save();
+
+                if ($i % 100 == 0) $this->_model->freeMemory();
+                $i++;
             }
             $this->_lastSyncMapping[$id] = $row->id;
         }
+        $this->_model->freeMemory();
+
+        if ($this->_ignoreDeleted) return true;
+
         foreach ($existingRows as $row) {
+            if ($this->_model->hasDeletedFlag() && $row->deleted) continue;
+
             $this->_lastSyncStat['delete']++;
             $row->delete();
         }

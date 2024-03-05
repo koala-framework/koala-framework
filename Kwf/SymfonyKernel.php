@@ -1,42 +1,41 @@
 <?php
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
 abstract class Kwf_SymfonyKernel extends Kernel
 {
     public function __construct()
     {
-        $env = Kwf_Config::getValue('symfony.environment');
-        if (in_array($env, array('test', 'dev'))) {
-            $environment = $env;
-            $debug = true;
-            //Debug::enable();
-        } else {
-            $environment = 'prod';
-            $debug = false;
-        }
+        $environment = (Kwf_Config::getValue('symfony.environment.name')) ? Kwf_Config::getValue('symfony.environment.name') : 'prod';
+        $debug = (Kwf_Config::getValue('symfony.environment.debug')) ? Kwf_Config::getValue('symfony.environment.debug') : false;
+
         parent::__construct($environment, $debug);
 
         AnnotationRegistry::registerLoader(array('Kwf_Loader', 'loadClass'));
     }
 
-    public function locateResource($name, $dir = null, $first = true)
+    public function getRootDir()
     {
-        if (substr($name, 0, 4) == '@Kwc') {
-            if (!$first) throw new \Kwf_Exception_NotYetImplemented();
-            $componentClass = substr($name, 4, strpos($name, '/')-4);
-            $name = substr($name, strpos($name, '/')+1);
-            $paths = \Kwc_Abstract::getSetting($componentClass, 'parentFilePaths');
-            foreach ($paths as $path=>$cls) {
-                if (file_exists($path.'/'.$name)) {
-                    return $path.'/'.$name;
-                }
-            }
-            throw new \Kwf_Exception();
-        } else {
-            return parent::locateResource($name, $dir, $first);
-        }
+        return getcwd() . "/symfony";
     }
 
+    public function getCacheDir()
+    {
+        return getcwd() . "/cache/symfony/{$this->getEnvironment()}";
+    }
 
+    public function getLogDir()
+    {
+        return getcwd() . "/log/symfony";
+    }
+
+    public function registerContainerConfiguration(LoaderInterface $loader)
+    {
+        $loader->load("{$this->getRootDir()}/config/config_{$this->getEnvironment()}.yml");
+        $parametersLocal = $this->getRootDir() . '/config/parameters.local.yml';
+        if (file_exists($parametersLocal) && is_readable($parametersLocal)) {
+            $loader->load($parametersLocal); // local parameters always win
+        }
+    }
 }

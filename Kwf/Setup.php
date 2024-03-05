@@ -64,6 +64,9 @@ class Kwf_Setup
             if (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED) {
                 $ignore = true;
             }
+            if (defined('E_USER_DEPRECATED') && $error["type"] == E_USER_DEPRECATED) {
+                $ignore = true;
+            }
             if (!$ignore) {
                 $e = new ErrorException($error["message"], 0, $error["type"], $error["file"], $error["line"]);
                 Kwf_Debug::handleException($e);
@@ -131,14 +134,6 @@ class Kwf_Setup
         return $requestPath;
     }
 
-    public static function getBaseUrl()
-    {
-        static $ret;
-        if (isset($ret)) return $ret;
-        $ret = Kwf_Config::getValue('server.baseUrl');
-        return $ret;
-    }
-
     public static function dispatchKwc()
     {
         $requestPath = self::getRequestPath();
@@ -146,26 +141,28 @@ class Kwf_Setup
         $fullRequestPath = $requestPath;
 
         $data = null;
-        $baseUrl = Kwf_Setup::getBaseUrl();
-        if ($baseUrl) {
-            if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
-                throw new Kwf_Exception_NotFound();
-            }
-            $requestPath = substr($requestPath, strlen($baseUrl));
-        }
         $uri = substr($requestPath, 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
 
-        if ($uri == 'robots.txt') {
-            Kwf_Util_RobotsTxt::output();
+        if ($uri == 'robots.txt' || $uri == 'sitemap.xml') {
+            self::restrictRequestMethod();
+            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', null);
+
+            if ($uri == 'robots.txt') {
+                $robotsTxtClass = Kwf_Config::getValue('robotsTxtClass');
+                $robotsTxtClass::output($data);
+            }
+
+            if ($uri == 'sitemap.xml') {
+                $sitemapClass = Kwf_Config::getValue('sitemapClass');
+                $sitemapClass::output($data->getDomainComponent());
+            }
         }
 
-        if ($uri == 'sitemap.xml') {
-            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].Kwf_Setup::getBaseUrl().'/', null);
-            Kwf_Component_Sitemap::output($data->getDomainComponent());
-        }
         if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf', 'api'))) {
+            self::restrictRequestMethod();
+
             if (!isset($_SERVER['HTTP_HOST'])) {
                 $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$fullRequestPath;
             } else {
@@ -222,6 +219,8 @@ class Kwf_Setup
             exit;
 
         } else if ($requestPath == '/kwf/util/kwc/render') {
+            self::restrictRequestMethod();
+
             Kwf_User_Autologin::processCookies();
             Kwf_Util_Component::dispatchRender();
         }
@@ -232,15 +231,10 @@ class Kwf_Setup
         $requestPath = self::getRequestPath();
         if ($requestPath === false) return;
 
-        $baseUrl = Kwf_Setup::getBaseUrl();
-        if ($baseUrl) {
-            if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
-                throw new Kwf_Exception_NotFound();
-            }
-            $requestPath = substr($requestPath, strlen($baseUrl));
-        }
         $urlParts = explode('/', substr($requestPath, 1));
         if (is_array($urlParts) && $urlParts[0] == 'media') {
+            self::restrictRequestMethod();
+
             if (sizeof($urlParts) != 7) {
                 throw new Kwf_Exception_NotFound();
             }
@@ -279,7 +273,7 @@ class Kwf_Setup
     /**
      * Check if user is logged in (faster than directly calling user model)
      *
-     * Only asks user model (expensive) when there is something stored in the session
+     * Only asks user model (expensive) when there is something stored in the session or class already loaded
      *
      * @return boolean if user is logged in
      */
@@ -288,21 +282,28 @@ class Kwf_Setup
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
         if ($benchmarkEnabled) $t = microtime(true);
-        if (!Zend_Session::isStarted() &&
-            !Zend_Session::sessionExists() &&
-            !Kwf_Config::getValue('autologin')
-        ) {
-            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: no session', microtime(true)-$t);
-            return false;
+        if (class_exists('Kwf_User_Model', false)) {
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: Kwf_User_Model already loaded, asked model', microtime(true)-$t);
+            $m = Kwf_Registry::get('userModel');
+            if (!$m) return false;
+            $ret = $m->hasAuthedUser();
+        } else {
+            if (!Zend_Session::isStarted() &&
+                !Zend_Session::sessionExists() &&
+                !Kwf_Config::getValue('autologin')
+            ) {
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: no session', microtime(true)-$t);
+                return false;
+            }
+            if (!Kwf_Auth::getInstance()->getStorage()->read()) {
+                if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: storage empty', microtime(true)-$t);
+                return false;
+            }
+            $m = Kwf_Registry::get('userModel');
+            if (!$m) return false;
+            $ret = $m->hasAuthedUser();
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: asked model', microtime(true)-$t);
         }
-        if (!Kwf_Auth::getInstance()->getStorage()->read()) {
-            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: storage empty', microtime(true)-$t);
-            return false;
-        }
-        $m = Kwf_Registry::get('userModel');
-        if (!$m) return false;
-        $ret = $m->hasAuthedUser();
-        if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: asked model', microtime(true)-$t);
         return $ret;
     }
 
@@ -315,22 +316,41 @@ class Kwf_Setup
         $authUser = !empty($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : false;
         $authPW = !empty($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : false;
 
+        $kwfAuthorization = null;
         if (isset($_SERVER['HTTP_X_KWF_AUTHORIZATION'])) {
-            $authValue = explode(' ', $_SERVER['HTTP_X_KWF_AUTHORIZATION']);
-            if (count($authValue) == 2 && strtolower($authValue[0]) == 'basic') {
+            $kwfAuthorization = $_SERVER['HTTP_X_KWF_AUTHORIZATION'];
+        } else if (isset($_COOKIE['KWF-Authorization'])) {
+            $kwfAuthorization = $_COOKIE['KWF-Authorization'];
+        }
+
+        if ($kwfAuthorization !== null) {
+            $authValue = explode(' ', $kwfAuthorization);
+            if (count($authValue) === 2 && strtolower($authValue[0]) === 'basic') {
                 $authorization = explode(':', base64_decode($authValue[1]));
-                if (count($authorization) == 2) {
+                if (count($authorization) === 2) {
                     $authUser = $authorization[0];
                     $authPW = $authorization[1];
                 }
             }
         }
+
         if (!$authUser || !$authPW
-            || $authUser != $requiredUsername
-            || $authPW != $requiredPassword
+            || $authUser !== $requiredUsername
+            || $authPW !== $requiredPassword
         ) {
             header('WWW-Authenticate: Basic realm="Page locked by preLogin"');
-            throw new Kwf_Exception_Unauthorized('PreLogin required');
+            $exception = new Kwf_Exception_Unauthorized('PreLogin required');
+            $exception->setPasswordToMask($requiredPassword);
+            throw $exception;
         }
+    }
+
+    /**
+     * @throws Kwf_Exception_MethodNotAllowed
+     */
+    public static function restrictRequestMethod()
+    {
+        $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
+        if ($method && !in_array($method, array('HEAD', 'GET', 'POST'))) throw new Kwf_Exception_MethodNotAllowed($method);
     }
 }

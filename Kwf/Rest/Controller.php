@@ -3,15 +3,7 @@ abstract class Kwf_Rest_Controller extends Zend_Rest_Controller
 {
     public function preDispatch()
     {
-        if ($this->_getParam('applicationAssetsVersion')) {
-            if (Kwf_Assets_Dispatcher::getInstance()->getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
-                $this->_forward('json-wrong-version', 'error',
-                                    'kwf_controller_action_error');
-                return;
-            }
-        }
-
-        $this->_validateSessionToken();
+        $this->_validateCsrf();
 
         $allowed = false;
         if ($this->_getUserRole() == 'cli') {
@@ -42,17 +34,10 @@ abstract class Kwf_Rest_Controller extends Zend_Rest_Controller
         parent::preDispatch();
     }
 
-    protected function _validateSessionToken()
+    protected function _validateCsrf()
     {
-        if (Kwf_Util_SessionToken::getSessionToken()) {
-            if (!$this->_getParam('kwfSessionToken') && !$this->getRequest()->getHeader('X-Kwf-Session-Token')) {
-                throw new Kwf_Exception("Missing sessionToken parameter or X-Kwf-Session-Token header");
-            }
-            if (($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken())
-                &&  ($this->getRequest()->getHeader('X-Kwf-Session-Token') != Kwf_Util_SessionToken::getSessionToken())
-            ) {
-                throw new Kwf_Exception("Invalid kwfSessionToken");
-            }
+        if (!$this->getRequest()->getHeader('X-Requested-With')) {
+            throw new Kwf_Exception("Missing X-Requested-With header (rest urls must be called using XHR only to prevent CSRF)");
         }
     }
 

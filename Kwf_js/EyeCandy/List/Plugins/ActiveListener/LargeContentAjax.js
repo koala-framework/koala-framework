@@ -2,6 +2,7 @@ var kwfExtend = require('kwf/commonjs/extend');
 var onReady = require('kwf/commonjs/on-ready');
 var getKwcRenderUrl = require('kwf/commonjs/get-kwc-render-url');
 var statistics = require('kwf/commonjs/statistics');
+var dataLayer = require('kwf/commonjs/data-layer');
 
 Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
@@ -140,6 +141,11 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = kwfExtend(Kwf.EyeCan
         this._doTransition(item, activeEl, nextEl);
 
         statistics.trackView(item.el.child('a').dom.href);
+        dataLayer.push({
+            event: 'pageview',
+            pagePath: item.el.child('a').dom.href,
+            pageTitle: document.title
+        });
 
         this.activeItem = item;
     },

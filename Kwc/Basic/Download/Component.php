@@ -16,6 +16,8 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['generators']['child']['component']['downloadTag'] = 'Kwc_Basic_DownloadTag_Component';
+        $ret['apiContent'] = 'Kwc_Basic_Download_ApiContent';
+        $ret['apiContentType'] = 'textLink';
         return $ret;
     }
 

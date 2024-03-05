@@ -321,7 +321,7 @@ class Kwf_Form extends Kwf_Form_NonTableForm
                 $i['messages'] = array($i['message']);
             }
             foreach ($i['messages'] as $m) {
-                $msg[] = ($name ? ($name.': ') : '').htmlspecialchars($m);
+                $msg[] = ($name ? ($name.': ') : '').Kwf_Util_HtmlSpecialChars::filter($m);
             }
         }
         return $msg;

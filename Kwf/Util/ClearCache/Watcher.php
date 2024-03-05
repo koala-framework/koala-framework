@@ -15,24 +15,6 @@ class Kwf_Util_ClearCache_Watcher
         return false;
     }
 
-    private static function _informDuckcast($cacheType)
-    {
-        if (Kwf_Config::getValue('debug.duckcast.host')) {
-            echo "Inform Duckcast ...";
-
-            try {
-                file_get_contents(
-                    'http://'.Kwf_Config::getValue('debug.duckcast.host')
-                        .':'.Kwf_Config::getValue('debug.duckcast.port').'/watcher?cacheType='.$cacheType
-                );
-            } catch (Exception $e) {
-                echo " [".$e->getMessage()."]\n";
-                return;
-            }
-            echo " [ok]\n";
-        }
-    }
-
     public static function watch()
     {
         if (Kwf_Config::getValue('whileUpdatingShowMaintenancePage')) {
@@ -165,37 +147,7 @@ class Kwf_Util_ClearCache_Watcher
     {
         $eventStart = microtime(true);
         Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
-        if (substr($event->filename, -4)=='.css' || substr($event->filename, -3)=='.js' || substr($event->filename, -4)=='.jsx' || substr($event->filename, -5)=='.scss' || substr($event->filename, -15)=='.underscore.tpl') {
-            echo "asset modified\n";
-            if ($event instanceof Event\Modify) {
-
-                //there is no cache for individual files, scss cache is handled in Kwf_Assets_Dependency_File_Scss using mtime
-
-                $assetsType = substr($event->filename, strrpos($event->filename, '.')+1);
-                if ($assetsType == 'scss') $assetsType = 'css';
-                if ($assetsType == 'tpl') $assetsType = 'js';
-                if ($assetsType == 'jsx') $assetsType = 'js';
-                self::_clearAssetsAll($assetsType);
-
-
-            } else if ($event instanceof Event\Create || $event instanceof Event\Delete || $event instanceof Event\Move) {
-
-                self::_clearAssetsDependencies();
-
-                $assetsType = substr($event->filename, strrpos($event->filename, '.')+1);
-                if ($assetsType == 'scss') $assetsType = 'css';
-                if ($assetsType == 'tpl') $assetsType = 'js';
-                self::_clearAssetsAll($assetsType);
-            }
-
-        } else if (self::_endsWith($event->filename, '/dependencies.ini')) {
-            if ($event instanceof Event\Modify) {
-
-                self::_clearAssetsDependencies();
-
-                self::_clearAssetsAll();
-            }
-        } else if (preg_match('#/config([^/]*)?\.ini$#', $event->filename)) { //config.ini, configPoi.ini, config.local.ini (in any directory)
+        if (preg_match('#/config([^/]*)?\.ini$#', $event->filename)) { //config.ini, configPoi.ini, config.local.ini (in any directory)
             if ($event instanceof Event\Modify) {
 
                 $section = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
@@ -314,9 +266,6 @@ class Kwf_Util_ClearCache_Watcher
                     //view cache can depend on settings
                     self::_deleteViewCache(array(array('component_class' => $matchingClasses)));
                 }
-            } else if (self::_endsWith($event->filename, '/Component.css') || self::_endsWith($event->filename, '/Component.scss')) {
-                //MODIFY already handled above (assets)
-                //CREATE/DELETE also handled above
             } else if (self::_endsWith($event->filename, '/Master.tpl') || self::_endsWith($event->filename, '/Master.twig')) {
                 if ($event instanceof Event\Modify) {
                     //all component_classes
@@ -411,8 +360,7 @@ class Kwf_Util_ClearCache_Watcher
 
         if ($dependenciesChanged) {
             echo "assets changed...\n";
-            self::_clearAssetsDependencies();
-            self::_clearAssetsAll();
+            //TODO
         }
 
         $clearCacheSimpleStatic = array(
@@ -518,68 +466,5 @@ class Kwf_Util_ClearCache_Watcher
     {
         $countDeleted = Kwf_Component_Cache::getInstance()->deleteViewCache($updates);
         echo "deleted ".$countDeleted." view cache entries\n";
-    }
-
-    private static function _clearAssetsDependencies()
-    {
-        //there is no cache containting dependencies
-    }
-
-    private static function _clearAssetsAll($fileType = null)
-    {
-        if (!$fileType) {
-            self::_clearAssetsAll('js');
-            self::_clearAssetsAll('css');
-            return;
-        }
-        $fileNames = array(
-            'cache/assets/output-cache-ids-'.$fileType,
-            'build/assets/output-cache-ids-'.$fileType,
-        );
-        $assetsCacheIds = array();
-        $assetsBuildCacheIds = array();
-        $simpleStaticCacheIds = array();
-        foreach ($fileNames as $fileName) {
-            if (file_exists($fileName)) {
-                $cacheIds = file($fileName);
-                unlink($fileName);
-                foreach ($cacheIds as $cacheId) {
-                    $cacheId = trim($cacheId);
-                    echo $cacheId."\n";
-                    $assetsCacheIds[] = $cacheId;
-                    $assetsBuildCacheIds[] = $cacheId;
-                    $simpleStaticCacheIds[] = 'as_'.$cacheId.'_gzip';
-                    $simpleStaticCacheIds[] = 'as_'.$cacheId.'_deflate';
-                    $assetsCacheIds[] = $cacheId.'_map';
-                    $assetsBuildCacheIds[] = $cacheId.'_map';
-                    $simpleStaticCacheIds[] = 'as_'.$cacheId.'_map_gzip';
-                    $simpleStaticCacheIds[] = 'as_'.$cacheId.'_map_deflate';
-                }
-            }
-        }
-        if ($assetsCacheIds) {
-            Kwf_Assets_Cache::getInstance()->remove($assetsCacheIds);
-        }
-        if ($assetsBuildCacheIds) {
-            Kwf_Assets_BuildCache::getInstance()->remove($assetsBuildCacheIds);
-        }
-        if ($simpleStaticCacheIds) {
-            Kwf_Cache_SimpleStatic::_delete($simpleStaticCacheIds);
-        }
-
-        $a = new Kwf_Util_Build_Types_Assets();
-        $a->flagAllPackagesOutdated($fileType);
-
-        self::_informDuckcast($fileType);
-
-        if ($fileType == 'css') {
-            self::_clearAssetsAll('0.css');
-            self::_clearAssetsAll('1.css');
-            self::_clearAssetsAll('ie8.css');
-        }
-        if ($fileType == 'js') {
-            self::_clearAssetsAll('defer.js');
-        }
-
     }
 }

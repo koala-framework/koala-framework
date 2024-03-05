@@ -3,6 +3,7 @@ var fieldRegistry = require('kwf/commonjs/frontend-form/field-registry');
 var Field = require('kwf/commonjs/frontend-form/field/field');
 var kwfExtend = require('kwf/commonjs/extend');
 var onReady = require('kwf/commonjs/on-ready');
+require('kwf/commonjs/frontend-form/field/multi-checkbox.css');
 
 onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
         var checkAll = mc.find('a.kwfMultiCheckboxCheckAll');

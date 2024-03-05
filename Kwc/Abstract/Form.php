@@ -4,6 +4,7 @@ class Kwc_Abstract_Form extends Kwf_Form
     public function __construct($name, $class)
     {
         $this->setClass($class);
+        $this->setLabelWidth(120);
         if ($class) {
             if (!$this->getModel()) {
                 $model = Kwc_Abstract::createOwnModel($class);

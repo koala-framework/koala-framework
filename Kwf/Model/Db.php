@@ -58,7 +58,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function getColumnType($col)
     {
-        if (isset($this->_columnTypes[$col])) {
+        if (array_key_exists($col, $this->_columnTypes)) {
             return $this->_columnTypes[$col];
         }
         $info = $this->getTable()->info();
@@ -709,7 +709,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             $col1 = $dbDepM->transformColumnName($ref['column']);
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
-            $depSelect->where("{$dbDepM->_formatField($col1)}={$dbDepOf->_formatField($col2)}");
+            $depSelect->where("{$dbDepM->_formatField($col1)}={$dbDepOf->_formatField($col2, null, $tableNameAlias)}");
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
             $exprStr = new Zend_Db_Expr($dbDepM->_formatField($expr->getField(), $depDbSelect));
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
@@ -729,12 +729,23 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $col1 = $dbDepOf->_formatField($ref['column'], $dbSelect, $tableNameAlias);
             if ($dbRefM instanceof Kwf_Model_Union) {
                 $ret = "CASE\n";
-                foreach ($dbRefM->getDbSelects($refSelect, array($expr->getField())) AS $modelKey=>$dbSelect) {
-                    $unionModels = $dbRefM->getUnionModels();
-                    $m = self::_getInnerDbModel($unionModels[$modelKey]);
-                    $idCol = $m->_formatField($m->getPrimaryKey(), $dbSelect);
-                    $dbSelect->where("$idCol=SUBSTR($col1, ".(strlen($modelKey)+1).")");
-                    $ret .= "  WHEN SUBSTR($col1, 1, ".strlen($modelKey).")='$modelKey' THEN ($dbSelect)\n";
+                $f = $expr->getField();
+                $unionModels = $dbRefM->getUnionModels();
+                if (is_string($f)) {
+                    foreach ($dbRefM->getDbSelects($refSelect, array($expr->getField())) AS $modelKey=>$dbSelect) {
+                        $m = self::_getInnerDbModel($unionModels[$modelKey]);
+                        $idCol = $m->_formatField($m->getPrimaryKey(), $dbSelect);
+                        $dbSelect->where("$idCol=SUBSTR($col1, ".(strlen($modelKey)+1).")");
+                        $ret .= "  WHEN SUBSTR($col1, 1, ".strlen($modelKey).")='$modelKey' THEN ($dbSelect)\n";
+                    }
+                } else {
+                    $refSelect->where($f);
+                    foreach ($dbRefM->getDbSelects($refSelect) as $modelKey=>$dbSelect) {
+                        $m = self::_getInnerDbModel($unionModels[$modelKey]);
+                        $idCol = $m->_formatField($m->getPrimaryKey(), $dbSelect);
+                        $dbSelect->where("$idCol=SUBSTR($col1, ".(strlen($modelKey)+1).")");
+                        $ret .= "  WHEN SUBSTR($col1, 1, ".strlen($modelKey).")='$modelKey' THEN ($dbSelect)=$col1\n";
+                    }
                 }
                 $ret .= "END";
                 return "$ret";

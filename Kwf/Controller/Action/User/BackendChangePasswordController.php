@@ -49,7 +49,7 @@ class Kwf_Controller_Action_User_BackendChangePasswordController extends Kwf_Con
     {
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('change-password');
         $this->view->email = $this->_getParam('user')->email;
-        $this->view->isActivate = $this->_getParam('user')->isActivated();
+        $this->view->isActivated = $this->_getParam('user')->isActivated();
         parent::indexAction();
     }
 

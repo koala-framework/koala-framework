@@ -176,9 +176,6 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         if (!isset($parsedUrl['host'])) {
             throw new Kwf_Exception("Host is missing in url '$url'");
         }
-        if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
-            $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
-        }
         foreach ($this->getPlugins('Kwf_Component_PluginRoot_Interface_PreResolveUrl') as $p) {
             $parsedUrl = $p->preFormatPath($parsedUrl);
         }
@@ -188,17 +185,13 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         } else {
             $path = $this->getComponent()->formatPath($parsedUrl);
             if (is_null($path)) return null;
-            $baseUrl = Kwf_Setup::getBaseUrl();
-            if ($baseUrl) {
-                if (substr($path, 0, strlen($baseUrl)) != $baseUrl) {
-                    return null;
-                } else {
-                    $path = substr($path, strlen($baseUrl));
-                }
-            }
             $path = trim($path, '/');
             $ret = $this->getComponent()->getPageByUrl($path, $acceptLanguage);
-            if ($ret && rawurldecode($ret->url) == $parsedUrl['path']) { //nur cachen wenn kein redirect gemacht wird
+
+            if ($ret && (
+                   $ret->generator->getGeneratorFlag('matchChildUrls')
+                || rawurldecode($ret->url) == $parsedUrl['path']) //nur cachen wenn kein redirect gemacht wird
+            ) {
                 $exactMatch = true;
                 if ($ret->isVisible()) {
                     Kwf_Component_Cache_Url_Abstract::getInstance()->save($cacheUrl, $ret);

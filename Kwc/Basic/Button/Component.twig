@@ -1,0 +1,7 @@
+<div class="{{ rootElementClass }}">
+    {{ renderer.component(linkTag) }}
+    <span class="{{ 'text'|bemClass }} {{ ('text--' ~ style)|bemClass }}">{{ text|mailEncodeText }}</span>
+    {% if linkTag.hasContent %}
+        </a>
+    {% endif %}
+</div>

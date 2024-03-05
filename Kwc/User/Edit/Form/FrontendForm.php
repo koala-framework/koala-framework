@@ -9,38 +9,6 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
         $this->setModel(Kwf_Registry::get('userModel')->getEditModel());
     }
 
-    public function getRow($parentRow = null)
-    {
-        if ($this->_rowIsParentRow($parentRow)) {
-            return $parentRow;
-        }
-        $id = $this->_getIdByParentRow($parentRow);
-        if (($id === 0 || $id === '0' || is_null($id)) && $this->_newUserRow) {
-            return $this->_newUserRow;
-        } else {
-            return parent::getRow($parentRow);
-        }
-    }
-
-    public function processInput($parentRow, $postData = array())
-    {
-        if ($this->_model instanceof Kwf_User_EditModel) {
-            $id = $this->_getIdByParentRow($parentRow);
-            if ($id === 0 || $id === '0' || is_null($id)) {
-                $email = null;
-                if ($this->getByName('email') && isset($postData[$this->getByName('email')->getFieldName()])) {
-                    $email = $postData[$this->getByName('email')->getFieldName()];
-                }
-
-                $this->_newUserRow = $this->_model->createUserRow(
-                    $email
-                );
-            }
-        }
-
-        return parent::processInput($parentRow, $postData);
-    }
-
     public function addUserForms($detailsClass, $forms)
     {
         $generators = Kwc_Abstract::getSetting($detailsClass, 'generators');

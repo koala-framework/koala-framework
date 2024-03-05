@@ -21,7 +21,7 @@
 }
 
 .x2-window .kwf-form-field-image-crop-image-wrapper {
-    background-image: url("/assets/kwf/images/cropimage/background.png");
+    background-image: url("~kwf/images/cropimage/background.png");
     position: absolute;
 }
 .x2-window .kwf-form-field-image-crop-image-wrapper.crop-changing {
@@ -62,7 +62,7 @@
 }
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-north .handle.north,
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-south .handle.south {
-    background-image: url('/assets/kwf/images/cropimage/topBottomMiddle.png');
+    background-image: url('~kwf/images/cropimage/topBottomMiddle.png');
     height: 7px;
     width: 26px;
     position: absolute;
@@ -76,7 +76,7 @@
 }
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-west .handle.west,
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-east .handle.east {
-    background-image: url('/assets/kwf/images/cropimage/leftRightMiddle.png');
+    background-image: url('~kwf/images/cropimage/leftRightMiddle.png');
     height: 26px;
     width: 7px;
     position: absolute;
@@ -94,13 +94,13 @@
 }
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-west .handle.northwest,
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-east .handle.northeast {
-    background-image: url('/assets/kwf/images/cropimage/leftRightTop.png');
+    background-image: url('~kwf/images/cropimage/leftRightTop.png');
     margin-top: 7px;
 }
 
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-west .handle.southwest,
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-east .handle.southeast {
-    background-image: url('/assets/kwf/images/cropimage/leftRightBottom.png');
+    background-image: url('~kwf/images/cropimage/leftRightBottom.png');
     bottom: 0px;
     margin-bottom: 7px;
 }
@@ -114,10 +114,10 @@
     position: absolute;
 }
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-north .handle.northwest {
-    background-image: url('/assets/kwf/images/cropimage/leftTop.png');
+    background-image: url('~kwf/images/cropimage/leftTop.png');
 }
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-south .handle.southwest {
-    background-image: url('/assets/kwf/images/cropimage/leftBottom.png');
+    background-image: url('~kwf/images/cropimage/leftBottom.png');
 }
 
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-north .handle.northeast,
@@ -125,8 +125,8 @@
     right: 0px;
 }
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-north .handle.northeast {
-    background-image: url('/assets/kwf/images/cropimage/rightTop.png');
+    background-image: url('~kwf/images/cropimage/rightTop.png');
 }
 .kwf-form-field-image-crop-image-resizable .x2-resizable-handle-south .handle.southeast {
-    background-image: url('/assets/kwf/images/cropimage/rightBottom.png');
+    background-image: url('~kwf/images/cropimage/rightBottom.png');
 }

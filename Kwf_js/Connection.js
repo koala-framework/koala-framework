@@ -58,7 +58,6 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
         }
         if (!options.params) options.params = {};
         options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
-        if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
             //wird benötigt wenn fkt über mozrepl aufgerufen wird
@@ -214,9 +213,6 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
         Kwf.Connection.runningRequests++;
         delete options.kwfIsSuccess;
         delete options.kwfLogin;
-
-        //session token might have changed if user had to login -> update it
-        if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
 
         Kwf.Connection.superclass.request.call(this, options);
         if (options.progress) {
@@ -379,10 +375,10 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
             errorText = options.errorText;
             errorMsg = options.errorText;
         } else if (r && r.exception) {
-            errorMsg = '<pre>'+r.exception.join('\n')+'</pre>';
+            errorMsg = '<pre>' + Ext2.util.Format.htmlEncode(r.exception.join('\n')) + '</pre>';
             errorMsgTitle = 'PHP Exception';
         } else if (r && r.error) {
-            errorMsg = r.error;
+            errorMsg = Ext2.util.Format.htmlEncode(r.error);
             errorMsgTitle = 'PHP Exception';
         } else {
             errorMsg = trlKwf("A connection problem occured.");
@@ -390,7 +386,7 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
         }
         var retry = false;
         if (response.status == -1) {
-            //request failed not beause of error response (eg 500) but because of eg. timeout
+            //request failed not because of error response (eg 500) but because of eg. timeout
             //allow the user to retry the request
             retry = true;
         } else {

@@ -3,9 +3,9 @@
  * This controller is used to display a tree structure.
  *
  * The sync-prefix means that this controller loads all data at once, so children are always loaded.
- * 
  *
- * @package 
+ *
+ * @package
  */
 abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action_Auto_Abstract
 {
@@ -70,7 +70,7 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
     */
     public function indexAction()
     {
-        $this->view->controllerUrl = $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/');
+        $this->view->controllerUrl = '/' . ltrim($this->getRequest()->getPathInfo(), '/');
         $this->view->xtype = 'kwf.autotreesync';
     }
 

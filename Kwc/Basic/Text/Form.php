@@ -51,16 +51,14 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
         $field->setControllerUrl(Kwc_Admin::getInstance($class)->getControllerUrl());
         $this->fields->add($field);
 
-        $this->setAssetsPackage(Kwf_Assets_Package_Default::getInstance('Frontend'));
-    }
-
-    //für tests
-    public function setAssetsPackage(Kwf_Assets_Package $package)
-    {
         $t = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getClass(), 'stylesModel'));
 
-        $urls = $package->getPackageUrls('text/css', Kwf_Trl::getInstance()->getTargetLanguage());
-
+        $urls = array();
+        if (Kwf_Assets_WebpackConfig::getDevServerUrl()) {
+            $urls[] = Kwf_Assets_WebpackConfig::getDevServerUrl() . 'assets/build/Frontend.css';
+        } else {
+            $urls[] = '/assets/build/Frontend.css';
+        }
         $styleEditorUrl = Kwc_Admin::getInstance($this->getClass())->getControllerUrl().'/styles-content';
         $styleEditorUrl .= '?t='.$t->getMTime();
         $urls[] = $styleEditorUrl;

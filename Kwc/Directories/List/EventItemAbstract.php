@@ -1,12 +1,10 @@
 <?php
-class Kwc_Directories_List_EventItemAbstract extends Kwf_Events_Event_Abstract
+class Kwc_Directories_List_EventItemAbstract extends Kwc_Directories_List_EventAbstract
 {
     public $itemId;
-    public $subroot;
     public function __construct($class, $itemId, $subroot)
     {
-        parent::__construct($class);
+        parent::__construct($class, $subroot);
         $this->itemId = $itemId;
-        $this->subroot = $subroot;
     }
 }

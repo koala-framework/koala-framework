@@ -1,5 +1,5 @@
 <div class="<?=$this->rootElementClass?>">
-    <input type="hidden" name="config" value="<?=htmlspecialchars(json_encode($this->config))?>" />
+    <input type="hidden" name="config" value="<?=Kwf_Util_HtmlSpecialChars::filter(json_encode($this->config))?>" />
     <?=$this->componentLink($this->data->parent, trlKwf('Back'), 'back')?>
     <?php if ($this->item->categories) { ?>
         <div class="categories">

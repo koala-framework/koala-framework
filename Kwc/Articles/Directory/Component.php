@@ -28,7 +28,6 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
 
         $ret['contentSender'] = 'Kwc_Articles_Directory_ContentSender';
 
-        $ret['flags']['assetsPackage'] = 'Articles';
         return $ret;
     }
 

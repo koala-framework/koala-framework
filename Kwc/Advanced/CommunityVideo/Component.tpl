@@ -1,5 +1,5 @@
 <div class="<?=$this->rootElementClass?>">
-    <input type="hidden" value="<?=htmlspecialchars(json_encode($this->config))?>" />
+    <input type="hidden" value="<?=Kwf_Util_HtmlSpecialChars::filter(json_encode($this->config))?>" />
     <div class="communityVideoContainer ratio<?=$this->config['ratio']?>">
         <div class="outerLoading">
             <div class="loading"></div>

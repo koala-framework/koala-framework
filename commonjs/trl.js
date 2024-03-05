@@ -1,10 +1,10 @@
-function getTrlData(i)
+function getTrlData(source, i)
 {
     var ret = null;
-    if (!window.kwfTrlData) return ret;
-    window.kwfTrlData.forEach(function(d) {
-        if (d[i]) {
-            ret = d[i];
+    if (!window['kwfUp-kwfTrlData']) return ret;
+    window['kwfUp-kwfTrlData'].forEach(function(d) {
+        if (d.source == source && d.data[i]) {
+            ret = d.data[i];
             return false;
         }
     });
@@ -23,41 +23,64 @@ function replaceValues(text, values)
     });
     return text;
 }
+
+
+var trl = function(source, i, values) {
+    var ret = getTrlData(source, i) || i;
+    return replaceValues(ret, values);
+};
+var trlc = function(source, context, i, values) {
+    var ret = getTrlData(source, context+'__'+i) || i;
+    return replaceValues(ret, values);
+};
+var trlp = function(source, sg, pl, values) {
+    var ret = getTrlData(source, sg + '--' + pl) || [sg, pl];
+    var cnt = values;
+    if (cnt instanceof Array) cnt = cnt[0]
+    if (cnt == 1) {
+        ret = ret[0];
+    } else {
+        ret = ret[1];
+    }
+    return replaceValues(ret, values);
+};
+var trlcp = function(source, context, sg, pl, values) {
+    var ret = getTrlData(source, context + '__' + sg + '--' + pl) || [sg, pl];
+    var cnt = values;
+    if (cnt instanceof Array) cnt = cnt[0]
+    if (cnt == 1) {
+        ret = ret[0];
+    } else {
+        ret = ret[1];
+    }
+    return replaceValues(ret, values);
+};
+
 var exports = {
     trl: function(i, values) {
-        var ret = getTrlData(i) || i;
-        return replaceValues(ret, values);
+        return trl('web', i, values);
     },
     trlc: function(context, i, values) {
-        var ret = getTrlData(context+'__'+i) || i;
-        return replaceValues(ret, values);
+        return trlc('web', context, i, values);
     },
     trlp: function(sg, pl, values) {
-        var ret = getTrlData(sg + '--' + pl) || [sg, pl];
-        var cnt = values;
-        if (cnt instanceof Array) cnt = cnt[0]
-        if (cnt == 1) {
-            ret = ret[0];
-        } else {
-            ret = ret[1];
-        }
-        return replaceValues(ret, values);
+        return trlp('web', sg, pl, values);
     },
     trlcp: function(context, sg, pl, values) {
-        var ret = getTrlData(context + '__' + sg + '--' + pl) || [sg, pl];
-        var cnt = values;
-        if (cnt instanceof Array) cnt = cnt[0]
-        if (cnt == 1) {
-            ret = ret[0];
-        } else {
-            ret = ret[1];
-        }
-        return replaceValues(ret, values);
+        return trlcp('web', context, sg, pl, values);
+    },
+    trlKwf: function(i, values) {
+        return trl('kwf', i, values);
+    },
+    trlcKwf: function(context, i, values) {
+        return trlc('kwf', context, i, values);
+    },
+    trlpKwf: function(sg, pl, values) {
+        return trlp('kwf', sg, pl, values);
+    },
+    trlcpKwf: function(context, sg, pl, values) {
+        return trlcp('kwf', context, sg, pl, values);
     }
 };
-exports.trlKwf = exports.trl;
-exports.trlcKwf = exports.trlc;
-exports.trlpKwf = exports.trlp;
-exports.trlcpKwf = exports.trlcp;
 
 module.exports = exports;

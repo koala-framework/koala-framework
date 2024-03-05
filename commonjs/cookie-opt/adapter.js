@@ -23,9 +23,9 @@ var api = {
     },
 
     setOpt: function(value) {
-        var opt = cookies.get('cookieOpt');
+        var oldValue = cookies.get('cookieOpt');
         cookies.set('cookieOpt', value, { expires: 3*365 });
-        if (opt != value) {
+        if (oldValue != value) {
             for (var i=0; i< onOptChangedCb.length; i++) {
                 onOptChangedCb[i].call(this, value);
             }

@@ -48,6 +48,12 @@ class Kwf_Util_Update_Helper
             $ret = array_merge($ret, $m->getUpdates());
         }
 
+        if ($kernel = Kwf_Util_Symfony::getKernel()) {
+            foreach ($kernel->getContainer()->get('kwf.updates_provider_locator')->getUpdateProviders() as $provider) {
+                $ret = array_merge($ret, $provider->getUpdates());
+            }
+        }
+
         $ret = self::_sortUpdates($ret);
         return $ret;
     }

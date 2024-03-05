@@ -108,6 +108,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret['viewCache'] = true;
         $ret['contentSender'] = 'Kwf_Component_Abstract_ContentSender_Default';
         $ret['layoutClass'] = 'Kwf_Component_Layout_Default';
+        $ret['plugins'] = array();
         return $ret;
     }
 
@@ -134,7 +135,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             return array_unique($ret);
 
         } else if ($selectType == 'array' && is_string($class) && count($select) == 1 &&
-            isset($select['componentClass']) && count($select['componentClass']) == 1
+            isset($select['componentClass']) && is_string($select['componentClass'])
         ) {
             //simple case no 3: looking for a single comopnentClass
             foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
@@ -534,61 +535,6 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         }
         $ret .= Kwf_Component_Abstract::formatRootElementClass($component, '');
         return $ret;
-    }
-
-    /**
-     * Returns the sortcutUrl of a given componentClass
-     *
-     * @param string
-     * @return string
-     */
-    static public function getShortcutUrl($componentClass, Kwf_Component_Data $data)
-    {
-        if (!Kwc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
-            throw new Kwf_Exception("You must either have the setting 'shortcutUrl' or reimplement getShortcutUrl method for '$componentClass'");
-        }
-        return Kwc_Abstract::getSetting($componentClass, 'shortcutUrl');
-    }
-
-    /**
-     * Returns data for a given shortcut url
-     *
-     * @param string
-     * @param string
-     * @return Kwf_Component_Data
-     */
-    public static function getDataByShortcutUrl($componentClass, $url)
-    {
-        if (!Kwc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
-            throw new Kwf_Exception("You must either have the setting 'shortcutUrl' or reimplement getDataByShortcutUrl method for '$componentClass'");
-        }
-        $sc = Kwc_Abstract::getSetting($componentClass, 'shortcutUrl');
-        $parts = explode('/', $url);
-        $constraints = array();
-        $isDomain = is_instance_of(
-            Kwf_Component_Data_Root::getInstance()->componentClass,
-           'Kwc_Root_DomainRoot_Component'
-        );
-        if ($isDomain) {
-            $pos = strpos($url, '/', 1);
-            $domain = substr($url, 0, $pos);
-            $url = substr($url, $pos + 1);
-        }
-        $shortcut = substr($url, 0, strpos($url, '/', 1));
-        if ($shortcut != $sc) return false;
-        if ($isDomain) {
-            $components = Kwf_Component_Data_Root::getInstance()->
-                getComponentsByClass('Kwc_Root_DomainRoot_Domain_Component', array('id' => '-' . $domain));
-            foreach ($components as $c) {
-                if ($c->row->id == $domain) $constraints = array('subroot' => $c);
-            }
-        }
-        $component = Kwf_Component_Data_Root::getInstance()
-            ->getComponentBySameClass($componentClass, $constraints);
-        if ($component) {
-            return $component->getChildPageByPath(substr($url, strlen($sc) + 1));
-        }
-        return false;
     }
 
     /**

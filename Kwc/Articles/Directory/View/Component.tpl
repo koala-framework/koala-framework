@@ -1,5 +1,5 @@
 <div class="<?=$this->rootElementClass?>">
-    <input type="hidden" name="config" value="<?=htmlspecialchars(json_encode($this->config))?>" />
+    <input type="hidden" name="config" value="<?=Kwf_Util_HtmlSpecialChars::filter(json_encode($this->config))?>" />
     <?php if (isset($this->searchForm)) { ?>
         <div class="searchForm">
             <?=$this->component($this->searchForm)?>

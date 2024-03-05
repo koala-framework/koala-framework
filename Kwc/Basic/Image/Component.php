@@ -7,6 +7,9 @@ class Kwc_Basic_Image_Component extends Kwc_Abstract_Image_Component
         $ret['componentName'] = trlKwfStatic('Image');
         $ret['componentIcon'] = 'picture';
         $ret['emptyImage'] = false; // eg. 'Empty.jpg' in same folder
+
+        $ret['apiContent'] = 'Kwc_Basic_Image_ApiContent';
+        $ret['apiContentType'] = 'image';
         return $ret;
     }
 

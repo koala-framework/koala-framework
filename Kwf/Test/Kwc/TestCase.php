@@ -27,7 +27,6 @@ abstract class Kwf_Test_Kwc_TestCase extends Kwf_Test_TestCase
                 'primaryKey' => 'page_id',
             )))
         ));
-        Kwf_Assets_Package_Default::clearInstances();
         Kwf_Component_LogDuplicateModel::setInstance(new Kwf_Model_FnF(array(
         )));
         Kwf_Media_OutputCache::getInstance()->clean();

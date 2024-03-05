@@ -1,15 +1,13 @@
 @mixin background-image-dpr2($path, $file, $width, $height, $params:"") {
-  @if $params != "" {
-    background: url($path + '/' + $file) $params;
-  } @else {
-    background: url($path + '/' + $file);
-  }
-
-  @media (min-device-pixel-ratio: 1.1), (-webkit-min-device-pixel-ratio: 1.1) {
-    & {
-      background-image: url($path + '/dpr2/' + $file);
-      background-size: $width $height;
-      -webkit-background-size: $width $height;
+    @if $params != "" {
+        background: url($path + '/' + $file) $params;
+    } @else {
+        background: url($path + '/' + $file);
     }
-  }
+
+    background-size: $width $height;
+
+    @media (min-device-pixel-ratio: 1.1), (min-resolution: 1.1dppx) {
+        background-image: url($path + '/dpr2/' + $file);
+    }
 }

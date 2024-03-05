@@ -53,7 +53,7 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
         $this->_componentField = $fields->add(new Kwf_Form_Field_Select('component',  trlKwf('Pagetype')))
             ->setValues($componentNames)
             ->setPossibleComponentClasses($componentClasses) //just for PageController
-            ->setTpl('<tpl for="."><div class="x2-combo-list-item">{name}</div></tpl>')
+            ->setTpl('<tpl for="."><div class="x2-combo-list-item">{name:htmlEncode}</div></tpl>')
             ->setAllowBlank(false);
 
         $hideInMenuText = trlKwf('Hide in Menu');

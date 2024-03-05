@@ -889,6 +889,9 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 return ($rowValue != $value);
             } else if ($expr instanceof Kwf_Model_Select_Expr_LowerEqual) {
                 return $rowValue <= $value;
+            } else if ($expr instanceof Kwf_Model_Select_Expr_StartsWith) {
+                $length = strlen((string)$value);
+                return substr((string)$rowValue, 0, $length) == (string)$value;
             } else {
                 throw new Kwf_Exception_NotYetImplemented(
                     "CompareField-Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
@@ -1204,12 +1207,16 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             } else {
                 $type = 'Column';
             }
-            if ($type == 'Column' || $type == 'ParentRow' || $type == 'ChildRows' || !class_exists($type)) {
-                $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\'.$type;
+            if (substr($type, 0, 1) === '@') {
+                $columnNormalizer = Kwf_Util_Symfony::getKernel()->getContainer()->get(substr($type, 1));
+            } else {
+                if (in_array($type, array('Column','ParentRow','ChildRows','Component\\Render','Component\\Url')) || !class_exists($type)) {
+                    $type = 'KwfBundle\\Serializer\\KwfModel\\ColumnNormalizer\\' . $type;
+                }
+                $columnNormalizer = new $type;
             }
-            $columnNormalizer = new $type;
-            if ($type instanceof \KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface) {
-                $ret += $columnNormalizer->getEventSubscribers($this, $column, $settings);
+            if ($columnNormalizer instanceof \KwfBundle\Serializer\KwfModel\ColumnNormalizer\CacheableInterface) {
+                $ret = array_merge($ret, $columnNormalizer->getEventSubscribers($this, $column, $settings));
             }
         }
         return $ret;

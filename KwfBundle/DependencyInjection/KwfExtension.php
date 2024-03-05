@@ -16,6 +16,11 @@ class KwfExtension extends Extension implements PrependExtensionInterface
             new FileLocator(__DIR__.'/../Resources/config')
         );
         $loader->load('services.yml');
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('kwf.csrf_protection.ignore_paths', $config['csrf_protection']['ignore_paths']);
     }
 
     public function prepend(ContainerBuilder $container)
@@ -56,6 +61,10 @@ class KwfExtension extends Extension implements PrependExtensionInterface
                 'view_response_listener' => 'force'
             ),
             'param_fetcher_listener' => true
+        ));
+
+        $container->prependExtensionConfig('security', array(
+            'session_fixation_strategy' => 'none'
         ));
     }
 }

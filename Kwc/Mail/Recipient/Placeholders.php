@@ -64,6 +64,7 @@ class Kwc_Mail_Recipient_Placeholders
                 }
                 $ret['salutation_hello'] = trim($trl->trlKwf('Hello {0} {1}', $replace, $language));
                 $ret['salutation_firstname'] = $trl->trlcKwf('salutation firstname unknown gender', 'Dear {0}', array($recipient->getMailFirstname()), $language);
+                $ret['salutation'] = '';
             }
         }
         return $ret;

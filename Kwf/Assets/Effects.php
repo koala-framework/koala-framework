@@ -51,6 +51,13 @@ class Kwf_Assets_Effects
         $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 0, 0);
     }
 
+    public static function hideInMenu(Imagick $image)
+    {
+        $overlay = new Imagick();
+        $overlay->readImage(KWF_PATH."/Kwf/Assets/Overlay/hideInMenu.png");
+        $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 0, 0);
+    }
+
     public static function rotate(Imagick $image, $params)
     {
         if (isset($params[0])) {
@@ -77,6 +84,7 @@ class Kwf_Assets_Effects
 
     public static function adminIcon(Imagick $im)
     {
+        if (!method_exists($im, 'exportImagePixels')) return;
         while ($im->previousImage()) {
             $pixels = $im->exportImagePixels(0, 0,
                 $im->getImageWidth(), $im->getImageHeight(),

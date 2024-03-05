@@ -243,6 +243,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
             }
         }
         if (!$subrootReached) return null;
+        if (!isset($chainedData->chained)) return null;
         if ($chainedData->chained->componentId != $c->componentId) return null; // To avoid getting results when called with an already chained component
         $ret = $chainedData;
         if (is_array($select)) {

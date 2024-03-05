@@ -1,9 +1,7 @@
-@import "compass/css3/box-sizing";
-
 @mixin form-input-width($width) {
     .kwfUp-kwfFormFieldWrapper {
-        input, textarea, select, {
-            @include box-sizing(border-box);
+        input, textarea, select {
+            box-sizing: border-box;
             width: 100% !important;
             max-width: $width;
 

@@ -20,6 +20,7 @@ onReady.onRender('.kwcClass', function(el) {
                 })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'kwfUp-ga');
 
                 window['kwfUp-ga']('create', el.data('code'), 'auto');
+                window['kwfUp-ga']('set', 'anonymizeIp', true);
                 window['kwfUp-ga']('send', 'pageview');
             }
         });

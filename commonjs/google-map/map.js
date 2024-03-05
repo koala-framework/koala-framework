@@ -5,9 +5,13 @@ var onReady = require('kwf/commonjs/on-ready');
 /**
  * The Kwf GoogleMaps object
  *
+ * @deprecated DO NOT USE THIS CLASS. Rather use the loader (loader.js) and the Google Maps API itself.
+ *
  * @param config The configuration object that may / must contain the following values
  *     mapContainer (mandatory): The wrapper element of the map (id, dom-element or jquery-element).
- *             Must contain a div with class 'container', where the google map itself will be put into-
+ *             Must contain a div with class 'container', where the google map itself will be put into.
+ *     width (optional): The width of the map container in pixel. Defaults to 350.
+ *     height (optional): The height of the map container in pixel. Defaults to 300.
  *     longitude (optional if coordinates is set): The longitude of the initial center point.
  *     latitude (optional if coordinates is set): The latitude of the initial center point.
  *     coordinates (optional if longitude and latitude is set): The longitude and
@@ -24,20 +28,14 @@ var onReady = require('kwf/commonjs/on-ready');
  *     lightMarkers (optional): An object of one marker or an array of markers.
  *            Markers at these positions will have another marker color.
  *     lightMarkerSrc (optional): An url to an image that should be used as light marker.
- *     zoom (optional): The initial zoom value. Either an integer, an array of
- *            longitude / latitude values that should be visible in the map or null.
- *            If null all existing markers are centered.
- *            Default value for zoom is 13.
- *            Example for array usage:
- *            [ top, right, bottom, left ]
- *            - or in coordinates -
- *            [ highest longitude, highest latitude, lowest longitude, lowest latitude ]
- *     width (optional): The width of the map container in pixel. Defaults to 350.
- *     height (optional): The height of the map container in pixel. Defaults to 300.
- *     satelite (optional): 0 or 1, whether it should be possible to switch to satelite
- *            view or not. Defaults to 1.
+ *     singleMarkerZoom (optional): Zoom if only one marker is set. Defaults to 15.
  *     zoomControl (optional): true to show large zoom controls. Defaults to true.
- *     overview (optional): 0 or 1, whether to show a small overview map at the bottom.
+ *     zoomControlPosition (optional): Identifiers used to specify the placement of controls on the map.
+ *     mapTypeControl: true to show map type controls. Defaults to true.
+ *     mapType (optional): Type of map ('roadmap', 'satellite', 'hybrid', 'terrain'). Defaults to 'roadmap'.
+ *     streetViewControl (optional): boolean: true if StreetViewControl should be enabled. Defaults to false.
+ *     clickableIcons (optional): boolean: true if POIs should be clickable. Defaults to false.
+ *     scrollWheel (optional): boolean: If false, disables zooming on the map using a mouse scroll wheel. Defaults to true.
  */
 var Map = function(config) {
     if (!config.mapContainer) throw new Error('config value mapContainer not set');
@@ -47,18 +45,20 @@ var Map = function(config) {
     this._baseParams = $.extend({}, config.baseParams);
     this.markers = [];
     this.config = config;
+
     if (typeof this.config.width == 'undefined') this.config.width = 350;
     if (typeof this.config.height == 'undefined') this.config.height = 300;
-    if (typeof this.config.satelite == 'undefined') this.config.satelite = 1;
+    if (typeof this.config.mapTypeControl == 'undefined') this.config.mapTypeControl = true;
+    if (typeof this.config.mapType == 'undefined') this.config.mapType = 'roadmap';
     if (typeof this.config.zoomControl == 'undefined') this.config.zoomControl = true;
-    if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
+    if (typeof this.config.singleMarkerZoom == 'undefined') this.config.singleMarkerZoom = 15;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
-    if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
-    if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
+    if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = true;
     if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
     if (typeof this.config.streetViewControl == 'undefined') this.config.streetViewControl = false;
+    if (typeof this.config.clickableIcons == 'undefined') this.config.clickableIcons = false;
 
     if (!this.config.markers) this.config.markers = [ ];
     if (typeof this.config.markers[0] == 'undefined' &&
@@ -117,24 +117,18 @@ Map.prototype = {
     {
         this.directionsService = new google.maps.DirectionsService();
         this.directionsDisplay = new google.maps.DirectionsRenderer();
-        //CONTROLLS
-        if (parseInt(this.config.satelite)) {
-            this.config.mapType = true;
-        } else {
-            this.config.mapType = false;
-        }
         var mapOptions = {
             center: new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude)),
             zoom: (typeof this.config.zoom == 'number')? parseInt(this.config.zoom) : 13, //initial zoom has to be set
             zoomControl: this.config.zoomControl,
             zoomControlOptions: {
-                style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
                 position: google.maps.ControlPosition[this.config.zoomControlPosition]
             },
-            mapTypeControl: this.config.mapType,
-            overviewMapControl: this.config.overview,
             streetViewControl: this.config.streetViewControl,
-            scrollwheel: this.config.scrollwheel
+            gestureHandling: this.config.scrollwheel ? "greedy" : "cooperative",
+            mapTypeControl: this.config.mapTypeControl,
+            mapTypeId: this.config.mapType,
+            clickableIcons: this.config.clickableIcons
         };
         if (this.config.styles) {
             mapOptions.styles = this.config.styles;
@@ -143,12 +137,6 @@ Map.prototype = {
         if (this.mapContainer.find(".mapDir")) {
             this.directionsDisplay.setMap(this.gmap);
             this.directionsDisplay.setPanel(this.mapContainer.find(".mapDir")[0]);
-        }
-
-        if (this.config.mapType == 'satellite') {
-            this.gmap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
-        } else if (this.config.mapType == 'hybrid') {
-            this.gmap.setMapTypeId(google.maps.MapTypeId.HYBRID);
         }
 
         // zoom = null: load all markers
@@ -230,8 +218,13 @@ Map.prototype = {
                     latlngbounds.extend(this.markers[i].getPosition());
                 }
             }
+
             this.gmap.setCenter(latlngbounds.getCenter());
             this.gmap.fitBounds(latlngbounds);
+
+            if (this.markers.length === 1 && this.config.singleMarkerZoom) {
+                this.gmap.setZoom(this.config.singleMarkerZoom);
+            }
 
             google.maps.event.addListener(this.gmap, "idle",
                 $.proxy(this._reloadMarkersOnMapChange, this, []));

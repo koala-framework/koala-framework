@@ -8,6 +8,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['plugins'] = array('Kwc_User_Login_Plugin');
         $ret['flags']['processInput'] = true;
+        $ret['componentName'] = trlKwfStatic('Login Component');
         return $ret;
     }
 
@@ -32,26 +33,18 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             if (!$auth instanceof Kwf_User_Auth_Interface_Redirect) throw new Kwf_Exception_NotFound();
             $redirectBackUrl = $_GET['redirect'];
 
-            $formValues = array();
-            foreach ($auth->getLoginRedirectFormOptions() as $option) {
-                if ($option['type'] == 'select') {
-                    $formValues[$option['name']] = $postData[$option['name']];
-                }
-            }
-
             $f = new Kwf_Filter_StrongRandom();
-            $state = 'login.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.str_replace('.', 'kwfdot', $redirectBackUrl);
+            $state = 'login.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.urlencode(str_replace('.', 'kwfdot', $redirectBackUrl));
 
-            //save state in namespace to validate it later
-            $ns = new Kwf_Session_Namespace('kwf-login-redirect');
-            $ns->state = $state;
+            //save state in cookie to validate it later
+            setcookie("kwf-login-redirect", $state, 0, '/', "", false, true);
 
-            $url = $auth->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
+            $url = $auth->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $postData);
             if ($url) {
                 header("Location: ".$url);
                 exit;
             } else {
-                echo $auth->getLoginRedirectHtml($this->_getRedirectBackUrl(), $state, $formValues);
+                echo $auth->getLoginRedirectHtml($this->_getRedirectBackUrl(), $state, $postData);
                 exit;
             }
         }
@@ -103,7 +96,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
                     'redirect' => '%redirect%',
                     'name' => $this->getData()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
-                    'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
+                    'formOptionsHtml' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
                 );
             }
         }

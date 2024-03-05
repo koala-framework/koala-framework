@@ -2,11 +2,7 @@
 class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 {
     protected $_form;
-    private $_processed = false;
-    private $_isSaved = false;
     private $_initialized = false;
-    private $_posted = false;
-    private $_postData = array();
     private $_formTrlStaticExecuted = false;
     protected $_errors = array();
 
@@ -21,19 +17,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['placeholder']['error'] = trlKwfStatic('An error has occurred');
         $ret['decorator'] = 'Kwc_Form_Decorator_Label';
         $ret['viewCache'] = true;
-        $ret['method'] = 'post';
 
-        $plugins = array('useViewCache' => 'Kwc_Form_UseViewCachePlugin');
-        if (isset($ret['plugins'])) {
-            $ret['plugins'] = array_merge($ret['plugins'], $plugins);
-        } else {
-            $ret['plugins'] = $plugins;
-        }
-
-        $ret['useAjaxRequest'] = true;
-        $ret['hideFormOnSuccess'] = true; // works only when useAjaxRequest==true
-
-        $ret['flags']['processInput'] = true;
+        $ret['hideFormOnSuccess'] = true;
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
 
@@ -42,6 +27,11 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $ret['rootElementClass'] = 'default';
 
         return $ret;
+    }
+
+    public function getSubmitDataLayer()
+    {
+        return array();
     }
 
     public static function validateSettings($settings, $componentClass)
@@ -70,13 +60,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
-    public function preProcessInput(array $postData)
+    //form doesn't use processInput anymore
+    protected final function _processInput($postData)
     {
-    }
-
-    public function processInput(array $postData)
-    {
-        $this->_processInput($postData);
     }
 
     protected final function _getIdFromPostData($postData)
@@ -91,25 +77,8 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return null;
     }
 
-    protected function _processInput($postData)
+    public function processAjaxInput($postData)
     {
-        if ($this->_processed) {
-            return;
-        }
-        $this->_setProcessed();
-
-        $this->_postData = $postData;
-
-        if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
-            $this->_postData = array();
-            $this->_posted = false;
-            return;
-        } else {
-            $this->_posted = true;
-        }
-
-        if (!$this->getForm()) return;
-
         $this->getForm()->trlStaticExecute($this->getData()->getLanguage());
         $this->_formTrlStaticExecuted = true;
 
@@ -123,57 +92,40 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $m = $m->getProxyModel();
         }
 
-        if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
+        if (Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
             Kwf_Registry::get('db')->beginTransaction();
         }
         $postData = $this->_form->processInput(null, $postData);
-        $this->_postData = $postData;
-        if (isset($postData[$this->getData()->componentId])) {
-            ignore_user_abort(true);
-            $this->_errors = array_merge($this->_errors, $this->_validate($postData));
-            if (!$this->_errors) {
-                try {
-                    $this->_form->prepareSave(null, $postData);
-                    $isInsert = false;
-                    if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
-                        $isInsert = true;
-                        $this->_beforeInsert($this->_form->getRow());
-                    } else {
-                        $this->_beforeUpdate($this->_form->getRow());
-                    }
-                    $this->_beforeSave($this->_form->getRow());
-                    $this->_form->save(null, $postData);
-                    if ($isInsert) {
-                        $this->_afterInsert($this->_form->getRow());
-                    } else {
-                        $this->_afterUpdate($this->_form->getRow());
-                    }
-                    $this->_form->afterSave(null, $postData);
-                    $this->_afterSave($this->_form->getRow());
-                    $this->_isSaved = true;
-                } catch (Exception $e) {
-                    $this->_handleProcessException($e);
+
+        ignore_user_abort(true);
+        $this->_errors = array_merge($this->_errors, $this->_validate($postData));
+        if (!$this->_errors) {
+            try {
+                $this->_form->prepareSave(null, $postData);
+                $isInsert = false;
+                if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
+                    $isInsert = true;
+                    $this->_beforeInsert($this->_form->getRow());
+                } else {
+                    $this->_beforeUpdate($this->_form->getRow());
                 }
+                $this->_beforeSave($this->_form->getRow());
+                $this->_form->save(null, $postData);
+                if ($isInsert) {
+                    $this->_afterInsert($this->_form->getRow());
+                } else {
+                    $this->_afterUpdate($this->_form->getRow());
+                }
+                $this->_form->afterSave(null, $postData);
+                $this->_afterSave($this->_form->getRow());
+            } catch (Exception $e) {
+                $this->_handleProcessException($e);
             }
         }
 
-        if ($this->_posted && Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
+
+        if (Kwf_Registry::get('db') && $m instanceof Kwf_Model_Db) {
             Kwf_Registry::get('db')->commit();
-        }
-
-        if ($this->isSaved() && !$this->_errors &&
-            (!isset($postData['doNotRelocate']) || !$postData['doNotRelocate'])
-        ) {
-            $success = $this->getSuccessComponent();
-            $url = null;
-            if ($success instanceof Kwf_Component_Data && $success->isPage) {
-                $url = $this->getSuccessComponent()->url;
-            } else if (is_string($success)) {
-                $url = $success;
-            }
-            if ($url) {
-                Kwf_Util_Redirect::redirect($url);
-            }
         }
     }
 
@@ -199,38 +151,24 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
-    protected function _checkWasProcessed()
-    {
-        if (!$this->_processed && isset($_REQUEST[$this->getData()->componentId.'-post'])) {
-            throw new Kwf_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
-        }
-    }
-
     public function getPostData()
     {
-        $this->_checkWasProcessed();
-        return $this->_postData;
+        throw new Kwf_Exception('Removed. Probalby use NonAjax Form');
     }
 
-    /**
-     * Returns if the form was posted in the current request
-     */
     public function isPosted()
     {
-        $this->_checkWasProcessed();
-        return $this->_posted;
+        throw new Kwf_Exception('Removed. Probalby use NonAjax Form');
     }
 
     public function getErrors()
     {
-        $this->_checkWasProcessed();
         return $this->_errors;
     }
 
     public function getFormRow()
     {
-        $this->_checkWasProcessed();
-        return $this->getForm()->getRow();
+        throw new Kwf_Exception('Removed. Probalby use NonAjax Form');
     }
 
     public function getForm()
@@ -253,79 +191,35 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = Kwc_Abstract::getTemplateVars($renderer);
 
-        $this->_checkWasProcessed();
-
         if (!$this->_formTrlStaticExecuted) {
             $this->getForm()->trlStaticExecute($this->getData()->getLanguage());
             $this->_formTrlStaticExecuted = true;
         }
 
-        $ret['isPosted'] = $this->_posted;
-        $ret['showSuccess'] = false;
         $ret['errors'] = Kwf_Form::formatValidationErrors($this->getErrors());
-        if ($this->isSaved()) {
-            if (!$ret['errors'] && $this->getSuccessComponent()) {
-                $ret['showSuccess'] = true;
+
+        foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
+            if ($c->id != 'success') {
+                $ret[$c->id] = $c;
             }
         }
 
-        if ($ret['showSuccess']) {
-            $ret['success'] = $this->getSuccessComponent();
-        } else {
-            foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
-                if ($c->id != 'success') {
-                    $ret[$c->id] = $c;
-                }
-            }
+        $values = $this->getForm()->load(null, array());
+        $idPrefix = $this->getData()->componentId.'_';
+        if (Kwf_Config::getValue('application.uniquePrefix')) $idPrefix = Kwf_Config::getValue('application.uniquePrefix').'-'.$idPrefix;
+        $ret['form'] = $this->getForm()->getTemplateVars($values, '', $idPrefix);
+
+        $dec = $this->_getSetting('decorator');
+        if ($dec && is_string($dec)) {
+            $dec = new $dec();
+            $ret['form'] = $dec->processItem($ret['form'], $this->getErrors());
         }
 
-        if (!$ret['showSuccess']) {
-            $values = $this->getForm()->load(null, $this->_postData);
-            $idPrefix = $this->getData()->componentId.'_';
-            if (Kwf_Config::getValue('application.uniquePrefix')) $idPrefix = Kwf_Config::getValue('application.uniquePrefix').'-'.$idPrefix;
-            $ret['form'] = $this->getForm()->getTemplateVars($values, '', $idPrefix);
+        $ret['formName'] = $this->getData()->componentId;
 
-            $dec = $this->_getSetting('decorator');
-            if ($dec && is_string($dec)) {
-                $dec = new $dec();
-                $ret['form'] = $dec->processItem($ret['form'], $this->getErrors());
-            }
-
-            $ret['formName'] = $this->getData()->componentId;
-
-            $ret['formId'] = $this->getForm()->getId();
-            if ($ret['formId']) {
-                $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
-            }
-
-            $page = $this->getData()->getPage();
-            if (!$page) {
-                throw new Kwf_Exception('Form must have an url so it must be on a page but is on "' . $this->getData()->componentId . '". (If component is a box it must not be unique)');
-            }
-            $cachedContent = Kwf_Component_Cache::getInstance()->load(
-                $page->componentId, 'componentLink'
-            );
-            if ($cachedContent) {
-                $targetPage = unserialize($cachedContent);
-                $ret['action'] = $targetPage[0];
-            } else {
-                $ret['action'] = $this->getData()->url;
-            }
-            if (isset($_SERVER["QUERY_STRING"])) {
-                $ret['action'] .= '?' . $_SERVER["QUERY_STRING"];
-            }
-
-            $ret['method'] = $this->_getSetting('method');
-        }
-
-        $ret['isUpload'] = false;
-        foreach (new RecursiveIteratorIterator(
-                new Kwf_Collection_Iterator_RecursiveFormFields($this->getForm()->fields))
-                as $f) {
-            if ($f instanceof Kwf_Form_Field_File) {
-                $ret['isUpload'] = true;
-                break;
-            }
+        $ret['formId'] = $this->getForm()->getId();
+        if ($ret['formId']) {
+            $ret['formIdHash'] = Kwf_Util_Hash::hash($ret['formId']);
         }
 
         $ret['message'] = null;
@@ -365,13 +259,14 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         if (!$errorStyle) $errorStyle = Kwf_Config::getValue('kwc.form.errorStyle');
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
-            'useAjaxRequest' => $this->_getSetting('useAjaxRequest'),
             'hideFormOnSuccess' => $this->_getSetting('hideFormOnSuccess'),
             'componentId' => $this->getData()->componentId,
             'hideForValue' => $hideForValue,
             'fieldConfig' => (object)$fieldConfig,
             'errorStyle' => $errorStyle,
-            'baseParams' => $baseParams
+            'baseParams' => $baseParams,
+            'submitDataLayer' => $this->getSubmitDataLayer(),
+            'skipTracking' => false,
         );
 
         $ret['uniquePrefix'] = Kwf_Config::getValue('application.uniquePrefix');
@@ -398,18 +293,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return $this->_getPlaceholder($placeholder);
     }
 
-    protected function _setProcessed()
-    {
-        $this->_processed = true;
-        return $this;
-    }
-
-    protected function _setIsSaved()
-    {
-        $this->_isSaved = true;
-        return $this;
-    }
-
     public function hasContent()
     {
         return true;
@@ -417,12 +300,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
     public function isProcessed()
     {
-        return $this->_processed;
+        throw new Kwf_Exception('Removed. Probalby use NonAjax Form');
     }
 
     public function isSaved()
     {
-        return $this->_isSaved;
+        throw new Kwf_Exception('Removed. Probalby use NonAjax Form');
     }
 
     protected function _afterSave(Kwf_Model_Row_Interface $row)

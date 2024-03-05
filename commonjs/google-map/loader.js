@@ -1,9 +1,13 @@
 var apiKeys = require('kwf-webpack/loader/google-maps-api-key!');
+require('core-js/es6/symbol');
 var t = require('kwf/commonjs/trl');
-var isLoaded = false;
-var isCallbackCalled = false;
-var callbacks = [];
 var loadedLibraries;
+
+var callbackFunctionName = 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
+if (typeof window[callbackFunctionName + '_callbacks'] === "undefined") window[callbackFunctionName + '_callbacks'] = [];
+
+if (typeof window[callbackFunctionName + '_isCallbackCalled'] === "undefined") window[callbackFunctionName + '_isCallbackCalled'] = false;
+if (typeof window[callbackFunctionName + '_isLoaded'] === "undefined") window[callbackFunctionName + '_isLoaded'] = false;
 
 module.exports = function(callback, options)
 {
@@ -29,21 +33,20 @@ module.exports = function(callback, options)
         throw new Error('Google map was already loaded with different libraries');
     }
 
-    if (isCallbackCalled) {
+    if (window[callbackFunctionName + '_isCallbackCalled']) {
         callback.call(scope);
         return;
     }
-    callbacks.push({
+    window[callbackFunctionName + '_callbacks'].push({
         callback: callback,
         scope: scope
     });
-    if (isLoaded) return;
+    if (window[callbackFunctionName + '_isLoaded']) return;
 
-    isLoaded = true;
+    window[callbackFunctionName + '_isLoaded'] = true;
 
 
     //try find the correct api key
-    //apiKeys is set by Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys
     var key = '';
     if (typeof apiKeys == 'string') {
         //one api key can have multiple domains configured
@@ -68,9 +71,8 @@ module.exports = function(callback, options)
         }
     }
 
-    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries='+options.libraries.join(',')+'&async=2&language='+ __trlKwf('en');
-    url += '&callback=';
-    url += 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
+    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&key='+key+'&c&libraries='+options.libraries.join(',')+'&async=2&language='+ __trlKwf('en');
+    url += '&callback=' + callbackFunctionName;
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
     s.setAttribute('src', url);
@@ -79,10 +81,10 @@ module.exports = function(callback, options)
     loadedLibraries = options.libraries;
 };
 
-window['kwfUp-KwfGoogleMapLoaded'.replace('-', '_')] = function()
+window[callbackFunctionName] = function()
 {
-    isCallbackCalled = true;
-    callbacks.forEach(function(i) {
+    window[callbackFunctionName + '_isCallbackCalled'] = true;
+    window[callbackFunctionName + '_callbacks'].forEach(function(i) {
         i.callback.call(i.scope || window);
     });
 };

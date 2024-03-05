@@ -10,6 +10,7 @@ class Kwc_Mail_Editable_Component extends Kwc_Mail_Component
     {
         $ret = parent::getSettings($param);
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Mail/Editable/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Mail/Editable/PreviewPanel.js';
         $ret['menuConfig'] = 'Kwc_Mail_Editable_MenuConfig';
         return $ret;
     }

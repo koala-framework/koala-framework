@@ -451,11 +451,6 @@ class Kwf_Media_Image
                 if ($previousCacheFile) {
                     $f = $previousCacheFile;
                 }
-                $im = self::_createImagickFromBlob(file_get_contents($f), $mimeType);
-                Kwf_Util_Upload::onFileRead($f);
-                if (!$previousCacheFile) {
-                    $im = self::_processCommonImagickSettings($im); //only once
-                }
                 $realWidth = $preScaleWidth;
                 $realHeight = $preScaleHeight;
                 if (isset($size['rotate'])
@@ -464,12 +459,15 @@ class Kwf_Media_Image
                     $realWidth = $preScaleHeight;
                     $realHeight = $preScaleWidth;
                 }
-                $im->resizeImage($realWidth, $realHeight, Imagick::FILTER_LANCZOS, 1);
-                $blob = $im->getImageBlob();
-                if (!strlen($blob)) throw new Kwf_Exception("imageblob is empty");
+                $blob = Kwf_Media_Scaler_Abstract::getInstance()->scale(
+                    $f,
+                    array('width' => $realWidth, 'height' => $realHeight, 'crop' => array('x'=>0, 'y' => 0, 'width' => $sourceSize['width'], 'height' => $sourceSize['height'])),
+                    $mimeType,
+                    array('skipCleanup' => !!$previousCacheFile)
+                );
+
                 file_put_contents($preScaleCacheFile, $blob);
                 Kwf_Util_Upload::onFileWrite($preScaleCacheFile);
-                $im->destroy();
             }
             $previousCacheFile = $preScaleCacheFile;
         }
@@ -532,137 +530,33 @@ class Kwf_Media_Image
             }
             return $ret;
         }
+        $preScale = array('factor'=>0);
+        if ($uploadId && !$source instanceof Imagick) {
+            $preScale = self::_preScale($source, $sourceSize, $mimeType, $size, $uploadId);
+        }
 
-        if (class_exists('Imagick')) {
-            $preScale = array('factor'=>0);
-            if ($uploadId && !$source instanceof Imagick) {
-                $preScale = self::_preScale($source, $sourceSize, $mimeType, $size, $uploadId);
-            }
-
-            if ($source instanceof Imagick) {
-                $im = $source;
-            } else {
-                $f = $source;
-                if ($preScale['factor']) {
-                    $f = $preScale['file'];
-                }
-                $blob = file_get_contents($f);
-                Kwf_Util_Upload::onFileRead($f);
-                if (!strlen($blob)) throw new Kwf_Exception("File is empty");
-                $im = self::_createImagickFromBlob($blob, $mimeType);
-            }
-            if (!$preScale['factor']) {
-                //preScale does this already
-                $im = self::_processCommonImagickSettings($im);
-            }
-            if (isset($size['rotate']) && $size['rotate']) {
-                $im->rotateImage(new ImagickPixel('#FFF'), $size['rotate']);
-            }
-
+        if ($preScale['factor']) {
+            $source = $preScale['file'];
             $factor = pow(2, $preScale['factor']); //1 if factor==0
-            $im->cropImage($size['crop']['width']/$factor,
-                           $size['crop']['height']/$factor,
-                           $size['crop']['x']/$factor,
-                           $size['crop']['y']/$factor);
-            $im->resizeImage($size['width'], $size['height'], Imagick::FILTER_LANCZOS, 1);
-            $im->setImagePage(0, 0, 0, 0);
-//             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
-            if (isset($size['imageCompressionQuality'])) {
-                $im->setImageCompressionQuality($size['imageCompressionQuality']);
-            } else {
-                $im->setImageCompressionQuality(80);
-            }
-            $ret = $im->getImageBlob();
-            $im->destroy();
+            $size['crop']['width'] = $size['crop']['width']/$factor;
+            $size['crop']['height'] = $size['crop']['height']/$factor;
+            $size['crop']['x'] = $size['crop']['x']/$factor;
+            $size['crop']['y'] = $size['crop']['y']/$factor;
+        }
+
+        if ($source instanceof Imagick) {
+            $scaler = new Kwf_Media_Scaler_Imagick();
         } else {
-            $srcSize = getimagesize($source);
-            if ($srcSize[2] == 1) {
-                $source = imagecreatefromgif($source);
-            } elseif ($srcSize[2] == 2) {
-                $source = imagecreatefromjpeg($source);
-            } elseif ($srcSize[2] == 3) {
-                $source = imagecreatefrompng($source);
-            }
-            if (isset($size['rotate']) && $size['rotate']) {
-                $source = imagerotate($source, $size['rotate'], 0);
-            }
-            $destination = imagecreatetruecolor($size['width'], $size['height']);
-            imagefill($destination, 0, 0, imagecolorallocate($destination, 255, 255, 255));
-            imagecopyresampled($destination, $source, 0, 0, $size['crop']['x'], $size['crop']['y'],
-                                $size['width'], $size['height'],
-                                $size['crop']['width'], $size['crop']['height']);
-            ob_start();
-            if ($srcSize[2] == 1) {
-                imagegif($destination);
-            } elseif ($srcSize[2] == 2) {
-                imagejpeg($destination);
-            } elseif ($srcSize[2] == 3) {
-                imagepng($destination);
-            }
-            $ret = ob_get_contents();
-            ob_end_clean();
-        }
-        return $ret;
-    }
-
-    private function _createImagickFromFile($file)
-    {
-        $im = new Imagick();
-        $im->readImage($file);
-        if (method_exists($im, 'setColorspace')) {
-            $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
-            $im->setColorspace($im->getImageColorspace());
-        }
-        return $im;
-    }
-
-    private static function _createImagickFromBlob($blob, $mime)
-    {
-        $im = new Imagick();
-        $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $mime)); //add fake filename to help imagick with format detection
-        if (method_exists($im, 'setColorspace')) {
-            $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
-            $im->setColorspace($im->getImageColorspace());
-        }
-        return $im;
-    }
-
-    private static function _processCommonImagickSettings($im)
-    {
-        if (method_exists($im, 'getImageProfiles') && $im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
-            $profiles = $im->getImageProfiles('icc', false);
-            $hasIccProfile = in_array('icc', $profiles);
-            // if it doesnt have a CMYK ICC profile, we add one
-            if ($hasIccProfile === false) {
-                $iccCmyk = file_get_contents(dirname(__FILE__).'/icc/ISOuncoated.icc');
-                $im->profileImage('icc', $iccCmyk);
-                unset($iccCmyk);
-            }
-            // then we add an RGB profile
-            $iccRgb = file_get_contents(dirname(__FILE__).'/icc/sRGB_v4_ICC_preference.icc');
-            $im->profileImage('icc', $iccRgb);
-            unset($iccRgb);
-        }
-        if (method_exists($im, 'setColorspace')) {
-            $im->setColorspace(Imagick::COLORSPACE_RGB);
-        } else {
-            $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+            $scaler = Kwf_Media_Scaler_Abstract::getInstance();
         }
 
-        if (method_exists($im, 'setColorspace')) {
-            $im->setColorspace(Imagick::COLORSPACE_RGB);
-        } else {
-            $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $skipCleanup = $preScale['factor'] > 0;
+        if ($skipCleanup) {
+            $skipCleanup = $scaler->isSkipCleanup($source, $mimeType);
         }
 
-        $im->stripImage();
-        $im->setImageCompressionQuality(80);
-
-        $version = $im->getVersion();
-        if (isset($version['versionNumber']) && (int)$version['versionNumber'] >= 1632) {
-            if ($im->getImageProperty('date:create')) $im->setImageProperty('date:create', null);
-            if ($im->getImageProperty('date:modify')) $im->setImageProperty('date:modify', null);
-        }
-        return $im;
+        return $scaler->scale($source, $size, $mimeType, array(
+            'skipCleanup' => $skipCleanup
+        ));
     }
 }

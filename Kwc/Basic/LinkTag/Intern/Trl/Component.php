@@ -5,6 +5,7 @@ class Kwc_Basic_LinkTag_Intern_Trl_Component extends Kwc_Basic_LinkTag_Abstract_
     {
         $ret = parent::getSettings($masterComponent);
         $ret['dataClass'] = 'Kwc_Basic_LinkTag_Intern_Trl_Data';
+        $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
         return $ret;
     }
 }

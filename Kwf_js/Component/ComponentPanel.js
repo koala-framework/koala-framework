@@ -103,6 +103,7 @@ Kwf.Component.ComponentPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
             if (config.title) delete config.title;
 
             var item = Ext2.ComponentMgr.create(config);
+            this.relayEvents(item, ['editcomponent', 'gotComponentConfigs', 'datachange']);
             item.on('savebackaction', function() {
                 this.componentsStack.pop();
                 var data = this.componentsStack.pop();

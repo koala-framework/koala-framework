@@ -13,9 +13,15 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('Activate Account');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Activate_Form_Success_Component';
-        $ret['useAjaxRequest'] = true;
         $ret['viewCache'] = false;
-        unset($ret['plugins']['useViewCache']);
+        $ret['flags']['processInput'] = true;
+        return $ret;
+    }
+
+    protected function _getBaseParams()
+    {
+        $ret = parent::_getBaseParams();
+        if (!empty($_GET['redirect'])) $ret['redirect'] = $_GET['redirect'];
         return $ret;
     }
 
@@ -52,16 +58,11 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
 
     public function processInput(array $postData)
     {
-        parent::processInput($postData);
-
         if (isset($postData['code'])) {
             $code = $postData['code'];
             $this->getForm()->getRow()->code = $code;
-        } else if (isset($postData['form_code'])) {
-            $code = $postData['form_code'];
-            $this->getForm()->getRow()->code = $code;
         } else {
-            $code = $this->getForm()->getRow()->code;
+            $code = '';
         }
 
         if (!preg_match('#^(.*)-(\w*)$#', $code, $m)) {
@@ -83,15 +84,31 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
                 $this->_hideForm = true;
             }
         }
-
-        if (!$this->_errors && $this->_user && $this->isSaved()) {
-            $userModel->setPassword($this->_user, $this->_form->getRow()->password);
-            $this->_user->clearActivationToken();
-            $this->_afterLogin(Kwf_Registry::get('userModel')->getAuthedUser());
-        }
     }
 
     protected function _afterLogin(Kwf_Model_Row_Abstract $user)
     {
+    }
+
+    protected function _afterSave(Kwf_Model_Row_Interface $row)
+    {
+        parent::_afterSave($row);
+        $userModel = Zend_Registry::get('userModel');
+
+        if (!preg_match('#^(.*)-(\w*)$#', $row->code, $m)) {
+            throw new Kwf_Exception("Invalid code");
+        }
+        $userId = $m[1];
+        $code = $m[2];
+        $user = $userModel->getRow($userId);
+
+        if (!$user) {
+            throw new Kwf_Exception("Invalid code");
+        } else if (!$user->validateActivationToken($code)) {
+            throw new Kwf_Exception("Invalid code");
+        }
+        $userModel->setPassword($user, $row->password);
+        $user->clearActivationToken();
+        $this->_afterLogin(Kwf_Registry::get('userModel')->getAuthedUser());
     }
 }

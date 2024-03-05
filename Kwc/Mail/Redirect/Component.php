@@ -168,9 +168,9 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         if ($mode == 'mailhtml' || $mode == 'html') {
             $that = $this;
             $mailText = preg_replace_callback('#(<a [^>]*href=")([^>"]+)()#', function($m) use ($that, $recipient) {
-                $link = htmlspecialchars_decode($m[2]);
+                $link = Kwf_Util_HtmlSpecialChars::decode($m[2]);
                 $link = $that->_createRedirectUrl($link, $recipient);
-                return $m[1].htmlspecialchars($link).$m[3];
+                return $m[1].Kwf_Util_HtmlSpecialChars::filter($link).$m[3];
             }, $mailText);
         } else if ($mode == 'mailtext') {
             $that = $this;
@@ -222,6 +222,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         } else {
             $link = $hrefParts['path'];
             if (!$link) $link = '/';
+            if (isset($hrefParts['fragment'])) $link .= '#' . $hrefParts['fragment'];
         }
 
         if (!isset($this->_redirectRowsCache[$link])) {

@@ -1,6 +1,4 @@
 @import "config/colors";
-@import "compass/css3/opacity";
-@import "compass/css3/box-sizing";
 
 .kwcClass {
     .kwcBem__background {
@@ -11,7 +9,7 @@
         z-index: 2;
 
         &.kwcBem__background--opaque {
-            @include opacity(0.7);
+            opacity: 0.7;
         }
 
         &.kwcBem__backgroundImage {
@@ -59,6 +57,6 @@
         z-index: 3;
         position: relative;
         padding: 30px 0;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
     }
 }

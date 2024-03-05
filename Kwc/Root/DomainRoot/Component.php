@@ -34,7 +34,7 @@ class Kwc_Root_DomainRoot_Component extends Kwc_Root_Abstract
     public static function getAvailableLanguages($componentClass)
     {
         $ret = array();
-        foreach (Kwf_Config::getValueArray('kwc.domains') as $d) {
+        foreach (Kwc_Root_DomainRoot_Component::getDomains() as $d) {
             if (isset($d['language'])) {
                 if (is_array($d['language'])) {
                     $ret = array_merge($ret, $d['language']);
@@ -44,6 +44,21 @@ class Kwc_Root_DomainRoot_Component extends Kwc_Root_Abstract
             }
         }
         $ret = array_unique($ret);
+        return $ret;
+    }
+
+    public static function getDomains()
+    {
+        $availableDomains = Kwf_Config::getValue('kwc.availableDomains');
+        if (is_array($availableDomains)) {
+            $domains = Kwf_Config::getValueArray('kwc.domains');
+            foreach ($availableDomains as $domain) {
+                if (!isset($domains[$domain])) continue;
+                $ret[$domain] = $domains[$domain];
+            }
+        } else {
+            $ret = Kwf_Config::getValueArray('kwc.domains');
+        }
         return $ret;
     }
 }

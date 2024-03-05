@@ -15,10 +15,11 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         parent::__construct($field_name, $field_label);
         $this->setXtype('numberfield');
         $this->setDecimalSeparator(trlcKwfStatic('decimal separator', '.'));
+        $this->setAllowDecimals(true);
         $this->setDecimalPrecision(2);
        $this->setInputType('number');
 
-        $this->_floatValidator = new Zend_Validate_Float();
+        $this->_floatValidator = new Kwf_Validate_Float();
     }
 
     public function getMetaData($model)

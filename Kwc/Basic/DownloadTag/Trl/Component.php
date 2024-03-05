@@ -12,6 +12,8 @@ class Kwc_Basic_DownloadTag_Trl_Component extends Kwc_Basic_LinkTag_Abstract_Trl
         $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['dataClass'] = 'Kwc_Basic_DownloadTag_Trl_Data';
+        $ret['apiContent'] = 'Kwc_Basic_DownloadTag_Trl_ApiContent';
+        $ret['apiContentType'] = 'download';
         return $ret;
     }
 
@@ -25,6 +27,22 @@ class Kwc_Basic_DownloadTag_Trl_Component extends Kwc_Basic_LinkTag_Abstract_Trl
     public function getDownloadUrl()
     {
         return $this->getData()->url;
+    }
+
+    public function getFilesize()
+    {
+        $fRow = $this->getFileRow()->getParentRow('File');
+        if (!$fRow) return null;
+        return $fRow->getFileSize();
+    }
+
+    public function getFileRow()
+    {
+        if ($this->getRow()->own_download) {
+            return $this->getData()->getChildComponent('-download')->getComponent()->getFileRow();
+        } else {
+            return $this->getData()->chained->getComponent()->getFileRow();
+        }
     }
 
     public static function isValidMediaOutput($id, $type, $className)

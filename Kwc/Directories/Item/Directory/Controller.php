@@ -65,7 +65,10 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
                 $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($ec['componentClass'], 'componentName'));
                 $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
                 $icon = new Kwf_Asset($icon);
-                $this->_columns->add(new Kwc_Directories_Item_Directory_ControllerEditButton('edit_'.$i, ' ', 20))
+                $data = new Kwc_Directories_Item_Directory_ControllerEditButtonData();
+                $data->setEditComponent($ec['component']);
+                $this->_columns->add(new Kwf_Grid_Column_Button('edit_'.$i, ' ', 20))
+                    ->setData($data)
                     ->setColumnType('editContent')
                     ->setEditComponentClass($ec['componentClass'])
                     ->setEditComponent($ec['component'])
@@ -158,7 +161,8 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
             array('ignoreVisible'=>true, 'limit'=>1)
         );
         foreach ($ids as $id) {
-            $child = $dir->getChildComponent(array('id'=>'-'.$id, 'ignoreVisible'=>true));
+            $sep = $dir->getGenerator('detail')->getIdSeparator();
+            $child = $dir->getChildComponent(array('id'=>$sep.$id, 'ignoreVisible'=>true));
             $newChild = Kwf_Util_Component::duplicate($child, $dir, $progressBar);
             $newChild->row->save();
             $this->view->data['duplicatedIds'][] = $newChild->id;

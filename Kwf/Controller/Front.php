@@ -64,8 +64,6 @@ class Kwf_Controller_Front extends Zend_Controller_Front
             $plugin->setErrorHandlerController('cli');
         }
         $this->registerPlugin($plugin);
-
-        $this->setBaseUrl(Kwf_Setup::getBaseUrl());
     }
 
     public static function getInstance()
@@ -124,6 +122,15 @@ class Kwf_Controller_Front extends Zend_Controller_Front
     {
         if ($request === null) {
             if (PHP_SAPI == 'cli') {
+                $argv = $_SERVER['argv'];
+                if (isset($argv[1]) && $argv[1] == 'symfony') {
+                    unset($argv[0]);
+                    unset($argv[1]);
+                    if (!in_array("--no-ansi", $argv)) $argv[] = '--ansi';
+                    $cmd = './symfony/bin/console '.implode(' ', array_map('escapeshellarg', $argv));
+                    passthru($cmd, $retVar);
+                    exit($retVar);
+                }
                 $request = new Kwf_Controller_Request_Cli();
             } else {
                 $request = new Kwf_Controller_Request_Http();

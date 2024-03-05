@@ -14,7 +14,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         return $ret;
     }
 
-    private function _getParent()
+    protected function _getParent()
     {
         $previous = null;
         $parent = $this->_data->parent;
@@ -25,7 +25,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
 
         if ($parent instanceof Kwc_Basic_LinkTag_FirstChildPage_Data) {
             $parent = $parent->_getFirstChildPage();
-            if ($parent == $this->_data) {
+            if ($parent->componentId == $this->_data->componentId) {
                 $parent = $parent->parent;
                 while ($parent && $parent instanceof Kwc_Basic_LinkTag_FirstChildPage_Data) {
                     $parent = $parent->parent;
@@ -69,6 +69,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($parent);
             $parentContent = $parentContentSender->_render($includeMaster, $hasDynamicParts);
+            $title = preg_match('/<title[^>]*>(.*?)<\/title>/ims', $parentContent, $match) ? $match[1] : null;
 
             //remove main content to avoid duplicate content for search engines
             //content will be loaded using ajax
@@ -101,9 +102,9 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
                 $class .= ' ' . str_replace('kwfUp-', $kwfUniquePrefix, $options['cssClass']);
             }
             if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
-            $options = htmlspecialchars(json_encode($options));
+            $options = Kwf_Util_HtmlSpecialChars::filter(json_encode($options));
             $lightboxContent =
-                "<div class=\"$class ".$kwfUniquePrefix."kwfLightboxOpen\">\n".
+                "<div class=\"$class ".$kwfUniquePrefix."kwfLightboxOpen\" data-parent-title=\"$title\">\n".
                 "    <div class=\"".$kwfUniquePrefix."kwfLightboxScrollOuter\">\n".
                 "        <div class=\"".$kwfUniquePrefix."kwfLightboxScroll\">\n".
                 "            <div class=\"".$kwfUniquePrefix."kwfLightboxBetween\">\n".

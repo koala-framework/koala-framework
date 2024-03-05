@@ -1,1 +1,0 @@
-ALTER TABLE  `kwc_mail_redirect_statistics` CHANGE  `recipient_id`  `recipient_id` VARCHAR( 255 ) NOT NULL;

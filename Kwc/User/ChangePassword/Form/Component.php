@@ -8,6 +8,7 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         $ret['generators']['child']['component']['success'] = 'Kwc_User_ChangePassword_Form_Success_Component';
         $ret['plugins'] = array('Kwf_Component_Plugin_Login_Component');
         $ret['viewCache'] = false;
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
@@ -17,10 +18,11 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         $this->_form->setModel(new Kwf_Model_FnF());
     }
 
-    protected function _processInput($postData)
+    public function processInput($postData)
     {
-
         $users = Kwf_Registry::get('userModel');
+        $userRow = $users->getAuthedUser();
+        if (!$userRow) return;
 
         $showPassword = false;
         //is there a password auth?
@@ -34,7 +36,7 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         //if a redirect auth doesn't allow password hide it
         foreach ($users->getAuthMethods() as $auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
-                if (!$auth->allowPasswordForUser($users->getAuthedUser())) {
+                if (!$auth->allowPasswordForUser($userRow)) {
                     $label = $auth->getLoginRedirectLabel();
                     $label = Kwf_Trl::getInstance()->trlStaticExecute($label['name']);
                     $msg = $this->getData()->trlKwf("This user doesn't have a password, he must log in using {0}", $label);
@@ -45,7 +47,6 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
                 }
             }
         }
-        parent::_processInput($postData);
     }
 
     protected function _afterSave(Kwf_Model_Row_Interface $row)

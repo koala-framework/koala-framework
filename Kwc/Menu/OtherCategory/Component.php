@@ -24,8 +24,31 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
     private function _getMenuSource()
     {
         $category = Kwc_Abstract::getSetting($this->_getMenuComponentClass(), 'level');
-        $categoryData = $this->getData()->parent->parent->getChildComponent('-'.$category);
-        $menu = $categoryData->getChildComponent('-'.$this->getData()->id);
+
+        // get first parent with boxes as menu can also be below composite
+        $firstParentWithMenuBoxes = $this->getData()->getPage();
+        if (!$firstParentWithMenuBoxes) {
+            $firstParentWithMenuBoxes = $this->getData()->getSubroot();
+        }
+
+        // get path from box-component to actual menu-component deeper inside the box-component
+        $menuComponentIdPath = array();
+        $menuComponentIdPath[] = $this->getData()->id;
+        $ownBoxStartCmp = $this->getData();
+
+        while ($ownBoxStartCmp->parent != $firstParentWithMenuBoxes
+            && !Kwc_Abstract::getFlag($ownBoxStartCmp->parent->componentClass, 'menuCategory')
+        ) {
+            $ownBoxStartCmp = $ownBoxStartCmp->parent;
+            $menuComponentIdPath[] = $ownBoxStartCmp->id;
+        }
+        $menuComponentIdPath = array_reverse($menuComponentIdPath);
+
+        // get default menu-component
+        $menu = $firstParentWithMenuBoxes->getChildComponent('-'.$category);
+        foreach ($menuComponentIdPath as $componentId) {
+            $menu = $menu->getChildComponent('-'.$componentId);
+        }
         return $menu;
     }
 

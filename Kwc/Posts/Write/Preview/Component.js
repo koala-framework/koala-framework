@@ -1,3 +1,6 @@
+/*
+TODO port to jquery
+
 Ext2.namespace('Kwc.PostsWritePreview');
 
 Ext2.onReady(function()
@@ -42,7 +45,7 @@ Kwc.PostsWritePreview.scrollToBottom = function(el, maxHeight) {
 
 Kwc.PostsWritePreview.replaceText = function(v)
 {
-    // htmlspecialchars
+    // Kwf_Util_HtmlSpecialChars::filter
     v = v.replace(/&/g, '&amp;');
     v = v.replace(/"/g, '&quot;');
     v = v.replace(/</g, '&lt;');
@@ -102,3 +105,4 @@ Kwc.PostsWritePreview.replaceText = function(v)
     return v;
 };
 
+*/

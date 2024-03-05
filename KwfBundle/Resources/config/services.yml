@@ -46,12 +46,40 @@ services:
             - { name: serializer.normalizer, priority: -10 }
         public: false
 
-    kwf.exception_handler:
-        class: KwfBundle\ExceptionHandler
+    kwf.exception_controller:
+        class: Symfony\Bundle\TwigBundle\Controller\ExceptionController
+        arguments: ['@twig', '%kernel.debug%']
+
+    kwf.assets_package:
+        class: KwfBundle\Assets\Package
+        arguments: ["/", @assets.empty_version_strategy]
+
+    assets.packages:
+        class: Symfony\Component\Asset\Packages
+        arguments: [@kwf.assets_package]
+
+    kwf.exception_listener:
+        class: KwfBundle\EventListener\ExceptionHandler
+        arguments: ['@kwf.exception_controller']
         tags:
-            - { name: kernel.event_subscriber }
+            - { name: kernel.event_listener, event: kernel.exception, priority: 13 }
 
     kwf.modelobserver_listener:
         class: KwfBundle\EventListener\ModelObserverProcess
         tags:
             - { name: kernel.event_listener, event: kernel.terminate }
+
+    kwf.crsfprotection_listener:
+        class: KwfBundle\EventListener\CsrfProtection
+        arguments: ['%kwf.csrf_protection.ignore_paths%']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 12 }
+
+    kwf.maintenance_jobs_locator:
+        class: KwfBundle\MaintenanceJobs\Locator
+
+    kwf.updates_provider_locator:
+        class: KwfBundle\UpdatesProvider\Locator
+
+    kwf.validator.error_collect_validator:
+        class: KwfBundle\Validator\ErrorCollectValidator

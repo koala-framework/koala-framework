@@ -22,14 +22,14 @@
     a {
         &.listSwitchPrevious {
             width: 39px;
-            background: url('/assets/kwf/Kwc/Legacy/List/Carousel/images/arrowLeft.png') left center no-repeat;
+            background: url('~kwf/Kwc/Legacy/List/Carousel/images/arrowLeft.png') left center no-repeat;
             position: absolute;
             height: 100%;
             top: 0;
             left: 0;
         }
         &.listSwitchNext {
-            background: url('/assets/kwf/Kwc/Legacy/List/Carousel/images/arrowRight.png') left center no-repeat;
+            background: url('~kwf/Kwc/Legacy/List/Carousel/images/arrowRight.png') left center no-repeat;
             width: 39px;
             position: absolute;
             top: 0;

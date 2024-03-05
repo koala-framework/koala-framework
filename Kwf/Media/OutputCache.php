@@ -68,7 +68,11 @@ class Kwf_Media_OutputCache
     {
         $id = self::_processCacheId($id);
         $be = self::_getBackend();
-        if ($be == 'memcache') {
+        if ($be == 'memcached') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
+            $ret = Kwf_Cache_Simple::getMemcached()->get($prefix.$id);
+        } else if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
             $ret = Kwf_Cache_Simple::getMemcache()->get($prefix.$id);
@@ -106,7 +110,11 @@ class Kwf_Media_OutputCache
         $id = self::_processCacheId($id);
         $this->_getSecondLevelCache()->save($data, $id, array(), $ttl);
         $be = self::_getBackend();
-        if ($be == 'memcache') {
+        if ($be == 'memcached') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
+            return Kwf_Cache_Simple::getMemcached()->set($prefix.$id, $data, $ttl);
+        } else if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
             $flags = is_int($data) ? null : MEMCACHE_COMPRESSED;
@@ -128,7 +136,11 @@ class Kwf_Media_OutputCache
         $id = self::_processCacheId($id);
         $this->_getSecondLevelCache()->remove($id);
         $be = self::_getBackend();
-        if ($be == 'memcache') {
+        if ($be == 'memcached') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
+            return Kwf_Cache_Simple::getMemcached()->delete($prefix.$id);
+        } else if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
             return Kwf_Cache_Simple::getMemcache()->delete($prefix.$id);
@@ -144,7 +156,12 @@ class Kwf_Media_OutputCache
     public function clean()
     {
         $be = self::_getBackend();
-        if ($be == 'memcache') {
+        if ($be == 'memcached') {
+            $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
+            foreach ($this->_getSecondLevelCache()->getIds() as $id) {
+                Kwf_Cache_Simple::getMemcached()->delete($prefix.$id);
+            }
+        } else if ($be == 'memcache') {
             $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
             foreach ($this->_getSecondLevelCache()->getIds() as $id) {
                 Kwf_Cache_Simple::getMemcache()->delete($prefix.$id);
@@ -178,4 +195,27 @@ class Kwf_Media_OutputCache
         }
     }
 
+    public function clear($class)
+    {
+        $cacheFolder = Kwf_Config::getValue('mediametaCacheDir');
+        // get all folders, except . and .. (array_slice)
+        $firstLevelFolders = array_slice(scandir($cacheFolder), 2);
+        foreach ($firstLevelFolders as $firstLevelFolder) {
+            if (is_file($cacheFolder.'/'.$firstLevelFolder)) continue;
+            $secondLevelFolders = array_slice(scandir($cacheFolder.'/'.$firstLevelFolder), 2);
+            foreach ($secondLevelFolders as $secondLevelFolder) {
+                $ids = array_slice(scandir($cacheFolder.'/'.$firstLevelFolder.'/'.$secondLevelFolder), 2);
+                foreach ($ids as $id) {
+                    if (strpos($id, 'internal-metadatas') !== false) continue;
+                    if (strpos($id, $class) === false) continue;
+                    $id = substr($id, 13);
+                    $data = $this->_getSecondLevelCache()->load($id);
+                    if (isset($data['file']) && $data['file']) {
+                        unlink(realpath($data['file']));
+                    }
+                    $this->remove($id);
+                }
+            }
+        }
+    }
 }

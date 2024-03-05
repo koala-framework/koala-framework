@@ -12,7 +12,7 @@ class Kwf_Js_DoubleTapToGo_Test extends PHPUnit_Framework_TestCase
         }
 
         $cmd = "phantomjs --web-security=false ../vendor/bower_components/qunit-phantomjs-runner/runner.js ";
-        $cmd .= "http://".Kwf_Config::getValue('server.domain').Kwf_Setup::getBaseUrl()."/kwf/test/kwf_js_double-tap-to-go_test 20";
+        $cmd .= "http://" . Kwf_Config::getValue('server.domain') . "/kwf/test/kwf_js_double-tap-to-go_test 20";
         $cmd .= " 2>&1";
         $out = array();
         exec($cmd, $out, $retVar);

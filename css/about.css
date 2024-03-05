@@ -11,7 +11,7 @@
     border-top: 2px solid #a9bfd4;
     padding: 10px;
     font-size: 11px;
-    background: url(/assets/kwf/images/welcome/footerBg.jpg) bottom left repeat-x;
+    background: url(~kwf/images/welcome/footerBg.jpg) bottom left repeat-x;
 }
 .kwf-about .footer img#enteWelcome {
     position: absolute;

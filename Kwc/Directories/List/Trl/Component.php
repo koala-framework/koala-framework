@@ -38,6 +38,32 @@ class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
         );
     }
 
+    public function getItems($select = null)
+    {
+        $ret = array();
+        $items = $this->getData()->chained->getComponent()->getItems($select);
+        foreach ($items as $item) {
+            $trlItemCmp = self::getChainedByMaster($item, $this->getData(), array('ignoreVisible' => true));
+            if ($trlItemCmp) {
+                $trlItemCmp->parent->getComponent()->callModifyItemData($trlItemCmp);
+                $ret[] = $trlItemCmp;
+            }
+        }
+        return $ret;
+    }
+
+    public function getItemIds($select = null)
+    {
+        $ret = array();
+        $items = $this->getItems($select);
+        foreach ($items as $item) {
+            if ($item) {
+                $ret[] = $item->id;
+            }
+        }
+        return $ret;
+    }
+
     public function getSelect()
     {
         $itemDirectory = $this->getItemDirectory();
@@ -46,9 +72,9 @@ class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
             throw new Kwf_Exception_NotYetImplemented();
         } else {
             if (Kwc_Abstract::getSetting($this->getData()->chained->componentClass, 'useDirectorySelect')) {
-                $ret = $itemDirectory->getComponent()->getSelect();
+                $ret = $this->_getChainedComponent()->getComponent()->getSelect();
             } else {
-                $ret = $itemDirectory->getGenerator('detail')
+                $ret = $this->_getChainedComponent()->getGenerator('detail')
                     ->select($this->getItemDirectory());
             }
         }

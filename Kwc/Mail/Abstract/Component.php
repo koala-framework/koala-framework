@@ -84,6 +84,35 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         return $this->_getSetting('recipientSources');
     }
 
+    /**
+     * @param string $modelShortcut
+     * @param string|int $id
+     * @return Kwf_Model_Row_Interface
+     * @throws Kwf_Exception
+     */
+    public function getRecipientFromShortcut($modelShortcut, $id)
+    {
+        $modelName = null;
+        foreach ($this->getRecipientSources() as $shortcut => $recipientSource) {
+            if ($shortcut === $modelShortcut) {
+                $modelName = $recipientSource['model'];
+                break;
+            }
+        }
+        if (!$modelName) {
+            throw new Kwf_Exception("No recipient source for shortcut \"{$modelShortcut}\" found");
+        } else if (!is_instance_of($modelName, 'Kwf_Model_Abstract')) {
+            throw new Kwf_Exception("Recipient-Model for shortcut \"{$modelShortcut}\" and id \"{$id}\" has to be a model.");
+        }
+
+        $row = Kwf_Model_Abstract::getInstance($modelName)->getRow($id);
+        if ($row && !$row instanceof Kwc_Mail_Recipient_Interface) {
+            throw new Kwf_Exception("Recipient-Row has to implement Kwc_Mail_Recipient_Interface");
+        }
+
+        return $row;
+    }
+
     public function getHtmlStyles()
     {
         $ret = $this->_getSetting('mailHtmlStyles');
@@ -122,7 +151,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $returnPath = $this->_getReturnPath();
         if ($returnPath) $mail->setReturnPath($returnPath);
         $bcc = $this->_getBcc();
-        $mail->addBcc($bcc);
+        if ($bcc) $mail->addBcc($bcc);
 
         return $mail;
     }
@@ -283,23 +312,42 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTotalViews()
+    /**
+     * @param null|Zend_Db_Expr $where
+     */
+    public function getTotalViews($where = null)
     {
         $db = Kwf_Registry::get('db');
-        $sql = "
-            SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
-            FROM kwc_mail_views WHERE mail_component_id=?";
-        return $db->fetchOne($sql, $this->getData()->componentId);
+
+        $select = new Zend_Db_Select($db);
+        $select
+            ->from(
+                array('kwc_mail_views'),
+                array(new Zend_Db_Expr('count(distinct(concat(recipient_id,recipient_model_shortcut)))'))
+            )
+            ->where('mail_component_id = ?', $this->getData()->componentId);
+        if ($where) $select->where($where);
+
+        return $db->fetchOne($select);
     }
 
-    public function getTotalClicks()
+    /**
+     * @param null|Zend_Db_Expr $where
+     */
+    public function getTotalClicks($where = null)
     {
         $db = Kwf_Registry::get('db');
-        $sql = "
-            SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
-            FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
-            WHERE s.redirect_id=r.id AND mail_component_id=?";
-        return $db->fetchOne($sql, $this->getData()->componentId);
+
+        $select = new Zend_Db_Select($db);
+        $select
+            ->from(
+                array('kwc_mail_redirect_statistics'),
+                array(new Zend_Db_Expr('count(distinct(concat(recipient_id,recipient_model_shortcut)))'))
+            )
+            ->where('mail_component_id = ?', $this->getData()->componentId);
+        if ($where) $select->where($where);
+
+        return $db->fetchOne($select);
     }
 
     public static function getMediaOutput($id, $type, $className)

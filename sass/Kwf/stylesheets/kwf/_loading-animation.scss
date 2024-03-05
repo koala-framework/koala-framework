@@ -1,43 +1,21 @@
-@import "kwf/modernizr";
-
 @mixin loading-animation($animationName, $path, $file, $width, $height, $params:"") {
+    background: url($path + '/' + $file + '.png') $params;
+    position: absolute;
+    height: $height;
+    width: $width;
+    margin: 0 auto;
+    display: block;
+    content: '';
+    left: 50%;
+    top: 50%;
+    margin-left: -($width / 2);
+    margin-top: -($height / 2);
+    animation: $animationName .5s infinite linear;
 
-    @include modernizr(cssanimations) {
-        background: url($path + '/' + $file + '.png') $params;
-        position: absolute;
-        height: $height;
-        width: $width;
-        margin: 0 auto;
-        display: block;
-        content: '';
-        left: 50%;
-        top: 50%;
-        margin-left: -($width / 2);
-        margin-top: -($height / 2);
-        -moz-animation: $animationName .5s infinite linear;
-        -webkit-animation: $animationName .5s infinite linear;
-        animation: $animationName .5s infinite linear;
-
-        @media (min-device-pixel-ratio: 1.1), (-webkit-min-device-pixel-ratio: 1.1) {
-            & {
-              background-image: url($path + '/dpr2/' + $file + '.png');
-              background-size: $width $height;
-              -webkit-background-size: $width $height;
-            }
+    @media (min-device-pixel-ratio: 1.1), (-webkit-min-device-pixel-ratio: 1.1) {
+        & {
+          background-image: url($path + '/dpr2/' + $file + '.png');
+          background-size: $width $height;
         }
-    }
-
-    @include modernizr-no(cssanimations) {
-        background: url($path + '/' + $file + '.gif') $params;
-        position: absolute;
-        height: $height;
-        width: $width;
-        margin: 0 auto;
-        display: block;
-        content: '';
-        left: 50%;
-        top: 50%;
-        margin-left: -($width / 2);
-        margin-top: -($height / 2);
     }
 }

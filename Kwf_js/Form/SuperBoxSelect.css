@@ -4,8 +4,8 @@
 .x2-superboxselect-display-btns {padding-right: 33px !important;}
 .x2-superboxselect-btns {position: absolute; right: 1px; top: 0; overflow:hidden; padding:2px;}
 .x2-superboxselect-btns div {float: left; width: 16px; height: 16px; margin-top: 4px;}
-.x2-superboxselect-btn-clear {background: url(/assets/kwf/images/superboxselect/clear.png) no-repeat scroll left 0px;}
-.x2-superboxselect-btn-expand {background: url(/assets/kwf/images/superboxselect/expand.png) no-repeat scroll left 0px;}
+.x2-superboxselect-btn-clear {background: url(~kwf/images/superboxselect/clear.png) no-repeat scroll left 0px;}
+.x2-superboxselect-btn-expand {background: url(~kwf/images/superboxselect/expand.png) no-repeat scroll left 0px;}
 .x2-superboxselect-btn-over {background-position: left -16px}
 .x2-superboxselect-btn-hide {display:none;}
 .x2-superboxselect li {float: left; margin: 1px 1px 2px 1px; padding: 0;line-height: 18px;}
@@ -17,7 +17,7 @@ body.ext-ie7 .x2-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2e
 body.ext-ie6 .x2-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em; padding: 2px 19px 4px 5px !important;}
 .x2-superboxselect-item-hover {background: #BBCEF1; border: 1px solid #6D95E0;}
 .x2-superboxselect-item-focus {border-color: #598BEC; background: #598BEC; color: #fff;}
-.x2-superboxselect-item-close {background: url(/assets/kwf/images/superboxselect/close.png) no-repeat scroll left 0px; border: none; cursor: default; font-size: 1px; height: 16px;padding:0; position: absolute; right: 0px; top: 2px; width: 13px;display:block;cursor:pointer;}
+.x2-superboxselect-item-close {background: url(~kwf/images/superboxselect/close.png) no-repeat scroll left 0px; border: none; cursor: default; font-size: 1px; height: 16px;padding:0; position: absolute; right: 0px; top: 2px; width: 13px;display:block;cursor:pointer;}
 
 .x2-superboxselect-item-close:hover, .x2-superboxselect-item-close:active  { background-position: left -12px;}
 .x2-superboxselect-item-focus .x2-superboxselect-item-close{ background-position: left -24px}

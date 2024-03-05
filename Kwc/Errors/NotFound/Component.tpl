@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?>">
     <h1>404 - <?=$this->data->trlKwf('File not found');?></h1>
-    <p><?=$this->data->trlKwf('The requested URL "{0}" was not found on this server.', htmlspecialchars($this->requestUri));?></p>
+    <p><?=$this->data->trlKwf('The requested URL "{0}" was not found on this server.', Kwf_Util_HtmlSpecialChars::filter($this->requestUri));?></p>
     <ul>
         <li>
             <?=$this->data->trlKwf('If you typed the address, make sure the spelling is correct');?>.<br/>

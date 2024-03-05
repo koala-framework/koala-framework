@@ -3,6 +3,9 @@ namespace KwfBundle\HttpFoundation\Session;
 
 use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeSessionHandler;
+use Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy;
+use Symfony\Component\HttpFoundation\Session\Storage\Proxy\NativeProxy;
+use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
 
 class KwfSessionStorage extends PhpBridgeSessionStorage
 {
@@ -16,7 +19,12 @@ class KwfSessionStorage extends PhpBridgeSessionStorage
     public function setSaveHandler($saveHandler = null)
     {
         //parent::setSaveHandler($saveHandler);
-        $this->saveHandler = $saveHandler;
+        if (!$saveHandler instanceof AbstractProxy && $saveHandler instanceof \SessionHandlerInterface) {
+            $this->saveHandler = new SessionHandlerProxy($saveHandler);
+        } elseif (!$saveHandler instanceof AbstractProxy) {
+            $this->saveHandler = \PHP_VERSION_ID >= 50400 ?
+                new SessionHandlerProxy(new \SessionHandler()) : new NativeProxy();
+        }
     }
 
     public function start()

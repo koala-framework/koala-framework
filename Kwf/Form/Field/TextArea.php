@@ -60,11 +60,11 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
         }
         if ($cls) $ret['html'] .= ' class="'.trim($cls).'"';
         if ($this->getEmptyText()) {
-            $ret['html'] .= ' placeholder="'.htmlspecialchars($this->getEmptyText()).'"';
+            $ret['html'] .= ' placeholder="'.Kwf_Util_HtmlSpecialChars::filter($this->getEmptyText()).'"';
         }
 
         $ret['html'] .= '>';
-        $ret['html'] .= htmlspecialchars($value);
+        $ret['html'] .= Kwf_Util_HtmlSpecialChars::filter($value);
         $ret['html'] .= "</textarea>";
         return $ret;
     }

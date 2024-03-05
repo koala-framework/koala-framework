@@ -131,8 +131,8 @@ class Kwf_Form_Field_MultiCheckboxLegacy extends Kwf_Form_Field_Abstract
         $this->_references = $references;
         return $this;
     }
-    
-    public function load(Kwf_Model_Row_Interface $row)
+
+    public function load($row, $postData = array())
     {
         if (!$row) return array();
 
@@ -169,7 +169,7 @@ class Kwf_Form_Field_MultiCheckboxLegacy extends Kwf_Form_Field_Abstract
         }
         return $ret;
     }
-    public function save(Kwf_Model_Row_Interface $row, $postData)
+    public function save($row, $postData)
     {
         $new = array();
         if (isset($postData[$this->getFieldName()]) && $postData[$this->getFieldName()]) {

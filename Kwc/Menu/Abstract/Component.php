@@ -96,31 +96,26 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
             return 'otherCategoryChild';
         }
 
-        $data = $parentData;
+        $categoryData = $parentData;
         $menuLevel = 0;
-        while ($data && !Kwc_Abstract::getFlag($data->componentClass, 'menuCategory')) {
-            if ($data->isPage) $menuLevel++;
-            $data = $data->parent;
+        while ($categoryData && !Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory')) {
+            if ($categoryData->isPage) $menuLevel++;
+            $categoryData = $categoryData->parent;
         }
 
         $shownLevel = Kwc_Abstract::getSetting($componentClass, 'level');
         if (!is_numeric($shownLevel)) $shownLevel = 1;
         $requiredLevels = call_user_func(array($componentClass, '_requiredLevels'), $componentClass);
-
         $ret = false;
         if ($menuLevel > $requiredLevels) {
             $ret = 'parentContent';
         } else if ($shownLevel <= $menuLevel) {
             $ret = 'parentMenu';
             if (!is_numeric(Kwc_Abstract::getSetting($componentClass, 'level'))) {
-                $data = $parentData;
-                do {
-                    if (Kwc_Abstract::getFlag($data->componentClass, 'menuCategory')) break;
-                } while ($data = $data->parent);
-                if ($data) {
-                    $cat = Kwc_Abstract::getFlag($data->componentClass, 'menuCategory');
+                if ($categoryData) {
+                    $cat = Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory');
                     if ($cat) {
-                        if ($cat === true) $cat = $data->id;
+                        if ($cat === true) $cat = $categoryData->id;
                         if ($cat != Kwc_Abstract::getSetting($componentClass, 'level')) {
                             //there are categories and we are in a different category than the menu is
                             //(so none is active and we can just show the parentContent (=efficient))
@@ -138,9 +133,9 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
 
         if ($ret == false) {
             if (!is_numeric(Kwc_Abstract::getSetting($componentClass, 'level'))) {
-                $cat = Kwc_Abstract::getFlag($parentData->componentClass, 'menuCategory');
+                $cat = Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory');
                 if ($cat) {
-                    if ($cat === true) $cat = $parentData->id;
+                    if ($cat === true) $cat = $categoryData->id;
                     if ($cat != Kwc_Abstract::getSetting($componentClass, 'level')) {
                         $ret = 'otherCategory';
                     }

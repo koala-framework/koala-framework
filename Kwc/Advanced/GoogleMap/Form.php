@@ -26,8 +26,7 @@ class Kwc_Advanced_GoogleMap_Form extends Kwc_Abstract_Form
             ->setWidth(120);
 
         $this->fields->add(new Kwf_Form_Field_Checkbox('zoom_control', trlKwf('Zoom Control')));
-        $this->fields->add(new Kwf_Form_Field_Checkbox('satelite', trlKwf('Satelitemap')));
-        $this->fields->add(new Kwf_Form_Field_Checkbox('overview', trlKwf('Overviewmap')));
+        $this->fields->add(new Kwf_Form_Field_Checkbox('map_type_control', trlKwf('MapType Control')));
         $this->fields->add(new Kwf_Form_Field_Checkbox('routing', trlKwf('Routing')));
         $this->fields->add(new Kwf_Form_Field_Checkbox('scrollwheel', trlKwf('Enable Scrollwheel to zoom')));
 

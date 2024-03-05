@@ -1,5 +1,3 @@
-@import "compass/css3/transition";
-
 .kwcClass {
     position: relative;
 
@@ -31,7 +29,7 @@
             left: 0;
             top: 0;
             opacity: 0;
-            @include transition(opacity 0.25s ease-in-out);
+            transition: opacity 0.25s ease-in-out;
 
             .innerHoverIcon {
                 display: block;
@@ -50,23 +48,23 @@
         }
 
         &.kwfUp-kwcEnlargeTag .outerHoverIcon .innerHoverIcon {
-            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/enlargeIcon.png) no-repeat 0 0;
+            background: url(~kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/enlargeIcon.png) no-repeat 0 0;
         }
 
         &.kwfUp-kwcBasicLinkTagIntern .outerHoverIcon .innerHoverIcon {
-            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkInternIcon.png) no-repeat 0 0;
+            background: url(~kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkInternIcon.png) no-repeat 0 0;
         }
 
         &.kwfUp-kwcBasicLinkTagExtern .outerHoverIcon .innerHoverIcon {
-            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkExternIcon.png) no-repeat 0 0;
+            background: url(~kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkExternIcon.png) no-repeat 0 0;
         }
 
         &.kwfUp-kwcBasicDownloadTag .outerHoverIcon .innerHoverIcon {
-            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/downloadIcon.png) no-repeat 0 0;
+            background: url(~kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/downloadIcon.png) no-repeat 0 0;
         }
 
         &.kwfUp-kwcBasicLinkTagMail .outerHoverIcon .innerHoverIcon {
-            background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/mailIcon.png) no-repeat 0 0;
+            background: url(~kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/mailIcon.png) no-repeat 0 0;
         }
     }
 }

@@ -22,10 +22,11 @@ class Kwf_Controller_Action_User_ChangeuserController extends Kwf_Controller_Act
         $authedChangedRole = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
         $acl = Zend_Registry::get('acl');
         if (!($acl->getRole($authedChangedRole) instanceof Kwf_Acl_Role_Admin)) {
-            //wenn nicht superuser
-            foreach ($acl->getRoles() as $role) {
+            $roles = array();
+            foreach ($acl->getAllowedEditResourceRoleIdsByRole($authedChangedRole) as $roleId) {
+                $role = $acl->getRole($roleId);
                 if ($role instanceof Kwf_Acl_Role && !($role instanceof Kwf_Acl_Role_Admin)) {
-                    $roles[] = $role->getRoleId();
+                    $roles[] = $roleId;
                 }
             }
             $roles = array_values(array_unique($roles));

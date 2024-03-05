@@ -10,14 +10,6 @@ class Kwf_Util_Maintenance
         }
         $offlineBootstrap  = "<?php\n";
         $offlineBootstrap .= "\$requestUri = isset(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : null;\n";
-        if (Kwf_Setup::getBaseUrl()) {
-            $offlineBootstrap .= "if (\$requestUri !== null) {\n";
-            $offlineBootstrap .= "    if (substr(\$requestUri, 0, ".strlen(Kwf_Setup::getBaseUrl()).") != '".Kwf_Setup::getBaseUrl()."') {\n";
-            $offlineBootstrap .= "        throw new Exception('Invalid baseUrl');\n";
-            $offlineBootstrap .= "    }\n";
-            $offlineBootstrap .= "    \$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
-            $offlineBootstrap .= "}\n";
-        }
         $offlineBootstrap .= "if (PHP_SAPI == 'cli' || (
             substr(\$requestUri, 0, 14) == '/kwf/util/apc/' ||
             \$requestUri == '/kwf/json-progress-status' ||

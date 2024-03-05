@@ -63,6 +63,9 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
     public function getMetaData($model)
     {
         $ret = parent::getMetaData($model);
+        if (!isset($ret['items'])) {
+            throw new Kwf_Exception("Fieldset must contain at least one field.");
+        }
         foreach ($ret['items'] as $k=>$i) {
             if ($i == 'hidden') {
                 unset($ret['items'][$k]);

@@ -4,7 +4,7 @@ class Kwc_Basic_Text_Pdf extends Kwc_Abstract_Pdf
     private $_wholeHTMLText = "";
     public function writeContent()
     {
-        $vars = $this->_component->getTemplateVars();
+        $vars = $this->_component->getTemplateVars(new Kwf_Component_Renderer());
         $contentParts = $vars['contentParts'];
         $html = '';
         foreach ($contentParts as $content){

@@ -5,15 +5,39 @@ class Kwc_Basic_LinkTag_News_Form extends Kwc_Abstract_Form
     {
         parent::__construct($name, $class, $id);
 
-        $this->add(new Kwf_Form_Field_Select('news_id', trlKwf('News')))
-            ->setDisplayField('title')
+        $directories = new Kwf_Form_Field_Select('directory_component_id', trlKwf('Component'));
+        $directories
+            ->setDisplayField('name')
             ->setPageSize(20)
             ->setStoreUrl(
-                Kwc_Admin::getInstance($class)->getControllerUrl('News').'/json-data'
+                Kwc_Admin::getInstance($class)->getControllerUrl('Directories').'/json-data'
             )
             ->setWidth(300)
             ->setListWidth(317)
             ->setAllowBlank(false);
+
+        $filteredField = $this->_createFilteredField();
+
+        $this->add(new Kwf_Form_Field_FilterField())
+            ->setName('filterField')
+            ->setFilterColumn('directoryComponentId')
+            ->setFilteredField($filteredField)
+            ->setFilterField($directories);
+    }
+
+    protected function _createFilteredField()
+    {
+        $news = new Kwf_Form_Field_Select('news_id', trlKwf('News'));
+        $news
+            ->setDisplayField('title')
+            ->setPageSize(20)
+            ->setStoreUrl(
+                Kwc_Admin::getInstance($this->getClass())->getControllerUrl('News').'/json-data'
+            )
+            ->setWidth(300)
+            ->setListWidth(317)
+            ->setAllowBlank(false);
+        return $news;
     }
 
     public function getIsCurrentLinkTag($parentRow)

@@ -63,6 +63,9 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     {
         if ($this->_data->getBaseProperty('preLogin')) {
             $ignore = false;
+            foreach (Kwf_Config::getValueArray('preLoginIgnore') as $i) {
+                if (substr($_SERVER['REDIRECT_URL'], 0, strlen($i)) == $i) $ignore  = true;
+            }
             foreach (Kwf_Config::getValueArray('preLoginIgnoreIp') as $i) {
                 $ip = $_SERVER['REMOTE_ADDR'];
                 if ($ip == $i) $ignore = true;
@@ -75,7 +78,15 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                     if (substr($ip, -strlen($i)) == $i) $ignore = true;
                 }
             }
-            Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
+            if (!$ignore) Kwf_Setup::checkPreLogin($this->_data->getBaseProperty('preLoginUser'), $this->_data->getBaseProperty('preLoginPassword'));
+        }
+
+        foreach ($this->_data->getPlugins('Kwf_Component_Plugin_Interface_Redirect') as $p) {
+            $p = Kwf_Component_Plugin_Abstract::getInstance($p, $this->_data->componentId);
+            if ($redirect = $p->getRedirectUrl($this->_data)) {
+                header('Location: '.$redirect);
+                exit;
+            }
         }
 
         $benchmarkEnabled = Kwf_Benchmark::isEnabled();
@@ -102,7 +113,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
             }
         }
 
-        if (!$hasDynamicParts) {
+        if (!$hasDynamicParts && !$process) {
             $ret['lifetime'] = 60*60;
         }
         self::_callPostProcessInput($process);
@@ -123,8 +134,24 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
             $content['contents'] .= ob_get_contents();
             ob_end_clean();
         }
+
+        foreach ($this->_getHeaders() as $header => $headerValue) {
+            header($header . ': ' . $headerValue);
+        }
+
         Kwf_Media_Output::outputWithoutShutdown($content);
         exit;
+    }
+
+    protected function _getHeaders()
+    {
+        return array(
+            'Strict-Transport-Security' => 'max-age=31536000',
+            'X-Content-Type-Options' => 'nosniff',
+            'X-Frame-Options' => 'SAMEORIGIN',
+            'X-XSS-Protection' => '1; mode=block',
+            'Referrer-Policy' => 'strict-origin-when-cross-origin',
+        );
     }
 
     //removed, if required add _getMimeType() method

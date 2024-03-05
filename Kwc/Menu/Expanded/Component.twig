@@ -2,24 +2,24 @@
     <nav class="{{ rootElementClass }}">
         {% if parentPage %}
             {% block parentPageName %}
-            <h2 class="parentPageName">{{ parentPage.name }}</h2>
+            <h2 class="{{ 'parentPageName'|bemClass }}">{{ parentPage.name }}</h2>
             {% endblock %}
         {% endif %}
-        <ul class="menu">
+        <ul class="{{ 'menu'|bemClass }}">
             {% for m in menu %}
                 {{ m.preHtml|raw }}
                 <li class="{{ m.class }}">
                     {% block menuLink %}
-                    {{ renderer.componentLink(m.data) }}
+                        {{ renderer.componentLink(m.data, null, 'link'|bemClass ) }}
                     {% endblock %}
                     {% if m.submenu|length %}
                         {% block subMenu %}
-                        <ul class="subMenu">
+                        <ul class="{{ 'subMenu'|bemClass }}">
                             {% for sm in m.submenu %}
                                 {{ sm.preHtml|raw }}
                                 <li class="{{ sm.class }}">
                                     {% block subMenuLink %}
-                                    {{ renderer.componentLink(sm.data, sm.text) }}
+                                        {{ renderer.componentLink(sm.data, sm.text, 'subMenuLink'|bemClass ) }}
                                     {% endblock %}
                                 </li>
                                 {{ sm.postHtml|raw }}
@@ -31,6 +31,5 @@
                 {{ m.postHtml|raw }}
             {% endfor %}
         </ul>
-        <div class="kwfUp-clear"></div>
     </nav>
 {% endif %}

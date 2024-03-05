@@ -50,7 +50,7 @@ class Kwf_Test_Kwc_RenderComponentController extends Zend_Controller_Action
         }
 
         $domain = 'http://'.Zend_Registry::get('config')->server->domain;
-        $data = $root->getPageByUrl($domain.Kwf_Setup::getBaseUrl().'/'.$url, null);
+        $data = $root->getPageByUrl($domain . '/' . $url, null);
         if (!$data) {
             throw new Kwf_Exception_NotFound();
         }

@@ -8,7 +8,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function optimizeAction()
     {
-        Kwf_Util_MemoryLimit::set(512);
         if ($this->_getParam('debug')) echo "\noptimize index...\n";
         Kwf_Util_Fulltext_Backend_Abstract::getInstance()->optimize($this->_getParam('debug'));
         if ($this->_getParam('debug')) echo "done.\n";
@@ -137,7 +136,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             $countIndexed++;
             if ($this->_getParam('debug')) echo "changed: $row->page_id\n";
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
-            if (!$page) {
+
+            $newDoc = false;
+            if ($page) $newDoc = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getFulltextContentForPage($page);
+
+            if (!$newDoc) {
                 if ($this->_getParam('debug')) echo "deleting $row->page_id\n";
                 $sr = Kwf_Component_Data_Root::getInstance()->getComponentById($row->subroot_component_id, array('ignoreVisible' => true));
                 if ($sr) {
@@ -167,9 +170,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function checkContentsSubrootAction()
     {
-        Kwf_Util_MemoryLimit::set(256);
-
-        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'), array('ignoreVisible'=>true));
         if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
         $i = 0;
 
@@ -191,6 +192,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         foreach ($it as $row) {
             $componentId = $row->page_id;
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+            if (!$page) continue;
             if (!$this->_getParam('skip-diff')) {
                 $docContent = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getDocumentContent($page);
             } else {
@@ -200,8 +202,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             if (!$newDoc) {
                 //this can happen (if there is no content)
                 Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($subroot, $componentId);
-                $row = $pagesMetaModel->getRow($componentId);
-                if ($row) $row->delete();
                 continue;
             }
             if (trim($newDoc['content']) != trim($docContent)) {
@@ -231,10 +231,14 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         if (!$path) {
             throw new Kwf_Exception_Client("Solr is not ment to be started manually from cli on this section.");
         }
+        $port = Kwf_Config::getValue('fulltext.solr.port');
+        if (!$port) {
+            $port = 8983;
+        }
 
         $solrHome = getcwd().'/solr';
         chdir($path);
-        $cmd = "java -Dsolr.solr.home=$solrHome -jar start.jar";
+        $cmd = "java -Dsolr.solr.home=$solrHome -Djetty.port=$port -jar start.jar";
         passthru($cmd, $ret);
         exit($ret);
     }

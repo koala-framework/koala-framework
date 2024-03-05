@@ -112,12 +112,7 @@ class Kwf_Component_Data
                 $filename = $data->id.($filename ? ':' : '').$filename;
             }
             if ($data->isPseudoPage || $data->componentId == 'root') {
-                if ($filename && Kwc_Abstract::getFlag($data->componentClass, 'shortcutUrl')) {
-                    $filename = call_user_func(array($data->componentClass, 'getShortcutUrl'), $data->componentClass, $data).($filename ? '/' : '').$filename;
-                    break;
-                } else {
-                    if ($data->filename) $filename = $data->filename.($filename ? '/' : '').$filename;
-                }
+                if ($data->filename) $filename = $data->filename.($filename ? '/' : '').$filename;
                 if ($data->componentId != 'root' && $data->generator->getGeneratorFlag('static')) {
                     $hadStaticPage = true;
                 } else {
@@ -126,8 +121,7 @@ class Kwf_Component_Data
             }
         } while ($data = $data->parent);
 
-        $baseUrl = Kwf_Setup::getBaseUrl(); //TODO baseUrl vs. root filename: both do the same
-        return ($baseUrl ? $baseUrl : '').'/'.$filename;
+        return '/' . $filename;
     }
 
     /**
@@ -186,7 +180,8 @@ class Kwf_Component_Data
     public function getDomainComponentId()
     {
         if (!isset($this->_domainComponentIdCache)) { //cache ist vorallem für bei kwfUnserialize nützlich
-            $this->_domainComponentIdCache = $this->getDomainComponent()->componentId;
+            $domainComponent = $this->getDomainComponent();
+            $this->_domainComponentIdCache = $domainComponent ? $domainComponent->componentId : null;
         }
         return $this->_domainComponentIdCache;
     }
@@ -227,7 +222,7 @@ class Kwf_Component_Data
         } else {
             $url = $this->getAbsoluteUrl();
         }
-        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($url.'?kwcPreview');
+        return '/admin/component/preview/?url='.urlencode($url.'?kwcPreview');
     }
 
     public function __get($var)
@@ -237,6 +232,13 @@ class Kwf_Component_Data
                 $page = $this->getPage();
                 if (!$page) return '';
                 return $page->url;
+            }
+            return $this->_getPseudoPageUrl();
+        } else if ($var == 'ownUrl') {
+            if (!$this->isPage) {
+                $page = $this->getPage();
+                if (!$page) return '';
+                return $page->ownUrl;
             }
             return $this->_getPseudoPageUrl();
         } else if ($var == 'rel') {

@@ -39,6 +39,10 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
     {
         parent::_init();
         $this->_exprs['format'] = new Kwf_Model_Select_Expr_String('html');
+        $this->_exprs['activated'] = new Kwf_Model_Select_Expr_And(array(
+            new Kwf_Model_Select_Expr_NotEquals('password', ''),
+            new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_IsNull('password'))
+        ));
     }
 
     // wenn createRow benötigt wird weil man ein anderes userModel (db?) hat,
@@ -46,7 +50,9 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
     // zurückgeben
     public function createRow(array $data=array())
     {
-        throw new Kwf_Exception("createRow is not allowed in Kwf_User_Model. Use createUserRow() instead.");
+        $row = parent::createRow($data);
+        $this->_resetPermissions($row);
+        return $row;
     }
 
     public static function isLockedCreateUser()
@@ -84,12 +90,11 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
 
     /**
      * @param string E-Mail address of user
+     * @deprecated
      */
-    public function createUserRow($email)
+    public final function createUserRow($email)
     {
-        $row = parent::createRow(array('email' => $email));
-        $this->_resetPermissions($row);
-        return $row;
+        return $this->createRow(array('email' => $email));
     }
 
     public function getKwfUserRowById($id)
@@ -147,6 +152,7 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
 
     public function getAuthMethods()
     {
+        if (Kwf_Config::getValue('disableKoalaLogin')) return array();
         return array(
             'password' => new Kwf_User_Auth_PasswordFields(
                 $this

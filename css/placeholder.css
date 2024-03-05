@@ -3,7 +3,7 @@ body {
 }
 
 div.placeholder {
-    background: url(/assets/kwf/images/placeholder.jpg) no-repeat;
+    background: url(~kwf/images/placeholder.jpg) no-repeat;
     width: 410px; height: 365px;
     margin: auto;
     margin-top: 100px;

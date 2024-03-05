@@ -1,8 +1,7 @@
-@import "compass/css3/box-sizing";
-
 .kwcClass {
-    > .listItem {
+    > .kwcBem__listItem {
         padding-bottom: 20px;
+
         .kwfUp-kwcTextImage {
             &.noText {
                 .kwfUp-kwcBasicImageEnlarge {
@@ -11,7 +10,8 @@
             }
         }
 
-        &.emptyContent {
+        &.emptyContent,
+        &--emptyContent {
             display: none;
         }
     }
@@ -20,43 +20,43 @@
 .kwcClass.gt480 {
     margin-right: -20px;
 
-    > .listItem {
-        @include box-sizing(border-box);
+    > .kwcBem__listItem {
+        box-sizing: border-box;
         padding-right: 20px;
         float: left;
         display: inline;
     }
 
     &.col2col-50_50 {
-        > .listItem.span1 {
+        > .kwcBem__listItem.span1 {
             width: percentage(1/2);
         }
     }
 
     &.col2col-33_66,
     &.col2col-66_33 {
-        > .listItem.span1 {
+        > .kwcBem__listItem.span1 {
             width: percentage(1/3);
         }
 
-        > .listItem.span2 {
+        > .kwcBem__listItem.span2 {
             width: percentage(1/3*2);
         }
     }
 
     &.col2col-25_75,
     &.col2col-75_25 {
-        > .listItem.span1 {
+        > .kwcBem__listItem.span1 {
             width: percentage(1/4);
         }
 
-        > .listItem.span3 {
+        > .kwcBem__listItem.span3 {
             width: percentage(1/4*3);
         }
     }
 
     &.col3col-33_33_33 {
-        > .listItem.span1 {
+        > .kwcBem__listItem.span1 {
             width: percentage(1/3);
         }
     }
@@ -64,20 +64,21 @@
     &.col3col-50_25_25,
     &.col3col-25_50_25,
     &.col3col-25_25_50 {
-        > .listItem.span1 {
+        > .kwcBem__listItem.span1 {
             width: percentage(1/4);
         }
 
-        > .listItem.span2 {
+        > .kwcBem__listItem.span2 {
             width: percentage(1/4*2);
         }
     }
 
     &.col4col-25_25_25_25 {
-        > .listItem.span1 {
+        > .kwcBem__listItem.span1 {
             width: percentage(1/2);
 
-            &.emptyContent {
+            &.emptyContent,
+            &.kwcBem__listItem--emptyContent {
                 display: none;
             }
 
@@ -88,32 +89,35 @@
     }
 
     &.col5col-20_20_20_20_20 {
-        > .listItem.span1 {
+        > .kwcBem__listItem.span1 {
             width: percentage(1/5);
 
-            &.emptyContent {
+            &.emptyContent,
+            &.kwcBem__listItem--emptyContent {
                 display: none;
             }
         }
     }
 
-    > .listItem.kwcLast,
-    > .listItem.lineLast {
+    > .kwcBem__listItem.kwcLast,
+    > .kwcBem__listItem.kwcBem__listItem--lineLast {
         margin-right:0;
         *margin-left:0;
     }
 
-    > .listItem.lineFirst {
+    > .kwcBem__listItem.kwcFirst,
+    > .kwcBem__listItem.kwcBem__listItem--lineFirst {
         clear: both;
     }
 }
 
 .kwcClass.gt620 {
     &.col4col-25_25_25_25 {
-        > .listItem.span1 {
+        > .kwcBem__listItem.span1 {
             width: percentage(1/4);
 
-            &.emptyContent {
+            &.emptyContent,
+            &.kwcBem__listItem--emptyContent {
                 display: inline;
             }
 
@@ -121,7 +125,8 @@
                 clear: none;
             }
 
-            &.lineFirst {
+            &.kwcFirst,
+            &.kwcBem__listItem--lineFirst {
                 clear: both;
             }
         }

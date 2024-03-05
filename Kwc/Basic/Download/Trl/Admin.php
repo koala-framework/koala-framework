@@ -15,4 +15,23 @@ class Kwc_Basic_Download_Trl_Admin extends Kwc_Abstract_Composite_Trl_Admin
     {
         return $data->getComponent()->getRow()->infotext;
     }
+
+    public function exportContent(Kwf_Component_Data $cmp)
+    {
+        $ret = parent::exportContent($cmp);
+        $trlRow = $cmp->getComponent()->getRow();
+        $masterRow = $cmp->chained->getComponent()->getRow();
+        $ret['infotext'] = $trlRow->infotext ? $trlRow->infotext : $masterRow->infotext;
+        return $ret;
+    }
+
+    public function importContent(Kwf_Component_Data $cmp, $data)
+    {
+        parent::importContent($cmp, $data);
+        $ownRow = $cmp->getComponent()->getRow();
+        if (isset($data['infotext'])) {
+            $ownRow->infotext = $data['infotext'];
+        }
+        $ownRow->save();
+    }
 }

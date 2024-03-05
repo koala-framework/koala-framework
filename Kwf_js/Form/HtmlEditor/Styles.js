@@ -180,7 +180,7 @@ Ext2.extend(Kwf.Form.HtmlEditor.Styles, Ext2.util.Observable, {
                 editable: false,
                 triggerAction: 'all',
                 forceSelection: true,
-                tpl: '<tpl for="."><div class="x2-combo-list-item kwfUp-webStandard kwcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
+                tpl: '<tpl for="."><div class="x2-combo-list-item kwfUp-webStandard kwcText"><{tagName:htmlEncode} class="{className:htmlEncode}">{name:htmlEncode}</{tagName:htmlEncode}></div></tpl>',
                 mode: 'local',
                 width: 150,
                 listWidth: 450,

@@ -36,9 +36,6 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
         if ($url == '') return '';
 
         if (substr($url, 0, 8) == '/assets/') {
-            if (Kwf_Setup::getBaseUrl()) {
-                $url = Kwf_Setup::getBaseUrl().$url;
-            }
             $subroot = null;
             if ($this->_getView() && $this->_getView()->component) {
                 $subroot = $this->_getView()->component->getSubroot();
@@ -66,8 +63,8 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
 
         $attr = '';
         foreach ($attributes as $k=>$i) {
-            $attr .= ' '.$k.'="'.$i.'"';
+            $attr .= ' '.Kwf_Util_HtmlSpecialChars::filter($k).'="'.Kwf_Util_HtmlSpecialChars::filter($i).'"';
         }
-        return "<img src=\"$url\"$attr alt=\"$alt\" />";
+        return "<img src=\"" .Kwf_Util_HtmlSpecialChars::filter($url) . "\"$attr alt=\"" .Kwf_Util_HtmlSpecialChars::filter($alt) . "\" />";
     }
 }

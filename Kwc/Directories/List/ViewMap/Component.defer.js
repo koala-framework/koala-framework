@@ -12,7 +12,7 @@ var renderMap = function(map) {
 
     var cfg = map.find(".options");
     if (!cfg) return;
-    cfg = $.parseJSON(cfg.val());
+    cfg = JSON.parse(cfg.val());
 
     cfg.mapContainer = map;
     var cls = eval(cfg.mapClass) || gmapMap;

@@ -5,6 +5,9 @@ class Kwf_Acl_Component extends Kwf_Acl
     {
         parent::__construct();
 
+        $this->addResource(new Kwf_Acl_Resource_MediaDownload('media_download'));
+        $this->allow('guest', 'media_download'); // TODO default deny in kwf 5.2
+
         $this->addRole(new Kwf_Acl_Role('superuser', trlKwfStatic('Superuser')));
         $this->addRole(new Kwf_Acl_Role('preview', trlKwfStatic('Preview')));
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_superuser', 'superuser'), 'edit_role');
@@ -17,7 +20,6 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->add(new Zend_Acl_Resource('kwf_component_media'));
         $this->add(new Zend_Acl_Resource('kwf_component_benchmark'));
         $this->add(new Zend_Acl_Resource('kwf_component_show-component'));
-        $this->add(new Kwf_Acl_Resource_MediaUpload_Any('kwf_media_upload_any'));
         $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_pages',
             array('text'=>trlKwfStatic('Page tree'), 'icon'=>'application_side_tree.png')));
             $this->add(new Zend_Acl_Resource('kwf_component_page'), 'kwf_component_pages');
@@ -45,6 +47,8 @@ class Kwf_Acl_Component extends Kwf_Acl
                 $this->add(new Zend_Acl_Resource('kwf_user_user'), 'kwf_user_users');
                 $this->add(new Zend_Acl_Resource('kwf_user_log'), 'kwf_user_users');
                 $this->add(new Zend_Acl_Resource('kwf_user_comments'), 'kwf_user_users');
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_user_actions-log',
+                array('text'=>trlKwfStatic('User Actions-Log'), 'icon'=>'report_user.png')), 'settings');
             $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_clear-cache',
                     array('text'=>trlKwfStatic('Clear Cache'), 'icon'=>'database.png')), 'settings');
             $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_redirects_redirects',
@@ -77,6 +81,7 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->allow('superuser', 'settings');
         $this->allow('superuser', 'kwf_enquiries_enquiries');
         $this->deny('superuser', 'kwf_component_clear-cache');
+        $this->deny('superuser', 'kwf_maintenance-jobs_jobs');
 
         $this->allow('admin', 'kwf_component_show-component');
         $this->allow('admin', 'kwf_component_pages');
@@ -90,7 +95,7 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->deny('guest', 'kwf_welcome_welcome');
         $this->deny('guest', 'kwf_component_pages');
 
-        $this->allow('superuser', 'kwf_media_upload_any');
+        $this->allow('superuser', 'kwf_media_upload');
 
         // Kwf_Component_Acl nicht vergessen für Komponentenrechte!
     }

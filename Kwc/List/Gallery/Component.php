@@ -15,6 +15,8 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $ret['breakpoint'] = '600';
         $ret['showMoreLink'] = true;
         $ret['defaultVisible'] = true;
+        $ret['apiContent'] = 'Kwc_List_Gallery_ApiContent';
+        $ret['apiContentType'] = 'gallery';
         return $ret;
     }
 

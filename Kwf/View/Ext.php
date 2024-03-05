@@ -61,9 +61,6 @@ class Kwf_View_Ext extends Kwf_View
         }
         $this->ext = $ext;
         $this->extTemplate = 'ext.tpl';
-        if (Kwf_Util_SessionToken::getSessionToken()) {
-            $this->sessionToken = Kwf_Util_SessionToken::getSessionToken();
-        }
 
         $this->applicationName = Zend_Registry::get('config')->application->name;
         $this->favicon = self::getFavicon();

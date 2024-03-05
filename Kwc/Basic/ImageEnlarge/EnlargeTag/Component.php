@@ -17,6 +17,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         );
 
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['apiContent'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ApiContent';
+        $ret['apiContentType'] = 'imageEnlarge';
 
         return $ret;
     }
@@ -89,6 +91,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             $d = $d->parent;
         }
         return $d->getComponent();
+    }
+
+    public function hasContent()
+    {
+        return !!$this->getImageDataOrEmptyImageData();
     }
 
     /**
@@ -186,5 +193,64 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         $ret['content'] = $text;
         $ret['normalContent'] = $text;
         return $ret;
+    }
+
+    public function getApiData()
+    {
+        $image = $this->_getImageOutputData();
+        if (!$this->getData()->hasContent()) {
+            return null;
+        }
+        $ret = array(
+            'aspectRatio' => $image['aspectRatio'],
+            'widthSteps' => $image['widthSteps'],
+            'baseUrl' => $this->_getAbsoluteUrl($this->getBaseImageUrl()),
+            'url' => $this->_getAbsoluteUrl($this->getImageUrl()),
+            'maxResolutionUrl' => $this->_getAbsoluteUrl($this->getMaxResolutionImageUrl()),
+        );
+        $baseImageComponentData = $this->_getImageEnlargeComponent()->getApiData();
+        if (isset($baseImageComponentData['caption']) && $baseImageComponentData['caption']) {
+            $ret['caption'] = $baseImageComponentData['caption'];
+        }
+        if (isset($baseImageComponentData['alt']) && $baseImageComponentData['alt']) {
+            $ret['alt'] = $baseImageComponentData['alt'];
+        }
+        if ($this->_getSetting('imageTitle')) {
+            if ($this->getRow()->title) {
+                $ret['title'] = $this->getRow()->title;
+            } else if (isset($baseImageComponentData['title'])) {
+                $ret['title'] = $baseImageComponentData['title'];
+            }
+        }
+        return $ret;
+    }
+
+    private function _getImageOutputData()
+    {
+        $imageData = $this->getImageDataOrEmptyImageData();
+        return Kwf_Media_Output_Component::getResponsiveImageVars(
+            $this->getImageDimensions(), $imageData['dimensions']
+        );
+    }
+
+    private function _getAbsoluteUrl($url)
+    {
+        if ($url && substr($url, 0, 1) == '/' && substr($url, 0, 2) != '//') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
+            $domain = $this->getData()->getDomain();
+            $protocol = Kwf_Util_Https::domainSupportsHttps($domain) ? 'https' : 'http';
+            $url = "$protocol://$domain$url";
+        }
+        return $url;
+    }
+
+    private function getMaxResolutionImageUrl()
+    {
+        $imageData = $this->getImageDataOrEmptyImageData();
+        if ($imageData) {
+            $s = $this->getImageDimensions();
+            $widths = Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['dimensions']);
+            return $this->getImageUrl();
+        }
+        return null;
     }
 }

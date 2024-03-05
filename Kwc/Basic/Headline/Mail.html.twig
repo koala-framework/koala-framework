@@ -1,0 +1,16 @@
+<table class="{{ rootElementClass }}" width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <{{ headlineType.tag }} class="{{ 'headline'|bemClass }} {% if headlineType.class %}{{ headlineType.class|bemClass }}{% endif %}">
+                {{ headline1|raw }}
+            </{{ headlineType.tag }}>
+        </td>
+    </tr>
+    {% if headline2 %}
+        <tr>
+            <td>
+                <span class="{{ 'sub'|bemClass }}">{{ headline2|raw }}</span>
+            </td>
+        </tr>
+    {% endif %}
+</table>

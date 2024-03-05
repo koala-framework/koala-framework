@@ -20,15 +20,15 @@
 }
 
 .kwcClass .article .icons .print {
-    background: url("/assets/kwf/Kwc/Articles/Detail/printer.png") no-repeat left center;
+    background: url("~kwf/Kwc/Articles/Detail/printer.png") no-repeat left center;
 }
 
 .kwcClass .article .icons a.feedback {
-    background: url("/assets/kwf/Kwc/Articles/Detail/email_edit.png") no-repeat scroll left center transparent;
+    background: url("~kwf/Kwc/Articles/Detail/email_edit.png") no-repeat scroll left center transparent;
 }
 
 .kwcClass .article .icons .top {
-    background: url("/assets/kwf/Kwc/Articles/Detail/exclamation.png") no-repeat scroll left center transparent;
+    background: url("~kwf/Kwc/Articles/Detail/exclamation.png") no-repeat scroll left center transparent;
 }
 
 .kwcClass .article .icons .kwfSwitchHoverFade .switchContent {

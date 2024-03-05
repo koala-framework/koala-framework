@@ -11,6 +11,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
     protected $_logChangedUser = false;
     protected $_passwordSet = false;
     private $_sendMails = true; // whether to send mails on saving or not. used for resending emails
+    protected $_redirectUrl = false;
 
     public function __toString()
     {
@@ -21,6 +22,16 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         $ret = trim($ret);
         if (!$ret) $ret = $this->email;
         return $ret;
+    }
+
+    public function setRedirectUrl($redirectUrl)
+    {
+        $this->_redirectUrl = $redirectUrl;
+    }
+
+    public function getRedirectUrl()
+    {
+        return $this->_redirectUrl;
     }
 
     public function setNotifyGlobalUserAdded($val)
@@ -128,7 +139,9 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         }
 
         $authMethods = $this->getModel()->getAuthMethods();
-        $authMethods['password']->generatePasswordSalt($this);
+        if (isset($authMethods['password'])) {
+            $authMethods['password']->generatePasswordSalt($this);
+        }
 
         if (!$this->gender) $this->gender = '';
     }
@@ -257,7 +270,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
     {
         if ($this->_sendMails) {
             $row = $this->getModel()->getKwfUserRowById($this->id);
-            $mail = new Kwf_User_Mail_Activation($row);
+            $mail = new Kwf_User_Mail_Activation($row, $this->getRedirectUrl());
             $mail->send();
             $this->writeLog('user_mail_UserActivation');
         }

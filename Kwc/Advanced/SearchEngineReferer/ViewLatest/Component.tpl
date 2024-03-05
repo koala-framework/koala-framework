@@ -7,10 +7,10 @@
                 <li class="<?php if($i++ == 0) echo 'first'; ?>">
                     <?php if ($v['component']) echo $this->componentLink($v['component']); ?>
                     gefunden bei<br />
-                    <a href="<?= htmlspecialchars($v['row']->referer_url); ?>" data-kwc-popup="blank"><?= htmlspecialchars($v['host']); ?></a>
+                    <a href="<?= Kwf_Util_HtmlSpecialChars::filter($v['row']->referer_url); ?>" data-kwc-popup="blank"><?= Kwf_Util_HtmlSpecialChars::filter($v['host']); ?></a>
                     <?php if ($v['query']) { ?>
                         mit Suche nach
-                        <a href="<?= htmlspecialchars($v['row']->referer_url); ?>" data-kwc-popup="blank"><?= htmlspecialchars($v['query']); ?></a>
+                        <a href="<?= Kwf_Util_HtmlSpecialChars::filter($v['row']->referer_url); ?>" data-kwc-popup="blank"><?= Kwf_Util_HtmlSpecialChars::filter($v['query']); ?></a>
                     <?php } ?>
                 </li>
             <?php } ?>

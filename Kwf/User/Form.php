@@ -44,26 +44,4 @@ class Kwf_User_Form extends Kwf_Form
             ->setValues($data);
         }
     }
-
-    public function getRow($parentRow = null)
-    {
-        $id = $this->_getIdByParentRow($parentRow);
-        if (($id === 0 || $id === '0' || is_null($id)) && $this->_newUserRow) {
-            return $this->_newUserRow;
-        } else {
-            return parent::getRow($parentRow);
-        }
-    }
-
-    public function processInput($parentRow, $postData = array())
-    {
-        $id = $this->_getIdByParentRow($parentRow);
-        if ($id === 0 || $id === '0' || is_null($id)) {
-            $this->_newUserRow = $this->_model->createUserRow(
-                $postData[$this->getByName('email')->getFieldName()]
-            );
-        }
-
-        return parent::processInput($parentRow, $postData);
-    }
 }

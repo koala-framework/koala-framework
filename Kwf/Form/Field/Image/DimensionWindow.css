@@ -23,7 +23,7 @@
 }
 
 .x2-window .kwf-form-field-image-crop-image-wrapper.error {
-    background-image: url('/assets/kwf/images/cropimage/redPx85.png');
+    background-image: url('~kwf/images/cropimage/redPx85.png');
 }
 
 .kwf-form-field-image-dimensionwindow-errorMessage.error {

@@ -1,7 +1,5 @@
 @import "config/colors";
-@import "compass/css3/box-sizing";
 @import "kwf/background-image-dpr2";
-@import "compass/css3/transition";
 
 .kwcClass {
     overflow: hidden;
@@ -26,14 +24,14 @@
             width: 52px;
             z-index: 1;
             top: 0px;
-            @include transition-delay(0.4s);
-            @include transition-property(all);
-            @include transition-duration(0s);
+            transition-delay: 0.4s;
+            transition-property: all;
+            transition-duration: 0s;
             &.active {
                 background-position: left center;
-                @include transition-delay(0s);
-                @include transition-property(all);
-                @include transition-duration(0s);
+                transition-delay: 0s;
+                transition-property: all;
+                transition-duration: 0s;
             }
         }
         > .kwfUp-slider {
@@ -64,7 +62,7 @@
                 width: 100%;
 
                 li {
-                    @include box-sizing(border-box);
+                    box-sizing: border-box;
                     padding: 0 15px 0 15px;
                     position: relative;
                     display: block;
@@ -92,7 +90,7 @@
                         }
                     }
                     &.kwfUp-hasChildren > a {
-                        @include background-image-dpr2('/assets/kwf/Kwc/Menu/Mobile/images/', 'lightGreyArrowRight.png', 10px, 18px, no-repeat center right);
+                        @include background-image-dpr2('~kwf/Kwc/Menu/Mobile/images/', 'lightGreyArrowRight.png', 10px, 18px, no-repeat center right);
                     }
                     .kwfUp-subMenu {
                         position: absolute;
@@ -100,7 +98,7 @@
                         visibility: hidden;
                     }
                     &.kwfUp-back a {
-                        @include background-image-dpr2('/assets/kwf/Kwc/Menu/Mobile/images/', 'lightGreyArrowLeft.png', 10px, 18px, no-repeat center left);
+                        @include background-image-dpr2('~kwf/Kwc/Menu/Mobile/images/', 'lightGreyArrowLeft.png', 10px, 18px, no-repeat center left);
                         padding-left: 15px;
                         color: #999;
                     }
@@ -116,6 +114,10 @@
                 }
             }
         }
+
+        .kwfUp-item--selected {
+            font-weight: bold;
+        }
     }
 
     .kwfUp-showMenu {
@@ -127,15 +129,15 @@
         width: 52px;
         z-index: 1;
         top: 0px;
-        @include transition-delay(0.4s);
-        @include transition-property(all);
-        @include transition-duration(0s);
+        transition-delay: 0.4s;
+        transition-property: all;
+        transition-duration: 0s;
 
         &.kwfUp-active {
             background-position: left center;
-            @include transition-delay(0s);
-            @include transition-property(all);
-            @include transition-duration(0s);
+            transition-delay: 0s;
+            transition-property: all;
+            transition-duration: 0s;
         }
     }
 }

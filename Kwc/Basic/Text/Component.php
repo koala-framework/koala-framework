@@ -12,7 +12,6 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
             'enableAlignments'  => false,
             'enableColors'      => false,
             'enableFont'        => false,
-            'enableFontSize'    => false,
             'enableFormat'      => true,
             'enableLists'       => true,
             'enableSourceEdit'  => true,
@@ -26,10 +25,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
             'enableStyles'      => true,
             'enableStylesEditor'=> true,
             'enableTagsWhitelist'=> true,
-            'defaultText'       => Kwc_Abstract::LOREM_IPSUM,
-
-            //veraltert NICHT VERWENDEN!! (in der Kwc_Mail komponente ist ein besserer ersatz)
-            'emailStyles'       => array()
+            'defaultText'       => Kwc_Abstract::LOREM_IPSUM
         ));
 
         $ret['stylesModel'] = 'Kwc_Basic_Text_StylesModel';
@@ -60,6 +56,8 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $ret['flags']['hasFulltext'] = true;
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
+        $ret['apiContent'] = 'Kwc_Basic_Text_ApiContent';
+        $ret['apiContentType'] = 'formattedText';
         return $ret;
     }
 
@@ -139,7 +137,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                                 $style .= "$k: $v; ";
                             }
                         }
-                        $styleAttr = 'style="'.htmlspecialchars($style).'"';
+                        $styleAttr = 'style="'.Kwf_Util_HtmlSpecialChars::filter($style).'"';
                         $part = str_replace($matched, $prefix.$styleAttr.$postfix, $part);
                     }
                 }
@@ -147,7 +145,6 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                 $ret['contentParts'][] = $part;
             }
         }
-        $ret['styles'] = $this->_getSetting('emailStyles');
         return $ret;
     }
 

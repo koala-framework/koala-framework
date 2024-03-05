@@ -1,6 +1,4 @@
-@import "compass/css3/box-sizing";
 @import "compass/utilities/general/clearfix";
-@import "compass/css3/transition";
 
 $contentMargin  : 10px;
 $breakpoint     : 600;
@@ -16,9 +14,9 @@ div.kwcClass {
 
     .listItem {
         opacity: 1;
-        @include transition-property(opacity);
-        @include transition-duration(0.25s);
-        @include transition-timing-function(cubic-bezier(0.215, 0.61, 0.355, 1));
+        transition-property: opacity;
+        transition-duration: 0.25s;
+        transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     }
 
     &.hidePics {
@@ -26,12 +24,12 @@ div.kwcClass {
             padding: 0px !important;
             width: 0px !important;
             opacity: 0;
-            @include transition-duration(0s);
+            transition-duration: 0s;
         }
     }
 
     > .listItem, > .morePics > .listItem {
-        @include box-sizing(border-box);
+        box-sizing: border-box;
         padding: 0 $contentMargin 7px 0;
         position: relative;
         margin: 0;
@@ -59,6 +57,12 @@ div.kwcClass {
                 background: white;
                 height: auto;
             }
+        }
+    }
+
+    &.col1 {
+        > .listItem, > .morePics > .listItem {
+            width: 100%;
         }
     }
 

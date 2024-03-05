@@ -20,6 +20,7 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
         $ret['assetsAdmin']['dep'][] = 'ExtWindow';
         $ret['ownModel'] = 'Kwc_Mail_Model';
         $ret['componentName'] = 'Mail';
+        $ret['flags']['skipPagesMeta'] = true;
 
         return $ret;
     }

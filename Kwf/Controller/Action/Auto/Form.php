@@ -15,7 +15,7 @@ abstract class Kwf_Controller_Action_Auto_Form extends Kwf_Controller_Action_Aut
         if ($this->_form->getProperties()) {
             $this->view->assign($this->_form->getProperties());
         }
-        $this->view->controllerUrl = $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/');
+        $this->view->controllerUrl = '/' . ltrim($this->getRequest()->getPathInfo(), '/');
         $this->view->xtype = 'kwf.autoform';
     }
 

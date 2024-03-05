@@ -1,8 +1,7 @@
-// @require ModernizrPrefixed
-
 var $ = require('jquery');
 var onReady = require('kwf/commonjs/on-ready');
 var oneTransitionEnd = require('kwf/commonjs/element/one-transition-end');
+var lightboxHelper = require('kwf/commonjs/lightbox/lightbox-helper');
 
 var AbstractStyle = function(lightbox) {
     this.lightbox = lightbox;
@@ -37,8 +36,8 @@ AbstractStyle.prototype = {
         var maskEl = this.lightbox.lightboxEl.find('.kwfUp-kwfLightboxMask');
         maskEl.click(function(ev) {
             if ($(document.body).find('.kwfUp-kwfLightboxMask').is(ev.target)) {
-                if (currentOpen) {
-                    currentOpen.style.onMaskClick();
+                if (lightboxHelper.currentOpen) {
+                    lightboxHelper.currentOpen.style.onMaskClick();
                 }
             }
         });
@@ -66,8 +65,7 @@ AbstractStyle.prototype = {
     },
     unmask: function() {
         var lightboxMaskEl = this.lightbox.lightboxEl.find('.kwfUp-kwfLightboxMask');
-        var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
-        var duration = lightboxMaskEl.css(transitionDurationName);
+        var duration = lightboxMaskEl.css('transitionDuration');
         lightboxMaskEl.removeClass('kwfUp-kwfLightboxMaskOpen');
         if (parseFloat(duration)>0) {
             oneTransitionEnd(lightboxMaskEl, function() {

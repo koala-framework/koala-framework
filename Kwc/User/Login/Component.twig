@@ -19,7 +19,7 @@
                     <form method="GET" action="{{ r.url|escape }}">
                     <input type="hidden" name="redirectAuth" value="{{ r.authMethod|escape }}" />
                     <input type="hidden" name="redirect" value="{{ r.redirect|escape }}" />
-                    {{ r.formOptions }}
+                    {{ r.formOptionsHtml|raw }}
                     <div class="button {{ r.authMethod}}">
                         <button class="{{ r.authMethod}}">
                             {% if r.icon %}

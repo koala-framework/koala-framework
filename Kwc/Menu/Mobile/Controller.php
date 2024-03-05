@@ -1,10 +1,6 @@
 <?php
 class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
 {
-    protected function _validateSessionToken()
-    {
-    }
-
     public function jsonIndexAction()
     {
         if ($this->_getParam('subrootComponentId')) {
@@ -90,6 +86,11 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         return true;
     }
 
+    protected function _validateCsrf()
+    {
+        // Not necessary for Frontend
+    }
+
     protected function _getChildPages()
     {
         $category = Kwc_Abstract::getSetting($this->_getParam('class'), 'level');
@@ -173,9 +174,10 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                     }
                 }
 
-
-                if (Kwc_Abstract::getSetting($this->_getParam('class'), 'showSelectedPageInList') && !empty($ret[$i]['children']) &&
-                    !is_instance_of($page->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Component')) {
+                if (Kwc_Abstract::getSetting($this->_getParam('class'), 'showSelectedPageInList') && !empty($ret[$i]['children'])
+                    && !is_instance_of($page->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Component')
+                    && !is_instance_of($page->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Trl_Component')
+                ) {
                     array_unshift($ret[$i]['children'], array(
                         'name' => $pageData['name'],
                         'url' => $pageData['url'],

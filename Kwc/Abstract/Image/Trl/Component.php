@@ -20,6 +20,15 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         return $this->getData()->chained->getComponent()->getBaseType();
     }
 
+    public function getApiData()
+    {
+        if ($this->getRow()->own_image) {
+            return $this->getData()->getChildComponent("-image")->getComponent()->getApiData();
+        } else {
+            return $this->getData()->chained->getComponent()->getApiData();
+        }
+    }
+
     public function getBaseImageUrl()
     {
         if ($this->getRow()->own_image) {
@@ -87,10 +96,13 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         if ($this->getRow()->own_image) {
             return $this->getData()->getChildComponent('-image')->getComponent()->getImageUrl();
         } else {
-            $baseUrl = $this->getBaseImageUrl();
-            if ($baseUrl) {
-                $dimensions = $this->getImageDimensions();
-                return str_replace('{width}', $dimensions['width'], $baseUrl);
+            // TODO: Use implementation from non-trl version
+            $imageData = $this->getImageDataOrEmptyImageData();
+            if ($imageData) {
+                $s = $this->getImageDimensions();
+                $width = Kwf_Media_Image::getResponsiveWidthStep($s['width'],
+                    Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['file']));
+                return str_replace('{width}', $width, $this->getBaseImageUrl());
             }
         }
         return null;
@@ -141,5 +153,19 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
             array(get_class($c->chained->getComponent()), 'getMediaOutput'),
             $c->chained->componentId, $type, $c->chained->componentClass
         );
+    }
+    private function _getAbsoluteUrl($url)
+    {
+        if ($url && substr($url, 0, 1) == '/' && substr($url, 0, 2) != '//') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
+            $domain = $this->getData()->getDomain();
+            $protocol = Kwf_Util_Https::domainSupportsHttps($domain) ? 'https' : 'http';
+            $url = "$protocol://$domain$url";
+        }
+        return $url;
+    }
+
+    public function getAbsoluteImageUrl()
+    {
+        return $this->_getAbsoluteUrl($this->getImageUrl());
     }
 }

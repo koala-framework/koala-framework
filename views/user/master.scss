@@ -1,7 +1,5 @@
 @import "compass/utilities/general/clearfix";
 @import "kwf/background-image-dpr2";
-@import "compass/css3/transition";
-@import "compass/css3/box-sizing";
 @import "config/user/master";
 
 $colorIcon: null;
@@ -15,11 +13,11 @@ $colorIcon: null;
 
 @font-face {
     font-family: "frontendIcon";
-    src:url("/assets/kwf/views/user/icon/frontendIcon.eot");
-    src:url("/assets/kwf/views/user/icon/frontendIcon.eot?#iefix") format("embedded-opentype"),
-    url("/assets/kwf/views/user/icon/frontendIcon.woff") format("woff"),
-    url("/assets/kwf/views/user/icon/frontendIcon.ttf") format("truetype"),
-    url("/assets/kwf/views/user/icon/frontendIcon.svg#frontendIcon") format("svg");
+    src:url("~kwf/views/user/icon/frontendIcon.eot");
+    src:url("~kwf/views/user/icon/frontendIcon.eot?#iefix") format("embedded-opentype"),
+    url("~kwf/views/user/icon/frontendIcon.woff") format("woff"),
+    url("~kwf/views/user/icon/frontendIcon.ttf") format("truetype"),
+    url("~kwf/views/user/icon/frontendIcon.svg#frontendIcon") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -28,8 +26,6 @@ html {
     body.kwfUp-backendUser {
         .kwfUp-content {
             animation: backendUserFadein 1s, backendUserSlidein 1s;
-            -moz-animation: backendUserFadein 1s, backendUserSlidein 1s; // Firefox
-            -webkit-animation: backendUserFadein 1s, backendUserSlidein 1s; // Safari and Chrome
             animation-timing-function: ease;
         }
     }
@@ -43,39 +39,7 @@ html {
         opacity:1;
     }
 }
-@-moz-keyframes backendUserFadein { // Firefox
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-webkit-keyframes backendUserFadein { // Safari and Chrome
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
 @keyframes backendUserSlidein {
-    from {
-        margin-top: -158px;
-    }
-    to {
-        margin-top: -178px;
-    }
-}
-@-moz-keyframes backendUserSlidein {
-    from {
-        margin-top: -158px;
-    }
-    to {
-        margin-top: -178px;
-    }
-}
-@-webkit-keyframes backendUserSlidein {
     from {
         margin-top: -158px;
     }
@@ -100,16 +64,16 @@ body.kwfUp-backendUser {
 
         .kwfUp-innerFrontendLink {
             .kwfUp-front {
-                @include box-sizing(border-box);
+                box-sizing: border-box;
                 text-transform: uppercase;
                 color: $button-color;
                 position: absolute;
                 padding-top: 4px;
                 left: -50px;
                 z-index: 1;
-                @include transition-property(all);
-                @include transition-duration(0.3s);
-                @include transition-timing-function(ease);
+                transition-property: all;
+                transition-duration: 0.3s;
+                transition-timing-function: ease;
             }
 
             .kwfUp-back {
@@ -124,9 +88,9 @@ body.kwfUp-backendUser {
                     font-size: 45px;
                     color: $colorIcon;
                     content: "b";
-                    @include transition-property(all);
-                    @include transition-duration(0.3s);
-                    @include transition-timing-function(ease);
+                    transition-property: all;
+                    transition-duration: 0.3s;
+                    transition-timing-function: ease;
                 }
             }
         }
@@ -249,8 +213,8 @@ body.kwfUp-backendUser {
             height: 40px;
             border: none;
             width: 100%;
-            @include transition-property(all);
-            @include transition-duration(0.25s);
+            transition-property: all;
+            transition-duration: 0.25s;
 
             &:hover {
                 background: none $button-color-hover;
@@ -304,23 +268,23 @@ body.kwfUp-backendUser {
             display: inline-block;
 
             &.kwfUp-vividPlanet {
-                @include background-image-dpr2('/assets/kwf/views/user/images', 'logo.png', 120px, 26px, no-repeat left center transparent);
+                @include background-image-dpr2('~kwf/views/user/images', 'logo.png', 120px, 26px, no-repeat left center transparent);
                 margin-right: 15px;
                 width: 120px;
                 height: 26px;
 
                 &:hover {
-                    @include background-image-dpr2('/assets/kwf/views/user/images', 'logoColored.png', 120px, 26px, no-repeat left center transparent);
+                    @include background-image-dpr2('~kwf/views/user/images', 'logoColored.png', 120px, 26px, no-repeat left center transparent);
                 }
             }
 
             &.kwfUp-koala {
-                @include background-image-dpr2('/assets/kwf/views/user/images', 'kwfLogo.png', 112px, 26px, no-repeat left center transparent);
+                @include background-image-dpr2('~kwf/views/user/images', 'kwfLogo.png', 112px, 26px, no-repeat left center transparent);
                 width: 120px;
                 height: 26px;
 
                 &:hover {
-                    @include background-image-dpr2('/assets/kwf/views/user/images', 'kwfLogoColored.png', 112px, 26px, no-repeat left center transparent);
+                    @include background-image-dpr2('~kwf/views/user/images', 'kwfLogoColored.png', 112px, 26px, no-repeat left center transparent);
                 }
             }
         }

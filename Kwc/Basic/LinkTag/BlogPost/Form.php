@@ -5,7 +5,19 @@ class Kwc_Basic_LinkTag_BlogPost_Form extends Kwc_Abstract_Form
     {
         parent::__construct($name, $class, $id);
 
-        $this->add(new Kwf_Form_Field_Select('blog_post_id', trlKwf('Blog')))
+        $directories = new Kwf_Form_Field_Select('directory_component_id', trlKwf('Component'));
+        $directories
+            ->setDisplayField('name')
+            ->setPageSize(20)
+            ->setStoreUrl(
+                Kwc_Admin::getInstance($class)->getControllerUrl('Directories').'/json-data'
+            )
+            ->setWidth(300)
+            ->setListWidth(317)
+            ->setAllowBlank(false);
+
+        $filteredField = new Kwf_Form_Field_Select('blog_post_id', trlKwf('Blog'));
+        $filteredField
             ->setDisplayField('title')
             ->setPageSize(20)
             ->setStoreUrl(
@@ -14,6 +26,12 @@ class Kwc_Basic_LinkTag_BlogPost_Form extends Kwc_Abstract_Form
             ->setWidth(300)
             ->setListWidth(317)
             ->setAllowBlank(false);
+
+        $this->add(new Kwf_Form_Field_FilterField())
+            ->setName('filterField')
+            ->setFilterColumn('directoryComponentId')
+            ->setFilteredField($filteredField)
+            ->setFilterField($directories);
     }
 
     public function getIsCurrentLinkTag($parentRow)

@@ -40,6 +40,14 @@ class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_
                         $column = 'parent_subroot_id';
                         $hasComponentId = true;
                     }
+                } else if ($table == 'kwc_basic_link_intern') {
+                    if ($field['Field'] == 'target') {
+                        $column = 'target';
+                        $hasComponentId = true;
+                    } else if ($field['Field'] == 'component_id') {
+                        $column = 'component_id';
+                        $hasComponentId = true;
+                    }
                 } else if ($field['Field'] == 'component_id') {
                     $column = 'component_id';
                     $hasComponentId = true;

@@ -45,7 +45,22 @@ class Kwf_Component_Cache_Memory
     public function loadWithMetaData($id)
     {
         $be = Kwf_Cache_Simple::getBackend();
-        if ($be == 'memcache') {
+        if ($be == 'memcached') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
+
+            $tmp = Kwf_Cache_Simple::getMemcached()->get($prefix.$id);
+            if (is_array($tmp) && array_key_exists(0, $tmp)) {
+                return array(
+                    'contents' => $tmp[0],
+                    'timestamp' => $tmp[1],
+                    'expire' => $tmp[2] ? ($tmp[1] + $tmp[2]) : null, //mtime + lifetime
+                );
+            } else if ($tmp) {
+                return $tmp;
+            }
+            return false;
+        } else if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
 
@@ -82,7 +97,12 @@ class Kwf_Component_Cache_Memory
     public function save($data, $id, $ttl)
     {
         $be = Kwf_Cache_Simple::getBackend();
-        if ($be == 'memcache') {
+        if ($be == 'memcached') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
+            $data = array($data, time(), $ttl);
+            return Kwf_Cache_Simple::getMemcached()->set($prefix.$id, $data, $ttl);
+        } else if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
             $data = array($data, time(), $ttl);
@@ -103,7 +123,11 @@ class Kwf_Component_Cache_Memory
     public function remove($id, $microtime)
     {
         $be = Kwf_Cache_Simple::getBackend();
-        if ($be == 'memcache') {
+        if ($be == 'memcached') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
+            return Kwf_Cache_Simple::getMemcached()->set($prefix.$id, $microtime);
+        } else if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $microtime);
@@ -125,7 +149,9 @@ class Kwf_Component_Cache_Memory
     public function _clean()
     {
         $be = Kwf_Cache_Simple::getBackend();
-        if ($be == 'memcache') {
+        if ($be == 'memcached') {
+            return Kwf_Cache_Simple::getMemcached()->flush();
+        } else if ($be == 'memcache') {
             return Kwf_Cache_Simple::getMemcache()->flush();
         } else if ($be == 'file') {
             foreach (glob('cache/view/*') as $i) {

@@ -99,7 +99,7 @@ class Kwf_Controller_Action_Form_Controller extends Kwf_Controller_Action
             $this->view->errorsHtml .= '<p class="error">'.trlKwf('An error has occurred').':</p>';
             $this->view->errorsHtml .= '<ul>';
             foreach ($this->view->errors as $error) {
-                $this->view->errorsHtml .= '<li>' . htmlspecialchars($error) . '</li>';
+                $this->view->errorsHtml .= '<li>' . Kwf_Util_HtmlSpecialChars::filter($error) . '</li>';
             }
             $this->view->errorsHtml .= '</ul>';
             $this->view->errorsHtml .= '</div>';

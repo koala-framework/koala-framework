@@ -10,6 +10,10 @@ class Column implements ColumnNormalizerInterface, ColumnDenormalizerInterface
 {
     public function normalize(Kwf_Model_Row_Interface $row, $column, array $settings, $format = null, array $context = array())
     {
+        if (isset($settings['column'])) {
+            return $row->{$settings['column']};
+        }
+
         return $row->$column;
     }
 

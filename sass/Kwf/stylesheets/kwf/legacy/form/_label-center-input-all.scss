@@ -2,7 +2,7 @@
     > div.kwfUp-kwcForm > form {
         .kwfUp-kwfFormFieldWrapper {
             > input, textarea, select {
-                @include box-sizing(border-box);
+                box-sizing: border-box;
                 width: 100% !important;
             }
         }

@@ -15,8 +15,8 @@ var $ = require('jquery');
         $.extend(this.config, config);
 
         this.el = $(el);
-        this.switchLink = this.el.find(this.config.link || '.kwfUp-switchLink');
-        this.switchContainer = this.el.find(this.config.container || '.kwfUp-switchContent');
+        this.switchLink = this.el.find(this.config.link || '.kwfUp-switchLink:first');
+        this.switchContainer = this.el.find(this.config.container || '.kwfUp-switchContent:first');
         this.boundEvent = this.config.hover ? 'hover' : 'click';
         this.activeTimeout = null;
 
@@ -99,15 +99,15 @@ var $ = require('jquery');
                 priority: -1 // initialize before tabs
             });
             onReady.onRender(elOrSelector, function(el, config) {
-                if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('kwfUp-active')) {
-                    el.find(config.container || 'div.kwfUp-switchContent').hide();
+                if (!el.find(config.container || 'div.kwfUp-switchContent:first').hasClass('kwfUp-active')) {
+                    el.find(config.container || 'div.kwfUp-switchContent:first').hide();
                 }
             });
         } else {
             config = config || {};
             el = elOrSelector;
-            if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('kwfUp-active')) {
-                el.find(config.container || 'div.kwfUp-switchContent').hide();
+            if (!el.find(config.container || 'div.kwfUp-switchContent:first').hasClass('kwfUp-active')) {
+                el.find(config.container || 'div.kwfUp-switchContent:first').hide();
             }
             el = elOrSelector.get(0);
 

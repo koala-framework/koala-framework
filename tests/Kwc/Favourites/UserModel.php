@@ -1,8 +1,6 @@
 <?php
 class Kwc_Favourites_UserModel extends Kwf_User_Model
 {
-    protected $_authedUserId = 1;
-
     public function __construct($config = array())
     {
         $config['proxyModel'] = new Kwf_Model_FnF(array(
@@ -16,22 +14,14 @@ class Kwc_Favourites_UserModel extends Kwf_User_Model
         parent::__construct($config);
     }
 
-    public function getAuthedUser()
+    public function setAuthedUser($idOrUserRow)
     {
-        //return first user
-        $select = new Kwf_Model_Select();
-        $select->where(new Kwf_Model_Select_Expr_Equal('id', $this->_authedUserId));
-        $row = $this->getRow($select);
-        return $row;
-    }
-
-    public function setAuthedUser($id)
-    {
-        $this->_authedUserId = $id;
-    }
-
-    public function getAuthedUserId()
-    {
-        return $this->getAuthedUser()->id;
+        if (!is_object($idOrUserRow)) {
+            $select = new Kwf_Model_Select();
+            $select->where(new Kwf_Model_Select_Expr_Equal('id', $idOrUserRow));
+            $idOrUserRow = $this->getRow($select);
+        }
+        parent::setAuthedUser($idOrUserRow);
     }
 }
+

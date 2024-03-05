@@ -14,6 +14,17 @@ class Kwc_Mail_HtmlParser
 
     public function __construct(array $styles)
     {
+        $up = Kwf_Config::getValue('application.uniquePrefix');
+        if ($up) $up .= '-';
+
+        foreach ($styles as $key => $value) {
+            if (isset($value['styles'])) {
+                foreach ($value['styles'] as $styleKey => $styleValue) {
+                    $styles[$key]['styles'][$styleKey] = str_replace('kwfUp-', $up, $styleValue);
+                }
+            }
+        }
+
         $this->_styles = $styles;
     }
 
@@ -62,6 +73,7 @@ class Kwc_Mail_HtmlParser
             if (isset($style['selector'])) throw new Kwf_Exception("don't use tag AND selector");
             return ($style['tag'] == '*' || $style['tag'] == $tag) && (!isset($style['class']) || $class == $style['class']);
         } else if (isset($style['selector'])) {
+            $style['selector'] = self::_replaceUniquePrefix($style['selector']);
             $selectors = explode(' ', $style['selector']); //css-artiger selector
             $selectors = array_reverse($selectors);
             $stack = array_reverse($stack);
@@ -112,7 +124,7 @@ class Kwc_Mail_HtmlParser
                 if (isset($s['styles'])) {
                     foreach ($s['styles'] as $style=>$value) {
                         if ($style == 'font-family') {
-                            $appendTags['font']['face'] = $value;
+                            $appendTags['font']['face'] = self::_replaceUniquePrefix($value);
                         /*
                         } else if ($style == 'font-size') {
                             if (substr($value, -2) == 'px') {
@@ -247,5 +259,15 @@ class Kwc_Mail_HtmlParser
         $this->_ret = preg_replace('#\+(kwc|plugin|/plugin)(.*?)\$#', '<\1\2>', $this->_ret);
 
         return $this->_ret;
+    }
+
+    private static function _replaceUniquePrefix($value)
+    {
+        static $up;
+        if(!isset($up)) {
+            $up = Kwf_Config::getValue('application.uniquePrefix');
+            if ($up) $up .= '-';
+        }
+        return str_replace('kwfUp-', $up, $value);
     }
 }

@@ -5,9 +5,11 @@ class Kwc_Columns_Abstract_SettingsForm extends Kwc_Abstract_Form
     {
         parent::_initFields();
         $types = $this->_getColumnTypes();
+        $typeKeys = array_keys($types);
+
         $this->add(new Kwf_Form_Field_Select('type', trlKwf('Columns type')))
             ->setAllowBlank(false)
-            ->setDefaultValue(array_shift((array_keys($types))))
+            ->setDefaultValue(array_shift($typeKeys))
             ->setValues($types);
     }
 

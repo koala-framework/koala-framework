@@ -79,7 +79,7 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
                         '<tpl for=".">',
                             '<li>',
                             '<form>',
-                            '<tpl for="formOptions">',
+                            '<tpl for="formOptionsHtml">',
                                 '<tpl if="type == \'select\'">',
                                     '<select name="{name}">',
                                     '<tpl for="values">',
@@ -105,8 +105,7 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
                     this.redirectsPanel.body.select('a').each(function(a) {
                         a.on('click', function(ev) {
                             ev.preventDefault();
-                            window.ssoCallback = (function(sessionToken) {
-                                Kwf.sessionToken = sessionToken;
+                            window.ssoCallback = (function() {
                                 this.afterLogin();
                                 delete window.ssoCallback;
                             }).bind(this);
@@ -150,10 +149,6 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
 
         if(doc && doc.body){
             if (doc.body.innerHTML.match(/successful/)) {
-                var sessionToken = doc.body.innerHTML.match(/sessionToken:([^:]+):/);
-                if (sessionToken[1]) {
-                    Kwf.sessionToken = sessionToken[1];
-                }
                 this.afterLogin();
             } else if (doc.getElementsByName('username').length >= 1) {
                 if (doc.activeElement && doc.activeElement.tagName.toLowerCase() != 'input') { //only focus() if not password has focus (to avoid users typing their password into username)

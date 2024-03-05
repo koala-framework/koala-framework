@@ -5,7 +5,6 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
     public function rebuildWorkerAction()
     {
         set_time_limit(0);
-        Kwf_Util_MemoryLimit::set(512);
 
         $queueFile = 'temp/pagemetaRebuildQueue';
         $statsFile = 'temp/pagemetaRebuildStats';
@@ -15,7 +14,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             //child process
 
             //echo "memory_usage (child): ".(memory_get_usage()/(1024*1024))."MB\n";
-            if (memory_get_usage() > 128*1024*1024) {
+            if (memory_get_usage() > 120*1024*1024) {
                 if ($this->_getParam('debug')) echo "new process...\n";
                 break;
             }
@@ -48,6 +47,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             ));
             if ($this->_getParam('verbose')) echo " done\n";
             foreach ($childPages as $c) {
+                if ($this->_getRecursiveSkip($c)) continue;
                 if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
                 $queue[] = $c->componentId;
                 file_put_contents($queueFile, implode("\n", $queue));
@@ -96,8 +96,6 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
     public function rebuildAction()
     {
-        Kwf_Util_MemoryLimit::set(512);
-
         $m = Kwf_Component_PagesMetaModel::getInstance();
         $s = $m->select();
         $m->updateRows(array('rebuilt'=>0), $s);
@@ -136,9 +134,10 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         }
 
         if ($this->_getParam('debug')) {
+            $secondsAsDurationHelper = new Kwf_View_Helper_SecondsAsDuration();
             $stats = unserialize(file_get_contents($statsFile));
             echo "fulltext reindex finished.\n";
-            echo "duration: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
+            echo "duration: ".$secondsAsDurationHelper->secondsAsDuration(microtime(true)-$startTime)."s\n";
             echo "used child processes: $numProcesses\n";
             echo "processed pages: $stats[pages]\n";
             echo "indexed pages: $stats[addedPages]\n";
@@ -155,7 +154,6 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
     public function updateChangedJobAction()
     {
-        Kwf_Util_MemoryLimit::set(512);
         $start = microtime(true);
         $m = Kwf_Component_PagesMetaModel::getInstance();
         $s = $m->select();
@@ -180,7 +178,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
     private function _processRecursive(Kwf_Component_Data $page)
     {
-        if (memory_get_usage() > 128*1024*1024) {
+        if (memory_get_usage() > 120*1024*1024) {
             if ($this->_getParam('debug')) echo "Collect garbage...\n";;
             Kwf_Component_Data_Root::getInstance()->freeMemory();
         }
@@ -192,6 +190,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         );
         $ret = array();
         foreach ($childPages as $p) {
+            if ($this->_getRecursiveSkip($p)) continue;
             $m = Kwf_Component_PagesMetaModel::getInstance();
             $r = $m->getRow($p->componentId);
             if (!$r) {
@@ -202,5 +201,20 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             $r->save();
             $this->_processRecursive($p);
         }
+    }
+
+    private function _getRecursiveSkip(Kwf_Component_Data $page)
+    {
+        if (Kwc_Abstract::getFlag($page->componentClass, 'skipPagesMeta')) {
+            return true;
+        }
+        $c = $page->parent;
+        while ($c) {
+            if (Kwc_Abstract::getFlag($c->componentClass, 'skipPagesMeta')) {
+                return true;
+            }
+            $c = $c->parent;
+        }
+        return false;
     }
 }

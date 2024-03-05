@@ -28,7 +28,6 @@ class Kwc_Box_MetaTags_Trl_Component extends Kwc_Abstract_Composite_Trl_Componen
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['metaTags'] = $this->_getMetaTags();
-        $ret['canonicalUrl'] = $this->getData()->getAbsoluteUrl();
         return $ret;
     }
 }

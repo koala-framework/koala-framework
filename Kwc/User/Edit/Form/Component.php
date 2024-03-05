@@ -22,9 +22,10 @@ class Kwc_User_Edit_Form_Component extends Kwc_Form_Component
             } else {
                 throw new Kwf_Exception_AccessDenied();
             }
+            $this->_initUserForm();
+        } else {
+            throw new Kwf_Exception_AccessDenied('User not logged in.');
         }
-
-        $this->_initUserForm();
     }
 
     protected function _initUserForm()

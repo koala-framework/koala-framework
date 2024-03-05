@@ -63,7 +63,11 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
 
             // scheis php... bei $this->$name sucht er nur nach einem property
             // und vergisst, dass es __get() auch gibt
-            if ($this->__get($name) !== $value) {
+            $currentValue = $this->__get($name);
+            if (is_array($currentValue) || is_object($currentValue)) {
+                $currentValue = 'kwfSerialized'.serialize($currentValue);
+            }
+            if ($currentValue !== $value) {
                 $this->_setDirty($name);
             }
             $this->_row->$n = $value;
@@ -74,9 +78,8 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
 
     protected function _saveWithoutResetDirty()
     {
-        $insert =
-            !is_array($this->_getPrimaryKey())
-            && !$this->getCleanValue($this->_getPrimaryKey());
+        $insert = (!is_array($this->_getPrimaryKey()) && !$this->getCleanValue($this->_getPrimaryKey()))
+            || ($this->_model->hasDeletedFlag() && $this->isDirty('deleted') && !$this->deleted);
 
         if ($insert) {
             $this->_beforeInsert();
@@ -87,9 +90,11 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
         $this->_beforeSave();
         if ($insert || $this->_isDirty()) {
             $ret = $this->_row->save();
-            $this->_model->afterInsert($this);
         } else {
             $ret = $this->{$this->_getPrimaryKey()};
+        }
+        if ($insert) {
+            $this->_model->afterInsert($this);
         }
         parent::_saveWithoutResetDirty(); //siblings nach uns speichern; damit auto-inc id vorhanden
         if ($insert) {

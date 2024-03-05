@@ -10,7 +10,9 @@ var Recaptcha = kwfExtend(Field, {
             var options = {
                 'sitekey' : this.getField().getAttribute('data-site-key'),
                 'callback' : (function() {
-                    this.form.errorStyle.hideFieldError(this);
+                    if (this.form.errorStyle) {
+                        this.form.errorStyle.hideFieldError(this);
+                    }
                 }).bind(this)
             };
             window.grecaptcha.render(this.getField(), options);

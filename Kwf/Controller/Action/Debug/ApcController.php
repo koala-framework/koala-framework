@@ -990,7 +990,7 @@ EOB;
                 if($fieldkey=='info') {
                     echo "<tr class=tr-$m><td class=td-0>Stored Value</td><td class=td-last><pre>";
                     $output = var_export(apc_fetch($entry[$fieldkey]),true);
-                    echo htmlspecialchars($output);
+                    echo Kwf_Util_HtmlSpecialChars::filter($output);
                     echo "</pre></td></tr>\n";
                 }
                 break;
@@ -1324,8 +1324,8 @@ EOB;
             } else if (!$i--) {
                 break;
             }
-            echo "<b><a href=\"http://pecl.php.net/package/APC/$ver\">".htmlspecialchars($v)."</a></b><br><blockquote>";
-            echo nl2br(htmlspecialchars(current($match[2])))."</blockquote>";
+            echo "<b><a href=\"http://pecl.php.net/package/APC/$ver\">".Kwf_Util_HtmlSpecialChars::filter($v)."</a></b><br><blockquote>";
+            echo nl2br(Kwf_Util_HtmlSpecialChars::filter(current($match[2])))."</blockquote>";
             next($match[2]);
         }
         echo '</td></tr>';

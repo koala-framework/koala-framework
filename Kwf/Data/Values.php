@@ -8,7 +8,7 @@ class Kwf_Data_Values extends Kwf_Data_Abstract
         $this->_values = $values;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $name = $this->getFieldname();
         if (isset($this->_values[$row->$name])) {

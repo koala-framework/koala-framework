@@ -53,7 +53,7 @@ class Kwc_Directories_Item_Directory_Cc_Events extends Kwc_Abstract_Composite_Cc
 
     public function onMasterChildModelUpdated(Kwc_Directories_List_EventItemsUpdated $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventItemsUpdated($this->_class));
+        $this->fireEvent(new Kwc_Directories_List_EventItemsUpdated($this->_class, $event->subroot));
     }
 
 }

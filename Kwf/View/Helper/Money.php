@@ -16,6 +16,8 @@ class Kwf_View_Helper_Money
 
     public function money($amount)
     {
+        if ($amount === null || $amount === '') return '';
+
         $component = $this->_data;
         if ($component) {
             $format = $component->getBaseProperty('money.format');
@@ -37,6 +39,6 @@ class Kwf_View_Helper_Money
         if ($amountFormat) {
             $number = str_replace('{0}', $number, $amountFormat);
         }
-        return str_replace('{0}', '<span class="kwfUp-amount">'.$number.'</span>', $format);
+        return str_replace('{0}', '<span class="kwfUp-amount">'.Kwf_Util_HtmlSpecialChars::filter($number).'</span>', $format);
     }
 }

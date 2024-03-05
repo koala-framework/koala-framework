@@ -1,6 +1,6 @@
 <?php
 class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Component
-    implements Kwf_Media_Output_IsValidInterface
+    implements Kwf_Media_Output_IsValidInterface, Kwf_Media_Output_ClearCacheInterface
 {
     public static function getSettings($param = null)
     {
@@ -8,10 +8,14 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
             'ownModel'     => 'Kwc_Basic_DownloadTag_Model',
             'componentName' => trlKwfStatic('Download'),
             'componentIcon' => 'folder_link',
+            'hasPopup'      => true,
+            'openType'      => null, //wenn hasPopup auf false
         ));
         $ret['dataClass'] = 'Kwc_Basic_DownloadTag_Data';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/DownloadTag/Panel.js';
+        $ret['apiContent'] = 'Kwc_Basic_DownloadTag_ApiContent';
+        $ret['apiContentType'] = 'download';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         return $ret;
     }
@@ -23,10 +27,10 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         $row = $this->_getRow();
         $filename = $row->filename != '' ? $row->filename : 'unnamed';
 
-
         $ret['filesize'] = $this->getFilesize();
         $ret['url'] = $this->getDownloadUrl();
         $ret['filename'] = $filename;
+
         return $ret;
     }
 
@@ -79,10 +83,23 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
 
         $filename = $row->filename != '' ? $row->filename : 'unnamed';
         $filename .= '.'.$fileRow->extension;
-        return array(
+
+        $ret = array(
             'file' => $file,
             'mimeType' => $mimeType,
-            'downloadFilename' => $filename
+            'noindex' => !!$row->rel_noindex
         );
+        if ($row->content_disposition === 'attachment') {
+            $ret['downloadFilename'] = $filename;
+        } else if ($row->content_disposition === 'inline') {
+            $ret['filename'] = $filename;
+        }
+
+        return $ret;
+    }
+
+    public static function canCacheBeDeleted($id)
+    {
+        return !Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
     }
 }
