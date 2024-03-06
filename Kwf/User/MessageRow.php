@@ -21,6 +21,15 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                         $ret = trlKwf('Account edited by {0}.', array($user->__toString()));
                     }
                     break;
+                case 'user_role_changed':
+                    $user = $this->getParentRow('User');
+                    if (!$this->by_user_id) {
+                        $ret = trlKwf('Role changed to "{0}".', array($user->role));
+                    } else {
+                        $byUser = $this->getParentRow('ByUser');
+                        $ret = trlKwf('Role changed to "{0}" by {1}.', array($user->role, $byUser->__toString()));
+                    }
+                    break;
                 case 'user_activate':
                     if (!$this->by_user_id) {
                         $ret = trlKwf('Account activated.');
