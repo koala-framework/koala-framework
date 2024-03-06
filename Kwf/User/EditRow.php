@@ -9,6 +9,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
     protected $_additionalRolesCache = null;
     protected $_notifyGlobalUserAdded = false;
     protected $_logChangedUser = false;
+    protected $_logRoleChanged = false;
     protected $_passwordSet = false;
     private $_sendMails = true; // whether to send mails on saving or not. used for resending emails
     protected $_redirectUrl = false;
@@ -59,6 +60,9 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
             if ($value != $this->__get($columnName)) {
                 $this->_logChangedUser = true;
             }
+        }
+        if ($columnName == 'role' && $value !== $this->role) {
+            $this->_logRoleChanged = true;
         }
         if ($columnName == 'email' && strtolower($value) != strtolower($this->email)) {
             $this->_changedOldMail = $this->email;
@@ -207,6 +211,11 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
             $this->writeLog('user_edited');
 
             $this->_logChangedUser = false;
+        }
+        if ($this->_logRoleChanged) {
+            $this->writeLog('user_role_changed');
+
+            $this->_logRoleChanged = false;
         }
     }
 
