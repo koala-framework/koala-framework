@@ -46,6 +46,15 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                         $ret = trlKwf('Account edited.');
                     }
                     break;
+                case 'user_role_changed':
+                    $user = $this->getParentRow('User');
+                    if (!$this->by_user_id) {
+                        $ret = trlKwf('Role changed to "{0}".', array($user->role));
+                    } else {
+                        $byUser = $this->getParentRow('ByUser');
+                        $ret = trlKwf('Role changed to "{0}" by {1}.', array($user->role, $byUser->__toString()));
+                    }
+                    break;
                 case 'user_activate':
                     if ($this->by_user_id) {
                         $username = $this->getEditorUserNameIgnoreDeleted();
@@ -162,6 +171,9 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     } else {
                         $ret = trlKwf('Wrong login password used.');
                     }
+                    break;
+                case 'login':
+                    $ret = trlKwf('Logged in.');
                     break;
                 default:
                     $ret = $this->message_type;
