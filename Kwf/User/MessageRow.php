@@ -102,6 +102,9 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                         $ret = trlKwf('Wrong login password used by {0}.', array($user->__toString()));
                     }
                     break;
+                case 'login':
+                    $ret = trlKwf('Logged in.');
+                    break;
                 default:
                     $ret = $this->message_type;
             }
