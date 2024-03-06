@@ -170,6 +170,7 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
         if (!$row->logins) $row->logins = 0;
         $row->logins = $row->logins + 1;
         $row->last_login = date('Y-m-d H:i:s');
+        $row->writeLog("login");
         $row->save();
     }
 }
