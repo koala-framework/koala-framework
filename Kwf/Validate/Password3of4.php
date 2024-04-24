@@ -23,7 +23,7 @@ class Kwf_Validate_Password3of4 extends Zend_Validate_Abstract
 
         $this->_setValue($value);
 
-        if (mb_strlen($value, 'UTF-8') < 16) {
+        if (mb_strlen($value, 'UTF-8') < (int)Kwf_Config::getValue('user.minimumPasswordLength')) {
             $this->_error(self::TOO_SHORT);
             return false;
         }
