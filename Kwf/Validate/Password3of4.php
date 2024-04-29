@@ -10,7 +10,7 @@ class Kwf_Validate_Password3of4 extends Zend_Validate_Abstract
     public function __construct()
     {
         $this->_messageTemplates[self::INVALID] = trlKwfStatic("The password is invalid");
-        $this->_messageTemplates[self::TOO_SHORT] = trlKwfStatic("The password must be at least 16 characters long");
+        $this->_messageTemplates[self::TOO_SHORT] = trlKwfStatic("The password must be at least {0} characters long", array(Kwf_Config::getValue('user.minimumPasswordLength')));
         $this->_messageTemplates[self::NO_3OF4] = trlKwfStatic("Due to security reasons the password must contain 3 out of the following 4 character types: small letters, capital letters, numbers and special signs");
     }
 
