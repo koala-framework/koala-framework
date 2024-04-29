@@ -1,7 +1,7 @@
 <div class="{{ rootElementClass }}">
     {% if items %}
         <span class="{{ 'title'|bemClass }}">
-            {{ data.trlKwf('You ordered the following product', 'You ordered the following products', items|length) }}
+            {{ data.trlpKwf('You ordered the following product', 'You ordered the following products', items|length) }}
         </span>
         <div>
             {% for item in items %}
