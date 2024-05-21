@@ -95,7 +95,7 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
                             );
                         } else if ($auth->validatePassword($row, $this->_credential)) {
                             if (mb_strlen($this->_credential, 'UTF-8') < (int)Kwf_Config::getValue('user.minimumPasswordLength')) {
-                                throw new Kwf_Exception_Client(trlKwf('Even more security for your data. Until now, it was possible to use relatively short passwords for this login. Due to increasing security requirements, we have to raise the standard and ask you to set a more secure password. Please use the "Forgot password" function to reset the previous password and create a new password with at least {0} characters. Thank you for your understanding.', array(Kwf_Config::getValue('user.minimumPasswordLength'))));
+                                throw new Kwf_Exception_Client(trlKwf('We have changed our security guidelines. Please set a new {0}-digit password under ‘Reset password’.', array(Kwf_Config::getValue('user.minimumPasswordLength'))));
                             } else {
                                 $ret = new Zend_Auth_Result(
                                     Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwfStatic('Authentication successful'))
