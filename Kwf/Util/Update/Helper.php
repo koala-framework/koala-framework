@@ -138,6 +138,10 @@ class Kwf_Util_Update_Helper
                     if (is_numeric($f)) {
                         throw new Kwf_Exception("Invalid update script name: ".$i->getPathname()." Please use the new syntax.");
                     }
+                    $date = substr($f, 0, 8);
+                    if ($date !== date("Ymd", strtotime($date))) {
+                        throw new Kwf_Exception("Invalid update script name: ".$i->getPathname());
+                    }
                     $className = $matchingNamespace.$classPrefix.'_'.$f;
                     if ($className == 'Kwf_Update_Sql') continue;
                     $update = self::createUpdate($className, $i->getPathname());
