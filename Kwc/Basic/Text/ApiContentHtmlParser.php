@@ -20,8 +20,6 @@ class Kwc_Basic_Text_ApiContentHtmlParser
                 if (isset($current->children)) {
                     $filteredChildren = array();
                     foreach ($current->children as $key => $child) {
-                        // empty text-elemente in block-element not allowed
-                        if ($child->element == 'text' && trim($child->text) == '') continue;
                          // trailing spaces in last segment of block not allowed
                         if ($child->element == 'text' && $key == count($current->children)-1) $child->text = rtrim($child->text);
                         $filteredChildren[] = $child;
