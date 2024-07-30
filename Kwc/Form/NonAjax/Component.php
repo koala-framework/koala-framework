@@ -323,6 +323,19 @@ class Kwc_Form_NonAjax_Component extends Kwc_Abstract_Composite_Component
 
         $ret['submitCaption'] = $this->_getPlaceholder('submitButton');
 
+        $fieldConfig = array();
+        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_RecursiveFormFields($this->_form->fields), RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($iterator as $field) {
+            if ($field->getFieldName()) {
+                $fieldConfig[$field->getFieldName()] = (object)$field->getFrontendMetaData();
+            }
+        }
+
+        $ret['config'] = array(
+            'componentId' => $this->getData()->componentId,
+            'fieldConfig' => (object)$fieldConfig,
+        );
+
         return $ret;
     }
 
