@@ -31,7 +31,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             if (!isset($authMethods[$postData['redirectAuth']])) throw new Kwf_Exception_NotFound();
             $auth = $authMethods[$postData['redirectAuth']];
             if (!$auth instanceof Kwf_User_Auth_Interface_Redirect) throw new Kwf_Exception_NotFound();
-            $redirectBackUrl = $_GET['redirect'];
+            $redirectBackUrl = isset($_GET['redirect']) && $_GET['redirect'] != "" ? $_GET['redirect'] : '/';
 
             $f = new Kwf_Filter_StrongRandom();
             $state = 'login.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.urlencode(str_replace('.', 'kwfdot', $redirectBackUrl));
