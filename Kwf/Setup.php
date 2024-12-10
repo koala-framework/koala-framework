@@ -174,6 +174,7 @@ class Kwf_Setup
         switch (php_sapi_name()) {
             case 'apache2handler':
             case 'apache':
+            case 'fpm-fcgi':
                 $requestPath = $_SERVER['REQUEST_URI'];
                 $requestPath = strtok($requestPath, '?');
                 break;
