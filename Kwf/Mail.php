@@ -133,7 +133,9 @@ class Kwf_Mail extends Zend_Mail
                 $this->addAttachment($image);
                 $replace = "cid:{$image->id}";
             } else {
-                $replace = "http://" . $this->getDomain() . $path;
+                $domain = $this->getDomain();
+                $protocol = Kwf_Util_Https::domainSupportsHttps($domain) ? 'https' : 'http';
+                $replace = "{$protocol}://{$domain}{$path}";
             }
             $html = str_replace($matches[0], "{$matches[1]}=\"$replace\"", $html);
         }
