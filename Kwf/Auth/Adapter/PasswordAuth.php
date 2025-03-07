@@ -94,7 +94,7 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
                                 Zend_Auth_Result::SUCCESS, $this->_identity, array(trlKwfStatic('Authentication successful'))
                             );
                         } else if ($auth->validatePassword($row, $this->_credential)) {
-                            if (mb_strlen($this->_credential, 'UTF-8') < 16) {
+                            if (mb_strlen($this->_credential, 'UTF-8') < (int)Kwf_Config::getValue('user.minimumPasswordLength')) {
                                 throw new Kwf_Exception_Client(trlKwf('The length of the password is too short. Please use the "Lost password" function to reset the password and set a new password with at least 16 characters.'));
                             } else {
                                 $ret = new Zend_Auth_Result(
