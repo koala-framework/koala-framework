@@ -91,9 +91,7 @@ function initResponsiveImgEl(el) {
             img.attr('title', title[1]);
         }
         var alt = noscript.match(/alt="([^"]+)"/);
-        if (alt) {
-            img.attr('alt', alt[1]);
-        }
+        img.attr('alt', alt ? alt[1] : "");
     }
     el.trigger('changesrc', sizePath);
 };
