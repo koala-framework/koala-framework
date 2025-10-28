@@ -51,6 +51,7 @@ class Kwc_Root_DomainRoot_Component extends Kwc_Root_Abstract
     {
         $availableDomains = Kwf_Config::getValue('kwc.availableDomains');
         if (is_array($availableDomains)) {
+            $ret = array();
             $domains = Kwf_Config::getValueArray('kwc.domains');
             foreach ($availableDomains as $domain) {
                 if (!isset($domains[$domain])) continue;
