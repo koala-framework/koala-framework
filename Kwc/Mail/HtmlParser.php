@@ -195,8 +195,10 @@ class Kwc_Mail_HtmlParser
             'char-encoding'  =>'utf8',
             'newline'        =>'LF',
             'uppercase-tags' => false,
-            'drop-font-tags' => false,
         );
+        if (Kwf_Util_Tidy::supportsDropFontTags()) {
+            $config['drop-font-tags'] = false;
+        }
         if (class_exists('tidy')) {
             $tidy = new tidy;
             $tidy->parseString($html, $config, 'utf8');
