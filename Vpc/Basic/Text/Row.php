@@ -209,10 +209,10 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     );
         $enableTidy = Vpc_Abstract::getSetting($this->_componentClass, 'enableTidy');
         $enableFontSize = Vpc_Abstract::getSetting($this->_componentClass, 'enableFontSize');
-        if ($enableFontSize && Vps_Util_Tidy::supportsDropFontTags()) {
-            $config['drop-font-tags'] = !$enableFontSize;
-        }
         if ($enableTidy && class_exists('tidy')) {
+            if (Vps_Util_Tidy::supportsDropFontTags()) {
+                $config['drop-font-tags'] = !$enableFontSize;
+            }
 
             //woraround für tidy bug wo er zwei class-attribute in einen
             //tag schreibt wenn eins davon leer ist
