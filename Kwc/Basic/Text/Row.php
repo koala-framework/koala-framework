@@ -237,10 +237,10 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                     );
         $enableTidy = Kwc_Abstract::getSetting($this->_componentClass, 'enableTidy');
         $enableFontSize = Kwc_Abstract::getSetting($this->_componentClass, 'enableFontSize');
-        if ($enableFontSize && Kwf_Util_Tidy::supportsDropFontTags()) {
-            $config['drop-font-tags'] = !$enableFontSize;
-        }
         if ($enableTidy && class_exists('tidy')) {
+            if (Kwf_Util_Tidy::supportsDropFontTags()) {
+                $config['drop-font-tags'] = !$enableFontSize;
+            }
 
             //woraround für tidy bug wo er zwei class-attribute in einen
             //tag schreibt wenn eins davon leer ist
