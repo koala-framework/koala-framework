@@ -218,7 +218,6 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                     'wrap'           => '86',
                     'doctype'        => 'omit',
                     'drop-proprietary-attributes' => true,
-                    'drop-font-tags' => true,
                     'word-2000'      => true,
                     'show-body-only' => true,
                     'bare'           => true,
@@ -238,8 +237,8 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                     );
         $enableTidy = Kwc_Abstract::getSetting($this->_componentClass, 'enableTidy');
         $enableFontSize = Kwc_Abstract::getSetting($this->_componentClass, 'enableFontSize');
-        if ($enableFontSize){
-            $config['drop-font-tags'] = false;
+        if ($enableFontSize && Kwf_Util_Tidy::supportsDropFontTags()) {
+            $config['drop-font-tags'] = !$enableFontSize;
         }
         if ($enableTidy) {
 
