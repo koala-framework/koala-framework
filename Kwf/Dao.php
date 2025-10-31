@@ -36,7 +36,21 @@ class Kwf_Dao
         if (!isset($dbConfig['username']) && isset($dbConfig['user'])) $dbConfig['username'] = $dbConfig['user'];
         if (!isset($dbConfig['password']) && isset($dbConfig['pass'])) $dbConfig['password'] = $dbConfig['pass'];
         if (!isset($dbConfig['dbname']) && isset($dbConfig['name'])) $dbConfig['dbname'] = $dbConfig['name'];
+        if (self::useDbImportLocalInfile()) {
+            if (!isset($dbConfig['driver_options'])) $dbConfig['driver_options'] = array();
+            $dbConfig['driver_options'][PDO::MYSQL_ATTR_LOCAL_INFILE] = true;
+        }
         return $dbConfig;
+    }
+
+    /**
+     * Returns whether LOAD DATA LOCAL INFILE is allowed in the DB connection
+     *
+     * @return bool
+     */
+    public final static function useDbImportLocalInfile()
+    {
+        return Kwf_Config::getValue('db_import_local_infile') === true;
     }
 
     public function getDb($db = 'web')
