@@ -920,7 +920,11 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 // set the character_set_database MySQL system variable to utf8
                 $this->executeSql("SET character_set_database = 'utf8'");
 
-                $sqlString = "LOAD DATA INFILE '$filename'";
+                $sqlString = "LOAD DATA";
+                if (Vps_Dao::useDbImportLocalInfile()) {
+                    $sqlString .= " LOCAL";
+                }
+                $sqlString .= " INFILE '$filename'";
                 if (isset($options['replace']) && $options['replace']) {
                     $sqlString .= " REPLACE";
                 }
