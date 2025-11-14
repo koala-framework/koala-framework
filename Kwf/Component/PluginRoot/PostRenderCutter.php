@@ -10,10 +10,16 @@ abstract class Kwf_Component_PluginRoot_PostRenderCutter implements
     {
         if ($maskType == self::MASK_TYPE_NOMASK) return '';
         $params = $params ? base64_encode(json_encode($params)) : '';
-        $ret = '';
-        $ret .= $maskCode == self::MASK_CODE_BEGIN || $maskType == self::MASK_TYPE_SHOW ? '<!--' : '<';
-        $ret .= " postRenderPlugin{$maskCode}".'{'.$page->componentId.'}'." $params ";
-        $ret .= $maskCode == self::MASK_CODE_END || $maskType == self::MASK_TYPE_SHOW ? '-->' : '>';
+        $ret = "<!-- postRenderPlugin{$maskCode}".'{'.$page->componentId.'}'." $params";
+        if ($maskType == self::MASK_TYPE_HIDE) {
+            if ($maskCode == self::MASK_CODE_BEGIN) {
+                $ret = "{$ret} hide--><script type=\"text/x-kwf-masked\">";
+            } else if ($maskCode == self::MASK_CODE_END) {
+                $ret = "</script>$ret -->";
+            }
+        } else {
+            $ret = "$ret -->";
+        }
         return $ret;
     }
 
@@ -76,11 +82,15 @@ abstract class Kwf_Component_PluginRoot_PostRenderCutter implements
             $endTag = '-->';
             $startTag = '<!--';
         } else if ($maskType == self::MASK_TYPE_HIDE) {
-            $endTag = '>';
-            $startTag = '<';
+            $endTag = 'hide--><script type="text/x-kwf-masked">';
+            $endTag .= '|>'; //previous code, might be in view cache
+            $startTag = '</script><!--';
+            $startTag .= '|<'; //previous code, might be in view cache
         } else {
-            $endTag = '-->|>';
-            $startTag = '<!--|<';
+            $endTag = '-->|hide--><script type="text/x-kwf-masked">';
+            $endTag .= '|>'; //previous code, might be in view cache
+            $startTag = '<!--|</script><!--';
+            $startTag .= '|<'; //previous code, might be in view cache
         }
         $pattern = "#(<!-- postRenderPluginBegin{([^ ]*)} ($params) ($endTag))(.*?)(($startTag) postRenderPluginEnd{\\2} $params -->)#s";
         preg_match_all($pattern, $output, $matches);
