@@ -83,8 +83,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
 
 
-        if (!$this->_getParam('debug')) Kwf_Util_Maintenance::writeMaintenanceBootstrap();
-
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
             Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
@@ -107,8 +105,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             echo "\n\033[32mupdate finished\033[0m\n";
             $runner->writeExecutedUpdates($executedUpdates);
         }
-
-        if (!$this->_getParam('debug')) Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
 
         if ($checkUpdatesSettings) {
             $runner->executePostMaintenanceBootstrapUpdates();
