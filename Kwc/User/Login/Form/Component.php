@@ -1,6 +1,8 @@
 <?php
 class Kwc_User_Login_Form_Component extends Kwc_Form_Component
 {
+    const ERROR_WRONG_EMAIL_OR_PASSWORD = 'eweop';
+
     public static function getSettings($param = null)
     {
         $ret = parent::getSettings($param);
@@ -63,7 +65,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
                     $this->_errors[] = array('message' => $this->getData()->trlStaticExecute($message));
                 }
             } else {
-                $this->_errors[] = array('message' => $this->getData()->trlKwf('Invalid E-Mail or password, please try again.'));
+                $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_WRONG_EMAIL_OR_PASSWORD));
             }
         }
     }
@@ -81,5 +83,13 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         $auth = Kwf_Auth::getInstance();
         $auth->clearIdentity();
         return $auth->authenticate($adapter);
+    }
+
+    protected function _getErrorMessage($type)
+    {
+        if ($type == self::ERROR_WRONG_EMAIL_OR_PASSWORD) {
+            return $this->getData()->trlKwf('Invalid E-Mail or password, please try again.');
+        }
+        return null;
     }
 }
