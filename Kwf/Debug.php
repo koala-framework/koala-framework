@@ -179,6 +179,9 @@ class Kwf_Debug
         //ignore notice from iconv like "Detected an incomplete multibyte character in input string"
         if ($errno == E_NOTICE && substr($errstr, 0, 15) == 'iconv_strlen():') return;
 
+        //PHP 7.4 added this notice for array access on null, bool and int, which returned null silently before; keep the old behaviour
+        if ($errno == E_NOTICE && substr($errstr, 0, 46) == 'Trying to access array offset on value of type') return;
+
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
