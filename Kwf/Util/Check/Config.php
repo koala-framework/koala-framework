@@ -56,7 +56,7 @@ class Kwf_Util_Check_Config
     {
         $checks = array();
         $checks['php'] = array(
-            'name' => 'Php >= 5.2'
+            'name' => 'Php >= 5.5'
         );
         $checks['imagick'] = array(
             'name' => 'imagick Php extension'
