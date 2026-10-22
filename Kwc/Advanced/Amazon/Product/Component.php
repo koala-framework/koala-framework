@@ -32,7 +32,7 @@ class Kwc_Advanced_Amazon_Product_Component extends Kwc_Abstract
                 $amazon = new Kwf_Service_Amazon();
                 try {
                     $resultSet = $amazon->itemLookup(
-                        implode($chunk,','), 
+                        implode(',', $chunk), 
                         array(
                             'AssociateTag' => $this->_getSetting('associateTag'),
                             'ResponseGroup' => 'Small,ItemAttributes,Images'
@@ -51,7 +51,7 @@ class Kwc_Advanced_Amazon_Product_Component extends Kwc_Abstract
                         $products[$i->ASIN] = (object)array(
                             'item' => $i,
                             'title' => isset($i->Title) ? $i->Title : null,
-                            'author' => isset($i->Author) ? (is_array($i->Author) ? implode($i->Author, ', ') : $i->Author) : null,
+                            'author' => isset($i->Author) ? (is_array($i->Author) ? implode(', ', $i->Author) : $i->Author) : null,
                             'asin' => $i->ASIN, 
                             'detailPageURL' => isset($i->DetailPageURL) ? $i->DetailPageURL : null,
                             'currencyCode' => isset($i->CurrencyCode) ? $i->CurrencyCode : null, 

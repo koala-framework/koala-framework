@@ -64,7 +64,7 @@ class Kwf_Model_ProxyCache extends Kwf_Model_Proxy
                     }
                 }
                 $valuesbefore = $values;
-                $v = implode($values, '_');
+                $v = implode('_', $values);
 
                 if (isset($this->_cacheData[$cacheId][$v]))
                     $data = $this->_cacheData[$cacheId][$v];
@@ -123,9 +123,9 @@ class Kwf_Model_ProxyCache extends Kwf_Model_Proxy
     {
         $parts = array();
         $parts[] = $this->getUniqueIdentifier();
-        $parts[] = implode ($cacheSetting['index'], '_');
-        $parts[] = implode ($cacheSetting['columns'], '_');
-        return implode ($parts, '_');
+        $parts[] = implode('_', $cacheSetting['index']);
+        $parts[] = implode('_', $cacheSetting['columns']);
+        return implode('_', $parts);
     }
 
     private function _getCache()
@@ -182,7 +182,7 @@ class Kwf_Model_ProxyCache extends Kwf_Model_Proxy
         foreach ($indexes as $key => $index) {
            $identifier[] = $this->_escapeSearchKeyElement($row->{$index});
         }
-        $ret = implode(($identifier), '_');
+        $ret = implode('_', $identifier);
         return $ret;
     }
 
