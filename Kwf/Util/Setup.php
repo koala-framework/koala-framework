@@ -233,9 +233,6 @@ class Kwf_Util_Setup
         $ret .= "ini_set('default_charset', 'UTF-8');\n";
         $ret .= "umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen\n";
 
-        //this is *NOT* recommended but still works somehow
-        $ret .= "if (get_magic_quotes_gpc()) Kwf_Util_UndoMagicQuotes::undoMagicQuotes();\n";
-
         if (Kwf_Config::getValue('debug.firephp') || Kwf_Config::getValue('debug.querylog')) {
             $ret .= "if (PHP_SAPI != 'cli') {\n";
             if (Kwf_Config::getValue('debug.firephp')) {
