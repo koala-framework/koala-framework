@@ -524,7 +524,7 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.49",
+            "version": "v2.8.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -581,6 +581,9 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/console/tree/v2.8.52"
+            },
             "time": "2018-11-20T15:55:20+00:00"
         },
         {
@@ -642,7 +645,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.49",
+            "version": "v2.8.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -698,11 +701,14 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/event-dispatcher/tree/v2.8.50"
+            },
             "time": "2018-11-21T14:20:20+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v2.8.49",
+            "version": "v2.8.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -747,6 +753,9 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/finder/tree/v2.8.50"
+            },
             "time": "2018-11-11T11:18:13+00:00"
         },
         {
@@ -868,7 +877,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.49",
+            "version": "v2.8.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -913,6 +922,9 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/process/tree/v2.8.50"
+            },
             "time": "2018-11-11T11:18:13+00:00"
         },
         {
@@ -1710,7 +1722,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.49",
+            "version": "v2.8.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -1756,6 +1768,9 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/yaml/tree/v2.8.52"
+            },
             "time": "2018-11-11T11:18:13+00:00"
         }
     ],
