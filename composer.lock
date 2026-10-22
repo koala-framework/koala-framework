@@ -326,16 +326,16 @@
         },
         {
             "name": "koala-framework/zendframework1",
-            "version": "v1.12.13-p2",
+            "version": "v1.12.13-p4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/zendframework1.git",
-                "reference": "30f94db082a8ad6b52840d4e97e729f71856faa7"
+                "reference": "b09124379571546d0cf2fb42d4413123c00c9533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/zendframework1/zipball/30f94db082a8ad6b52840d4e97e729f71856faa7",
-                "reference": "30f94db082a8ad6b52840d4e97e729f71856faa7",
+                "url": "https://api.github.com/repos/koala-framework/zendframework1/zipball/b09124379571546d0cf2fb42d4413123c00c9533",
+                "reference": "b09124379571546d0cf2fb42d4413123c00c9533",
                 "shasum": ""
             },
             "require": {
@@ -369,7 +369,11 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2018-05-08T15:00:10+00:00"
+            "support": {
+                "issues": "https://github.com/koala-framework/zendframework1/issues",
+                "source": "https://github.com/koala-framework/zendframework1/tree/v1.12.13-p4"
+            },
+            "time": "2026-10-22T08:20:10+00:00"
         },
         {
             "name": "mouf/nodejs-installer",
