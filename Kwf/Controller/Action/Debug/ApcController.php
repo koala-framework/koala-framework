@@ -1317,7 +1317,8 @@ EOB;
         preg_match_all('!<(title|description)>([^<]+)</\\1>!', $rss, $match);
         next($match[2]); next($match[2]);
 
-        while (list(,$v) = each($match[2])) {
+        while (($v = current($match[2])) !== false) {
+            next($match[2]);
             list(,$ver) = explode(' ', $v, 2);
             if ($i < 0 && version_compare($apcversion, $ver, '>=')) {
                 break;

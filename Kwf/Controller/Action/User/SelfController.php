@@ -14,6 +14,7 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
 
         parent::preDispatch();
         $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        if (!$authedUser) return;
         $row = $this->_form->getModel()->getRowByKwfUser($authedUser);
         $this->_form->setId($row->id);
     }
@@ -23,6 +24,8 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
         parent::_initFields();
 
         $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        //guests get forwarded to the login, but Kwf_Controller_Action_Auto_Form::preDispatch() still builds the form
+        if (!$authedUser) return;
         $hasPassword = false;
         $allowPassword = true;
         foreach (Kwf_Registry::get('userModel')->getAuthMethods() as $auth) {

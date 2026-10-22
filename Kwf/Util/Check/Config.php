@@ -56,7 +56,7 @@ class Kwf_Util_Check_Config
     {
         $checks = array();
         $checks['php'] = array(
-            'name' => 'Php >= 5.2'
+            'name' => 'Php >= 5.5'
         );
         $checks['imagick'] = array(
             'name' => 'imagick Php extension'
@@ -87,9 +87,6 @@ class Kwf_Util_Check_Config
         );
         $checks['memory_limit'] = array(
             'name' => 'memory_limit'
-        );
-        $checks['magic_quotes_gpc'] = array(
-            'name' => 'magic_quotes_gpc'
         );
 
         //ab hier wird die config geladen
@@ -156,7 +153,7 @@ class Kwf_Util_Check_Config
 
     private static function _php()
     {
-        if (version_compare(PHP_VERSION, '5.1.6') < 0) {
+        if (version_compare(PHP_VERSION, '5.5.0') < 0) {
             throw new Kwf_Exception("Php version '".PHP_VERSION."' is too old");
         }
         return array(
@@ -460,21 +457,6 @@ class Kwf_Util_Check_Config
         }
         if (extension_loaded('apcu') && function_exists('apc_delete_file')) {
             throw new Kwf_Exception("apc and apcu loaded");
-        }
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
-    private static function _magic_quotes_gpc()
-    {
-        if (PHP_SAPI!= 'cli' // nur im web testen, die cli berührt das sowieso nicht
-            && get_magic_quotes_gpc()
-        ) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "magic_quotes_gpc is turned on. Please allow disabling it in .htaccess or turn off in php.ini"
-            );
         }
         return array(
             'status' => self::RESULT_OK,
