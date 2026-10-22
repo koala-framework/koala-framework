@@ -273,6 +273,13 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
     public function logoutAction()
     {
+        $this->_logout();
+        //same target as the logout button in Kwf_js/Menu/Index.js
+        Kwf_Util_Redirect::redirect('/kwf/welcome');
+    }
+
+    private function _logout()
+    {
         Kwf_Auth::getInstance()->clearIdentity();
         Kwf_Session::destroy();
         $this->_onLogout();
@@ -288,7 +295,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
     public function jsonLogoutUserAction()
     {
-        $this->logoutAction();
+        $this->_logout();
     }
 
     protected function _createAuthAdapter()
