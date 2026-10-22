@@ -153,7 +153,7 @@ class Kwf_Util_Check_Config
 
     private static function _php()
     {
-        if (version_compare(PHP_VERSION, '5.1.6') < 0) {
+        if (version_compare(PHP_VERSION, '5.5.0') < 0) {
             throw new Kwf_Exception("Php version '".PHP_VERSION."' is too old");
         }
         return array(
