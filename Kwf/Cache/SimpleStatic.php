@@ -139,7 +139,7 @@ class Kwf_Cache_SimpleStatic
                     //APCIterator is borked, delete everything
                     //see https://bugs.php.net/bug.php?id=59938
                     if (extension_loaded('apcu')) {
-                        apc_clear_cache();
+                        apcu_clear_cache();
                     } else {
                         apc_clear_cache('user');
                     }
